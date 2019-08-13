@@ -1,0 +1,145 @@
+{#$cssFile = array("mobiscroll.css", "add-goods.css?v={#$cfg_staticVersion#}")#}
+{#if $id == 0#}
+{#$pageTitle = $langData['waimai'][5][13]#}
+{#else#}
+{#$pageTitle = $langData['waimai'][5][14]#}
+{#/if#}
+{#include file='../_header.html' pageTitle=$pageTitle cssFile=$cssFile goBack=1 rbtn='<a href="javascript:;" class="submit">'|cat:$langData['siteConfig'][6][27]|cat:'</a>'#}
+
+  <div class="container">
+    <form action="waimaiFoodAdd.php?sid={#$sid#}&id={#$id#}" id="submitForm">
+      <div class="img-box imgbox">
+        <p>{#$langData['waimai'][19][493]#}</p>
+        <ul class="uploader-list fn-clear" id="fileList">
+          <li class="uploadbtn">
+            <div id="filePicker" class="webuploader-container">
+              <div class="webuploader-pick">+</div>
+            </div>
+          </li>
+          {#foreach from=$picsList key=k item=i#}
+          <li class="thumbnail" id="item_{#$k+1#}"><img src="{#changeFileSize url="{#$i.path#}" type="large"#}" data-val="{#$i.pathSource#}" data-url="{#changeFileSize url="{#$i.path#}" type="large"#}" alt=""><div class="file-panel"><span class="cancel"></span></div></li>
+          {#/foreach#}
+        </ul>
+        <input type="hidden" name="pics" id="pics" value="">
+      </div>
+
+      <div class="bgfff">
+        <div class="block">
+          <dl class="inpbox">
+            <dt><span><label for="">{#$langData['siteConfig'][19][486]#}</label></span></dt>
+            <dd><input type="text" placeholder="请输入商品名称" name="title" value="{#$title#}"></dd>
+          </dl>
+          <dl class="inpbox">
+            <dt><span><label for="">{#$langData['waimai'][5][15]#}</label></span></dt>
+            <dd><input type="text" placeholder="0" name="sort" value="{#$sort|string_format:"%d"#}"></dd>
+          </dl>
+          <dl class="inpbox">
+            <dt><span><label for="">{#$langData['waimai'][5][16]#}</label></span></dt>
+            <dd><input type="text" placeholder="{#$langData['siteConfig'][21][150]#}" name="price" value="{#$price#}"></dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="bgfff">
+        <div class="block">
+          <div data-role="fieldcontain" class="dom_select">
+            <label for="typename">{#$langData['waimai'][1][44]#}</label>
+            <input type="text" id="typeid_dummy" class="" placeholder="" readonly="" value="迷你">
+            <select id="typeid" name="typeid" class="demo-test-select dw-hsel" tabindex="-1">
+              {#foreach from=$typelist item=l#}
+              <option value="{#$l.id#}"{#if $typeid == $l.id#} selected="selected"{#/if#}>{#$l.title#}</option>
+              {#/foreach#}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="bgfff">
+        <div class="block">
+          <dl class="inpbox">
+            <dt><span><label for="">{#$langData['waimai'][1][52]#}</label></span></dt>
+            <dd><input type="text" placeholder="{#$langData['waimai'][5][17]#}" name="unit" value="{#$unit#}"></dd>
+          </dl>
+          <dl class="inpbox">
+            <dt><span><label for="">{#$langData['waimai'][1][55]#}</label></span></dt>
+            <dd><input type="text" placeholder="{#$langData['waimai'][5][18]#}" name="label" value="{#$label#}"></dd>
+          </dl>
+          <div data-role="fieldcontain" class="dom_select">
+            <label for="">{#$langData['waimai'][1][60]#}</label>
+            <select class="demo-test-select" data-role="none" name="status" tabindex="-1">
+              <option value="1"{#if $status == 1#} selected="selected"{#/if#}>{#$langData['waimai'][1][120]#}</option>
+              <option value="0"{#if $status == 0#} selected="selected"{#/if#}>{#$langData['waimai'][1][121]#}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="bgfff">
+        <div class="block">
+          <div class="fn-clear item">
+            {#if $is_dabao == 1#}
+            <a href="javascript:;"><span>{#$langData['waimai'][5][19]#}</span><em class="toggle on" data-type="is_dabao"></em></a>
+            <p class="warn fn-clear" style="display:block;"><span>{#$langData['siteConfig'][19][890]#}</span><input type="text" placeholder="{#$langData['waimai'][5][20]#}" name="dabao_money" value="{#$dabao_money|string_format:"%.2f"#}"></p>
+            {#else#}
+            <a href="javascript:;"><span>{#$langData['waimai'][5][19]#}</span><em class="toggle" data-type="is_dabao"></em></a>
+            <p class="warn fn-clear"><span>{#$langData['siteConfig'][19][890]#}</span><input type="text" placeholder="{#$langData['waimai'][5][20]#}" name="dabao_money" value="{#$dabao_money|string_format:"%.2f"#}"></p>
+            {#/if#}
+            <input type="hidden" name="is_dabao" id="is_dabao" value="">
+          </div>
+        </div>
+      </div>
+
+      <div class="bgfff">
+        <div class="block">
+          <div class="fn-clear item">
+            {#if $stockvalid == 1#}
+            <a href="javascript:;"><span>{#$langData['waimai'][5][21]#}</span><em class="toggle on" data-type="stockvalid"></em></a>
+            <p class="warn fn-clear" style="display:block;"><span>{#$langData['waimai'][1][58]#}</span><input type="text" name="stock" placeholder="{#$langData['waimai'][5][22]#}" value="{#$stock#}"></p>
+            {#else#}
+            <a href="javascript:;"><span>{#$langData['waimai'][5][21]#}</span><em class="toggle" data-type="stockvalid"></em></a>
+            <p class="warn fn-clear"><span>{#$langData['waimai'][1][58]#}</span><input type="text" name="stock" placeholder="{#$langData['waimai'][5][22]#}" value="{#$stock#}"></p>
+            {#/if#}
+            <input type="hidden" name="stockvalid" id="stockvalid" value="">
+          </div>
+        </div>
+      </div>
+
+      <div class="bgfff">
+        <div class="block">
+          <div class="fn-clear item">
+            <p class="warn fn-clear" style="display:block;"><span>{#$langData['waimai'][5][23]#}</span><input type="text" name="formerprice" placeholder="{#$langData['waimai'][5][24]#}" value="{#$formerprice|string_format:"%.2f"#}"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bgfff">
+        <div class="block">
+          <dl class="inpbox">
+            <dt><span><label for="">{#$langData['waimai'][5][25]#}</label></span></dt>
+            <dd class="warn"><textarea name="descript" id="descript" rows="4">{#$descript#}</textarea></dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="bgfff">
+        <div class="block">
+          <dl class="inpbox">
+            <dt><span><label for="">{#$langData['siteConfig'][16][119]#}</label></span></dt>
+            <dd class="warn"><textarea name="body" id="body" rows="5">{#$body#}</textarea></dd>
+          </dl>
+        </div>
+      </div>
+      <input type="submit" class="fn-hide">
+    </form>
+    {#if $id#}<div class="bgfff del">{#$langData['waimai'][5][26]#}</div>{#/if#}
+  </div>
+
+<script>
+  var sid = {#$sid#}, id = {#$id#};
+  var modelType = 'waimai';
+  var thumbSize = {#$thumbSize#}, thumbType = '{#$thumbType#}', atlasSize = {#$atlasSize*1024*1024#}, atlasType = '{#$atlasType#}', atlasMax = 5;
+</script>
+{#include file='../_footer.html' jsFile=array("zepto.deferred.js", "/static/js/webuploader/webuploader.js", "/templates/member/touch/js/common.js?v={#$cfg_staticVersion#}", "mobiscroll.js", "mobiscroll.select.js", "add-goods.js?v={#$cfg_staticVersion#}") curr='shop' toppage=0#}
+
+</body>
+</html>

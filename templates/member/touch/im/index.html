@@ -1,0 +1,93 @@
+{#if $from == 'message'#}
+{#$templets_skin = $templets_skin|cat:"im/"#}
+{#/if#}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>消息列表</title>
+		<meta name="wap-font-scale" content="no">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no,viewport-fit=cover">		
+		<link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/core/touchBase.css?v={#$cfg_staticVersion#}" />
+		<link rel="stylesheet" href="{#$templets_skin#}css/info_list.css?v={#$cfg_staticVersion#}" />
+		<link rel="stylesheet" href="{#$templets_skin#}css/common.css?v={#$cfg_staticVersion#}" />
+		<script type="text/javascript" src="{#$cfg_staticPath#}js/core/touchScale.js?v={#$cfg_staticVersion#}"></script>
+		<script type="text/javascript" src="{#$cfg_staticPath#}js/core/zepto.min.js?v={#$cfg_staticVersion#}"></script>
+		<script>
+			var masterDomain = '{#$cfg_basehost#}', channelDomain = '{#$article_channelDomain#}';
+			var staticPath = '{#$cfg_staticPath#}',templets_skin = '{#$templets_skin#}';
+			var userDomain = '{#$member_userDomain#}/im/';
+		</script>
+	</head>
+	<body>
+	<div class="top_head">
+		<!--消息和通知切换s-->
+		<ul class="tab_box">
+			<li class="on" data-type="info"> <a href="javascript:;">消息</a></li>
+			<li data-type="notice"><a href="javascript:;">通知</a></li>
+		</ul>
+		<!--消息和通知切换e-->
+		<!--好友列表按钮s-->
+		<div class="btn_group">
+			<a href="{#$member_userDomain#}/im/f_list.html" class="f_list"></a>
+			<a href="{#$member_userDomain#}/im/search_list.html" class="add_f"></a>
+		</div>
+		<!--好友列表按钮e-->
+	</div>
+	
+	<!--消息列表s-->
+	<div class="list_box">
+		<div class="message_list ulbox  show" data-page="1" >
+			<ul class="scrollbox">
+				{#*
+				<li class="commt link_li">
+					<a href="commt_list.html#commt" class="fn-clear">
+						<div class="left_img">
+							<img src="{#$templets_skin#}images/commt.png" />
+						</div>
+						<div class="right_con">
+							<h2>评论</h2>
+							<i></i>
+						</div>
+					</a>
+				</li>
+				<li class="zan link_li tip_num">
+					<a href="commt_list.html#zan" class="fn-clear">
+						<div class="left_img">
+							<img src="{#$templets_skin#}images/zan.png" />
+						</div>
+						<div class="right_con">
+							<h2>赞</h2>
+							<i>7</i>
+						</div>
+					</a>
+				</li>
+				*#}
+			</ul>
+			<div class="loading">
+				<img src="{#$templets_skin#}images/loading_1.gif"/>
+				<span>加载中~</span>
+			</div>
+			<li class="info_li" style="display: none;"></li>
+			
+		</div>
+		<div class="tip_list ulbox"  data-page="1" >
+			<div class="scrollbox">
+				
+			</div>
+			<div class="loading">
+				<img src="{#$templets_skin#}images/loading_1.gif"/>
+				<span>加载中~</span>
+			</div>
+			
+		
+		</div>
+		
+	</div>
+	<!--消息列表e-->
+	<script type="text/javascript" src="{#$templets_skin#}js/getlist.js?v={#$cfg_staticVersion#}" ></script>
+	<script type="text/javascript" src="{#$templets_skin#}js/Myfunc.js?v={#$cfg_staticVersion#}" ></script>
+	<script type="text/javascript" src="{#$templets_skin#}js/info_list.js?v={#$cfg_staticVersion#}" ></script>
+	</body>
+</html>

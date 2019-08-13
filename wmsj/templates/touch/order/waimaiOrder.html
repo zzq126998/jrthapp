@@ -1,0 +1,77 @@
+{#$cssFile = array("swiper.min.css", "order.css?v={#$cfg_staticVersion#}")#}
+{#include file='../_header.html' pageTitle=$langData['waimai'][5][1] cssFile=$cssFile goBack=0 rbtn='<a href="javascript:;" class="more">'|cat:$langData['siteConfig'][18][18]|cat:'</a>'#}
+
+<div class="tabs fn-clear">
+  <a href="javascript:;" class="group1{#if $state == 2#} active{#/if#}" data-state="2">{#$langData['waimai'][5][2]#}</a>
+  <a href="javascript:;" class="group1{#if $state == 3#} active{#/if#}" data-state="3">{#$langData['siteConfig'][9][12]#}</a>
+  <a href="javascript:;" class="group1{#if $state == 4#} active{#/if#}" data-state="4">{#$langData['siteConfig'][16][114]#}</a>
+  <a href="javascript:;" class="group1{#if $state == 5#} active{#/if#}" data-state="5">{#$langData['siteConfig'][16][115]#}</a>
+  <a href="javascript:;" data-state="1" class="group2 fn-hide{#if $state == 1#} active{#/if#}">{#$langData['siteConfig'][9][5]#}</a>
+  <a href="javascript:;" data-state="7" class="group2 fn-hide{#if $state == 7#} active{#/if#}">{#$langData['siteConfig'][9][6]#}</a>
+  <a href="javascript:;" data-state="6" class="group2 fn-hide{#if $state == 6#} active{#/if#}">{#$langData['siteConfig'][9][13]#}</a>
+</div>
+<div class="container">
+
+  <div id="tabs-container" class="swiper-container">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" {#if empty($list)#}data-page="1" data-first="0" data-end="1"{#else#}data-page="2" data-first="0"{#/if#}>
+        <div class="loading" style="border-bottom: 0px solid transparent; height: 0px;" data-loading="false">{#$langData['siteConfig'][7][7]#}...</div>
+        <div class="content-slide">
+          {#$count = 0#}
+          {#foreach from=$list item=l#}
+          <div class="item">
+            {#if $l.today#}<em class="tag">{#$langData['siteConfig'][13][24]#}</em>{#/if#}
+            <a href="waimaiOrderDetail.php?id={#$l.id#}" class="fn-clear">
+              {#*<div class="imgbox"><img src="{#$templets_skin#}images/timepicker2.png?v=2" alt="">{#$l.pubdate|date_format:"%H:%M"#}</div>*#}
+              <div class="txtbox">
+                <p class="title">{#$l.username#}&nbsp;&nbsp;{#$l.tel#}</p>
+                <p>{#$langData['siteConfig'][19][308]#}：{#$l.shopname#}{#$l.ordernumstore#}</p>
+              </div>
+            </a>
+          </div>
+          {#/foreach#}
+          {#if empty($list)#}
+          <div class="load">{#$langData['siteConfig'][21][64]#}</div>
+          {#/if#}
+        </div>
+      </div>
+      <div class="swiper-slide" data-page="1" data-first="1">
+        <div class="loading" style="border-bottom: 0px solid transparent; height: 0px;" data-loading="false">{#$langData['siteConfig'][7][7]#}...</div>
+        <div class="content-slide"></div>
+      </div>
+      <div class="swiper-slide" data-page="1" data-first="1">
+        <div class="loading" style="border-bottom: 0px solid transparent; height: 0px;" data-loading="false">{#$langData['siteConfig'][7][7]#}...</div>
+        <div class="content-slide"></div>
+      </div>
+      <div class="swiper-slide" data-page="1" data-first="1">
+        <div class="loading" style="border-bottom: 0px solid transparent; height: 0px;" data-loading="false">{#$langData['siteConfig'][7][7]#}...</div>
+        <div class="content-slide"></div>
+      </div>
+
+      <div class="swiper-slide" data-page="1" data-first="1">
+        <div class="loading" style="border-bottom: 0px solid transparent; height: 0px;" data-loading="false">{#$langData['siteConfig'][7][7]#}...</div>
+        <div class="content-slide"></div>
+      </div>
+      <div class="swiper-slide" data-page="1" data-first="1">
+        <div class="loading" style="border-bottom: 0px solid transparent; height: 0px;" data-loading="false">{#$langData['siteConfig'][7][7]#}...</div>
+        <div class="content-slide"></div>
+      </div>
+      <div class="swiper-slide" data-page="1" data-first="1">
+        <div class="loading" style="border-bottom: 0px solid transparent; height: 0px;" data-loading="false">{#$langData['siteConfig'][7][7]#}...</div>
+        <div class="content-slide"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="blank"></div>
+
+<script>
+  var pageUrl = '{#$cfg_basehost#}/wmsj/order/waimaiOrder.php?state=', state = {#if $state#}{#$state#}{#else#}2{#/if#};
+</script>
+
+{#$jsFile = array("swiper.min.js", "drag-loading.js", "waimaiOrder.js?v={#$cfg_staticVersion#}")#}
+{#include file='../_footer.html' curr='order' toppage=1#}
+
+</body>
+</html>

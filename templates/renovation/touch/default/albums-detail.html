@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>{#$detail_title#}-{#$renovation_title#}</title>
+<meta name="keywords" content="{#$renovation_keywords#}" />
+<meta name="description" content="{#$renovation_description#}" />
+<link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/core/touchBase.css?v={#$cfg_staticVersion#}" />
+<link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/common.css?v={#$cfg_staticVersion#}">
+<link rel="stylesheet" href="{#$templets_skin#}css/idangerous.swiper.css?v={#$cfg_staticVersion#}">
+<link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/picture.css?v={#$cfg_staticVersion#}">
+<script type="text/javascript" src="{#$cfg_staticPath#}js/core/touchScale.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/core/zepto.min.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript">
+	var masterDomain = '{#$cfg_basehost#}', channelDomain = '{#$renovation_channelDomain#}', staticPath = '{#$cfg_staticPath#}';
+</script>
+</head>
+
+<body>
+	<div class="photoBox">
+		<div class="photo-head-h">
+			<div class="photo-head">
+				<a href="javascript:history.go(-1)" class="back goBack"><i></i></a>
+				<p>{#$detail_title#}</p>
+			</div>
+		</div>
+		<div class="swiper-container">
+			<ul id="Gallery" class="swiper-wrapper">
+				{#foreach from=$detail_pics item="pics" key=k#}
+	    	<li class="swiper-slide">
+					<img src="{#$templets_skin#}images/blank.gif" data-src="{#$pics.path#}" alt="{#$k+1#}/{#$detail_pics|@count#}" class="swiper-lazy">
+					<span>{#$detail_title#}</span>
+				</li>
+				{#/foreach#}
+			</ul>
+		</div>
+		<div class="pic-int" style="z-index: 1001; display: block;">
+			<div class="flor f10"><span class="f14">1/6	</span></div>
+		</div>
+		<div class="space"></div>
+	</div>
+	<script src="{#$templets_skin#}js/idangerous.swiper.min.js"></script>
+	<script src="{#$templets_skin#}js/jquery.scroll.loading.js"></script>
+	<script src="{#$templets_skin#}js/picture.js?v={#$cfg_staticVersion#}"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{#$cssFile = array("goods-type.css?v=2")#}
+{#include file='../_header.html' pageTitle=$langData['siteConfig'][19][488] cssFile=$cssFile goBack=1 rbtn='<a href="add-goodsType.php?sid='|cat:$sid|cat:'">'|cat:$langData['siteConfig'][6][31]|cat:'</a>'#}
+
+  <div class="container">
+    {#foreach from=$list item=l#}
+    <div class="fn-clear item" data-id="{#$l.id#}">
+      <p class="name">{#$l.title#}&nbsp;&nbsp;&nbsp;&nbsp;<span>【{#if $l.status#}{#$langData['waimai'][1][120]#}{#else#}{#$langData['siteConfig'][6][15]#}{#/if#}】</span></p>
+      <p class="date">{#$langData['waimai'][1][65]#}：{#$l.start_time#}{#$langData['siteConfig'][13][7]#}{#$l.end_time#}</p>
+      <p class="date">{#$langData['waimai'][1][67]#}：{#if $l.weekshow#}{#$l.week#}{#else#}{#$langData['waimai'][5][44]#}{#/if#}</p>
+      <em class="more"></em>
+    </div>
+    {#/foreach#}
+  </div>
+
+  <!-- 操作提示层 s -->
+  <div class="layer">
+    <div class="mask"></div>
+    <div class="operate">
+      <ul>
+        <li class="icon1"><a href="javascript:;" class="fn-clear del"><span>{#$langData['siteConfig'][6][8]#}</span></a></li>
+        <li class="icon2"><a href="" data-url="add-goodsType.php?sid={#$sid#}&id=" class="fn-clear edit"><span>{#$langData['siteConfig'][6][7]#}</span><em class="arrow"></em></a></li>
+        <li class="cancel"><a href="javascript:;">{#$langData['siteConfig'][6][12]#}</a></li>
+      </ul>
+    </div>
+  </div>
+  <!-- 操作提示层 e -->
+
+<script>var sid = {#$sid#};</script>
+{#include file='../_footer.html' jsFile=array("goods-type.js?v=2") curr='shop' toppage=0#}
+
+</body>
+</html>

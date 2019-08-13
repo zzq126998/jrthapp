@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>全国小区一键导入</title>
+<link rel='stylesheet' type='text/css' href='{#$cfg_basehost#}/static/css/admin/datetimepicker.css?v={#$cfg_staticVersion#}' />
+<link rel='stylesheet' type='text/css' href='{#$cfg_basehost#}/static/css/admin/common.css?v={#$cfg_staticVersion#}' />
+<link rel='stylesheet' type='text/css' href='{#$cfg_basehost#}/static/css/admin/bootstrap.css?v={#$cfg_staticVersion#}' />
+<link rel='stylesheet' type='text/css' href='{#$staticFile#}css/index.css?v={#$cfg_staticVersion#}' />
+<script>
+    var staticPath = '{#$cfg_basehost#}/static/', step = {#$step#}, cityid = '{#$cityid#}', cid = '{#$cid#}';
+</script>
+</head>
+
+<body>
+{#if !$step#}
+<div class="alert alert-success" style="margin:10px 20px 0;"><button type="button" class="close" data-dismiss="alert">×</button>请处只显示已开通的分站城市，如需导入更多城市，请先开通相关城市分站！</div>
+
+<div class="step0">
+    {#if $alreadyCollection#}
+    <div class="alreadyCollection">
+        <h4>已采集({#$alreadyCollection|count#})：</h4>
+        <ul class="clearfix">
+            {#foreach from=$alreadyCollection item=city#}
+            <li><a href="?step=4&cityid={#$city.cityid#}&cid={#$city.cid#}" title="已采集{#$city.totalRecord#}个小区"><strong>{#$city.name#}</strong><span>{#$city.totalRecord#}</span></a></li>
+            {#/foreach#}
+        </ul>
+    </div>
+    {#/if#}
+
+    {#if $notCollection#}
+    <div class="notCollection">
+        <h4>未采集({#$notCollection|count#})：</h4>
+        <ul class="clearfix">
+            {#foreach from=$notCollection item=city#}
+            <li data-cid="{#$city.cid#}"><a href="?step=1&cityid={#$city.cityid#}&cid={#$city.cid#}"><strong>{#$city.name#}</strong></a></li>
+            {#/foreach#}
+        </ul>
+    </div>
+    {#/if#}
+
+    {#if !$alreadyCollection && !$notCollection#}
+    <div class="empty">暂未查询要到导入的城市，请先开通城市分站！</div>
+    {#/if#}
+</div>
+
+{#elseif $step == 4#}
+<div class="search">
+    <label>【{#$cityName#}】采集数据管理&nbsp;&nbsp;&nbsp;&nbsp;<a href="index.php">返回首页</a></label>
+</div>
+
+<div class="filter clearfix">
+    <div class="f-left">
+        <div class="btn-group" id="selectBtn">
+            <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="check"></span><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><a href="javascript:;" data-id="1">全选</a></li>
+                <li><a href="javascript:;" data-id="0">不选</a></li>
+            </ul>
+        </div>
+        <button class="btn" data-toggle="dropdown" id="delBtn">删除</button>
+        <div class="btn-group" id="stateBtn">
+            <button class="btn dropdown-toggle" data-toggle="dropdown">全部信息(<span class="totalCount">{#$totalCount#}</span>)<span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><a href="javascript:;" data-id="">全部信息(<span class="totalCount">{#$totalCount#}</span>)</a></li>
+                <li><a href="javascript:;" data-id="0">待采集(<span class="totalGray">{#$state1#}</span>)</a></li>
+                <li><a href="javascript:;" data-id="1">已采集(<span class="totalAudit">{#$state2#}</span>)</a></li>
+                <li><a href="javascript:;" data-id="2">已发布(<span class="totalRefuse">{#$state3#}</span>)</a></li>
+            </ul>
+        </div>
+        <a href="?step=1&cityid={#$cityid#}&cid={#$cid#}" class="btn btn-primary" id="collection" style="margin-left: 15px;" title="重新获取最新小区信息">采集最新小区</a>
+        {#if $state1#}
+        <a href="?step=2&cityid={#$cityid#}&cid={#$cid#}" class="btn btn-primary" id="collection" style="margin-left: 15px;" title="完成待采集任务">继续采集</a>
+        {#/if#}
+        {#if $state2#}<a href="?step=3&cityid={#$cityid#}&cid={#$cid#}" class="btn btn-success" id="fabu" style="margin-left: 15px;">一键发布</a>{#/if#}
+        <button class="btn btn-danger" data-toggle="dropdown" id="delete" style="margin-left: 15px;">清空列表</button>
+    </div>
+    <div class="f-right">
+        <div class="btn-group" id="pageBtn">
+            <button class="btn dropdown-toggle" data-toggle="dropdown">每页10条<span class="caret"></span></button>
+            <ul class="dropdown-menu pull-right">
+                <li><a href="javascript:;" data-id="10">每页10条</a></li>
+                <li><a href="javascript:;" data-id="15">每页15条</a></li>
+                <li><a href="javascript:;" data-id="20">每页20条</a></li>
+                <li><a href="javascript:;" data-id="30">每页30条</a></li>
+                <li><a href="javascript:;" data-id="50">每页50条</a></li>
+                <li><a href="javascript:;" data-id="100">每页100条</a></li>
+            </ul>
+        </div>
+        <button class="btn disabled" data-toggle="dropdown" id="prevBtn">上一页</button>
+        <button class="btn disabled" data-toggle="dropdown" id="nextBtn">下一页</button>
+        <div class="btn-group" id="paginationBtn">
+            <button class="btn dropdown-toggle" data-toggle="dropdown">1/1页<span class="caret"></span></button>
+            <ul class="dropdown-menu" style="left:auto; right:0;">
+                <li><a href="javascript:;" data-id="1">第1页</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<ul class="thead t100 clearfix">
+    <li class="row3">&nbsp;</li>
+    <li class="row25 left">小区</li>
+    <li class="row20 left">地址</li>
+    <li class="row12 left">报价</li>
+    <li class="row10 left">建筑类型</li>
+    <li class="row15 left">物业费</li>
+    <li class="row15 left">状态</li>
+</ul>
+
+<div class="list mt124" id="list" data-totalpage="1" data-atpage="1"><table><tbody></tbody></table><div id="loading" class="loading hide"></div></div>
+
+<div id="pageInfo" class="pagination pagination-centered"></div>
+{#/if#}
+
+<script type='text/javascript' src='{#$cfg_basehost#}/static/js/core/jquery-1.8.3.min.js?v={#$cfg_staticVersion#}'></script>
+<script type='text/javascript' src='{#$cfg_basehost#}/static/js/admin/common.js?v={#$cfg_staticVersion#}'></script>
+<script type='text/javascript' src='{#$cfg_basehost#}/static/js/ui/jquery.dialog-4.2.0.js?v={#$cfg_staticVersion#}'></script>
+<script type='text/javascript' src='{#$cfg_basehost#}/static/js/ui/bootstrap.min.js?v={#$cfg_staticVersion#}'></script>
+<script type='text/javascript' src='{#$staticFile#}js/index.js?v={#$cfg_staticVersion#}'></script>
+</body>
+</html>

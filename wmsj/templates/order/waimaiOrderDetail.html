@@ -1,0 +1,181 @@
+{#$pageTitle = $langData['siteConfig'][19][313]#}
+{#$pageCurr = "order/waimaiOrder"#}
+{#include file="../_header.html"#}
+
+<script>var id = {#$id#};</script>
+<div class="main-content">
+  <div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <i class="ace-icon fa fa-bar-chart-o bar-chart-o-icon"></i>
+      <li class="active">{#$langData['siteConfig'][17][1]#}</li>
+      <li class="active">{#$langData['siteConfig'][19][313]#}</li>
+    </ul>
+
+    {#include file="../_uinfo.html"#}
+
+  </div>
+  <div class="page-content">
+
+      <div class="page-content-area" id="list">
+        <style>.detail-view tr { height:30px; line-height:30px; } td { width: 80px; }</style>
+        <div style="overflow:hidden;">
+          <div class="col-xs-12 col-sm-6 ui-sortable">
+
+            {#if $state == 2#}
+            <button class="btn btn-success" id="confirmObj">{#$langData['siteConfig'][6][141]#}</button>
+            <button class="btn btn-danger" id="failedObj">{#$langData['waimai'][1][205]#}</button>
+            {#elseif $state == 3 || $state == 4 || $state == 5#}
+            <button class="btn btn-success" id="okObj">{#$langData['waimai'][1][224]#}</button>
+            <button class="btn btn-danger" id="failedObj">{#$langData['waimai'][1][228]#}</button>
+            {#*<button class="btn btn-warning" id="printObj">打印订单</button>*#}
+            {#elseif $state == 1#}
+            {#*<button class="btn btn-warning" id="printObj">打印订单</button>*#}
+            {#/if#}
+
+
+            <div class="widget-box">
+              <div class="widget-header header-color-blue">
+                <h5 class="bigger lighter">
+                  <i class="icon-table"></i>{#$langData['siteConfig'][19][313]#}</h5>
+              </div>
+              <div class="widget-body">
+                <div class="widget-main no-padding">
+                  <table class="table table-striped table-bordered table-hover">
+                    <tbody>
+                      <tr>
+                        <td>{#$langData['siteConfig'][19][50]#}</td>
+                        <td>{#if $ordernumstore != ""#}{#$shopname|cat:$ordernumstore#}{#else#}{#$ordernum#}{#/if#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['siteConfig'][17][12]#}</td>
+                        <td>{#$shopname#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['waimai'][1][175]#}</td>
+                        <td><a href="javascript:;" class="userinfo" data-id="{#$uid#}">{#$username#}</a></td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['siteConfig'][19][4]#}</td>
+                        <td>{#$person#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['siteConfig'][3][1]#}</td>
+                        <td>{#$tel#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['waimai'][1][209]#}</td>
+                        <td>{#$address#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['waimai'][1][210]#}</td>
+                        <td>
+                            {#foreach from=$food item=f#}
+                            {#$f.title#} 【{#$f.count#}】 &yen;{#$f.price * $f.count#}<br />
+                            {#/foreach#}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['waimai'][1][211]#}</td>
+                        <td>{#$note#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['waimai'][5][3]#}</td>
+                        <td>
+                            {#foreach from=$preset item=p#}
+                            {#$p.title#}：{#$p.value#}<br />
+                            {#/foreach#}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['waimai'][5][4]#}</td>
+                        <td>
+                            {#foreach from=$priceinfo item=p#}
+                            {#$p.body#}：{#if $p.type == "youhui" || $p.type == "manjian" || $p.type == "shoudan"#}-{#/if#}{#$p.amount#}<br />
+                            {#/foreach#}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['waimai'][1][213]#}</td>
+                        <td>{#$amount#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['siteConfig'][19][52]#}</td>
+                        <td>{#$paytype#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['waimai'][1][221]#}</td>
+                        <td>{#$peisong#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['waimai'][1][214]#}</td>
+                        <td>{#if $pubdate#}{#$pubdate|date_format:"%Y-%m-%d %H:%M:%S"#}{#/if#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['siteConfig'][19][53]#}</td>
+                        <td>{#if $paydate > 0#}{#$paydate|date_format:"%Y-%m-%d %H:%M:%S"#}{#/if#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['waimai'][6][16]#}</td>
+                        <td>{#if $paytype == $langData['siteConfig'][19][712] || $paytype == $langData['siteConfig'][19][302]#}<div>{#$langData['waimai'][6][17]#}：{#$paylognum#}</div><div>{#$langData['waimai'][6][18]#}：{#$transaction_id#}</div>{#/if#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['waimai'][4][8]#}</td>
+                        <td>{#if $confirmdate#}{#$confirmdate|date_format:"%Y-%m-%d %H:%M:%S"#}{#/if#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['siteConfig'][17][26]#}</td>
+                        <td>{#if $peidate#}{#$peidate|date_format:"%Y-%m-%d %H:%M:%S"#}{#/if#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['siteConfig'][17][27]#}</td>
+                        <td>{#if $songdate#}{#$songdate|date_format:"%Y-%m-%d %H:%M:%S"#}{#/if#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['waimai'][1][226]#}</td>
+                        <td>{#if $okdate#}{#$okdate|date_format:"%Y-%m-%d %H:%M:%S"#}{#/if#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['waimai'][1][227]#}</td>
+                        <td>{#if $okdate#}{#ceil(($okdate-$pubdate)/60)#}{#/if#}</td>
+                      </tr>
+                      <tr>
+                        <td>{#$langData['siteConfig'][16][50]#}</td>
+                        <td>
+                            {#if $state == 0#}
+                    {#$langData['siteConfig'][9][22]#}
+                    {#elseif $state == 1#}
+                    {#$langData['siteConfig'][6][3]#} - {#$langData['waimai'][1][221]#}：{#$peisong#}，<a tel="{#$peisongphone#}">{#$peisongphone#}</a>
+                    {#elseif $state == 2#}
+                    {#$langData['siteConfig'][9][11]#}
+                    {#elseif $state == 3#}
+                    {#$langData['siteConfig'][9][46]#}
+                    {#elseif $state == 4#}
+                    {#$langData['siteConfig'][16][114]#} - {#$langData['waimai'][1][221]#}：{#$peisong#}，<a tel="{#$peisongphone#}">{#$peisongphone#}</a>
+                    {#elseif $state == 5#}
+                    {#$langData['siteConfig'][16][115]#} - {#$langData['waimai'][1][221]#}：{#$peisong#}，<a tel="{#$peisongphone#}">{#$peisongphone#}</a>
+                    {#elseif $state == 6#}
+                    {#$langData['siteConfig'][6][112]#}
+                    {#elseif $state == 7#}
+                    {#$langData['siteConfig'][9][47]#}
+                    {#/if#}
+                        </td>
+                      </tr>
+                      {#if $state == 6 || $state == 7#}
+                      <tr>
+                        <td>{#$langData['waimai'][1][229]#}</td>
+                        <td>{#$failed#}</td>
+                      </tr>
+                      {#/if#}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  </div>
+</div>
+
+{#include file="../_footer.html" jsFile=$jsFile#}

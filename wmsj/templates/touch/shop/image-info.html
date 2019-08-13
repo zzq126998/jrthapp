@@ -1,0 +1,32 @@
+{#$cssFile = array("image-info.css?v=3")#}
+{#include file='../_header.html' pageTitle=$langData['waimai'][1][180] cssFile=$cssFile goBack=1 rbtn='<a href="javascript:;" class="submit">'|cat:$langData['siteConfig'][6][27]|cat:'</a>'#}
+
+  <div class="container">
+    <form action="" id="submitForm">
+     <div class="img-box imgbox">
+        <p>{#$langData['waimai'][5][45]#}({#$langData['waimai'][5][46]|replace:'1':'10'#})</p>
+        <ul class="uploader-list fn-clear" id="fileList">
+          <li class="uploadbtn">
+            <div id="filePicker" class="webuploader-container">
+              <div class="webuploader-pick">+</div>
+            </div>
+          </li>
+          {#foreach from=$picsList key=k item=i#}
+          <li class="thumbnail" id="item_{#$k+1#}"><img src="{#changeFileSize url="{#$i.path#}" type="small"#}" data-val="{#$i.pathSource#}" data-url="{#changeFileSize url="{#$i.path#}" type="small"#}" alt=""><div class="file-panel"><span class="cancel"></span></div></li>
+          {#/foreach#}
+        </ul>
+        <input type="hidden" name="shop_banner" id="shop_banner" value="">
+      </div>
+    </form>
+
+  </div>
+
+<script>
+  var sid = {#$sid#}, id = {#$id#};
+  var modelType = 'waimai';
+  var thumbSize = {#$thumbSize#}, thumbType = '{#$thumbType#}', atlasSize = {#$atlasSize*1024*1024#}, atlasType = '{#$atlasType#}', atlasMax = 10;
+</script>
+{#include file='../_footer.html' jsFile=array("zepto.deferred.js", "/static/js/webuploader/webuploader.js", "/templates/member/touch/js/common.js?v=4", "store-info-public.js?v=2", "image-info.js?v=2") curr='shop' toppage=0#}
+
+</body>
+</html>

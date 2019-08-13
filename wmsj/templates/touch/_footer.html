@@ -1,0 +1,43 @@
+{#if !$nobtm#}
+<!-- 底部 s -->
+<div class="footer">
+	<ul class="fn-clear">
+		<li class="foot1{#if $curr == 'order'#} curr{#/if#}"><a href="/wmsj/order/waimaiOrder.php"><i></i>{#$langData['siteConfig'][19][359]#}</a></li>
+    <li class="foot2{#if $curr == 'shop'#} curr{#/if#}"><a href="/wmsj/index.php?to=shop"><i></i>{#$langData['siteConfig'][17][12]#}</a></li>
+		<li class="foot3{#if $curr == 'statistics'#} curr{#/if#}"><a href="/wmsj/statistics/tj-waimai.php"><i></i>{#$langData['siteConfig'][17][11]#}</a></li>
+		<li class="foot4{#if $curr == 'comment'#} curr{#/if#}"><a href="/wmsj/message/waimaiCommon.php"><i></i>{#$langData['siteConfig'][6][114]#}</a></li>
+	</ul>
+</div>
+<!-- 底部 e -->
+{#/if#}
+<script type='text/javascript' src='{#$cfg_basehost#}/include/json.php?action=lang'></script>
+<script type="text/javascript" src="{#$templets_skin#}js/public.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$templets_skin#}js/checkLastOrder.js?v={#$cfg_staticVersion#}"></script>
+{#if $jsFile#}
+  {#foreach $jsFile as $val#}
+  {#if substr($val, 0, 1) == "/"#}
+  <script src="{#$val#}" type="text/javascript"></script>
+  {#else#}
+  <script src="{#$templets_skin#}js/{#$val#}" type="text/javascript"></script>
+  {#/if#}
+  {#/foreach#}
+{#/if#}
+{#if $toppage#}
+<script>
+// "pushState" in window.history && (
+//     window.history.pushState({
+//         title: document.title,
+//         url: location.href
+//     }, document.title, location.href),
+//     setTimeout(function () {
+//         window.addEventListener("popstate", function (e) {
+//             e.preventDefault();
+//             window.history.pushState({
+//             title: document.title,
+//             url: location.href
+//         }, document.title, location.href)
+//         })
+//     }, 1)
+// );
+</script>
+{#/if#}

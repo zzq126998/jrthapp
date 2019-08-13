@@ -1,0 +1,41 @@
+
+body, html{background: #efefef;}
+body.fixed{position: fixed; left: 0; right: 0;}
+
+/*头部*/
+.header-l .back{display: block; width: 1rem; height: 1rem; background: url(../images/btn_back.png) center center no-repeat; background-size: .5rem auto;}
+.header-middle span{background: url(../images/shape.png) right center no-repeat; padding-right: .5rem; background-size: .3rem auto; display: inline-block;}
+.header-middle span.on{background-image: url(../images/shape2.png);}
+.header-r{display: block; width: 1rem; height: 1rem; font-size: .38rem; line-height: 1rem; }
+.header-r a{display: block; }
+
+/*搜索*/
+.search{position: fixed; top: 1rem; left: 0; right: 0; background: #efefef; z-index: 8;}
+.search .keywords{display: block;width: 6.3rem; margin: .1rem; color: #bbb; padding: .1rem 0 .1rem 1rem; background: #fff url(../images/search_icon.png) .2rem .07rem no-repeat; background-size: .5rem auto; border-radius: .06rem; font-size: .3rem;border:none;outline:none;}
+
+/*列表*/
+.list{margin-top: 1.9rem;padding-bottom: 1rem;}
+.list .item{background: #fff; margin: 0 .1rem .1rem .1rem; padding: .3rem .3rem .3rem .4rem; border-radius: .06rem;overflow: hidden;}
+.list .item a{display: block;}
+.list .item .txtbox{float: left;}
+.list .item .name{font-size: .34rem; margin-bottom: .05rem;}
+.list .item .state{margin-right: .2rem; color: #4baf4f;}
+.list .item .state0 {color: #f60;}
+.list .item .num{color: #969696;}
+.list .item .price{float: right; padding-right: 0;margin-top: .25rem;}
+/*.list .item .xiajia {float: left;line-height: .5rem;margin: .25rem 0 0 1rem;}*/
+.list .item .status {line-height: .5rem;}
+.list .item .xiajia {display: inline-block;margin-left: 1rem;}
+.list .item .xiajia span {color: #999;}
+.list .item .toggle {display: inline-block;  width: 1rem; height: .5rem; vertical-align: middle;background: url(../images/btn_off.png) center center no-repeat; background-size: auto .6rem; }
+.list .item .toggle.on {background: url(../images/btn_on.png) center center no-repeat; background-size: auto .6rem; }
+
+/*筛选分类*/
+.layer{display: none; opacity: 0; position: fixed; left: 0; right: 0; z-index: 9;}
+.layer.show{display: block;}
+.layer .mask{position: fixed; top: 0; bottom: 0; left: 0; right: 0; background: #000; opacity: 0.5; z-index: 9;}
+.layer .type{position: fixed; top: 1rem; z-index: 10; background: #fff; left: 0; right: 0; font-size: .32rem; overflow: auto;}
+.layer .type li{padding: .2rem .3rem; border-bottom: .02rem solid #e5e5e5;}
+
+
+.loading {padding:.2rem 0;text-align: center;}

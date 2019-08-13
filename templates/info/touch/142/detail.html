@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="{#$cfg_soft_lang#}">
+    <title>{#$detail_title#}</title>
+    <meta name="keywords" content="{#$info_keywords#}">
+    <meta name="description" content="{#$info_description#}">
+    <meta name="wap-font-scale" content="no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no,viewport-fit=cover">
+    <link rel="shortcut icon" href="{#$cfg_basehost#}/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/core/touchBase.css?v={#$cfg_staticVersion#}">
+    <link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/ui/swiper.min_4.2.2.css?v={#$cfg_staticVersion#}">
+    <link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/common.css?v={#$cfg_staticVersion#}">
+    <link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/detail.css?v={#$cfg_staticVersion#}">
+    <script type="text/javascript" src="{#$cfg_staticPath#}js/core/touchScale.js?v={#$cfg_staticVersion#}"></script>
+    <script type="text/javascript" src="{#$cfg_staticPath#}js/core/zepto.min.js"></script>
+    <script type="text/javascript">
+        var masterDomain = '{#$cfg_basehost#}', staticPath = '{#$cfg_staticPath#}', site_map = "{#$site_map#}";
+        var imgurl = "{#$templets_skin#}";
+        var cookiePre = '{#$cfg_cookiePre#}', id = '{#$detail_id#}';
+        var JubaoConfig = {
+            "module" : 'info',
+            "action" : 'detail',
+            "id" : '{#$detail_id#}'
+        };
+        var detail_id = {#$detail_info.id#};
+        var pageData = {
+            title: '{#$detail_title#}',
+            address: '{#$detail_address#}',
+            lat: '{#$detail_lnglat[1]#}',
+            lng: '{#$detail_lnglat[0]#}',
+            mapType: '{#$site_map#}',
+            cityName: '{#$siteCityInfo['name']#}',
+            mapKey: '{#$site_map_key#}'
+        };
+        var lat='{#$detail_lnglat[1]#}',lng= '{#$detail_lnglat[0]#}';
+        var collect = {#$detail_info.collect#};
+        var detail_video='{#$detail_video#}';
+        var comdetailUrl = '{#getUrlPath service='info' template='comdetail' id="%id%"#}';
+    </script>
+</head>
+<body>
+<!-- 头部 -->
+{#include file="../../../siteConfig/touch_top.html" pageTitle={#$langData['info'][2][29]#}#}
+<!-- 头部 end -->
+<div class="top">
+    <div class="title"><h3>{#$detail_info['titlenew']#}</h3> <a class="share HN_PublicShare" href="javascript:;"></a></div>
+    {#if $detail_price_switch==0#}
+    <div class="mprice">{#if $detail_info['price'] neq 0#}<em>{#echoCurrency type='symbol'#}</em>{#$detail_info['price']#}
+    {#else#}
+    {#$langData['info'][2][30]#}
+    {#/if#}
+    </div>
+    {#/if#}
+    <div class="msg fn-clear">
+        <span class="time fn-left">{#date('m-d H:i', $detail_info['pubdate'])#}<i>·</i>{#$detail_info['validCeil']#}</span>
+        <div class="fn-right _right">
+            <span class="look">{#$detail_info['click']#}</span>
+            <span class="numZan">{#$detail_info['collectnum']#}</span>
+            <a href="javascript:;" class="numComment">{#$detail_info['common']#}</a>
+        </div>
+    </div>
+</div>
+
+<!--个人信息 s-->
+<div class="panel-info">
+    {#if $is_shop#}
+    <div class="info">
+        <a class="fn-clear" href="{#$shop_url#}">
+            <div class="user-img fn-left"><img src="{#$detail_info['member']['photo']#}" alt=""></div>
+            <div class="user-info">
+                <p class="name">{#$detail_info['member']['nickname']#} {#if $is_shop#}<i class="com_tab"></i> {#else#}<i class="panel_tab">{#$langData['info'][1][18]#}</i>{#/if#}</p>
+                <p class="msg-num">{#$langData['info'][1][19]#} <em>{#$detail_info['fabuCount']#}</em>{#$langData['info'][1][20]#}</p>
+            </div>
+            <i class="next_icon"></i>
+        </a>
+    </div>
+    {#else#}
+    {#if $detail_info['member']['userid']#}
+    <div class="info">
+        <a class="fn-clear" href="{#getUrlPath service="info" template="homepage" id={#$detail_info['member']['userid']#}#}">
+            <div class="user-img fn-left"><img src="{#$detail_info['member']['photo']#}" alt=""></div>
+            <div class="user-info">
+                <p class="name">{#$detail_info['member']['nickname']#}  {#if $is_shop#}<i class="com_tab"></i> {#else#}<i class="panel_tab">{#$langData['info'][1][18]#}</i>{#/if#}</p>
+                <p class="msg-num">{#$langData['info'][1][19]#} <em>{#$detail_info['fabuCount']#}</em>{#$langData['info'][1][20]#}</p>
+            </div>
+            <i class="next_icon"></i>
+        </a>
+    </div>
+    {#else#}
+    <div class="info fn-clear">
+        <div><span style="margin-left: 24px;font-size: .28rem;">{#$langData['info'][1][21]#}</span></div>
+        <i class="next_icon"></i>
+    </div>
+    {#/if#}
+    {#/if#}
+    <!-- 企业地址 -->
+    <div class="address address_map">
+        <div class="map" id="map"></div>
+        <div class="area map_address">
+            <a href="javascript:;" class="address-info appMapBtn fn-clear" target="_blank">
+                <i class="area-img"></i>
+                <span class="area-txt">{#$detail_address#}</span>
+                <div class="area-distance map_distance"><span></span><p>0km</p></div>
+            </a>
+        </div>
+    </div>
+</div>
+<!--个人信息 e-->
+
+<!--介绍内容 s-->
+<div class="intronCon">
+    <div class="introBox">
+        {#foreach from=$detail_info['imglist'] key=key item=imgs#}
+        <div class="picBox">
+            <img src="{#$imgs['path']#}" alt="">
+        </div>
+        {#/foreach#}
+        <div class="textCon">
+            <span class="type" >#<a href="{#getUrlPath service=info action=list id=$detail_typeid#}">{#$list_typename#}</a>#</span>
+            {#if $detail_item#}
+            <div class="attributes fn-clear">
+                {#foreach from=$detail_item item=item#}
+                {#if $item.value != ""#}
+                <dl><dt>{#$item.type#}：</dt><dd>{#$item.value#}&nbsp;</dd></dl>
+                {#/if#}
+                {#/foreach#}
+            </div>
+            {#/if#}
+            <p class="info">{#$detail_info['body']#}</p>
+        </div>
+    </div>
+    <!-- 举报 s-->
+    <div class="HN_Jubao reportBox fn-clear">
+        <div class="releft">
+            <p>{#$langData['info'][0][20]#}<span>{#$langData['info'][0][21]#}></span></p>{#* 如遇无效、虚假、诈骗信息，请 *#}{#* 立即举报 *#}
+            <p>{#$langData['info'][0][22]#}</p>{#* 办理服务前请勿付订金、押金等费用，谨防上当受骗！ *#}
+        </div>
+        <div class="reright ">
+            <img src="{#$templets_skin#}images/reportIcon.png" alt="">
+        </div>
+    </div>
+    <!-- 举报 e-->
+</div>
+<!--介绍内容 e-->
+
+<!--评论 s-->
+<div class="commentBox">
+    <div class="headtop">
+        <div class="head-title">
+            <p class="fn-clear"><span>{#$langData['info'][0][13]#}评论</span> <em class="fn-right">{#$langData['info'][1][39]#}{#$detail_common#}{#$langData['info'][1][37]#}</em></p>
+        </div>
+    </div>
+    <div class="commentList newList">
+        <ul>
+            {#info action='common' return='common' infoid={#$detail_id#} orderby='hot' pageSize='3'#}
+            {#if is_array($common.userinfo)#}
+            {#$nickname = $common.userinfo.nickname#}
+            {#$photo = $common.userinfo.photo|default: '/static/images/noPhoto_40.jpg'#}
+            {#else#}
+            {#$nickname = {#$langData['info'][2][33]#}#}
+            {#$photo = '/static/images/noPhoto_40.jpg'#}
+            {#/if#}
+            <li>
+                <div class="imgbox">
+                    <img src="{#$photo#}"  alt="">
+                </div>
+                <div class="rightInfo">
+                    <h4>{#$nickname#}</h4>
+                    <p class="txtInfo">{#$common.content#}</p>
+                    {#if $common.lower!=null#}
+                        {#if count($common.lower)>1#}
+                        <div class="replyCon">
+                            {#foreach from=$common.lower key=ck item=clist#}
+                            {#if $ck<=2#}
+
+                            {#if is_array($clist.userinfo)#}
+                            {#$nickname = $clist.userinfo.nickname#}
+                            {#else#}
+                            {#$nickname = {#$langData['info'][2][33]#}#}
+                            {#/if#}
+
+                            <dl><dt><span class="spColor">{#$nickname#}：</span></dt><dd>{#$clist.content#}</dd></dl>
+                            {#/if#}
+                            {#/foreach#}
+                            {#if $ck>=2#}
+                            <a href="{#getUrlPath service='info' template='comdetail' id={#$common.id#}#}" class="pmore">{#$langData['info'][2][34]#}{#count($common.lower)#}{#$langData['info'][2][35]#} ></a>
+                            {#/if#}
+                        </div>
+                        {#else#}
+                        <div class="replyCon">
+                                {#$n=1#}
+                                {#foreach from=$common.lower key=ck item=clist#}
+                                {#if is_array($clist.userinfo)#}
+                                {#$nickname = $clist.userinfo.nickname#}
+                                {#else#}
+                                {#$nickname = {#$langData['info'][2][33]#}#}
+                                {#/if#}
+                                {#$n=$n+1#}
+                                {#if $ck<1#}
+                                <dl><dt><span class="spColor">{#$nickname#}：</span></dt><dd>{#$clist.content#}</dd></dl>
+                                    {#if $clist.lower!=null#}
+                                        {#foreach from=$clist.lower key=cks item=clists#}
+                                        {#if is_array($clists.userinfo)#}
+                                        {#$nickname2 = $clists.userinfo.nickname#}
+                                        {#else#}
+                                        {#$nickname2 = {#$langData['info'][2][33]#}#}
+                                        {#/if#}
+                                        <dl><dt><span class="spColor">{#$nickname2#}</span>{#$langData['marry'][5][55]#} <span class="spColor">{#$nickname#}：</span></dt><dd>{#$clists.content#}</dd></dl>
+                                        {#/foreach#}
+                                        {#if $n>1#}
+                                        <a href="{#getUrlPath service='info' template='comdetail' id={#$clist.id#}#}" class="pmore">{#$langData['marry'][5][60]#}{#count($clist.lower)#}{#$langData['marry'][5][61]#} ></a>
+                                        {#/if#}
+                                    {#/if#}
+                                {#/if#}
+                                {#/foreach#}
+                            </div>
+                        {#/if#}
+                    {#/if#}
+                    <div class="rbottom">
+                        <div class="rtime">{#$common.dtime|date_format:'%m-%d %H:%M'#}</div>
+                        <div class="rbInfo">
+                            <a href="{#getUrlPath service='info' template='comdetail' id={#$common.id#}#}" class="btnReply"> <s></s> {#$langData['marry'][5][55]#} </a>
+                            <a href="javascript:;" class="btnUp numZan {#if $common.already==1#}al_zan{#/if#}" data-id="{#$common.id#}"><em>{#$common.good#}</em> </a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {#/info#}
+            <div class="allmore"><a href="{#getUrlPath service='info' template='comment' id={#$detail_id#}#}">{#if $detail_common > 0#}{#$langData['info'][1][36]#}{#$detail_common#}{#$langData['info'][1][37]#}{#else#}{#$langData['info'][1][38]#}{#/if#} <s></s></a></div>
+        </ul>
+    </div>
+</div>
+<!--评论 e-->
+
+<div class="ad-box">{#myad title="二手信息_模板三_移动端_广告五"#}</div>
+
+<!--相关推荐 s-->
+<div class="recomBox pubBox">
+    <div class="recom-title"><span>{#$langData['info'][0][19]#}</span></div>{#* 相关推荐 *#}
+    <div class="recomList">
+        <ul class="fn-clear  reInfo">
+            {#foreach from=$detail_info['tj_infos'] item=infos#}
+            <li class="fn-clear"><a href="{#$infos['url']#}">
+                <div class="userimg "><img src="{#changeFileSize url="{#$infos['litpic']#}" type="small"#}" alt=""></div>
+                <div class="info_r ">
+                    <h4 class="fn-clear">{#if !empty($infos['member']['nickname'])#}{#$infos['member']['nickname']#}{#else#}{#$langData['info'][1][4]#}{#/if#} {#if $infos['is_shop']==1#}<i class="com_tab"></i> {#else#}<i class="panel_tab">{#$langData['info'][1][5]#}</i>{#/if#}
+                        {#if $infos['price_switch']==0#}
+                        <span class="price fn-right">{#if $infos['price'] neq 0#}<i>{#echoCurrency type='symbol'#}</i>1500{#else#}{#$langData['info'][1][22]#}{#/if#}</span>
+                        {#/if#}
+                    </h4>
+                    <p class="con"><span class="type" >#<em>{#$infos['typename']#}</em>#</span>{#$infos['title']#}</p>
+                    <div class="item-box img-box">
+                        {#if $infos['video']#}
+                        <div class="item-box video-box commonimg">
+                            <img data-video="{#$infos['video']#}" src="{#changeFileSize url="{#$infos['litpic']#}" type="small"#}" alt="">
+                            <i class="play"></i>
+                        </div>
+                        {#else#}
+                        {#foreach from=$infos['picArr'] key=k item=v#}
+                        <div class="img_item commonimg"><img src="{#changeFileSize url="{#$v['litpic']#}" type="small"#}" alt=""></div>
+                        {#/foreach#}
+                        {#/if#}
+                    </div>
+                    <p class="area"><i class="icon_area"></i>{#$infos['address'][1]#}</p>
+                    <div class="msg fn-clear">
+                        <div class="_left fn-left"><span>{#$infos.pubdate|date_format:'%m-%d %H:%M'#}</span><span class="point">·</span>{#$langData['info'][1][6]#}{#$infos['click']#}</div>
+                        <div class="_right fn-right"><span data-uid="10618" data-id="{#$infos['id']#}" class="numZan">{#$infos['collectnum']#}</span><a href="javascript:;" class="numComment">{#$infos['common']#}</a></div>
+                    </div>
+                </div>
+            </a></li>
+            {#/foreach#}
+        </ul>
+    </div>
+</div>
+<!--相关推荐 e-->
+
+<div class="footer_comment fn-clear">
+   <span><input type="text" placeholder="{#$langData['info'][0][13]#}{#$detail_title#}:" id="wcmt_text"></span><a class="wcmt_send" id="wcmt_send_btm">{#$langData['info'][0][13]#}</a>{#* 评论 *#}
+</div>
+
+{#if $detail_info['price'] neq 0#}
+    <div class="foot_bottom">
+        <div class="f_left">
+            <div class="scBox l-item"><s></s>{#$langData['info'][0][12]#}</div>{#* 收藏 *#}
+            <div class="plBox l-item"><a href="javascript:;"><s></s><p>{#$langData['info'][0][13]#}</p></a></div>{#* 评论 *#}
+        </div>
+        <div class="f_right">
+            <div class="ftel r-item"><a href="javascript:;"><i></i><span>{#$langData['info'][0][14]#}</span></a></div>{#* 联系咨询 *#}
+            <div class="fbuy r-item"><a href="{#getUrlPath service='info' template='confirm' id={#$detail_info['id']#}#}">{#$langData['info'][0][15]#}</a></div>{#* 立即购买 *#}
+        </div>
+    </div>
+{#else#}
+    <div class="foot_bottom  foot2">
+        <div class="f_left">
+            <div class="scBox l-item"><s></s>{#$langData['info'][0][12]#}</div>{#* 收藏 *#}
+            <div class="plBox l-item"><a href="javascript:;"><s></s><p>{#$langData['info'][0][13]#}</p></a></div>{#* 评论 *#}
+        </div>
+        <div class="f_right">
+            <div class="ftel r-item"><a href="javascript:;"><i></i><span>{#$langData['info'][0][14]#}</span></a></div>{#* 联系咨询 *#}
+        </div>
+    </div>
+{#/if#}
+
+<div class="mark"></div>
+
+
+<!-- 电话弹出层 s-->
+<div class="modal-public m-telphone" tabindex="-1" role="dialog">
+    <div class="bgCover"></div>
+    <div class="modal-main">
+        <div class="close">
+            <img src="{#$templets_skin#}images/close.png" alt="">
+        </div>
+        <h3>{#$langData['info'][0][16]#}</h3>{#* 联系我们 *#}
+        <p class="fn-clear"><b>{#$detail_telNum#}</b></p>
+        <div class="call"><a href="tel:{#$detail_telNum#}" >{#$langData['info'][0][17]#}</a></div>{#* 立即拨打 *#}
+    </div>
+</div>
+<!-- 电话弹出层 e-->
+
+<!-- 视频图片弹出层 s-->
+<div class="videoModal">
+    <div class="swiper-container">
+        <i class="vClose"></i>
+        <div class="swiper-wrapper">
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+</div>
+<!-- 视频图片弹出层 e-->
+
+<!-- 图片放大 -->
+{#include file="../../../siteConfig/bigimg_1.2.html"#}
+
+{#include file="{#$HUONIAOROOT#}/templates/siteConfig/public_location.html"#}
+<script type="text/javascript">
+    var wxconfig = {
+        "appId": '{#$wxjssdk_appId#}',
+        "timestamp": '{#$wxjssdk_timestamp#}',
+        "nonceStr": '{#$wxjssdk_nonceStr#}',
+        "signature": '{#$wxjssdk_signature#}',
+        "description": '{#$langData['info'][2][31]#}：{#$detail_info['member']['nickname']#}，{#$langData['info'][2][32]#}：{#$detail_info['telNum']#}',
+        "title": '{#$detail_info['title']#}',
+        "imgUrl": '{#$detail_imglist[0]['path']|default:$info_logoUrl#}',
+        "link": '{#getUrlPath service='info' template='detail' id={#$detail_id#}#}',
+    };
+
+    document.write(unescape("%3Cscript src='{#$cfg_staticPath#}js/publicShare.js?v="+~(-new Date())+"'type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type='text/javascript' src='{#$cfg_basehost#}/include/json.php?action=lang'></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/ui/jquery.smartScroll.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/ui/swiper.min_4.2.2.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$site_map_apiFile#}"></script>
+<script src="{#$cfg_staticPath#}js/publicOpenMap.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$templets_skin#}js/dialog.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$templets_skin#}js/common.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$templets_skin#}js/detail.js?v={#$cfg_staticVersion#}"></script>
+</body>
+</html>

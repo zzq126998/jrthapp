@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="{#$cfg_soft_lang#}">
+<title>{#$livedetail_title#}-{#$live_title#}</title>
+<meta name="keywords" content="{#$live_keywords#}"/>
+<meta name="description" content="{#$live_description#}"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/core/touchBase.css?v={#$cfg_staticVersion#}" />
+<link rel="stylesheet" href="{#$templets_skin#}css/index.css?v={#$cfg_staticVersion#}">
+<script type="text/javascript" src="{#$cfg_staticPath#}js/core/touchScale.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/core/zepto.min.js?v={#$cfg_staticVersion#}"></script>
+<link rel="stylesheet" href="//g.alicdn.com/de/prismplayer/2.6.0/skins/default/aliplayer-min.css" />
+<script type="text/javascript" src="//g.alicdn.com/de/prismplayer/2.6.0/aliplayer-min.js"></script>
+<script>
+  var cookiePre='{#$cfg_cookiePre#}',masterDomain = '{#$cfg_basehost#}',staticPath = '{#$cfg_staticPath#}', templatePath = '{#$templets_skin#}';
+  var newsid = {#$livedetail_id#};
+  var JubaoConfig = {
+		"module" : 'live',
+		"action" : 'detail',
+		"id" : '{#$livedetail_id#}'
+	};
+</script>
+</head>
+
+<body>
+<div style="position: fixed; left: 0; right: 0; width: 100%; height: 100%; overflow: hidden; bottom: 0; top: 0;">
+{#$pageTitle = {#$livedetail_title#}#}
+{#include file="../../../siteConfig/touch_top.html" headTheme="absolute"#}
+<div class="hLive_con">
+    <div class="video_box">
+      {#if $livedetail_state == 2 && $detail_mp4url == ''#}
+      <div class="empty"><img src="{#$templets_skin#}images/huifang.png"><p>视频回放正在制作中，请稍后访问...</p></div>
+      {#/if#}
+
+        <div  id="J_prismPlayer"{#if !$detail_mp4url && !$detail_url#} style="display: none;"{#/if#}>
+            <p class="online"><span>浏览次数：{#$livedetail_click#}</span> <button id="refresh" style="display: none;"></button></p>
+        </div>
+    </div>
+
+    <div class="chat_box">
+        <div class="box_title">
+            <span class="chat_title">聊天</span>
+            <a href="{#$livedetail_userurl#}">
+            <span class="per_info">
+                <span class="head_img"><img src="{#$livedetail_photo#}"></span>
+                <span class="per_name">{#$livedetail_nickname#}</span>
+                <span class="per_care">
+                	{#if $fid != $userid#}
+	                	{#if $userid && $isfollow#}
+	            		<button data-id="{#$fid#}" class="follow btnCare1">已关注</button>
+	            		{#else#}
+	            		<button data-id="{#$fid#}" class="follow btnCare">关注</button>
+	            		{#/if#}
+	            	{#else#}
+	                {#/if#}
+                </span>
+            </span>
+            </a>
+        </div>
+        <div class="box_main">
+            <ul class="main_info" id="main_info">
+            </ul>
+        </div>
+        <div class="box_bottom">
+          <div>
+            <span class="bg"></span>
+            <input id="rc-chatroom-input" type="text" placeholder="来说点什么吧...">
+            <button class="btn-send" id="rc-chatroom-button">发送</ button>
+            <button class="btn_share1 share HN_PublicShare"></button>
+          </div>
+        </div>
+    </div>
+</div>
+<div class="live_like">
+    <button class="like_img" data-id="{#$livedetail_id#}"><img src="{#$templets_skin#}images/live_like.png" alt=""></button>
+    <span>{#$livedetail_up#}</span>
+</div>
+</div>
+<script type="text/javascript">
+var username='{#$livedetail_username#}';
+var userphoto='{#$livedetail_userphoto#}';
+var appKey = "{#$livedetail_appKey#}";
+var token  = "{#$livedetail_token#}";
+var config = {
+    protobuf : "{#$cfg_staticPath#}js/rong/protobuf-2.2.8.min.js"
+};
+var count = 0;// 拉取最近聊天最多 50 条。
+var chatRoomId = "{#$detail_chatRoomId#}"; // 聊天室 Id。{#$detail_url#}
+
+var isfalse ={#if $livedetail_state==2#}false{#else#}true{#/if#};
+var source = {#if $livedetail_state==2#}'{#$detail_mp4url#}'{#else#}'{#$detail_url#}'{#/if#};
+var player = new Aliplayer({
+     id: "J_prismPlayer",
+     autoplay: true,
+     isLive: isfalse,
+     playsinline:true,
+     width:"100%",
+     height:"100%",
+     useH5Prism:true,
+     useFlashPrism:false,
+     source:source,
+     cover:"{#$livedetail_litpic#}",
+     x5_type: "h5",
+     x5_fullscreen: !0,
+     {#if $livedetail_state==1#}
+     skinLayout: [{
+        name: "bigPlayButton",
+        align: "cc"
+      }, {
+        name: "H5Loading",
+        align: "cc"
+      }]
+    {#/if#}
+   }
+);
+
+player.on("pause", function(e) {
+    $('.empty_box').click();
+})
+player.on("requestFullScreen", function(n) {
+    r.default.adjustLayout(!0),
+    player.cancelFullScreen()
+})
+player.tag.addEventListener("x5videoexitfullscreen", function() {
+    WeixinJSBridge && WeixinJSBridge.call("closeWindow")
+})
+$(document).on("WeixinJSBridgeReady", function() {
+  $(player.el()).find("video")[0].play()
+})
+
+$(player.el()).find("video").attr('poster', '{#$livedetail_litpic#}');
+
+
+$(document).one('touchstart', function (e) {
+  player.play();
+  return false;
+});
+
+setTimeout(function(){
+  var h = $(window).height() - $('.header').height() - $('.hLive_con').height() - $('.box_title').height() - $('.box_bottom').height();
+  $('.box_main ul').css({"height": h+'px'});
+}, 2000);
+</script>
+
+<script>
+	var wxconfig = {
+        "appId": '{#$wxjssdk_appId#}',
+        "timestamp": '{#$wxjssdk_timestamp#}',
+        "nonceStr": '{#$wxjssdk_nonceStr#}',
+        "signature": '{#$wxjssdk_signature#}',
+        "description": '{#$livedetail_title#}',
+        "title": '{#$livedetail_title#}',
+        "imgUrl": '{#$livedetail_litpic#}',
+        "link": '{#getUrlPath service='live'  template='detail' id={#$livedetail_id#}#}',
+    };
+    document.write(unescape("%3Cscript src='{#$cfg_staticPath#}js/publicShare.js?v="+~(-new Date())+"'type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/javascript" src="{#$templets_skin#}js/index.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/rong/RongIMLib-2.2.9.min.js"></script>
+<script type="text/javascript" src="{#$templets_skin#}js/h_chatroom.js?v={#$cfg_staticVersion#}"></script>
+</body>
+</html>

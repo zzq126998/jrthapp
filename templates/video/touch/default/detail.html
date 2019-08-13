@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+<title>{#$detail_title#}</title>
+<meta name="keywords" content="{#$video_keywords#}" />
+<meta name="description" content="{#$video_description#}" />
+<link rel="stylesheet" type="text/css" href="{#$cfg_basehost#}/static/css/core/touchBase.css?v={#$cfg_staticVersion#}">
+<link rel="stylesheet" href="{#$templets_skin#}css/huoniao.media.min.css?v={#$cfg_staticVersion#}">
+<link rel="stylesheet" href="{#$templets_skin#}css/detail.css?v={#$cfg_staticVersion#}">
+<script type="text/javascript" src="{#$cfg_staticPath#}js/core/touchScale.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/core/zepto.min.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript">
+	var masterDomain = '{#$cfg_basehost#}', channelDomain = '{#$video_channelDomain#}', staticPath = '{#$cfg_staticPath#}';
+	var	JubaoConfig = {
+		"module" : 'video',
+		"action" : 'detail',
+		"id" : '{#$detail_id#}'
+	};
+</script>
+</head>
+
+<body>
+{#include file="../../../siteConfig/touch_top.html" pageTitle="$detail_title"#}
+
+<div class="video_box">
+	{#if $detail_videotype == 1#}
+	<iframe src="{#$detail_videourl#}" frameborder="0" width="970" height="522" allowfullscreen="true"></iframe>
+	{#else#}
+	<div class="playvideo" id="playercontainer">
+    <!--<div class="huoniao_media">
+      <video playsinline="true" webkit-playsinline="true"  poster="{#$detail_litpic#}">
+        <source src="{#$detail_videourl#}" type="video/mp4">您的浏览器不支持HTML5视频</video>
+    </div>-->
+  </div>
+	{#/if#}
+</div>
+<div class="infor">
+	<div class="infor_txt">
+		<div class="infor_title fn-clear"><em class="line">{#$detail_title#}</em></div>
+		<div class="infor_detail"><em>{#$list_typename#}</em> <span>{#$detail_click#}次观看</span></div>
+	</div>
+	<div class="video_author fn-clear fn-hide">
+		<div class="member fn-clear">
+			<!-- <div class="member_img"><img src="upfile/363f000ee22df66d81c9.jpg" alt=""></div> -->
+			<div class="member_name">{#$list_typename#}</div>
+		</div>
+		<div class="guan">关注</div>
+	</div>
+</div>
+<div class="hot_video">
+	<h1>猜你喜欢</h1>
+	<div class="hot_list fn-clear">
+		{#video action="alist" return="about" typeid=$list.id pageSize="4"#}
+		<div class="hot_box"><a href="{#$about.url#}">
+			<div class="hot_img">
+				{#if $about.flags == 1#}
+				<div class="tips">热门</div>
+				{#/if#}
+				<img src="{#$about.litpic#}" alt="">
+				<!-- <em>00:37</em> -->
+			</div>
+			<div class="hot_infor">
+				<div class="hi_title"><span>{#$about.click#}次观看</span></div>
+				<div class="hi_txt">{#$about.title#}</div>
+			</div>
+		</a></div>
+		{#/video#}
+	</div>
+</div>
+{#if $detail_videotype == 0#}
+<script type="text/javascript" src="{#$cfg_staticPath#}js/player/cyberplayer.js?v={#$cfg_staticVersion#}"></script>
+<script>
+var player = cyberplayer("playercontainer").setup({
+    width: "100%",
+    height: "100%",
+    file: "{#$detail_videourl#}",
+    image: "{#$detail_litpic#}",
+    autostart: true,
+    stretching: "uniform",
+    volume: 100,
+    controls: true,
+	imageAdvs: { // 图片广告，低版本IE不支持
+        start: { // 开场广告
+            image: "{#$mstartlitpicPath#}", // 广告图片地址
+            url: "{#$mstartUrl#}", // 跳转url
+            time: {#$mstartTime#} // 播放时长，单位：s
+        },
+        pause: { // 暂停广告
+            image: "{#$mpauselitpicPath#}",
+            url: "{#$mpauseUrl#}"
+        },
+        end: { // 结束广告
+            image: "{#$mendlitpicPath#}",
+            url: "{#$mendUrl#}"
+        }
+    },
+    ak: "{#$AK#}" //公有云平台注册即可获得accessKey
+});
+player.onPause(function(){
+	$('.jw-adv').css({width:'100%',height:'200px'});
+	console.log(11);
+});
+</script>
+{#/if#}
+<script type="text/javascript">
+	var wxconfig = {
+		"appId": '{#$wxjssdk_appId#}',
+		"timestamp": '{#$wxjssdk_timestamp#}',
+		"nonceStr": '{#$wxjssdk_nonceStr#}',
+		"signature": '{#$wxjssdk_signature#}',
+		"description": '{#$video_description#}',
+		"title": '{#$detail_title#}',
+		"imgUrl": '{#$detail_litpic#}',
+		"link": '{#getUrlPath service='video' template='detail' id={#$detail_id#}#}',
+	};
+
+  document.write(unescape("%3Cscript src='{#$cfg_staticPath#}js/publicShare.js?v="+~(-new Date())+"'type='text/javascript'%3E%3C/script%3E"));
+</script>
+<!--<script type="text/javascript" src="{#$templets_skin#}js/huoniao.media.min.js?v={#$cfg_staticVersion#}"></script>-->
+<script type="text/javascript" src="{#$templets_skin#}js/detail.js?v={#$cfg_staticVersion#}"></script>
+</body>
+</html>

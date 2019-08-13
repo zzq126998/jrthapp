@@ -1,0 +1,102 @@
+{#$cssFile = array("mobiscroll.css", "basic-info.css?v={#$cfg_staticVersion#}")#}
+{#include file='../_header.html' pageTitle=$langData['siteConfig'][19][22] cssFile=$cssFile goBack=1 rbtn='<a href="javascript:;" class="submit">'|cat:$langData['siteConfig'][6][27]|cat:'</a>'#}
+
+  <div class="container">
+    <form action="waimaiShopAdd.php?id={#$sid#}" id="submitForm">
+      <p class="title"><span>{#$langData['siteConfig'][19][22]#}</span></p>
+      <div class="bgfff">
+        <div class="block">
+          <dl class="inpbox">
+            <dt><span><label for="">{#$langData['siteConfig'][19][487]#}</label></span></dt>
+            <dd><input type="text" placeholder="0" name="sort" value="{#$sort|string_format:"%d"#}"></dd>
+          </dl>
+          <dl class="inpbox">
+            <dt><span><label for="">{#$langData['siteConfig'][19][174]#}</label></span></dt>
+            <dd><input type="text" placeholder="{#$langData['siteConfig'][19][174]#}" name="shopname" value="{#$shopname#}"></dd>
+          </dl>
+          <div data-role="fieldcontain" class="dom_select">
+            <label for="">{#$langData['waimai'][1][35]#}</label>
+            <dd><input type="text" placeholder="{#$langData['waimai'][1][35]#}" value="{#foreach from=$typeArr item=type#}{#if in_array($type.id, $typeid)#} {#$type.title#}{#/if#}{#/foreach#}" readonly="true" id="Config_type_id"></dd>
+          </div>
+          <div data-role="fieldcontain" class="dom_select">
+            <label for="">{#$langData['waimai'][1][71]#}</label>
+            <select class="demo-test-select" data-role="none" name="category" tabindex="-1">
+              <option value="1"{#if !$category || $category == 1#} selected{#/if#}>{#$langData['waimai'][5][53]#}</option>
+              <option value="2"{#if $category == 2#} selected{#/if#}>{#$langData['waimai'][5][54]#}</option>
+              <option value="3"{#if $category == 3#} selected{#/if#}>{#$langData['waimai'][5][55]#}</option>
+              <option value="4"{#if $category == 4#} selected{#/if#}>{#$langData['waimai'][5][56]#}</option>
+              <option value="5"{#if $category == 5#} selected{#/if#}>{#$langData['waimai'][5][57]#}</option>
+              <option value="6"{#if $category == 6#} selected{#/if#}>{#$langData['waimai'][5][58]#}</option>
+              <option value="7"{#if $category == 7#} selected{#/if#}>{#$langData['waimai'][5][59]#}</option>
+              <option value="8"{#if $category == 8#} selected{#/if#}>{#$langData['waimai'][5][60]#}</option>
+              <option value="9"{#if $category == 9#} selected{#/if#}>{#$langData['waimai'][5][61]#}</option>
+              <option value="10"{#if $category == 10#} selected{#/if#}>{#$langData['waimai'][5][62]#}</option>
+              <option value="11"{#if $category == 11#} selected{#/if#}>{#$langData['waimai'][5][63]#}</option>
+              <option value="12"{#if $category == 12#} selected{#/if#}>{#$langData['waimai'][5][64]#}</option>
+              <option value="13"{#if $category == 13#} selected{#/if#}>{#$langData['waimai'][5][65]#}</option>
+              <option value="14"{#if $category == 14#} selected{#/if#}>{#$langData['waimai'][5][66]#}</option>
+              <option value="15"{#if $category == 15#} selected{#/if#}>{#$langData['waimai'][5][67]#}</option>
+              <option value="16"{#if $category == 16#} selected{#/if#}>{#$langData['waimai'][5][68]#}</option>
+              <option value="17"{#if $category == 17#} selected{#/if#}>{#$langData['waimai'][5][69]#}</option>
+              <option value="18"{#if $category == 18#} selected{#/if#}>{#$langData['waimai'][5][70]#}</option>
+            </select>
+          </div>
+          <dl class="inpbox">
+            <dt><span><label for="">{#$langData['siteConfig'][19][56]#}</label></span></dt>
+            <dd><input type="text" placeholder="{#$langData['siteConfig'][19][56]#}" name="phone" value="{#$phone#}"></dd>
+          </dl>
+          <dl class="inpbox">
+            <dt><span><label for="">{#$langData['waimai'][1][37]#}</label></span></dt>
+            <dd><input type="text" placeholder="{#$langData['waimai'][1][37]#}" name="address" value="{#$address#}"></dd>
+          </dl>
+          <dl class="inpbox">
+            <dt><span><label for="">{#$langData['siteConfig'][19][14]#}</label></span></dt>
+            <dd><input type="number" placeholder="{#$langData['siteConfig'][19][14]#}" name="qq" value="{#$qq#}"></dd>
+          </dl>
+          <dl class="inpbox">
+            <dt><span><label for="">{#$langData['waimai'][1][74]#}</label></span></dt>
+            <dd class="warn"><textarea name="description" id="description" rows="4">{#$description#}</textarea></dd>
+          </dl>
+        </div>
+      </div>
+
+      <p class="local" style="display: none;"><a href="javascript:;" id="autolocation"><span>{#$langData['waimai'][5][38]#}</span></a></p>
+      <div class="bgfff" style="display: none;">
+        <div class="block">
+          <dl class="inpbox">
+            <dt><span><label for="">{#$langData['waimai'][5][39]#}：</label></span></dt>
+            <dd><input type="text" placeholder="" name="coordX" id="coordX" value="{#$coordX#}" readonly="readonly"></dd>
+          </dl>
+          <dl class="inpbox">
+            <dt><span><label for="">{#$langData['waimai'][5][40]#}：</label></span></dt>
+            <dd><input type="text" placeholder="" name="coordY" id="coordY" value="{#$coordY#}" readonly="readonly"></dd>
+          </dl>
+        </div>
+      </div>
+      <input type="submit" class="fn-hide">
+    </form>
+
+    <p class="tips" style="display: none;">{#$langData['waimai'][5][41]#}</p>
+
+  </div>
+
+  <!-- 多选分类 s -->
+  <div class="layer">
+    <div class="mask"></div>
+    <div class="operate">
+      <p class="fn-clear confirm"><a href="javascript:;">{#$langData['siteConfig'][6][1]#}</a></p>
+      <ul class="fn-clear shoptype">
+        <li class="all"><i></i><a href="javascript:;">{#$langData['siteConfig'][6][28]#}</a></li>
+        {#foreach from=$typeArr item=type#}
+        <li class="item{#if in_array($type.id, $typeid)#} curr{#/if#}" data-id="{#$type.id#}"><i></i><a href="javascript:;">{#$type.title#}</a></li>
+        {#/foreach#}
+      </ul>
+    </div>
+  </div>
+  <!-- 多选分类 e -->
+
+<script>var sid = {#$sid#};</script>
+<script type="text/javascript" src="{#$site_map_apiFile#}"></script>
+{#include file='../_footer.html' jsFile=array("mobiscroll.js", "mobiscroll.select.js", "store-info-public.js?v={#$cfg_staticVersion#}", "basic-info.js?v={#$cfg_staticVersion#}") curr='shop' toppage=0#}
+</body>
+</html>

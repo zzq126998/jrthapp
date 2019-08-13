@@ -1,0 +1,24 @@
+{#$cssFile = array("store-detail.css?v=2")#}
+{#include file='../_header.html' pageTitle=$shopname cssFile=$cssFile goBack=1 rbtn=''#}
+
+  <div class="container">
+    <div class="fn-clear item"><a href="goods-type.php?sid={#$id#}"><span>{#$langData['siteConfig'][19][499]#}</span><em class="arrow"></em></a></div>
+    <div class="fn-clear item"><a href="manage-goods.php?sid={#$id#}"><span>{#$langData['siteConfig'][19][451]#}</span><em class="arrow"></em></a></div>
+    <div class="fn-clear item"><a href="manage-store.php?sid={#$id#}"><span>{#$langData['waimai'][1][31]#}</span><em class="arrow"></em></a></div>
+    <!-- <div class="fn-clear item"><a href="outgoing-charge.php?sid={#$id#}"><span>{#$langData['waimai'][1][98]#}</span><em class="arrow"></em></a></div> -->
+    <div class="fn-clear item" data-type="status">
+      <a href="javascript:;"><span>{#$langData['waimai'][1][38]#}</span><em class="toggle{#if $status#} on{#/if#}"></em></a>
+      <p class="warn"><span>{#$langData['waimai'][5][50]#}：</span><input type="text" placeholder="{#$langData['waimai'][5][51]#}"></p>
+    </div>
+    <div class="fn-clear item" data-type="ordervalid">
+      <a href="javascript:;"><span>{#$langData['waimai'][5][52]#}</span><em class="toggle{#if $ordervalid#} on{#/if#}"></em></a>
+      <p class="warn"><span>{#$langData['waimai'][5][50]#}：</span><input type="text" placeholder="{#$langData['waimai'][5][51]#}"></p>
+    </div>
+  </div>
+
+
+<script>var id = {#$id#};</script>
+{#include file='../_footer.html' jsFile=array("store-detail.js?v=2") curr='shop' toppage=0#}
+
+</body>
+</html>

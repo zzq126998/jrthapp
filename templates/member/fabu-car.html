@@ -1,0 +1,336 @@
+<script type="text/javascript">
+	var payReturn = "{#getUrlPath service='member' type='user' template='manage' action='car'#}";
+	var mold = {#$detail_mold|default:0#};
+	var detail = {
+		videotype: {#$detail_videotype|default:0#}
+	}
+	var geetest = {#$cfg_geetest#};
+</script>
+<style>
+	.variable {display: none;}
+	.variable-{#$detail_mold|default:0#} {display: block;}
+	#listSection1 {display:block !important;}
+	#listSection1:empty {}
+</style>
+<ul class="main-tab">
+	<li class="curr"><a href="javascript:;">{#if $do == "edit"#}{#$langData['siteConfig'][16][157]#}{#else#}{#$langData['car'][6][4]#}{#/if#}</a></li>
+	<li><a href="{#getUrlPath service='member' type='user' template='manage' action='car'#}">{#$langData['car'][6][7]#}</a></li>
+</ul>
+
+<div class="w-form">
+	<form name="fabuForm" id="fabuForm" method="post" action="/include/ajax.php?service=car&action={#if $do == "edit"#}edit&id={#$id#}{#else#}put{#/if#}" data-url="{#getUrlPath service='member' type='user' template='manage' action='car'#}">
+
+		<dl class="fn-clear" data-required="1" id="box_mold">
+			<dt><span>*</span>{#$langData['car'][6][8]#}：</dt>{#* 品牌分类 *#}
+			<dd id="selType">
+				<div class="sel-group" data-title="{#$langData['car'][6][8]#}">
+					<button type="button" class="sel">{#if $do == "edit"#}{#$detail_typeName#}{#else#}{#$langData['siteConfig'][7][2]#}{#/if#}{#* 请选择 *#}<span class="caret"></span></button>
+					<ul class="sel-menu">
+						{#car action="type" return="type"#}
+						<li><a href="javascript:;" data-id="{#$type.id#}">{#$type.typename#}</a></li>
+						{#/car#}
+					</ul>
+				</div>
+				<input type="hidden" name="brand" id="brand" value="{#$detail_brand#}" />
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+
+		{#if $id && $detail_model#}
+		<dl class="fn-clear" id="carmodel">
+			<dt><span>*</span>{#$langData['car'][6][10]#}：</dt>{#* 品牌车型 *#}
+			<dd>
+				<select class="chosen-select" id="model" name="model" style="width: auto; min-width: 500px;" data-title="{#$langData['car'][6][10]#}">{#* 品牌车型 *#}
+					<option selected="" value="0">{#$langData['siteConfig'][7][2]#}</option>{#* 请选择 *#}
+					{#car action="carmodel" carsystem=$detail_carsystem return="type"#}
+					<option value="{#$type.id#}" {#if $detail_model == $type.id#} selected{#/if#}>{#$type.title#}</option>
+					{#/car#}
+				</select>
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+		{#else#}
+		<dl class="fn-clear fn-hide" id="carmodel">
+			<dt><span>*</span>{#$langData['car'][6][10]#}：</dt>{#* 品牌车型 *#}
+			<dd>
+				<select class="chosen-select" id="model" name="model" style="width: auto; min-width: 500px;" data-title="{#$langData['car'][6][10]#}">{#* 品牌车型 *#}
+					
+				</select>
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+		{#/if#}
+
+		<dl class="fn-clear" data-required="1">
+			<dt><span>*</span>{#$langData['siteConfig'][19][0]#}：</dt>{#* 标题 *#}
+			<dd>
+				<input type="text" name="title" class="inp" id="title" size="60" maxlength="50" data-title="{#$langData['siteConfig'][20][40]#}" value="{#$detail_title#}" />{#* 请输入信息标题，2-50个字 *#}
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear" data-required="1">
+			<dt><span>*</span>{#$langData['siteConfig'][19][27]#}：</dt>{#* 所在区域 *#}
+			<dd id="selAddr">
+				<div class="sel-group" data-title="{#$langData['siteConfig'][20][68]#}">{#* 请选择所在区域 *#}
+					<div class="city-title addrBtn" data-field="addrid" data-ids="{#getPublicParentInfo tab='site_area' id=$detail_addrid split=' '#}" data-id="{#$detail_addrid#}">{#if $detail_addrid != ""#}{#getPublicParentInfo tab='site_area' id=$detail_addrid type='typename' split='/'#}{#else#}{#$langData['siteConfig'][7][2]#}{#/if#}</div>{#* 请选择*#}
+				</div>
+				<input type="hidden" name="addr" id="addr" value="{#$detail_addrid#}" />
+                <input type="hidden" name="cityid" id="cityid" value="{#$detail_cityid#}" />
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear">
+			<dt>{#$langData['siteConfig'][19][19]#}：</dt>{#* 缩略图 *#}
+			<dd class="thumb fn-clear listImgBox">
+				<div class="uploadinp filePicker thumbtn{#if $detail_litpic != ""#} fn-hide{#/if#}" id="filePicker1" data-type="thumb"  data-count="1" data-size="{#$thumbSize#}" data-imglist=""><div></div><span></span></div>
+				{#if $detail_litpic != ""#}
+				<ul id="listSection1" class="listSection thumblist fn-clear" style="display:inline-block;"><li id="WU_FILE_0_1"><a href='{#$detail_litpic#}' target="_blank" title=""><img alt="" src="{#changeFileSize url="$detail_litpic" type="small"#}" data-val="{#$detail_litpicSource#}"/></a><a class="reupload li-rm" href="javascript:;">{#$langData['siteConfig'][19][176]#}</a></li></ul>{#* 删除图片 *#}
+				{#else#}
+				<ul id="listSection1" class="listSection thumblist fn-clear"></ul>
+				{#/if#}
+				<div>
+					<div class="variable variable-2 variable-3" style="font-size:14px;color:#999;">{#$langData['siteConfig'][31][1]#}</div>{#* 本地上传视频可以不上传缩略图，系统将会选取视频第一帧作为封面（会有一定延迟） *#}
+				</div>
+				<input type="hidden" name="litpic" value="{#$detail_litpicSource#}" class="imglist-hidden">
+			</dd>
+		</dl>
+
+		<dl class="fn-clear" data-required="1">
+			<dt>{#$langData['car'][6][11]#}：</dt>{#* 价格 *#}
+			<dd>
+				<div class="input-prepend input-append mr10">
+					<span class="add-bef">{#$langData['car'][6][12]#}</span>{#* 市场价 *#}
+					<input id="price" name="price" type="text" size="4" maxlength="7" data-title="{#$langData['car'][6][12]#}" value="{#$detail_price#}">{#* 面积必须为数字型 *#}
+					<span class="add-aft">{#$langData['car'][6][20]#}</span>{#* 万 *#}
+				</div>
+				<div class="input-prepend input-append mr10">
+					<span class="add-bef">{#$langData['car'][6][13]#}</span>{#* 新车总价 *#}
+					<input id="totalprice" name="totalprice" type="text" size="4" maxlength="3" onkeyup="value=value.replace(/\D+/ig,'')" value="{#$detail_totalprice#}">
+					<span class="add-aft">{#$langData['car'][6][20]#}</span>{#* 万 *#}
+				</div>
+				<div class="input-prepend input-append mr10">
+					<span class="add-bef">{#$langData['car'][6][15]#}</span>{#* 参考价 *#}
+					<input id="ckprice" name="ckprice" type="text" size="20" maxlength="30" value="{#$detail_ckprice#}">
+				</div>
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear" data-required="1">
+			<dt>{#$langData['car'][6][14]#}：</dt>{#* 含税 *#}
+			<dd>
+				<label class="checkbox"><input {#if $detail_tax==1#}checked{#/if#} type="checkbox" name="tax" id="tax" value="1"></label>{#* 含税 *#}
+			</dd>
+		</dl>
+
+		<dl class="fn-clear" data-required="1">
+			<dt>{#$langData['car'][6][16]#}：</dt>{#* 颜色 *#}
+			<dd>
+				<input type="text" name="colorname" class="inp" id="colorname" size="15" maxlength="50" data-title="{#$langData['car'][6][32]#}" value="{#$detail_colorname#}" />{#* 请输入颜色，1-10位 *#}
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear">
+			<dt><span>*</span>{#$langData['car'][6][17]#}：</dt>{#* 车牌所在地 *#}
+			<dd>
+				<select class="chosen-select" id="location" name="location" style="width: auto; min-width: 150px;" data-title="{#$langData['siteConfig'][20][585]#}">{#* 请选择城市 *#}
+					<option selected="" value="0">{#$langData['siteConfig'][7][2]#}</option>{#* 请选择 *#}
+					{#car action="city" return="city"#}
+					<option value="{#$city.id#}" {#if $detail_location == $city.id#} selected{#/if#}>{#$city.name#}</option>
+					{#/car#}
+				</select>
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear" data-required="1">
+			<dt>{#$langData['car'][6][33]#}：</dt>{#* 上牌时间 *#}
+			<dd>
+				<input type="text" name="cardtime" class="inp" id="cardtime" size="20" data-title="{#$langData['car'][6][34]#}" value="{#if $detail_cardtime#}{#$detail_cardtime|date_format:"%Y-%m-%d"#}{#/if#}" />
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear" data-required="1">
+			<dt>{#$langData['car'][6][18]#}：</dt>{#* 行驶里程 *#}
+			<dd>
+				<div class="input-prepend input-append mr10">
+					<input id="mileage" name="mileage" type="number" size="3" maxlength="7" data-title="{#$langData['car'][6][18]#}" value="{#$detail_mileage#}">{#* 万公里 *#}
+					<span class="add-aft">{#$langData['car'][6][21]#}</span>{#* 万 *#}
+				</div>
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear" data-required="1">
+		  <dt>{#$langData['car'][6][19]#}：</dt>{#* 车辆性质 *#}
+		  <dd>
+			  <div class="radio">
+					<span data-id="0"{#if $detail_nature == 0#} class="curr"{#/if#}>	{#$langData['car'][6][22]#}</span>
+					<span data-id="1"{#if $detail_nature == 1#} class="curr"{#/if#}>	{#$langData['car'][6][23]#}</span>
+					<input type="hidden" name="nature" id="nature" value="{#$detail_nature|default:0#}" />
+				</div>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear" id="box_staging" data-required="1">
+		  <dt>{#$langData['car'][6][35]#}：</dt>{#* 可分期 *#}
+		  <dd>
+			  <div class="radio">
+					<span data-id="0"{#if $detail_staging == 0#} class="curr"{#/if#}>	{#$langData['car'][6][36]#}</span>
+					<span data-id="1"{#if $detail_staging == 1#} class="curr"{#/if#}>	{#$langData['car'][6][35]#}</span>
+					<input type="hidden" name="staging" id="staging" value="{#$detail_staging|default:0#}" />
+				</div>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear {#if $detail_staging==1#}{#else#}fn-hide{#/if#}" id="downpayment1">
+			<dt>{#$langData['car'][6][24]#}：</dt>{#* 首付比例 *#}
+			<dd>
+				<select class="chosen-select" id="downpayment" name="downpayment" style="width: auto; min-width: 150px;" data-title="{#$langData['car'][6][25]#}">{#* 选择比例 *#}
+					<option selected="" value="0">{#$langData['siteConfig'][7][2]#}</option>{#* 请选择 *#}
+					{#car action="getDownPayment" return="Payment"#}
+					<option value="{#$Payment#}" {#if $detail_downpayment == $Payment#} selected{#/if#}>{#$Payment#}</option>
+					{#/car#}
+				</select>
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear" data-required="1">
+			<dt>{#$langData['car'][6][26]#}：</dt>{#* 看车方式 *#}
+			<dd>
+				<input type="text" name="seeway" class="inp" id="seeway" size="25" maxlength="50" data-title="{#$langData['car'][6][37]#}" value="{#$detail_seeway#}" />{#* 请输入看车方式 *#}
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear" data-required="1">
+			<dt>{#$langData['car'][6][27]#}：</dt>{#* 过户次数 *#}
+			<dd>
+				<div class="input-prepend input-append mr10">
+					<input id="transfertimes" name="transfertimes" type="number" size="3" maxlength="7" data-title="{#$langData['car'][6][27]#}" value="{#$detail_transfertimes#}">{#* 过户次数 *#}
+				</div>
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear" data-required="1">
+			<dt>{#$langData['car'][6][28]#}：</dt>{#* 年检到期时间 *#}
+			<dd>
+				<input autocomplete="off" type="text" name="njendtime" class="inp" id="njendtime" size="20" data-title="{#$langData['car'][6][38]#}" value="{#if $detail_njendtime#}{#$detail_njendtime|date_format:"%Y-%m-%d"#}{#/if#}" />
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear" data-required="1">
+			<dt>{#$langData['car'][6][29]#}：</dt>{#* 交强险到期时间 *#}
+			<dd>
+				<input autocomplete="off" type="text" name="jqxendtime" class="inp" id="jqxendtime" size="20" data-title="{#$langData['car'][6][39]#}" value="{#if $detail_jqxendtime#}{#$detail_jqxendtime|date_format:"%Y-%m-%d"#}{#/if#}" />
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear" data-required="1">
+			<dt>{#$langData['car'][6][30]#}：</dt>{#* 商业险到期时间 *#}
+			<dd>
+				<input autocomplete="off" type="text" name="businessendtime" class="inp" id="businessendtime" size="20" data-title="{#$langData['car'][6][40]#}" value="{#if $detail_businessendtime#}{#$detail_businessendtime|date_format:"%Y-%m-%d"#}{#/if#}" />
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear" data-required="1">
+			<dt>{#$langData['car'][6][31]#}：</dt>{#* 车况说明 *#}
+			<dd>
+				<textarea class="inp text" name="note" id="note" rows="5" cols="60" data-title="{#$langData['car'][6][41]#}">{#$detail_note#}</textarea>{#* 请输入描述，10-200个字 *#}
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear">
+			<dt>{#$langData['siteConfig'][6][78]#}：</dt>{#* 上传照片 *#}
+			<dd class="listImgBox">
+				<div class="list-holder">
+					<ul id="listSection2" class="fn-clear listSection fn-hide"{#if $detail_imglist#} style="display: block;"{#/if#}>
+						{#foreach from=$detail_imglist key=k item=i#}
+						<li class="fn-clear" id="WU_FILE_1_{#$k#}">
+							<span class="li-move" title="{#$langData['siteConfig'][23][42]#}">↕</span>{#* 拖动调整图片顺序 *#}
+							<a class="li-rm" href="javascript:;">×</a>
+							<div class="li-thumb" style="display: block;">
+								<div class="r-progress"><s></s></div>
+								<span class="ibtn">
+									<a href="javascript:;" class="Lrotate" title="{#$langData['siteConfig'][23][43]#}"></a>{#* 逆时针旋转90度 *#}
+									<a href="javascript:;" class="Rrotate" title="{#$langData['siteConfig'][23][44]#}"></a>{#* 顺时针旋转90度 *#}
+									<a href="{#$i.path#}" target="_blank" class="enlarge" title="{#$langData['siteConfig'][23][45]#}"></a>{#* 放大 *#}
+								</span>
+								<span class="ibg"></span>
+								<img data-val="{#$i.pathSource#}" data-url="{#changeFileSize url="{#$i.path#}" type="small"#}" src="{#changeFileSize url="{#$i.path#}" type="small"#}" />
+							</div>
+						</li>
+						{#/foreach#}
+					</ul>
+					<input type="hidden" name="imglist" value="" class="imglist-hidden">
+				</div>
+				<div class="btn-section fn-clear">
+					<div class="wxUploadObj fn-clear">
+						<div class="uploadinp filePicker" id="filePicker2" data-type="album" data-count="{#$atlasMax#}" data-size="{#$atlasSize#}" data-imglist=""><div id="flasHolder"></div><span>{#$langData['siteConfig'][6][168]#}</span></div>{#* 添加图片 *#}
+						<span class="upload-split fn-hide">{#$langData['siteConfig'][13][0]#}</span>{#* 或 *#}
+						<dl class="wxUpload fn-hide fn-clear">
+							<dt><img id="wxUploadImg" /></dt>
+							<dd>{#$langData['siteConfig'][19][362]#}<em class="wx">{#$langData['siteConfig'][27][139]#}</em>{#$langData['siteConfig'][27][140]#}<br />{#$langData['siteConfig'][19][846]#}{#$cfg_weixinName#}{#$langData['siteConfig'][27][141]#}<br />{#$langData['siteConfig'][27][142]#}<em class="fs">{#$langData['siteConfig'][6][139]#}</em>{#$langData['siteConfig'][27][143]#}</dd>{#* 使用-微信-扫描左侧二维码-关注-公众号后-将图片-发送-给公众号即可传图 *#}
+						</dl>
+					</div>
+					<div class="upload-tip">
+						<p><a href="javascript:;" class="fn-hide deleteAllAtlas"{#if $detail_imglist#} style="display: inline-block;"{#/if#}>{#$langData['siteConfig'][6][79]#}</a>{#* 删除所有 *#}
+							&nbsp;&nbsp;{#$langData['siteConfig'][20][10]|replace:'1':'2'|replace:'2':$atlasMax#} <span class="fileerror"></span></p>{#* 单张最大1M，最多2张 *#}
+					</div>
+				</div>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear" data-required="1">
+			<dt><span>*</span>{#$langData['siteConfig'][19][642]#}：</dt>{#* 联系人 *#}
+			<dd>
+				<input type="text" name="person" class="inp" id="person" size="20" data-title="{#$langData['waimai'][3][52]#}" value="{#if $detail_username != ""#}{#$detail_username#}{#else#}{#$userinfo.nickname#}{#/if#}" />{#* 商品单位 *#}
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+		<dl class="fn-clear" data-required="1">
+			<dt><span>*</span>{#$langData['siteConfig'][3][6]#}：</dt>{#* 手机号码 *#}
+			<dd>
+				<input type="text" name="tel" class="inp" id="tel" size="20" data-title="{#if $detail_contact == ""&&$userinfo.phone=="" #}{#$langData['siteConfig'][20][463]#}{#else#}{#$langData['siteConfig'][20][463]#}{#/if#}" onkeyup="value=value.replace(/\D+/ig,'')" value="{#if $detail_contact != ""#}{#$detail_contact#}{#else#}{#$userinfo.phone#}{#/if#}" />{#* 请输入手机号码 *#}
+				
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+		<dl class="fn-clear fn-hide testbox" >
+			<dt><span>*</span>{#$langData['siteConfig'][4][0]#}：</dt>{#* 验证码 *#}
+			<dd>
+				<input type="text" name="testcode" class="inp" id="testcode" size="20" data-title="{#$langData['siteConfig'][20][176]#}"  />{#* 验证码 *#}
+				<a class="codebtn" href="javascript:;">{#$langData['siteConfig'][4][7]#}</a>{#* 发送验证码 *#}
+				<span class="tip-inline"></span>
+			</dd>
+		</dl>
+
+		<dl class="fn-clear">
+			<dt>&nbsp;</dt>
+			<dd><button class="submit" id="submit">{#if $id == 0#}{#$langData['car'][6][4]#}{#else#}{#$langData['siteConfig'][6][122]#}{#/if#}</button></dd>{#* 立即投稿 - 提交修改 *#}
+		</dl>
+	</form>
+</div>
+<script>
+		var userinfo = {
+			phone: '{#$userinfo.phone#}',
+			phoneCheck: {#$userinfo.phoneCheck#}
+		};
+		var detail = {
+			contact: '{#$detail_contact#}'
+		}
+	</script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/ui/calendar/WdatePicker.js"></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/publicAddr.js?v={#$cfg_staticVersion#}"></script>
+{#if $cfg_geetest#}<script type="text/javascript" src="{#$cfg_secureAccess#}static.geetest.com/static/tools/gt.js"></script>{#/if#}
+<script type="text/javascript" src="{#$templets_skin#}js/codetest.js?v={#$cfg_staticVersion#}"></script>

@@ -1,0 +1,47 @@
+{#$cssFile = array("display-info.css?v=2")#}
+{#include file='../_header.html' pageTitle=$langData['waimai'][1][115] cssFile=$cssFile goBack=1 rbtn='<a href="javascript:;" class="submit">'|cat:$langData['siteConfig'][6][27]|cat:'</a>'#}
+
+  <div class="container">
+
+    <form action="" id="submitForm">
+      <div class="bgfff">
+        <dl class="inpbox fn-clear">
+          <dt>{#$langData['waimai'][1][116]#}：</dt>
+          <dd><div class="textarea"><textarea name="shop_notice" value="" rows="3" placeholder="{#$langData['siteConfig'][19][883]#}">{#$shop_notice#}</textarea></div></dd>
+        </dl>
+      </div>
+
+      <div class="bgfff">
+        <div class="block">
+          <div class="fn-clear openbtn">
+            <a href="javascript:;"><span>{#$langData['waimai'][1][117]#}</span><em class="toggle{#if $shop_notice_used#} on{#/if#}" data-type="shop_notice_used"></em></a>
+          </div>
+          <input type="hidden" id="shop_notice_used" name="shop_notice_used">
+        </div>
+      </div>
+
+      <div class="bgfff">
+        <dl class="inpbox fn-clear">
+          <dt>{#$langData['waimai'][1][118]#}：</dt>
+          <dd><div class="textarea"><textarea name="buy_notice" value="" rows="3" placeholder="{#$langData['siteConfig'][19][883]#}">{#$buy_notice#}</textarea></div></dd>
+        </dl>
+      </div>
+
+      <!-- <p class="title"><span>进入店铺链接类型</span></p>
+      <div class="bgfff links">
+        <ul>
+          <li><label for=""><span>首页</span><em></em></label></li>
+          <li class="curr"><label for=""><span>选购</span><em></em></label></li>
+        </ul>
+      </div> -->
+
+      </form>
+
+
+  </div>
+
+<script>var sid = {#$sid#};</script>
+{#include file='../_footer.html' jsFile=array("store-info-public.js?v=2", "display-info.js?v=2") curr='shop' toppage=0#}
+
+</body>
+</html>

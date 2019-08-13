@@ -1,0 +1,77 @@
+{#$cssFile = array("/static/css/ui/photoswipe.css", "/static/css/ui/photoswipe-default-skin.css", "comment.css?v={#$cfg_staticVersion#}")#}
+{#include file='../_header.html' pageTitle=$langData['waimai'][1][247] cssFile=$cssFile goBack=0#}
+<!-- 列表 s -->
+<div class="container">
+    <div class="loading" data-loading="false" style="border-bottom: 0px solid transparent; height: 0px;">
+        {#$langData['siteConfig'][7][7]#}...
+    </div>
+    <div class="list">
+      {#foreach $list as $key => $value#}
+      <div class="comment-list" data-id="{#$value.id#}">
+          <div class="comment-user">
+              <img src="/static/images/default_user.jpg">
+          </div>
+          <div class="comment-info">
+              <h3>{#$value.username#}<em>{#$value.pubdatef#}</em> </h3>
+              <h3>{#$langData['siteConfig'][19][174]#}：{#$value.shopname#}</h3>
+              <h3>{#$langData['siteConfig'][19][50]#}：{#$value.ordernumstore#}</h3>
+              <div class="judge-box">
+                  <div class="judge-star l">
+                      <s style="width:{#$value.star/5*100#}%;"></s>
+                  </div>
+                  <span class="sale-time">：{#$langData['siteConfig'][18][43]#}</span>
+                  <div class="clear"></div>
+              </div>
+              <div class="judge-box">
+                  <div class="judge-star l">
+                      <s style="width:{#$value.starps/5*100#}%;"></s>
+                  </div>
+                  <span class="sale-time">：{#$langData['waimai'][2][18]#}，{#$value.time#}{#$langData['siteConfig'][22][93]#}</span>
+                  <div class="clear"></div>
+              </div>
+              <div class="comment-txt">{#$langData['waimai'][1][248]#}：{#$value['content']#}</div>
+              {#if $value.pics#}
+              <div class="my-gallery" data-pswp-uid="1" itemscope="" itemtype="">
+                {#foreach from=$value.picsf key=k item=i#}
+                <figure itemprop="associatedMedia">
+                    <a data-size="300x228" href="{#$i#}" itemprop="contentUrl">
+                        <img alt="Image description" itemprop="thumbnail" src="{#$i|replace:'large':'small'#}">
+                    </a>
+                </figure>
+                {#/foreach#}
+              </div>
+              {#/if#}
+              <div class="state {#if $value.replydate != 0#}ok{#/if#}">
+                {#if $value.replydate != 0#}
+                <p class="content">{#$langData['waimai'][1][257]#}：{#$value.reply#}</p>
+                <p class="time">{#$langData['waimai'][1][258]#}：{#$value.replydatef#}</p>
+                <p class="btns"><a href="javascript:;" class="btn">{#$langData['waimai'][5][10]#}</a></p>
+                {#else#}
+                <p class="btns"><a href="javascript:;" class="btn reply">{#$langData['siteConfig'][6][29]#}</a></p>
+                {#/if#}
+              </div>
+          </div>
+      </div>
+      {#/foreach#}
+      <div class="load" style="display:none;">
+          {#if $list#}{#$langData['siteConfig'][20][184]#}···{#else#}{#$langData['siteConfig'][21][64]#}{#/if#}
+      </div>
+    </div>
+</div>
+<!-- 列表 e -->
+
+<div class="failbox">
+  <div class="mask"></div>
+  <form class="whyform" method="post">
+    <p>{#$langData['waimai'][5][11]#}</p>
+    <textarea name="fail" class="textarea"></textarea>
+    <p class="btn"><a href="javascript:;" class="sure" id="failedObj">{#$langData['siteConfig'][6][1]#}</a><a href="javascript:;" class="cancel">{#$langData['siteConfig'][6][12]#}</a></p>
+  </form>
+</div>
+
+<div class="pswp"tabindex="-1"role="dialog"aria-hidden="true"><div class="pswp__bg"></div><div class="pswp__scroll-wrap"><div class="pswp__container"><div class="pswp__item"></div><div class="pswp__item"></div><div class="pswp__item"></div></div><div class="pswp__ui pswp__ui--hidden"><div class="pswp__top-bar"><div class="pswp__counter"></div><button class="pswp__button pswp__button--close"title="Close (Esc)"></button><button class="pswp__button pswp__button--zoom"title="Zoom in/out"></button><div class="pswp__preloader"><div class="pswp__preloader__icn"><div class="pswp__preloader__cut"><div class="pswp__preloader__donut"></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class="pswp__share-tooltip"></div></div><button class="pswp__button pswp__button--arrow--left"title="Previous (arrow left)"></button><button class="pswp__button pswp__button--arrow--right"title="Next (arrow right)"></button><div class="pswp__caption"><div class="pswp__caption__center"></div></div></div></div></div>
+
+<div class="blank">
+</div>
+{#$jsFile = array("drag-loading.js", "/static/js/ui/photoswipe.min.js", "/static/js/ui/photoswipe-ui-default.min.js", "/static/js/ui/pic-swiper.js", "comment.js?v={#$cfg_staticVersion#}")#}
+  {#include file='../_footer.html' curr='comment' toppage=1#}

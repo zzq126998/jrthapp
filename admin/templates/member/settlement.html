@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={#$cfg_soft_lang#}" />
+<title>结算设置</title>
+{#$cssFile#}
+<script>
+var adminPath = "{#$adminPath#}";
+</script>
+</head>
+
+<body>
+<form action="" method="post" name="editform" id="editform" class="editform">
+  <input type="hidden" name="token" id="token" value="{#$token#}" />
+  <dl class="clearfix">
+    <dt><label for="pointName">打赏：</label></dt>
+    <dd>
+      <div class="input-prepend input-append">
+        <span class="add-on">结算佣金</span>
+        <input class="input-mini" type="text" name="rewardFee" value="{#$rewardFee#}">
+        <span class="add-on" style="display: inline-block;">%</span>
+      </div>
+    </dd>
+  </dl>
+  <dl class="clearfix">
+    <dt><label>商家：</label></dt>
+    <dd>
+      {#if in_array("tuan", $installModuleArr)#}
+      <div class="input-prepend input-append">
+        <span class="add-on">团购佣金</span>
+        <input class="input-mini" type="text" name="tuanFee" value="{#$tuanFee#}">
+        <span class="add-on" style="display: inline-block;">%</span>
+      </div><br />
+      {#/if#}
+      {#if in_array("travel", $installModuleArr)#}
+      <div class="input-prepend input-append">
+        <span class="add-on">旅游佣金</span>
+        <input class="input-mini" type="text" name="travelFee" value="{#$travelFee#}">
+        <span class="add-on" style="display: inline-block;">%</span>
+      </div><br />
+      {#/if#}
+      {#if in_array("homemaking", $installModuleArr)#}
+      <div class="input-prepend input-append">
+        <span class="add-on">家政佣金</span>
+        <input class="input-mini" type="text" name="homemakingFee" value="{#$homemakingFee#}">
+        <span class="add-on" style="display: inline-block;">%</span>
+      </div><br />
+      {#/if#}
+      {#if in_array("shop", $installModuleArr)#}
+      <div class="input-prepend input-append">
+        <span class="add-on">商城佣金</span>
+        <input class="input-mini" type="text" name="shopFee" value="{#$shopFee#}">
+        <span class="add-on" style="display: inline-block;">%</span>
+      </div><br />
+      {#/if#}
+      {#if in_array("huodong", $installModuleArr)#}
+      <div class="input-prepend input-append">
+        <span class="add-on">活动佣金</span>
+        <input class="input-mini" type="text" name="huodongFee" value="{#$huodongFee#}">
+        <span class="add-on" style="display: inline-block;">%</span>
+      </div><br />
+      {#/if#}
+      {#if in_array("waimai", $installModuleArr)#}
+      <div class="input-prepend input-append" style="display:none;">
+        <span class="add-on">外卖佣金</span>
+        <input class="input-mini" type="text" name="waimaiFee" value="{#$waimaiFee#}">
+        <span class="add-on" style="display: inline-block;">%</span>
+      </div><br />
+      {#/if#}
+      {#if in_array("live", $installModuleArr)#}
+      <div class="input-prepend input-append" style="display:block;">
+        <span class="add-on">直播佣金</span>
+        <input class="input-mini" type="text" name="liveFee" value="{#$liveFee#}">
+        <span class="add-on" style="display: inline-block;">%</span>
+      </div><br />
+      {#/if#}
+     
+    </dd>
+  </dl>
+  <dl class="clearfix formbtn">
+    <dt>&nbsp;</dt>
+    <dd><input class="btn btn-large btn-success" type="submit" name="submit" id="btnSubmit" value="确认提交" /></dd>
+  </dl>
+</form>
+
+{#$jsFile#}
+</body>
+</html>

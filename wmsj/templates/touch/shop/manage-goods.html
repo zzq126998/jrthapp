@@ -1,0 +1,30 @@
+{#$cssFile = array("manage-goods.css?v=3")#}
+{#include file='../_header.html' pageTitle=$langData['siteConfig'][19][451] cssFile=$cssFile goBack=1 rbtn='<a href="add-goods.php?sid='|cat:$sid|cat:'" class="more">'|cat:$langData['siteConfig'][6][31]|cat:'</a>'#}
+
+  <!-- 搜索 s -->
+  <div class="search"><input type="text" class="keywords" placeholder="{#$langData['siteConfig'][20][419]#}"></div>
+  <!-- 搜索 e -->
+
+  <!-- 列表 s -->
+  <div class="list">
+    <div class="loading">{#$langData['siteConfig'][20][184]#}</div>
+  </div>
+  <!-- 列表 e -->
+
+  <div class="layer">
+    <div class="mask"></div>
+    <div class="type">
+      <ul>
+        <li data-id="0">{#$langData['siteConfig'][18][2]#}</li>
+        {#foreach from=$typelist item=l#}
+        <li data-id="{#$l.id#}">{#$l.title#}</li>
+        {#/foreach#}
+      </ul>
+    </div>
+  </div>
+
+<script>var sid = {#$sid#};</script>
+{#include file='../_footer.html' jsFile=array("manage-goods.js?v=7") curr='shop' toppage=0#}
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+<title>{#$detail_title#}-{#$renovation_title#}</title>
+<meta name="keywords" content="{#$renovation_keywords#}" />
+<meta name="description" content="{#$renovation_description#}" />
+<link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/core/touchBase.css?v={#$cfg_staticVersion#}" />
+<link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/company.css?v={#$cfg_staticVersion#}">
+<link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/com-detail.css?v={#$cfg_staticVersion#}">
+<link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/case-detail.css?v={#$cfg_staticVersion#}">
+<script type="text/javascript" src="{#$cfg_staticPath#}js/core/touchScale.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/core/zepto.min.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript">
+	var masterDomain = '{#$cfg_basehost#}', channelDomain = '{#$renovation_channelDomain#}', cfg_staticPath = staticPath = '{#$cfg_staticPath#}';
+	var cookiePre = '{#$cfg_cookiePre#}';
+	var id = {#$detail_id#};
+</script>
+</head>
+
+<body>
+{#$pageTitle = "方案详情"#}
+{#include file="../../../siteConfig/touch_top.html"#}
+
+<div class="case_lead">{#$detail_title#}</div>
+<div class="case_list">
+	<ul>
+		<li><em>类型：</em>{#if $detail_type == 0#}家装{#else#}公装{#/if#}</li>
+		<li><em>方式：</em>{#$detail_btype#}</li>
+		<li><em>装修方式：</em>{#$detail_style#}</li>
+		<li><em>户型：</em>{#$detail_units#}</li>
+		<li><em>面积：</em>{#$detail_area#}平</li>
+		<li><em>费用：</em>{#$detail_price#}万{#echoCurrency type='short'#}</li>
+		<li class="ca_1"><em>开工：</em>{#$detail_began|date_format:"%Y-%m-%d"#}</li>
+		<li class="ca_1"><em>竣工：</em>{#$detail_end#}</li>
+	</ul>
+</div>
+<div class="case_pic">
+	{#if $detail_unitspic != ""#}
+	<h1>户型图：</h1>
+	<img src="{#$detail_unitspic#}" alt="">
+	{#/if#}
+	<h1>施工现场：</h1>
+	{#foreach from=$detail_pics item="pics"#}
+	<img src="{#$pics['path']#}" alt="">
+	{#/foreach#}
+</div>
+
+<div class="free one">
+	<ul>
+		{#if $detail_collect == 1#}<li class="collect has"><i></i>已收藏</li>{#else#}<li class="collect"><i></i>收藏</li>{#/if#}
+	</ul>
+</div>
+
+<script src="{#$templets_skin#}js/case-detail.js?v={#$cfg_staticVersion#}"></script>
+
+<script type="text/javascript">
+	var wxconfig = {
+		"appId": '{#$wxjssdk_appId#}',
+		"timestamp": '{#$wxjssdk_timestamp#}',
+		"nonceStr": '{#$wxjssdk_nonceStr#}',
+		"signature": '{#$wxjssdk_signature#}',
+		"description": '{#$renovation_description#}',
+		"title": '{#$detail_title#}方案详细',
+		"imgUrl": '{#$detail_litpic#}',
+		"link": '{#getUrlPath service='renovation' template='case-detail' id={#$detail_id#}#}',
+	};
+
+	document.write(unescape("%3Cscript src='{#$cfg_staticPath#}js/publicShare.js?v="+~(-new Date())+"'type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,73 @@
+{#$cssFile = array("mobiscroll.css", "add-goodsType.css?v={#$cfg_staticVersion#}")#}
+{#if $id == 0#}
+{#$pageTitle = $langData['waimai'][5][27]#}
+{#else#}
+{#$pageTitle = $langData['waimai'][5][28]#}
+{#/if#}
+{#include file='../_header.html' pageTitle=$pageTitle cssFile=$cssFile goBack=1 rbtn='<a href="javascript:;" id="submit">'|cat:$langData['siteConfig'][6][27]|cat:'</a>'#}
+
+  <div class="container">
+    <div class="bgfff">
+      <dl class="inpbox fn-clear">
+        <dt><span><label for="">{#$langData['siteConfig'][19][485]#}</label></span></dt>
+        <dd><input type="text" value="{#$title#}" id="title" placeholder="{#$langData['waimai'][5][29]#}"></dd>
+      </dl>
+      <dl class="inpbox fn-clear">
+        <dt><span><label for="">{#$langData['waimai'][5][31]#}</label></span></dt>
+        <dd><input type="number" value="{#$sort|string_format:"%d"#}" id="sort" placeholder="{#$langData['waimai'][5][30]#}"></dd>
+      </dl>
+      <dl class="inpbox fn-clear">
+        <dt><span><label for="">{#$langData['waimai'][1][64]#}</label></span></dt>
+        <dd><em class="toggle{#if $status#} on{#/if#}" id="status"></em></dd>
+      </dl>
+      <dl class="inpbox fn-clear">
+        <dt><span><label for="">{#$langData['waimai'][5][32]#}-{#$langData['waimai'][5][33]#}</label></span></dt>
+        <dd><input name="start_time" id="start_time" class="demo-test-date" placeholder="{#$langData['siteConfig'][7][2]#}" value=" {#if $start_time#}{#$start_time#}{#else#}{#$langData['siteConfig'][7][2]#}{#/if#}" type="text"></dd>
+      </dl>
+      <dl class="inpbox fn-clear">
+        <dt><span><label for="">{#$langData['waimai'][5][32]#}-{#$langData['waimai'][5][34]#}</label></span></dt>
+        <dd><input name="end_time" id="end_time" class="demo-test-date" placeholder="{#$langData['siteConfig'][7][2]#}" value=" {#if $end_time#}{#$end_time#}{#else#}{#$langData['siteConfig'][7][2]#}{#/if#}" type="text"></dd>
+      </dl>
+      <dl class="inpbox fn-clear">
+        <dt><span><label for="">{#$langData['waimai'][1][66]#}</label></span></dt>
+        <dd><em class="toggle{#if $weekshow#} on{#/if#}" id="weekshow"></em></dd>
+      </dl>
+      <dl class="inpbox fn-clear weekbtn">
+        <dt><span><label for="">{#$langData['waimai'][1][67]#}</label></span></dt>
+        <dd>
+          <input type="text" value="{#$weeklist#}" id="weektxt" placeholder="{#$langData['siteConfig'][7][2]#}" readonly="readonly">
+          <input type="hidden" id="week" value="{#$week#}">
+        </dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- 选择星期几 s -->
+  <div class="layer">
+    <div class="mask"></div>
+    <div class="operate">
+      <p class="fn-clear confirm"><a href="javascript:;">{#$langData['waimai'][3][33]#}</a></p>
+      <ul class="fn-clear week">
+        <li class="all"><i></i><a href="javascript:;">{#$langData['siteConfig'][6][28]#}</a></li>
+        <li class="item"><i></i><a href="javascript:;">{#$langData['siteConfig'][14][4]#}</a></li>
+        <li class="item"><i></i><a href="javascript:;">{#$langData['siteConfig'][14][5]#}</a></li>
+        <li class="item"><i></i><a href="javascript:;">{#$langData['siteConfig'][14][6]#}</a></li>
+        <li class="item"><i></i><a href="javascript:;">{#$langData['siteConfig'][14][7]#}</a></li>
+        <li class="item"><i></i><a href="javascript:;">{#$langData['siteConfig'][14][8]#}</a></li>
+        <li class="item"><i></i><a href="javascript:;">{#$langData['siteConfig'][14][9]#}</a></li>
+        <li class="item"><i></i><a href="javascript:;">{#$langData['siteConfig'][14][10]#}</a></li>
+      </ul>
+    </div>
+  </div>
+  <!-- 选择星期几 e -->
+<div class="tymodal fn-hide">
+  <a href="javascript:;" class="close"></a>
+  <div class="title"></div>
+  <div class="text"></div>
+</div>
+
+<script>var sid = {#$sid#}, id = {#$id#};</script>
+{#include file='../_footer.html' jsFile=array("mobiscroll.js", "mobiscroll.datetime.js", "mobiscroll.select.js", "add-goodsType.js?v={#$cfg_staticVersion#}") curr='shop' toppage=0#}
+
+</body>
+</html>

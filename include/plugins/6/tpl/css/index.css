@@ -1,0 +1,11 @@
+/* 城市列表 */
+.w-tip {right: 10px;}
+.step0 {padding: 20px;}
+.step0 ul {width: 101%; padding: 10px 0 20px; margin: 0;}
+.step0 li {float: left; border: 1px solid #ddd; width: 180px; height: 35px; line-height: 35px; list-style: none; padding: 4px; margin: 0 10px 10px 0; border-radius: 4px;}
+.step0 li a {display: block; padding: 0 5px;}
+.step0 li a strong {font-weight: 500;}
+.step0 li a span {float: right;}
+.step0 li a:hover {text-decoration: none; background: #f1f1f1;}
+.step0 .empty {text-align: center; line-height: 200px;}
+.alreadyCollection {border-bottom: 1px solid #ddd; margin-bottom: 20px;}

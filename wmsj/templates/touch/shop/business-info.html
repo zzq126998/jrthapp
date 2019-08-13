@@ -1,0 +1,133 @@
+{#$cssFile = array("mobiscroll.css", "business-info.css?v=3")#}
+{#include file='../_header.html' pageTitle=$langData['waimai'][1][78] cssFile=$cssFile goBack=1 rbtn='<a href="javascript:;" class="submit">'|cat:$langData['siteConfig'][6][27]|cat:'</a>'#}
+
+  <div class="container">
+    <form action="" id="submitForm">
+
+      <div class="bgfff">
+        <div class="fn-clear openbtn">
+          <a href="javascript:;"><span>{#$langData['waimai'][1][38]#}</span><em class="toggle{#if $status == 1#} on{#/if#}" data-type="status"></em></a>
+          <input type="hidden" name="status" id="status" value="">
+        </div>
+        <div class="textarea"><textarea name="closeinfo" value="" rows="3" placeholder="{#$langData['waimai'][1][82]#}">{#$closeinfo#}</textarea></div>
+      </div>
+      <div class="bgfff">
+        <div class="fn-clear openbtn">
+          <a href="javascript:;"><span>{#$langData['waimai'][5][42]#}</span><em class="toggle{#if $ordervalid == 1#} on{#/if#}" data-type="ordervalid"></em></a>
+          <input type="hidden" name="ordervalid" id="ordervalid" value="">
+        </div>
+        <div class="textarea"><textarea name="closeorder" value="" rows="3" placeholder="{#$langData['waimai'][5][43]#}">{#$closeorder#}</textarea></div>
+      </div>
+      <div class="bgfff">
+        <div class="block">
+          <div class="fn-clear openbtn">
+            <a href="javascript:;"><span>{#$langData['waimai'][1][87]#}</span><em class="toggle{#if $merchant_deliver#} on{#/if#}" data-type="merchant_deliver"></em></a>
+            <input type="hidden" name="merchant_deliver" id="merchant_deliver" value="">
+          </div>
+          <div class="fn-clear openbtn">
+            <a href="javascript:;"><span>{#$langData['waimai'][1][88]#}</span><em class="toggle{#if $selftake#} on{#/if#}" data-type="selftake"></em></a>
+            <input type="hidden" name="selftake" id="selftake" value="">
+          </div>
+          <!-- <div class="fn-clear openbtn">
+            <a href="javascript:;"><span>是否开启不能取消订单</span><em class="toggle"></em></a>
+          </div> -->
+        </div>
+      </div>
+
+      <div class="bgfff">
+        <div class="block">
+          <dl class="inpbox fn-clear weekbtn">
+            <dt><span><label for="">{#$langData['waimai'][1][93]#}</label></span></dt>
+            <dd><p>{#$weeklist#}</p></dd>
+            <input type="hidden" id="week" value="{#$weeks#}">
+          </dl>
+          <dl class="inpbox fn-clear">
+            <dt><span><label for="">{#$langData['waimai'][1][94]#}1</label></span></dt>
+            <dd>
+              <div class="fn-clear bg_arrow">
+                <div data-role="fieldcontain" class="item dom_select">
+                  <input class="demo-test-date" placeholder="{#$langData['waimai'][5][36]#}" name="start_time1" value="{#$start_time1#}" type="text">
+                </div>
+                <span class="zhi">-</span>
+                <div data-role="fieldcontain" class="item dom_select">
+                  <input class="demo-test-date" placeholder="{#$langData['waimai'][5][37]#}" name="end_time1" value="{#$end_time1#}" type="text">
+                </div>
+              </div>
+            </dd>
+          </dl>
+          <dl class="inpbox fn-clear">
+            <dt><span><label for="">{#$langData['waimai'][1][94]#}2</label></span></dt>
+            <dd>
+              <div class="fn-clear bg_arrow">
+                <div data-role="fieldcontain" class="item dom_select">
+                  <input class="demo-test-date" placeholder="{#$langData['waimai'][5][36]#}" name="start_time2" value="{#$start_time2#}" type="text">
+                </div>
+                <span class="zhi">-</span>
+                <div data-role="fieldcontain" class="item dom_select">
+                  <input class="demo-test-date" placeholder="{#$langData['waimai'][5][37]#}" name="end_time2" value="{#$end_time2#}" type="text">
+                </div>
+              </div>
+            </dd>
+          </dl>
+          <dl class="inpbox fn-clear">
+            <dt><span><label for="">{#$langData['waimai'][1][94]#}3</label></span></dt>
+            <dd>
+              <div class="fn-clear bg_arrow">
+                <div data-role="fieldcontain" class="item dom_select">
+                  <input class="demo-test-date" placeholder="{#$langData['waimai'][5][36]#}" name="start_time3" value="{#$start_time3#}" type="text">
+                </div>
+                <span class="zhi">-</span>
+                <div data-role="fieldcontain" class="item dom_select">
+                  <input class="demo-test-date" placeholder="{#$langData['waimai'][5][37]#}" name="end_time3" value="{#$end_time3#}" type="text">
+                </div>
+              </div>
+            </dd>
+          </dl>
+        </div>
+      </div>
+
+      <!-- <div class="bgfff">
+        <div class="block">
+          <dl class="inpbox fn-clear">
+            <dt><span><label for="">服务距离（公里）</label></span></dt>
+            <dd><input type="text" name="delivery_radius" value="{#if $id#}{#$delivery_radius#}{#else#}1.0{#/if#}"></dd>
+          </dl>
+        </div>
+      </div> -->
+
+      <div class="bgfff">
+        <div class="block">
+          <dl class="inpbox fn-clear">
+            <dt><span><label for="">{#$langData['waimai'][1][97]#}</label></span></dt>
+            <dd><input type="text" placeholder="{#$langData['waimai'][1][97]#}" name="delivery_area" value="{#$delivery_area#}"></dd>
+          </dl>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+
+  <div class="layer">
+    <div class="mask"></div>
+    <div class="operate">
+      <p class="fn-clear confirm"><a href="javascript:;">{#$langData['siteConfig'][6][1]#}</a></p>
+      <ul class="fn-clear week">
+        <li class="all"><i></i><a href="javascript:;">{#$langData['siteConfig'][6][28]#}</a></li>
+        <li class="item" data-id="1"><i></i><a href="javascript:;">{#$langData['siteConfig'][14][4]#}</a></li>
+        <li class="item" data-id="2"><i></i><a href="javascript:;">{#$langData['siteConfig'][14][5]#}</a></li>
+        <li class="item" data-id="3"><i></i><a href="javascript:;">{#$langData['siteConfig'][14][6]#}</a></li>
+        <li class="item" data-id="4"><i></i><a href="javascript:;">{#$langData['siteConfig'][14][7]#}</a></li>
+        <li class="item" data-id="5"><i></i><a href="javascript:;">{#$langData['siteConfig'][14][8]#}</a></li>
+        <li class="item" data-id="6"><i></i><a href="javascript:;">{#$langData['siteConfig'][14][9]#}</a></li>
+        <li class="item" data-id="7"><i></i><a href="javascript:;">{#$langData['siteConfig'][14][10]#}</a></li>
+      </ul>
+    </div>
+  </div>
+
+
+<script>var sid = {#$sid#};</script>
+{#include file='../_footer.html' jsFile=array("mobiscroll.js", "mobiscroll.datetime.js", "store-info-public.js?v=2", "business-info.js?v=3") curr='shop' toppage=0#}
+
+</body>
+</html>

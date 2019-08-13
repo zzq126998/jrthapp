@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+<title>{#$video_title#}</title>
+<meta name="keywords" content="{#$video_keywords#}" />
+<meta name="description" content="{#$video_description#}" />
+<link rel="stylesheet" type="text/css" href="{#$cfg_basehost#}/static/css/core/touchBase.css?v={#$cfg_staticVersion#}">
+<link rel="stylesheet" href="{#$templets_skin#}css/index.css?v={#$cfg_staticVersion#}">
+<script type="text/javascript" src="{#$cfg_staticPath#}js/core/touchScale.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/core/zepto.min.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript">
+var masterDomain = '{#$cfg_basehost#}', templatePath = '{#$templets_skin#}',nowStamp = '{#$smarty.now#}', staticPath = '{#$cfg_staticPath#}';
+var detailListId = 'video_list';
+</script>
+</head>
+
+<body>
+{#include file="../../../siteConfig/touch_top.html" pageTitle="$video_channelName"#}
+
+<div class="refresh" id="refresh"><div class="refresh_box" id="refresh_box"><em></em></div></div>
+
+<div class="nav fn-clear">
+  <div class="nav_more">
+    <div class="shadow"></div>
+    <a href="javascript:;" class="more_btn"></a>
+  </div>
+  <div class="menu_list fn-clear">
+    {#video action="type" return="typenav" type="0"#}
+    <a data-id="{#$typenav.id#}" href="?id={#$typenav.id#}" >{#$typenav.typename#}</a>
+    {#/video#}
+    <a href="javascript:;"  data-id = "0" style="width:.8rem;"></a>
+  </div>
+</div>
+<!-- 头部以及导航条 e -->
+
+<!-- 视频列表 s -->
+<div class="video_list" id="video_list"></div>
+<!-- 视频列表 e -->
+
+<script type="text/javascript">
+	var wxconfig = {
+		"appId": '{#$wxjssdk_appId#}',
+		"timestamp": '{#$wxjssdk_timestamp#}',
+		"nonceStr": '{#$wxjssdk_nonceStr#}',
+		"signature": '{#$wxjssdk_signature#}',
+		"description": '{#$video_description#}',
+		"title": '{#$video_title#}',
+		"imgUrl": '{#$video_logoUrl#}',
+		"link": '{#$video_channelDomain#}',
+	};
+
+  document.write(unescape("%3Cscript src='{#$cfg_staticPath#}js/publicShare.js?v="+~(-new Date())+"'type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/javascript" src="{#$cfg_staticPath#}js/ui/iscroll.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$templets_skin#}../../../siteConfig/touch/default/js/detail2list.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$templets_skin#}js/index.js?v={#$cfg_staticVersion#}"></script>
+</body>
+</html>

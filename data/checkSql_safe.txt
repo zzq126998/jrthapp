@@ -1,0 +1,267 @@
+
+2018-03-16 09:24:28 sql操作失败语句：SELECT `id`, `name`, `works`, `post`, `photo`, `company`, `special`, `style`, `idea`, `click` FROM `huoniao_renovation_team` WHERE `state` = 1AND 2=3 ORDER BY `weight` DESC, `id` DESC
+
+2018-03-16 09:24:31 sql操作失败语句：SELECT `id`, `name`, `works`, `post`, `photo`, `company`, `special`, `style`, `idea`, `click` FROM `huoniao_renovation_team` WHERE `state` = 1AND 2=3 ORDER BY `weight` DESC, `id` DESC
+
+2018-03-16 09:24:31 sql操作失败语句：SELECT `id`, `name`, `works`, `post`, `photo`, `company`, `special`, `style`, `idea`, `click` FROM `huoniao_renovation_team` WHERE `state` = 1AND 2=3 ORDER BY `weight` DESC, `id` DESC
+
+2018-03-16 09:24:43 sql操作失败语句：SELECT `id`, `name`, `works`, `post`, `photo`, `company`, `special`, `style`, `idea`, `click` FROM `huoniao_renovation_team` WHERE `state` = 1AND 2=3 ORDER BY `weight` DESC, `id` DESC
+
+2018-03-16 09:24:43 sql操作失败语句：SELECT `id`, `name`, `works`, `post`, `photo`, `company`, `special`, `style`, `idea`, `click` FROM `huoniao_renovation_team` WHERE `state` = 1AND 2=3 ORDER BY `weight` DESC, `id` DESC
+
+2018-03-16 09:25:17 sql操作失败语句：SELECT `id`, `name`, `works`, `post`, `photo`, `company`, `special`, `style`, `idea`, `click` FROM `huoniao_renovation_team` WHERE `state` = 1AND 2=3 ORDER BY `weight` DESC, `id` DESC
+
+2018-03-16 09:25:20 sql操作失败语句：SELECT `id`, `name`, `works`, `post`, `photo`, `company`, `special`, `style`, `idea`, `click` FROM `huoniao_renovation_team` WHERE `state` = 1AND 2=3 ORDER BY `weight` DESC, `id` DESC
+
+2018-03-16 09:25:20 sql操作失败语句：SELECT `id`, `name`, `works`, `post`, `photo`, `company`, `special`, `style`, `idea`, `click` FROM `huoniao_renovation_team` WHERE `state` = 1AND 2=3 ORDER BY `weight` DESC, `id` DESC
+
+2018-03-16 09:25:21 sql操作失败语句：SELECT `id`, `name`, `works`, `post`, `photo`, `company`, `special`, `style`, `idea`, `click` FROM `huoniao_renovation_team` WHERE `state` = 1AND 2=3 ORDER BY `weight` DESC, `id` DESC
+
+2018-03-16 09:25:21 sql操作失败语句：SELECT `id`, `name`, `works`, `post`, `photo`, `company`, `special`, `style`, `idea`, `click` FROM `huoniao_renovation_team` WHERE `state` = 1AND 2=3 ORDER BY `weight` DESC, `id` DESC
+
+2018-03-16 09:29:42 sql操作失败语句：UPDATE `huoniao_job_resume` SET `click` = `click` + 1 WHERE `id` = 15
+
+2018-03-16 09:29:48 sql操作失败语句：UPDATE `huoniao_job_resume` SET `click` = `click` + 1 WHERE `id` = 14
+
+2018-03-16 09:29:54 sql操作失败语句：UPDATE `huoniao_job_resume` SET `click` = `click` + 1 WHERE `id` = 14
+
+2018-03-16 09:36:22 sql操作失败语句：SELECT
+				s.`id`, s.`shopname`, s.`typeid`, s.`category`, s.`description`, s.`ordervalid`, s.`weeks`, s.`start_time1`, s.`end_time1`, s.`start_time2`, s.`end_time2`, s.`start_time3`, s.`end_time3`, s.`basicprice`, s.`delivery_fee`, s.`linktype`, s.`show_delivery_service`, s.`delivery_service`, s.`delivery_time`, s.`is_first_discount`, s.`first_discount`, s.`is_discount`, s.`discount_value`, s.`open_promotion`, s.`promotions`, s.`shop_banner`, s.`delivery_fee_mode`, s.`service_area_data`, s.`range_delivery_fee_value`,
+				CASE WHEN(
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time1`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time1`, TIME) > CONVERT(now(), TIME))
+					)
+					OR
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time2`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time2`, TIME) > CONVERT(now(), TIME))
+					)
+					OR
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time3`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time3`, TIME) > CONVERT(now(), TIME))
+					)
+				)THEN 1 ELSE 0 END AS yingye, (select count(o.`id`) from `huoniao_waimai_order` o where o.`state` = 1 and o.`sid` = s.`id`) AS sale
+				, ROUND(
+		        6378.138 * 2 * ASIN(
+		            SQRT(POW(SIN((undefined * PI() / 180 - s.`coordX` * PI() / 180) / 2), 2) + COS(undefined * PI() / 180) * COS(s.`coordX` * PI() / 180) * POW(SIN((undefined * PI() / 180 - s.`coordY` * PI() / 180) / 2), 2))
+		        ) * 1000
+		    ) AS juli
+				
+				FROM `huoniao_waimai_shop` s
+				WHERE 1 = 1 AND s.`status` = 1 AND s.`del` = 0 AND `cityid` = 166 AND ROUND(
+		        6378.138 * 2 * ASIN(
+		            SQRT(POW(SIN((undefined * PI() / 180 - s.`coordX` * PI() / 180) / 2), 2) + COS(undefined * PI() / 180) * COS(s.`coordX` * PI() / 180) * POW(SIN((undefined * PI() / 180 - s.`coordY` * PI() / 180) / 2), 2))
+		        ) * 1000
+		    ) < 10000 ORDER BY s.`ordervalid` DESC, `yingye` DESC, `juli` ASC, s.`sort` DESC, s.`id` DESC
+
+2018-03-16 13:23:08 sql操作失败语句：UPDATE `huoniao_site_cron` SET `ltime` = 1521177788, `ntime` = '1521177840' WHERE `id` = 11
+
+2018-03-16 13:23:11 sql操作失败语句：SELECT * FROM `huoniao_site_cron` WHERE `state` = 1 AND `ntime` <= 1521177791 ORDER BY `ntime` LIMIT 1
+
+2018-03-16 13:23:11 sql操作失败语句：UPDATE `huoniao_site_cron` SET `ltime` = 1521177791, `ntime` = '1521176400' WHERE `id` = {
+
+2018-03-16 13:23:14 sql操作失败语句：SELECT * FROM `huoniao_site_cron` WHERE `state` = 1 AND `ntime` <= 1521177794 ORDER BY `ntime` LIMIT 1
+
+2018-03-16 13:23:14 sql操作失败语句：SELECT * FROM `huoniao_site_cron` WHERE `state` = 1 AND `ntime` <= 1521177794 ORDER BY `ntime` LIMIT 1
+
+2018-03-16 13:23:25 sql操作失败语句：SELECT * FROM `huoniao_site_cron` WHERE `state` = 1 AND `ntime` <= 1521177805 ORDER BY `ntime` LIMIT 1
+
+2018-03-16 13:23:25 sql操作失败语句：SELECT * FROM `huoniao_site_cron` WHERE `state` = 1 AND `ntime` <= 1521177805 ORDER BY `ntime` LIMIT 1
+
+2018-03-16 13:23:35 sql操作失败语句：SELECT * FROM `huoniao_site_cron` WHERE `state` = 1 AND `ntime` <= 1521177815 ORDER BY `ntime` LIMIT 1
+
+2018-03-16 13:23:36 sql操作失败语句：SELECT * FROM `huoniao_site_cron` WHERE `state` = 1 AND `ntime` <= 1521177816 ORDER BY `ntime` LIMIT 1
+
+2018-03-16 13:23:38 sql操作失败语句：SELECT * FROM `huoniao_site_cron` WHERE `state` = 1 AND `ntime` <= 1521177818 ORDER BY `ntime` LIMIT 1
+
+2018-03-16 13:23:46 sql操作失败语句：SELECT * FROM `huoniao_site_cron` WHERE `state` = 1 AND `ntime` <= 1521177826 ORDER BY `ntime` LIMIT 1
+
+2018-03-16 13:23:46 sql操作失败语句：SELECT * FROM `huoniao_site_cron` WHERE `state` = 1 AND `ntime` <= 1521177826 ORDER BY `ntime` LIMIT 1
+
+2018-03-16 13:23:46 sql操作失败语句：SELECT * FROM `huoniao_site_cron` WHERE `state` = 1 AND `ntime` <= 1521177826 ORDER BY `ntime` LIMIT 1
+
+2018-03-16 17:07:43 sql操作失败语句：UPDATE `huoniao_job_news` SET `click` = `click` + 1 WHERE `id` = 20
+
+2018-03-16 17:07:52 sql操作失败语句：UPDATE `huoniao_job_news` SET `click` = `click` + 1 WHERE `id` = 20
+
+2018-03-16 17:07:55 sql操作失败语句：UPDATE `huoniao_job_news` SET `click` = `click` + 1 WHERE `id` = 18
+
+2018-03-16 17:07:59 sql操作失败语句：UPDATE `huoniao_job_news` SET `click` = `click` + 1 WHERE `id` = 18
+
+2018-03-16 17:08:15 sql操作失败语句：SELECT
+				s.`id`, s.`shopname`, s.`typeid`, s.`category`, s.`description`, s.`ordervalid`, s.`weeks`, s.`start_time1`, s.`end_time1`, s.`start_time2`, s.`end_time2`, s.`start_time3`, s.`end_time3`, s.`basicprice`, s.`delivery_fee`, s.`linktype`, s.`show_delivery_service`, s.`delivery_service`, s.`delivery_time`, s.`is_first_discount`, s.`first_discount`, s.`is_discount`, s.`discount_value`, s.`open_promotion`, s.`promotions`, s.`shop_banner`, s.`delivery_fee_mode`, s.`service_area_data`, s.`range_delivery_fee_value`,
+				CASE WHEN(
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time1`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time1`, TIME) > CONVERT(now(), TIME))
+					)
+					OR
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time2`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time2`, TIME) > CONVERT(now(), TIME))
+					)
+					OR
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time3`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time3`, TIME) > CONVERT(now(), TIME))
+					)
+				)THEN 1 ELSE 0 END AS yingye, (select count(o.`id`) from `huoniao_waimai_order` o where o.`state` = 1 and o.`sid` = s.`id`) AS sale
+				, ROUND(
+		        6378.138 * 2 * ASIN(
+		            SQRT(POW(SIN((undefined * PI() / 180 - s.`coordX` * PI() / 180) / 2), 2) + COS(undefined * PI() / 180) * COS(s.`coordX` * PI() / 180) * POW(SIN((undefined * PI() / 180 - s.`coordY` * PI() / 180) / 2), 2))
+		        ) * 1000
+		    ) AS juli
+				
+				FROM `huoniao_waimai_shop` s
+				WHERE 1 = 1 AND s.`status` = 1 AND s.`del` = 0 AND `cityid` = 166 AND ROUND(
+		        6378.138 * 2 * ASIN(
+		            SQRT(POW(SIN((undefined * PI() / 180 - s.`coordX` * PI() / 180) / 2), 2) + COS(undefined * PI() / 180) * COS(s.`coordX` * PI() / 180) * POW(SIN((undefined * PI() / 180 - s.`coordY` * PI() / 180) / 2), 2))
+		        ) * 1000
+		    ) < 10000 ORDER BY s.`ordervalid` DESC, `yingye` DESC, `juli` ASC, s.`sort` DESC, s.`id` DESC
+
+2018-03-16 17:09:44 sql操作失败语句：SELECT
+				s.`id`, s.`shopname`, s.`typeid`, s.`category`, s.`description`, s.`ordervalid`, s.`weeks`, s.`start_time1`, s.`end_time1`, s.`start_time2`, s.`end_time2`, s.`start_time3`, s.`end_time3`, s.`basicprice`, s.`delivery_fee`, s.`linktype`, s.`show_delivery_service`, s.`delivery_service`, s.`delivery_time`, s.`is_first_discount`, s.`first_discount`, s.`is_discount`, s.`discount_value`, s.`open_promotion`, s.`promotions`, s.`shop_banner`, s.`delivery_fee_mode`, s.`service_area_data`, s.`range_delivery_fee_value`,
+				CASE WHEN(
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time1`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time1`, TIME) > CONVERT(now(), TIME))
+					)
+					OR
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time2`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time2`, TIME) > CONVERT(now(), TIME))
+					)
+					OR
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time3`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time3`, TIME) > CONVERT(now(), TIME))
+					)
+				)THEN 1 ELSE 0 END AS yingye, (select count(o.`id`) from `huoniao_waimai_order` o where o.`state` = 1 and o.`sid` = s.`id`) AS sale
+				, ROUND(
+		        6378.138 * 2 * ASIN(
+		            SQRT(POW(SIN((undefined * PI() / 180 - s.`coordX` * PI() / 180) / 2), 2) + COS(undefined * PI() / 180) * COS(s.`coordX` * PI() / 180) * POW(SIN((undefined * PI() / 180 - s.`coordY` * PI() / 180) / 2), 2))
+		        ) * 1000
+		    ) AS juli
+				
+				FROM `huoniao_waimai_shop` s
+				WHERE 1 = 1 AND s.`status` = 1 AND s.`del` = 0 AND `cityid` = 166 AND ROUND(
+		        6378.138 * 2 * ASIN(
+		            SQRT(POW(SIN((undefined * PI() / 180 - s.`coordX` * PI() / 180) / 2), 2) + COS(undefined * PI() / 180) * COS(s.`coordX` * PI() / 180) * POW(SIN((undefined * PI() / 180 - s.`coordY` * PI() / 180) / 2), 2))
+		        ) * 1000
+		    ) < 10000 ORDER BY s.`ordervalid` DESC, `yingye` DESC, `juli` ASC, s.`sort` DESC, s.`id` DESC
+
+2018-03-16 17:58:27 sql操作失败语句：INSERT INTO `huoniao_pay_log` (`ordertype`, `ordernum`, `uid`, `body`, `amount`, `paytype`, `state`, `pubdate`) VALUES ('member', '1831694307735759', '29', 'a:1:{s:4:"type";s:7:"deposit";}', '1', 'globalalipay', 0, 1521194307)
+
+2018-03-16 17:58:32 sql操作失败语句：INSERT INTO `huoniao_pay_log` (`ordertype`, `ordernum`, `uid`, `body`, `amount`, `paytype`, `state`, `pubdate`) VALUES ('member', '1831694312900076', '29', 'a:1:{s:4:"type";s:7:"deposit";}', '1', 'wxpay', 0, 1521194312)
+
+2018-03-16 17:58:33 sql操作失败语句：INSERT INTO `huoniao_pay_log` (`ordertype`, `ordernum`, `uid`, `body`, `amount`, `paytype`, `state`, `pubdate`) VALUES ('member', '1831694313356063', '29', 'a:1:{s:4:"type";s:7:"deposit";}', '1', 'wxpay', 0, 1521194313)
+
+2018-03-16 17:59:02 sql操作失败语句：INSERT INTO `huoniao_pay_log` (`ordertype`, `ordernum`, `uid`, `body`, `amount`, `paytype`, `state`, `pubdate`) VALUES ('member', '1831694342354768', '29', 'a:1:{s:4:"type";s:7:"deposit";}', '1', 'wxpay', 0, 1521194342)
+
+2018-03-16 18:28:41 sql操作失败语句：INSERT INTO `huoniao_site_process` (`processid`, `expiry`) VALUE ('FB_CRON_CHECKER', '1521196421')
+
+2018-03-16 19:40:44 sql操作失败语句：SELECT * FROM `huoniao_website` WHERE `id` = QldvPQ==
+
+2018-03-19 19:14:53 sql操作失败语句：SELECT p.`id`, p.`type`, p.`title`, p.`store`, p.`mprice`, p.`price`, p.`sales`, p.`inventory`, p.`litpic`, p.`flag`, p.`btime`, p.`etime`, p.`state`, p.`pubdate`, p.`specification` FROM `huoniao_shop_product` p LEFT JOIN `huoniao_shop_store` s ON s.`id` = p.`store`WHERE 1 = 1AND 2=3 AND ((`btime` <= 1521458093 AND `etime` > 1521458093) OR (`btime` = 0 AND `etime` = 0)) AND FIND_IN_SET(0, `flag`) AND p.`state` = 1
+
+2018-03-19 19:14:53 sql操作失败语句：SELECT p.`id`, p.`type`, p.`title`, p.`store`, p.`mprice`, p.`price`, p.`sales`, p.`inventory`, p.`litpic`, p.`flag`, p.`btime`, p.`etime`, p.`state`, p.`pubdate`, p.`specification` FROM `huoniao_shop_product` p LEFT JOIN `huoniao_shop_store` s ON s.`id` = p.`store`WHERE 1 = 1AND 2=3 AND ((`btime` <= 1521458093 AND `etime` > 1521458093) OR (`btime` = 0 AND `etime` = 0)) AND FIND_IN_SET(0, `flag`) AND p.`state` = 1
+
+2018-03-19 19:16:35 sql操作失败语句：SELECT p.`id`, p.`type`, p.`title`, p.`store`, p.`mprice`, p.`price`, p.`sales`, p.`inventory`, p.`litpic`, p.`flag`, p.`btime`, p.`etime`, p.`state`, p.`pubdate`, p.`specification` FROM `huoniao_shop_product` p LEFT JOIN `huoniao_shop_store` s ON s.`id` = p.`store`WHERE 1 = 1AND 2=3 AND ((`btime` <= 1521458195 AND `etime` > 1521458195) OR (`btime` = 0 AND `etime` = 0)) AND FIND_IN_SET(0, `flag`) AND p.`state` = 1
+
+2018-03-19 19:16:35 sql操作失败语句：SELECT p.`id`, p.`type`, p.`title`, p.`store`, p.`mprice`, p.`price`, p.`sales`, p.`inventory`, p.`litpic`, p.`flag`, p.`btime`, p.`etime`, p.`state`, p.`pubdate`, p.`specification` FROM `huoniao_shop_product` p LEFT JOIN `huoniao_shop_store` s ON s.`id` = p.`store`WHERE 1 = 1AND 2=3 AND ((`btime` <= 1521458195 AND `etime` > 1521458195) OR (`btime` = 0 AND `etime` = 0)) AND FIND_IN_SET(0, `flag`) AND p.`state` = 1
+
+2018-03-19 19:39:35 sql操作失败语句：SELECT p.`id`, p.`type`, p.`title`, p.`store`, p.`mprice`, p.`price`, p.`sales`, p.`inventory`, p.`litpic`, p.`flag`, p.`btime`, p.`etime`, p.`state`, p.`pubdate`, p.`specification` FROM `huoniao_shop_product` p LEFT JOIN `huoniao_shop_store` s ON s.`id` = p.`store`WHERE 1 = 1AND 2=3 AND ((`btime` <= 1521459575 AND `etime` > 1521459575) OR (`btime` = 0 AND `etime` = 0)) AND FIND_IN_SET(0, `flag`) AND p.`state` = 1
+
+2018-03-19 19:39:35 sql操作失败语句：SELECT p.`id`, p.`type`, p.`title`, p.`store`, p.`mprice`, p.`price`, p.`sales`, p.`inventory`, p.`litpic`, p.`flag`, p.`btime`, p.`etime`, p.`state`, p.`pubdate`, p.`specification` FROM `huoniao_shop_product` p LEFT JOIN `huoniao_shop_store` s ON s.`id` = p.`store`WHERE 1 = 1AND 2=3 AND ((`btime` <= 1521459575 AND `etime` > 1521459575) OR (`btime` = 0 AND `etime` = 0)) AND FIND_IN_SET(0, `flag`) AND p.`state` = 1
+
+2018-03-20 18:21:10 sql操作失败语句：SELECT
+				s.`id`, s.`shopname`, s.`typeid`, s.`category`, s.`description`, s.`ordervalid`, s.`weeks`, s.`start_time1`, s.`end_time1`, s.`start_time2`, s.`end_time2`, s.`start_time3`, s.`end_time3`, s.`basicprice`, s.`delivery_fee`, s.`linktype`, s.`show_delivery_service`, s.`delivery_service`, s.`delivery_time`, s.`is_first_discount`, s.`first_discount`, s.`is_discount`, s.`discount_value`, s.`open_promotion`, s.`promotions`, s.`shop_banner`, s.`delivery_fee_mode`, s.`service_area_data`, s.`range_delivery_fee_value`,
+				CASE WHEN(
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time1`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time1`, TIME) > CONVERT(now(), TIME))
+					)
+					OR
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time2`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time2`, TIME) > CONVERT(now(), TIME))
+					)
+					OR
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time3`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time3`, TIME) > CONVERT(now(), TIME))
+					)
+				)THEN 1 ELSE 0 END AS yingye, (select count(o.`id`) from `huoniao_waimai_order` o where o.`state` = 1 and o.`sid` = s.`id`) AS sale
+				, ROUND(
+		        6378.138 * 2 * ASIN(
+		            SQRT(POW(SIN((undefined * PI() / 180 - s.`coordX` * PI() / 180) / 2), 2) + COS(undefined * PI() / 180) * COS(s.`coordX` * PI() / 180) * POW(SIN((undefined * PI() / 180 - s.`coordY` * PI() / 180) / 2), 2))
+		        ) * 1000
+		    ) AS juli
+				
+				FROM `huoniao_waimai_shop` s
+				WHERE 1 = 1 AND s.`status` = 1 AND s.`del` = 0 AND `cityid` = 166 AND ROUND(
+		        6378.138 * 2 * ASIN(
+		            SQRT(POW(SIN((undefined * PI() / 180 - s.`coordX` * PI() / 180) / 2), 2) + COS(undefined * PI() / 180) * COS(s.`coordX` * PI() / 180) * POW(SIN((undefined * PI() / 180 - s.`coordY` * PI() / 180) / 2), 2))
+		        ) * 1000
+		    ) < 10000 ORDER BY s.`ordervalid` DESC, `yingye` DESC, `juli` ASC, s.`sort` DESC, s.`id` DESC
+
+2018-03-21 09:20:12 sql操作失败语句：SELECT
+				s.`id`, s.`shopname`, s.`typeid`, s.`category`, s.`description`, s.`ordervalid`, s.`weeks`, s.`start_time1`, s.`end_time1`, s.`start_time2`, s.`end_time2`, s.`start_time3`, s.`end_time3`, s.`basicprice`, s.`delivery_fee`, s.`linktype`, s.`show_delivery_service`, s.`delivery_service`, s.`delivery_time`, s.`is_first_discount`, s.`first_discount`, s.`is_discount`, s.`discount_value`, s.`open_promotion`, s.`promotions`, s.`shop_banner`, s.`delivery_fee_mode`, s.`service_area_data`, s.`range_delivery_fee_value`,
+				CASE WHEN(
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time1`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time1`, TIME) > CONVERT(now(), TIME))
+					)
+					OR
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time2`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time2`, TIME) > CONVERT(now(), TIME))
+					)
+					OR
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time3`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time3`, TIME) > CONVERT(now(), TIME))
+					)
+				)THEN 1 ELSE 0 END AS yingye, (select count(o.`id`) from `huoniao_waimai_order` o where o.`state` = 1 and o.`sid` = s.`id`) AS sale
+				, ROUND(
+		        6378.138 * 2 * ASIN(
+		            SQRT(POW(SIN((undefined * PI() / 180 - s.`coordX` * PI() / 180) / 2), 2) + COS(undefined * PI() / 180) * COS(s.`coordX` * PI() / 180) * POW(SIN((undefined * PI() / 180 - s.`coordY` * PI() / 180) / 2), 2))
+		        ) * 1000
+		    ) AS juli
+				
+				FROM `huoniao_waimai_shop` s
+				WHERE 1 = 1 AND s.`status` = 1 AND s.`del` = 0 AND `cityid` = 166 AND ROUND(
+		        6378.138 * 2 * ASIN(
+		            SQRT(POW(SIN((undefined * PI() / 180 - s.`coordX` * PI() / 180) / 2), 2) + COS(undefined * PI() / 180) * COS(s.`coordX` * PI() / 180) * POW(SIN((undefined * PI() / 180 - s.`coordY` * PI() / 180) / 2), 2))
+		        ) * 1000
+		    ) < 10000 ORDER BY s.`ordervalid` DESC, `yingye` DESC, `juli` ASC, s.`sort` DESC, s.`id` DESC
+
+2018-03-21 18:32:08 sql操作失败语句：INSERT INTO `huoniao_site_process` (`processid`, `expiry`) VALUE ('FB_CRON_CHECKER', '1521628628')
+
+2018-03-21 19:08:53 sql操作失败语句：SELECT
+				s.`id`, s.`shopname`, s.`typeid`, s.`category`, s.`description`, s.`ordervalid`, s.`weeks`, s.`start_time1`, s.`end_time1`, s.`start_time2`, s.`end_time2`, s.`start_time3`, s.`end_time3`, s.`basicprice`, s.`delivery_fee`, s.`linktype`, s.`show_delivery_service`, s.`delivery_service`, s.`delivery_time`, s.`is_first_discount`, s.`first_discount`, s.`is_discount`, s.`discount_value`, s.`open_promotion`, s.`promotions`, s.`shop_banner`, s.`delivery_fee_mode`, s.`service_area_data`, s.`range_delivery_fee_value`,
+				CASE WHEN(
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time1`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time1`, TIME) > CONVERT(now(), TIME))
+					)
+					OR
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time2`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time2`, TIME) > CONVERT(now(), TIME))
+					)
+					OR
+					(
+						(FIND_IN_SET(DAYOFWEEK(now()) - 1, s.`weeks`) OR (DAYOFWEEK(now()) = 1 AND FIND_IN_SET(7, s.`weeks`))) AND (CONVERT(s.`start_time3`, TIME) < CONVERT(now(), TIME) AND CONVERT(s.`end_time3`, TIME) > CONVERT(now(), TIME))
+					)
+				)THEN 1 ELSE 0 END AS yingye, (select count(o.`id`) from `huoniao_waimai_order` o where o.`state` = 1 and o.`sid` = s.`id`) AS sale
+				, ROUND(
+		        6378.138 * 2 * ASIN(
+		            SQRT(POW(SIN((undefined * PI() / 180 - s.`coordX` * PI() / 180) / 2), 2) + COS(undefined * PI() / 180) * COS(s.`coordX` * PI() / 180) * POW(SIN((undefined * PI() / 180 - s.`coordY` * PI() / 180) / 2), 2))
+		        ) * 1000
+		    ) AS juli
+				
+				FROM `huoniao_waimai_shop` s
+				WHERE 1 = 1 AND s.`status` = 1 AND s.`del` = 0 AND `cityid` = 166 AND ROUND(
+		        6378.138 * 2 * ASIN(
+		            SQRT(POW(SIN((undefined * PI() / 180 - s.`coordX` * PI() / 180) / 2), 2) + COS(undefined * PI() / 180) * COS(s.`coordX` * PI() / 180) * POW(SIN((undefined * PI() / 180 - s.`coordY` * PI() / 180) / 2), 2))
+		        ) * 1000
+		    ) < 10000 ORDER BY s.`ordervalid` DESC, `yingye` DESC, `juli` ASC, s.`sort` DESC, s.`id` DESC
+
+2018-03-22 11:54:37 sql操作失败语句：SELECT `id`, `field`, `title`, `orderby`, `formtype`, `required`, `options`, `default` FROM `huoniao_infotypeitem` WHERE `tid` =  ORDER BY `orderby` DESC
+
+2018-03-22 12:06:36 sql操作失败语句：DELETE FROM `huoniao_site_admin_notice`
+
+2018-03-22 12:38:46 sql操作失败语句：DELETE FROM `huoniao_site_admin_notice`
+
+2018-03-22 12:43:07 sql操作失败语句：DELETE FROM `huoniao_site_admin_notice`
+
+2018-03-22 12:49:08 sql操作失败语句：SELECT `id`, `field`, `title`, `orderby`, `formtype`, `required`, `options`, `default` FROM `huoniao_infotypeitem` WHERE `tid` =  ORDER BY `orderby` DESC
+
+2018-03-22 12:49:09 sql操作失败语句：SELECT `id`, `field`, `title`, `orderby`, `formtype`, `required`, `options`, `default` FROM `huoniao_infotypeitem` WHERE `tid` =  ORDER BY `orderby` DESC
+

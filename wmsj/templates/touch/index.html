@@ -1,0 +1,22 @@
+{#$cssFile = array("index.css?v=5")#}
+  {#include file='_header.html' pageTitle=$langData['waimai'][1][32] cssFile=$cssFile rbtn='<a href="/?service=member&template=logout" class="logout">'|cat:$langData['siteConfig'][2][6]|cat:'</a>'#}
+
+  <!-- 列表 s -->
+  <div class="container">
+    <div class="loading" style="border-bottom: 0px solid transparent; height: 0px;" data-loading="false">{#$langData['siteConfig'][7][7]#}...</div>
+    <p class="tisi">{#$langData['waimai'][5][0]#}</p>
+    <div class="list">
+      <div class="load">{#$langData['siteConfig'][20][409]#}···</div>
+    </div>
+
+  </div>
+  <!-- 列表 e -->
+
+  <div class="blank"></div>
+
+  {#$jsFile = array("drag-loading.js", "index.js?v=2")#}
+  {#include file='_footer.html' curr='shop' toppage=1#}
+
+  <script>toppage = true;</script>
+</body>
+</html>
