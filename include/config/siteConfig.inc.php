@@ -1,5 +1,5 @@
 <?php
-$cfg_basehost = 'wx.ziyousuda.com';
+$cfg_basehost = 'ziyuan.cc';
 $cfg_webname = '互动诸城';
 $cfg_shortname = '互动诸城';
 $cfg_weblogo = 'VnpnQ2JGNHhWR01ETmdadA==';
@@ -33,7 +33,7 @@ $cfg_spiderIndex = '1';
 $cfg_urlRewrite = '1';
 $cfg_hideUrl = '0';
 $cfg_bindMobile = '0';
-$cfg_httpSecureAccess = '1';
+$cfg_httpSecureAccess = '0';
 $cfg_siteDebug = '0';
 $cfg_template = '103';
 $cfg_touchTemplate = '124';

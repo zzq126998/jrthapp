@@ -1,9 +1,9 @@
 <?php
 //数据库连接信息
-$DB_HOST = 'localhost';        //数据库地址
-$DB_NAME = 'wx_ziyousuda_co';   //数据库名
-$DB_USER = 'wx_ziyousuda_co';   //数据库用户名
-$DB_PASS = 'jMczpzZGC44YZNNx';   //数据库密码
+$DB_HOST = '182.61.51.112';        //数据库地址
+$DB_NAME = 'huoniao';   //数据库名
+$DB_USER = 'root';   //数据库用户名
+$DB_PASS = 'root';   //数据库密码
 $DB_PREFIX = 'huoniao_';       //数据库表前缀
 $DB_CHARSET = 'utf8';          //数据库编码
 

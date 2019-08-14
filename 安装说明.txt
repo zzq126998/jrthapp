@@ -1,0 +1,10 @@
+1、解程序包解压至根目录
+2、找到/include/config/siteConfig.inc.php
+       找到：$cfg_basehost = '填写域名'; 将域名改成你自己的域名
+       找到：$cfg_httpSecureAccess = '1'; 如果配置了SSL，设置为1，如果未配置SSL，设置为0
+5、找到/include/dbinfo.inc.php 修改数据库连接信息，如果开启了redis，修改对应的参数。
+
+默认后台：
+你的域名/admin
+用户名：admin
+密码：admin8300007
