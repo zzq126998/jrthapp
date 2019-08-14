@@ -1,30 +1,82 @@
 $(function(){
 
-  var aid = 0;
-  $('.main').delegate('.item', 'click', function(){
-    var t = $(this),
-        title = t.find('h5').text(),
-        note = t.find('.l p').text(),
-        people = t.find('.r em').text(),
-        contact = t.find('.tel').text();
-
-    aid = t.attr('data-id');
-
-    $('#title').val(title);
-    $('#note').val(note);
-    $('#people').val(people);
-    $('#contact').val(contact);
-
+  function getSelectedText(){
+      if (window.getSelection) {
+          return window.getSelection().toString();
+      } else if (document.selection) {
+          return document.selection.createRange().text;
+      }
+      return '';
+  }
+  var aid = 0,p; //标识符;
+  $('.main').delegate('.item .l', 'click', function(){
+    var text=getSelectedText();
+    if(text) return;
+    aid = $(this).parent('.item').attr('data-id')
+		$('.passmask').show();
     $('.popup-fabu .tit').html('修改一句话'+(type ? '求职' : '招聘')+'信息<s></s>');
     $('#tj').html('提交修改');
     $('.popup-fabu .edit').show();
     $('html').addClass('nos');
     $('.popup-fabu').show();
   });
+//输入管理密码
+var pass
+$('.pass_send').bind('click',function(){
+	 pass=$('#getpass').val();
+	 if(pass==''){
+	 	 $('.tip-pass').css('display','block');
+	 	 return 0;
+	 }else if(aid==0){
+	 		return;
+	 }else{
+	 		$.ajax({
+          url:'/include/ajax.php?service=job&action=checkPass',
+          data:{
+              pass : pass,
+              id : aid,
+          },
+          type:'GET',
+          dataType:'json',
+          success:function (data) {
+                if(data.state == 100 && data.info == 'success'){
+                	  p=1;
+                	  $('.passmask').hide(); //隐藏管理密码的输入框
+									  $('#password').parents('dl').hide()
+                    $.ajax({
+                        url:'/include/ajax.php?service=job&action=getSentence',
+                        data:{
+                            id : aid,
+                        },
+                        type:'GET',
+                        dataType:'json',
+                        success:function (data) {
+                            var data_info = data.info;
+                            console.log(data_info)
+
+														  $('#title').val(data_info.title);
+														  $('#note').val(data_info.note);
+														  $('#people').val(data_info.people);
+														  $('#contact').val( data_info.contact);
+														  $('#password').val(pass);
+														 
+                        }
+                    })
+
+                 
+                }else{
+                  alert(data.info);return;
+                }
+          }
+      })
+	 }
+})
 
   //发布
 	$('.put').bind('click', function(){
     aid = 0;
+    $('.passmask').hide();
+    $('#password').parents('dl').show()
 		$('.popup-fabu .tit').html('快速发布一句话'+(type ? '求职' : '招聘')+'<s></s>');
 		$('#tj').html('立即发布');
 		$('.popup-fabu .edit').hide();
@@ -51,7 +103,11 @@ $(function(){
       code = e.which;
     }
     if (code === 13) {
-      $('#tj').click();
+			if(aid !=0&&p!=1){
+				$('.pass_send').click();
+			}else{
+				$('#tj').click();
+			}
     }
   });
 
@@ -109,7 +165,7 @@ $(function(){
 					}
 				},
 				error: function(){
-					alert(langData['siteConfig'][20][183]);
+					alert(langData['siteConfig'][20][183]);   //网络错误，请稍候重试！
 					t.removeAttr('disabled');
 				}
 			});

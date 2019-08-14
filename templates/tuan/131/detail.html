@@ -27,6 +27,14 @@
 	var detailUrl   = '{#getUrlPath service="tuan" template="detail" id=$detail_id#}';
 	var date        = [{#$smarty.now#}, {#$detail_startdate#}, {#$detail_enddate#}];
 	var site_map    = '{#$site_map#}';
+	var imconfig = {
+		'mod':'tuan',
+		'chatid':"{#$detail_store['member']['userid']#}",
+		'title': '{#$detail_title#}',
+		"price": '<em>￥</em>{#$detail_price#}',
+		"imgUrl": '{#changeFileSize url={#$detail_litpic#} type='small'#}',
+		"link": '{#getUrlPath service="tuan" template="detail" id=$detail_id#}',
+	}
 </script>
 </head>
 
@@ -124,7 +132,7 @@
 						<a href="javascript:;" data-url="{#getUrlPath service="tuan" template="buy" id={#$detail_id#} count="%count%" param="type=pin"#}" class="link-open">{#echoCurrency type='symbol'#}<strong>{#$detail_pinprice#}</strong> 我要开团</a>
 						<a href="javascript:;" class="link-add"> <s></s>加入购物车</a>
 						{#/if#}
-
+						{#if $detail_store['member']['userid']#}<a href="javascript:;" data-type="detail" class="chat_to-Link">联系商家</a>{#/if#}
 					</div>
 				{#else#}
 					<div class="btns">
@@ -134,6 +142,7 @@
 						<a href="javascript:;" data-url="{#getUrlPath service="tuan" template="buy" id={#$detail_id#} count="%count%"#}" class="link-buy">立即抢购</a>
 						<a href="javascript:;" class="link-add"><s></s>加入购物车</a>
 						{#/if#}
+						{#if $detail_store['member']['userid']#}<a href="javascript:;" data-type="detail" class="chat_to-Link">联系商家</a>{#/if#}
 					</div>
 				{#/if#}
 

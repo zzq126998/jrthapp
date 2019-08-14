@@ -111,7 +111,7 @@ class aliyunOSS{
 
 		$this->tryCatch("putObject", $target, $source);
         $arr = explode('.', $source);
-        if(end($arr) != 'xls' && !strstr($source, 'house/community')){
+        if(end($arr) != 'xls' && !strstr($source, 'house/community') && !strstr($source, "card") && !strstr($source, "photo")){
             // 房产小区远程图片本地化上传会太慢，有时会失败，所以先不删除本地附件，待本地化成功后，将本地文件夹上传至OSS后可恢复此行 by gz 20190219
             unlinkFile($source);
         }

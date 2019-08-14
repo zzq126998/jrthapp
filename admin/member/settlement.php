@@ -23,10 +23,12 @@ if(!empty($_POST)){
 	$cfg_tuanFee = (float)$tuanFee;
 	$cfg_travelFee = (float)$travelFee;
 	$cfg_shopFee = (float)$shopFee;
-	$cfg_waimaiFee = (float)$waimaiFee;
 	$cfg_huodongFee = (float)$huodongFee;
 	$cfg_liveFee = (float)$liveFee;
 	$cfg_homemakingFee  = (float)$homemakingFee;
+	$cfg_educationFee  = (float)$educationFee;
+
+	$cfg_withdrawPlatform = $withdrawPlatform ? serialize($withdrawPlatform) : array();
 
 	adminLog("修改结算设置");
 
@@ -37,10 +39,21 @@ if(!empty($_POST)){
 	$configFile .= "\$cfg_tuanFee = ".$cfg_tuanFee.";\r\n";
 	$configFile .= "\$cfg_travelFee = ".$cfg_travelFee.";\r\n";
 	$configFile .= "\$cfg_shopFee = ".$cfg_shopFee.";\r\n";
-	$configFile .= "\$cfg_waimaiFee = ".$cfg_waimaiFee.";\r\n";
 	$configFile .= "\$cfg_huodongFee = ".$cfg_huodongFee.";\r\n";
 	$configFile .= "\$cfg_liveFee = ".$cfg_liveFee.";\r\n";
 	$configFile .= "\$cfg_homemakingFee = ".$cfg_homemakingFee.";\r\n";
+	$configFile .= "\$cfg_educationFee = ".$cfg_educationFee.";\r\n";
+	$configFile .= "\$cfg_minWithdraw = '".$minWithdraw."';\r\n";
+	$configFile .= "\$cfg_maxWithdraw = '".$maxWithdraw."';\r\n";
+	$configFile .= "\$cfg_withdrawFee = '".$withdrawFee."';\r\n";
+	$configFile .= "\$cfg_maxCountWithdraw = '".$maxCountWithdraw."';\r\n";
+	$configFile .= "\$cfg_maxAmountWithdraw = '".$maxAmountWithdraw."';\r\n";
+	$configFile .= "\$cfg_withdrawCycle = '".$withdrawCycle."';\r\n";
+	$configFile .= "\$cfg_withdrawCycleWeek = '".$withdrawCycleWeek."';\r\n";
+	$configFile .= "\$cfg_withdrawCycleDay = '".$withdrawCycleDay."';\r\n";
+	$configFile .= "\$cfg_withdrawPlatform = '".$cfg_withdrawPlatform."';\r\n";
+	$configFile .= "\$cfg_withdrawCheckType = '".$withdrawCheckType."';\r\n";
+	$configFile .= "\$cfg_withdrawNote = '".$withdrawNote."';\r\n";
 	$configFile .= "?".">";
 
 	$configIncFile = HUONIAOINC.'/config/settlement.inc.php';
@@ -70,9 +83,22 @@ if(file_exists($tpl."/".$templates)){
 	$huoniaoTag->assign('tuanFee', (float)$cfg_tuanFee);
 	$huoniaoTag->assign('travelFee', (float)$cfg_travelFee);
 	$huoniaoTag->assign('shopFee', (float)$cfg_shopFee);
-	$huoniaoTag->assign('waimaiFee', (float)$cfg_waimaiFee);
 	$huoniaoTag->assign('huodongFee', (float)$cfg_huodongFee);
+	$huoniaoTag->assign('liveFee', (float)$cfg_liveFee);
 	$huoniaoTag->assign('homemakingFee', (float)$cfg_homemakingFee);
+	$huoniaoTag->assign('educationFee', (float)$cfg_educationFee);
+
+	$huoniaoTag->assign('minWithdraw', $cfg_minWithdraw ? $cfg_minWithdraw : 1);
+	$huoniaoTag->assign('maxWithdraw', (int)$cfg_maxWithdraw);
+	$huoniaoTag->assign('withdrawFee', (int)$cfg_withdrawFee);
+	$huoniaoTag->assign('maxCountWithdraw', (int)$cfg_maxCountWithdraw);
+	$huoniaoTag->assign('maxAmountWithdraw', (int)$cfg_maxAmountWithdraw);
+	$huoniaoTag->assign('withdrawCycle', (int)$cfg_withdrawCycle);
+	$huoniaoTag->assign('withdrawCycleWeek', (int)$cfg_withdrawCycleWeek);
+	$huoniaoTag->assign('withdrawCycleDay', $cfg_withdrawCycleDay ? $cfg_withdrawCycleDay : 28);
+	$huoniaoTag->assign('withdrawPlatform', $cfg_withdrawPlatform ? unserialize($cfg_withdrawPlatform) : array('weixin', 'alipay', 'bank'));
+	$huoniaoTag->assign('withdrawCheckType', (int)$cfg_withdrawCheckType);
+	$huoniaoTag->assign('withdrawNote', $cfg_withdrawNote);
 
 	$huoniaoTag->compile_dir = HUONIAOROOT."/templates_c/admin/settlement";  //设置编译目录
 	$huoniaoTag->display($templates);

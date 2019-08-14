@@ -571,7 +571,7 @@ class info
         global $userLogin;
         global $langData;
         $pageinfo = $list = $itemList = array();
-        $nature   = $typeid = $addrid = $valid = $title = $rec = $fire = $top = $thumb = $orderby = $u = $state = $uid = $userid = $tel = $page = $pageSize = $where = $where1 = "";
+        $nature   = $typeid = $addrid = $valid = $title = $rec = $fire = $top = $thumb = $orderby = $u = $state = $uid = $userid = $tel = $notbid = $page = $pageSize = $where = $where1 = "";
         if (!empty($this->param)) {
             if (!is_array($this->param)) {
                 return array("state" => 200, "info" => $langData['info'][1][58]);
@@ -582,7 +582,7 @@ class info
                 $addrid   = $this->param['addrid'];
                 $valid    = $this->param['valid'];
                 $title    = $this->param['title'];
-                $itemList = $this->param['item'];
+                $itemList = $_REQUEST['item'];
                 $rec      = $this->param['rec'];
                 $fire     = $this->param['fire'];
                 $top      = $this->param['top'];
@@ -594,11 +594,12 @@ class info
                 $uid      = $this->param['uid'];
                 $userid   = $this->param['userid'];
                 $tel      = $this->param['tel'];
+                $notbid   = $this->param['notbid'];
                 $page     = $this->param['page'];
                 $pageSize = $this->param['pageSize'];
                 $shopid   = $this->param['shopid'];
-                $lng2     = $this->param['lng2'];
-                $lat2     = $this->param['lat2'];
+                $lng      = $this->param['lng'];
+                $lat      = $this->param['lat'];
                 $flag     = $this->param['flag'];
                 $price_section     = $this->param['price_section'];
             }
@@ -664,7 +665,7 @@ class info
 
         //置顶
         if (!empty($top)) {
-//            $where .= " AND `top` = 1";
+           $where .= " AND `isbid` = 1";
         }
 
         //指定电话号码
@@ -746,18 +747,22 @@ class info
 
         if (!empty($itemList)) {
             $itemList = json_decode($itemList, true);
-            foreach ($itemList as $k => $v) {
-                if (!empty($v['value'])) {
-                    $archives = $dsql->SetQuery("SELECT `aid` FROM `#@__infoitem` WHERE `iid` = " . $v['id'] . " AND find_in_set('" . $v['value'] . "', `value`)");
-                    $results  = $dsql->dsqlOper($archives, "results");
-                    if ($results) {
-                        foreach ($results as $key => $val) {
-                            $infoidArr[$k][$key] = $val['aid'];
+            if(is_array($itemList)){
+                foreach ($itemList as $k => $v) {
+                    if (!empty($v['value'])) {
+                        $archives = $dsql->SetQuery("SELECT `aid` FROM `#@__infoitem` WHERE `iid` = " . $v['id'] . " AND find_in_set('" . $v['value'] . "', `value`)");
+                        $results  = $dsql->dsqlOper($archives, "results");
+                        if ($results) {
+                            foreach ($results as $key => $val) {
+                                $infoidArr[$k][$key] = $val['aid'];
+                            }
+                        } else {
+                            $tj = false;
                         }
-                    } else {
-                        $tj = false;
                     }
                 }
+            }else{
+                $tj = false;
             }
         }
 
@@ -809,10 +814,14 @@ class info
         $order = " ORDER BY `isbid` DESC, `top` DESC, `fire` DESC, `rec` DESC, `weight` DESC, `id` DESC";
         //价格
         if ($orderby == "price") {
-            $order = " ORDER BY `isbid` DESC, `price` DESC, `top` DESC, `fire` DESC, `rec` DESC, `weight` DESC, `id` DESC";
+            $order = " ORDER BY `isbid` DESC, `price` ASC, `top` DESC, `fire` DESC, `rec` DESC, `weight` DESC, `id` DESC";
             //发布时间
         } elseif ($orderby == "1") {
-            $order = " ORDER BY `isbid` DESC, `pubdate` DESC, `top` DESC, `fire` DESC, `rec` DESC, `weight` DESC, `id` DESC";
+            if($notbid){
+                $order = " ORDER BY `pubdate` DESC, `top` DESC, `fire` DESC, `rec` DESC, `weight` DESC, `id` DESC";
+            }else{
+                $order = " ORDER BY `isbid` DESC, `pubdate` DESC, `top` DESC, `fire` DESC, `rec` DESC, `weight` DESC, `id` DESC";
+            }
             //浏览量
         } elseif ($orderby == "2") {
             $order = " ORDER BY `isbid` DESC, `click` DESC, `top` DESC, `fire` DESC, `rec` DESC, `weight` DESC, `id` DESC";
@@ -842,6 +851,14 @@ class info
         $pageSize = empty($pageSize) ? 10 : $pageSize;
         $page     = empty($page) ? 1 : $page;
 
+        //查询距离
+        $select = "";
+		if((!empty($lng))&&(!empty($lat))){
+            $select="(2 * 6378.137* ASIN(SQRT(POW(SIN(3.1415926535898*(".$lng."-l.`longitude`)/360),2)+COS(3.1415926535898*".$lng."/180)* COS(l.`longitude` * 3.1415926535898/180)*POW(SIN(3.1415926535898*(".$lat."-l.`latitude`)/360),2))))*1000 AS distance,";
+        }else{
+            $select="";
+        }
+
         //评论排行
         if (strstr($orderby, "4")) {
             //今日评论
@@ -860,11 +877,11 @@ class info
 
             $order = " ORDER BY total DESC";
 
-            $archives = $dsql->SetQuery("SELECT l.`id`, l.`titleRed`, l.`titleBlod`, l.`title`, l.`is_valid`, l.`typeid`, l.`price`, l.`video`, l.`color`, l.`pubdate`, l.`body`, l.`addr`, l.`click`, l.`tel`, l.`teladdr`, l.`rec`, l.`fire`, l.`top`, l.`userid`, l.`arcrank`, l.`valid`, l.`isbid`, l.`bid_end`, l.`bid_price`, l.`price_switch`, (SELECT COUNT(`id`) FROM `#@__infocommon` WHERE `aid` = l.`id` AND `ischeck` = 1 AND `floor` = 0) AS total FROM `#@__infolist` l WHERE 1 = 1" . $where);
+            $archives = $dsql->SetQuery("SELECT l.`id`, l.`titleRed`, l.`titleBlod`, l.`title`, l.`is_valid`, l.`typeid`, l.`price`, l.`video`, l.`color`, l.`pubdate`, l.`body`, l.`addr`, l.`click`, l.`tel`, l.`teladdr`, l.`rec`, l.`fire`, l.`top`, l.`userid`, l.`arcrank`, l.`valid`, l.`isbid`, l.`bid_end`, l.`bid_price`, l.`price_switch`, (SELECT COUNT(`id`) FROM `#@__public_comment` WHERE `aid` = l.`id` AND `ischeck` = 1 AND `pid` = 0 AND `type` = 'info-detail') AS total FROM `#@__infolist` l WHERE 1 = 1" . $where);
 
             //普通查询
         } else {
-            $archives = $dsql->SetQuery("SELECT l.`id`, l.`titleRed`, l.`titleBlod`, l.`title`, l.`is_valid`, l.`typeid`, l.`price`, l.`video`, l.`color`, l.`pubdate`, l.`body`, l.`addr`, l.`click`, l.`tel`, l.`teladdr`, l.`rec`, l.`fire`, l.`top`, l.`userid`, l.`arcrank`, l.`valid`, l.`isbid`, l.`bid_end`, l.`bid_price`, l.`price_switch` FROM `#@__infolist` as l WHERE 1 = 1" . $where);
+            $archives = $dsql->SetQuery("SELECT l.`id`, l.`titleRed`, l.`titleBlod`, l.`title`, l.`is_valid`, l.`typeid`, l.`price`, l.`video`, l.`longitude`, l.`longitude`,".$select." l.`color`, l.`pubdate`, l.`body`, l.`addr`, l.`click`, l.`tel`, l.`teladdr`, l.`rec`, l.`fire`, l.`top`, l.`userid`, l.`arcrank`, l.`valid`, l.`isbid`, l.`bid_end`, l.`bid_price`, l.`price_switch` FROM `#@__infolist` as l WHERE 1 = 1" . $where);
         }
 
         //总条数
@@ -926,6 +943,20 @@ class info
             );
             $urlParam = getUrlPath($param);
 
+            $param    = array(
+                "service" => "info",
+                "template" => "business",
+                "id" => "%id%"
+            );
+            $busiParam = getUrlPath($param);
+
+            $param    = array(
+                "service" => "info",
+                "template" => "homepage",
+                "id" => "%id%"
+            );
+            $homeParam = getUrlPath($param);
+
             $now = GetMkTime(time());
 
             $tmpData = array();
@@ -964,12 +995,23 @@ class info
                     }
                     if ($is_shop) {
                         $list[$key]['is_shop']     = 1;
-                        $list[$key]['lnglat']      = $is_shop[0]['lnglat'] ? explode(",", $is_shop[0]['lnglat']) : array(0, 0);
-
-                        $distance = getDistance($lng2, $lat2, $list[$key]['lnglat'][0], $list[$key]['lnglat'][1]);
-                        $list[$key]['lnglat_diff'] = sprintf("%.2f", ($distance / 1000));
+                        // $list[$key]['lnglat']      = $is_shop[0]['lnglat'] ? explode(",", $is_shop[0]['lnglat']) : array(0, 0);
+                        //
+                        // $distance = getDistance($lng2, $lat2, $list[$key]['lnglat'][0], $list[$key]['lnglat'][1]);
+                        // $list[$key]['lnglat_diff'] = sprintf("%.2f", ($distance / 1000));
 
                     }
+                }
+
+                $list[$key]['lnglat'] = array($val['longitude'], $val['latitude']);
+
+                if($lng && $lat){
+                    $list[$key]['distance']  = $val['distance'] > 1000 ? sprintf("%.1f", $val['distance'] / 1000) . $langData['siteConfig'][13][23] : sprintf("%.1f", $val['distance']) . $langData['siteConfig'][13][22];  //距离   //千米  //米
+    				if(strpos($list[$key]['distance'],'千米')){
+    					$list[$key]['distance'] = str_replace("千米",'km',$list[$key]['distance']);
+    				}elseif(strpos($list[$key]['distance'],'米')){
+    					$list[$key]['distance'] = str_replace("米",'m',$list[$key]['distance']);
+    				}
                 }
 
                 //会员发布信息统计
@@ -979,7 +1021,7 @@ class info
                     if(isset($tmpData['fabuCount'][$val['userid']])){
                         $fabuCount = $tmpData['fabuCount'][$val['userid']];
                     }else{
-                        $archives  = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__infolist` WHERE `arcrank` = 1 AND `userid` = " . $val['userid']);
+                        $archives  = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__infolist` WHERE `is_valid` = 0 AND `waitpay` = 0 AND `arcrank` = 1 AND `userid` = " . $val['userid']);
                         $res       = $dsql->dsqlOper($archives, "results");
                         $fabuCount = $res[0]['total'];
                         $tmpData['fabuCount'][$val['userid']] = $fabuCount;
@@ -1015,6 +1057,7 @@ class info
                 $list[$key]['typename'] = $typename;
 
                 $list[$key]['tel']     = $val['tel'];
+                $list[$key]['tel_']    = preg_replace('/(1[3456789]{1}[0-9])[0-9]{4}([0-9]{4})/is',"$1****$2", $val['tel']);
                 $list[$key]['teladdr'] = $val['teladdr'];
 
                 $list[$key]['click'] = $val['click'];
@@ -1062,6 +1105,19 @@ class info
                 $list[$key]['valid']   = $val['valid'];
                 $list[$key]['isvalid'] = ($val['valid'] != 0 && $val['valid'] > $now) ? 0 : 1;
 
+                //是否商家
+                $shopinfo     = $dsql->SetQuery("SELECT `id` FROM `#@__infoshop` WHERE `uid` = " . $val['userid']);
+                $infoshop     = $dsql->dsqlOper($shopinfo, "results");
+                $info_shop_id = 0;
+                if ($infoshop) {
+                    $info_shop_id = $infoshop[0]['id'];
+                }
+
+                if($info_shop_id){
+                    $list[$key]['busiurl'] = str_replace("%id%", $info_shop_id, $busiParam);
+                }else{
+                    $list[$key]['busiurl'] = str_replace("%id%", $val['userid'], $homeParam);
+                }
                 $list[$key]['typeurl'] = str_replace("%id%", $val['typeid'], $typeurlParam);
                 $list[$key]['url']     = str_replace("%id%", $val['id'], $urlParam);
 
@@ -1072,27 +1128,28 @@ class info
 
                 $list[$key]['desc'] = cn_substrR(strip_tags($val['body']), 80);
 
-                $archives             = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__infocommon` WHERE `aid` = " . $val['id'] . " AND `ischeck` = 1 AND `floor` = 0");
+                // $archives             = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__infocommon` WHERE `aid` = " . $val['id'] . " AND `ischeck` = 1 AND `floor` = 0");
+                $archives = $dsql->SetQuery("SELECT count(`id`) total FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'info-detail' AND `aid` = " . $val['id'] . " AND `pid` = 0");
                 $res                  = $dsql->dsqlOper($archives, "results");
                 $list[$key]['common'] = $res[0]['total'];
 
                 //会员信息
+                $member = array(
+                    'userid' => 0,
+                    'nickname' => '',
+                    'photo' => '',
+                    'userType' => 0,
+                    'emailCheck' => 0,
+                    'phoneCheck' => 0,
+                    'certifyState' => 0,
+                    'phone' => '',
+                );
                 if($val['userid']){
-                    $member               = getMemberDetail($val['userid']);
-                }else{
-                    $member = array(
-                        'id' => 0,
-                        'nickname' => '',
-                        'photo' => '',
-                        'userType' => 0,
-                        'emailCheck' => 0,
-                        'phoneCheck' => 0,
-                        'certifyState' => 0,
-                        'phone' => '',
-                    );
+                    $member = getMemberDetail($val['userid']);
                 }
-                $list[$key]['member'] = array(
-                    "id" => $val['userid'],
+
+                $list[$key]['member'] = $member['userid'] ? array(
+                    "id" => $member['userid'],
                     "nickname" => $member['nickname'],
                     "photo" => $member['photo'],
                     "userType" => $member['userType'],
@@ -1100,7 +1157,7 @@ class info
                     "phoneCheck" => $member['phoneCheck'],
                     "certifyState" => $member['certifyState'],
                     "phone" => $val['tel']
-                );
+                ) : array();
 
                 $param_u = [
                     'service' => 'info',
@@ -1144,18 +1201,18 @@ class info
 
             }
             $resList = $list;
-            if(!$flag){
-                $resarr1 = [];
-                $resarr2 = [];
-                foreach ($list as $key => $item) {
-                    if ($item['top'] == 1) {
-                        $resarr1[$key] = $item;
-                    } else {
-                        $resarr2[$key] = $item;
-                    }
-                }
-                $resList = array_merge($resarr1, $resarr2);
-            }
+            // if(!$flag && $orderby != 'price'){
+            //     $resarr1 = [];
+            //     $resarr2 = [];
+            //     foreach ($list as $key => $item) {
+            //         if ($item['top'] == 1) {
+            //             $resarr1[$key] = $item;
+            //         } else {
+            //             $resarr2[$key] = $item;
+            //         }
+            //     }
+            //     $resList = array_merge($resarr1, $resarr2);
+            // }
 
 
         }
@@ -1219,6 +1276,8 @@ class info
                 $uid      = $this->param['uid'];
                 $userid   = $this->param['userid'];
                 $tel      = $this->param['tel'];
+				$lng      = $this->param['lng'];
+                $lat      = $this->param['lat'];
                 $page     = $this->param['page'];
                 $pageSize = $this->param['pageSize'];
             }
@@ -1453,6 +1512,14 @@ class info
         $pageSize = empty($pageSize) ? 10 : $pageSize;
         $page     = empty($page) ? 1 : $page;
 
+        //查询距离
+        $select = "";
+		if((!empty($lng))&&(!empty($lat))){
+            $select="(2 * 6378.137* ASIN(SQRT(POW(SIN(3.1415926535898*(".$lng."-l.`longitude`)/360),2)+COS(3.1415926535898*".$lng."/180)* COS(l.`longitude` * 3.1415926535898/180)*POW(SIN(3.1415926535898*(".$lat."-l.`latitude`)/360),2))))*1000 AS distance,";
+        }else{
+            $select="";
+        }
+
         //评论排行
         if (strstr($orderby, "4")) {
             //今日评论
@@ -1471,11 +1538,12 @@ class info
 
             $order = " ORDER BY total DESC";
 
-            $archives = $dsql->SetQuery("SELECT l.`id`, l.`titleBlod`, l.`titleRed`, l.`title`, l.`is_valid`, l.`typeid`, l.`price`, l.`price_switch`, l.`video`, l.`color`, l.`pubdate`, l.`body`, l.`addr`, l.`click`, l.`tel`, l.`teladdr`, l.`rec`, l.`fire`, l.`userid`, l.`arcrank`, l.`valid`, l.`isbid`, l.`bid_type`, l.`bid_week0`, l.`bid_week1`, l.`bid_week2`, l.`bid_week3`, l.`bid_week4`, l.`bid_week5`, l.`bid_week6`, l.`bid_start`, l.`bid_end`, l.`bid_price`, l.`waitpay`, l.`refreshSmart`, l.`refreshCount`, l.`refreshTimes`, l.`refreshPrice`, l.`refreshBegan`, l.`refreshNext`, l.`refreshSurplus`, (SELECT COUNT(`id`) FROM `#@__infocommon` WHERE `aid` = l.`id` AND `ischeck` = 1 AND `floor` = 0) AS total FROM `#@__infolist` l WHERE 1 = 1" . $where);
+            $archives = $dsql->SetQuery("SELECT l.`id`, l.`titleBlod`, l.`titleRed`, l.`title`, l.`is_valid`, l.`typeid`, l.`price`, l.`price_switch`, l.`video`, l.`color`, l.`pubdate`, l.`body`, l.`addr`, l.`click`, l.`tel`, l.`teladdr`, l.`rec`, l.`fire`, l.`userid`, l.`arcrank`, l.`valid`, l.`isbid`, l.`bid_type`, l.`bid_week0`, l.`bid_week1`, l.`bid_week2`, l.`bid_week3`, l.`bid_week4`, l.`bid_week5`, l.`bid_week6`, l.`bid_start`, l.`bid_end`, l.`bid_price`, l.`waitpay`, l.`refreshSmart`, l.`refreshCount`, l.`refreshTimes`, l.`refreshPrice`, l.`refreshBegan`, l.`refreshNext`, l.`refreshSurplus`, (SELECT COUNT(`id`) FROM `#@__public_comment` WHERE `aid` = l.`id` AND `ischeck` = 1 AND `pid` = 0 AND `type` = 'info-detail') AS total FROM `#@__infolist` l WHERE 1 = 1" . $where);
+
 
             //普通查询
         } else {
-            $archives = $dsql->SetQuery("SELECT l.`id`, l.`titleBlod`, l.`titleRed`, l.`title`, l.`is_valid`, l.`typeid`, l.`price`, l.`price_switch`, l.`video`, l.`color`, l.`pubdate`, l.`body`, l.`addr`, l.`click`, l.`tel`, l.`teladdr`, l.`rec`, l.`fire`, l.`userid`, l.`arcrank`, l.`valid`, l.`isbid`, l.`bid_type`, l.`bid_week0`, l.`bid_week1`, l.`bid_week2`, l.`bid_week3`, l.`bid_week4`, l.`bid_week5`, l.`bid_week6`, l.`bid_start`, l.`bid_end`, l.`bid_price`, l.`waitpay`, l.`refreshSmart`, l.`refreshCount`, l.`refreshTimes`, l.`refreshPrice`, l.`refreshBegan`, l.`refreshNext`, l.`refreshSurplus` FROM `#@__infolist` as l WHERE 1 = 1" . $where);
+            $archives = $dsql->SetQuery("SELECT l.`id`, l.`titleBlod`, l.`titleRed`, l.`title`, l.`is_valid`, l.`typeid`, l.`price`, l.`price_switch`, l.`video`, l.`color`, l.`pubdate`, l.`body`, l.`addr`, l.`click`, l.`tel`, l.`teladdr`, l.`rec`, l.`fire`, l.`userid`, l.`arcrank`, ".$select."l.`valid`, l.`isbid`, l.`bid_type`, l.`bid_week0`, l.`bid_week1`, l.`bid_week2`, l.`bid_week3`, l.`bid_week4`, l.`bid_week5`, l.`bid_week6`, l.`bid_start`, l.`bid_end`, l.`bid_price`, l.`waitpay`, l.`refreshSmart`, l.`refreshCount`, l.`refreshTimes`, l.`refreshPrice`, l.`refreshBegan`, l.`refreshNext`, l.`refreshSurplus` FROM `#@__infolist` as l WHERE 1 = 1" . $where);
         }
 
         //总条数
@@ -1563,8 +1631,17 @@ class info
                 $list[$key]['price_switch']   = $val['price_switch'];
                 $list[$key]['video'] = $val['video'] ? getFilePath($val['video']) : '';
 
+                if($lng && $lat){
+                    $list[$key]['distance']  = $val['distance'] > 1000 ? sprintf("%.1f", $val['distance'] / 1000) . $langData['siteConfig'][13][23] : sprintf("%.1f", $val['distance']) . $langData['siteConfig'][13][22];  //距离   //千米  //米
+    				if(strpos($list[$key]['distance'],'千米')){
+    					$list[$key]['distance'] = str_replace("千米",'km',$list[$key]['distance']);
+    				}elseif(strpos($list[$key]['distance'],'米')){
+    					$list[$key]['distance'] = str_replace("米",'m',$list[$key]['distance']);
+    				}
+                }
+
                 //会员发布信息统计
-                $archives                = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__infolist` WHERE `arcrank` = 1 AND `userid` = " . $val['userid']);
+                $archives                = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__infolist` WHERE `is_valid` = 0 AND `waitpay` = 0 AND `arcrank` = 1 AND `userid` = " . $val['userid']);
                 $results                 = $dsql->dsqlOper($archives, "totalCount");
                 $list[$key]['fabuCount'] = $results;
 
@@ -1625,7 +1702,8 @@ class info
 
                 $list[$key]['desc'] = cn_substrR(strip_tags($val['body']), 80);
 
-                $archives             = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__infocommon` WHERE `aid` = " . $val['id'] . " AND `ischeck` = 1 AND `floor` = 0");
+                // $archives             = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__infocommon` WHERE `aid` = " . $val['id'] . " AND `ischeck` = 1 AND `floor` = 0");
+                $archives = $dsql->SetQuery("SELECT count(`id`) total FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'info-detail' AND `aid` = " . $val['id'] . " AND `pid` = 0");
                 $res                  = $dsql->dsqlOper($archives, "results");
                 $list[$key]['common'] = $res[0]['total'];
 
@@ -1839,6 +1917,7 @@ class info
 
             //if($userLogin->getUserID() > -1 || $userLogin->getMemberID() > -1){
             $infoDetail["telNum"] = $results[0]['tel'];
+            $infoDetail["telNum_"] = preg_replace('/(1[3456789]{1}[0-9])[0-9]{4}([0-9]{4})/is',"$1****$2", $results[0]['tel']);
             //}
 
             $infoDetail["teladdr"]                = $results[0]['teladdr'];
@@ -1856,7 +1935,7 @@ class info
 
             $infoDetail['member']['regtime_year'] = date("Y") - substr(FloorTime(time() - strtotime($infoDetail['member']['regtime'])), 0, 4);
 
-            $days           = (time() - (strtotime($infoDetail['member']['regtime']))) / 3600 / 24;
+            $days = (time() - (strtotime($infoDetail['member']['regtime']))) / 3600 / 24;
 
             $mons                   = (int)($days / 30);
             $infoDetail['member']['mons'] = $mons;
@@ -1877,7 +1956,7 @@ class info
             $infoDetail['info_shop_id'] = $info_shop_id;
 
             //会员发布信息统计
-            $archives                = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__infolist` WHERE `arcrank` = 1 AND `userid` = " . $results[0]['userid']);
+            $archives                = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__infolist` WHERE `is_valid` = 0 AND `waitpay` = 0 AND `arcrank` = 1 AND `userid` = " . $results[0]['userid']);
             $infoDetail['fabuCount'] = getCache("info", $archives, 300, array("name" => "total"));
 
             $archives    = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__member_collect` WHERE `module` = 'info' AND `action` = 'detail' AND `aid` = " . $results[0]['id']);
@@ -1886,14 +1965,14 @@ class info
             // $infoDetail['collectnum'] = $collectnum;
 
             //验证是否已经收藏
-            $params                = array(
+            $params = array(
                 "module" => "info",
                 "temp" => "detail",
                 "type" => "add",
                 "id" => $results[0]['id'],
                 "check" => 1
             );
-            $collect               = checkIsCollect($params);
+            $collect = checkIsCollect($params);
             $infoDetail['collect'] = $collect == "has" ? 1 : 0;
             $infoDetail["price"]  = $results[0]['price'];
             $infoDetail["price1"]  = $results[0]['price'] + $results[0]['yunfei'] ;
@@ -1913,10 +1992,12 @@ class info
             $archives                 = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__infolist` WHERE `arcrank` = 1 AND `userid` = '" . $results[0]['userid'] . "'");
             $infoDetail['storeCount'] = getCache("info", $archives, 300, array("name" => "total"));
 
-            $archives             = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__infocommon` WHERE `aid` = " . $results[0]['id'] . " AND `ischeck` = 1 AND `floor` = 0");
+            // $archives             = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__infocommon` WHERE `aid` = " . $results[0]['id'] . " AND `ischeck` = 1 AND `floor` = 0");
+            $archives = $dsql->SetQuery("SELECT count(`id`) total FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'info-detail' AND `aid` = '$id' AND `pid` = 0");
             $infoDetail['common'] = getCache("info", $archives, 300, array("name" => "total"));
 
-            $archives = $dsql->SetQuery("SELECT `userid` FROM `#@__infocommon` WHERE `aid` = " . $results[0]['id'] . " AND `ischeck` = 1 AND `floor` = 0");
+            // $archives = $dsql->SetQuery("SELECT `userid` FROM `#@__infocommon` WHERE `aid` = " . $results[0]['id'] . " AND `ischeck` = 1 AND `floor` = 0");
+            $archives = $dsql->SetQuery("SELECT `userid`  FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'info-detail' AND `aid` = '$id' AND `pid` = 0");
             $commons  = $dsql->dsqlOper($archives, "results");
             foreach ($commons as &$common) {
                 $users = getMemberDetail($common['userid']);
@@ -2354,6 +2435,8 @@ class info
         $imglist = $param['imglist'];
         $valid   = $param['valid'];
         $video   = $param['video'];
+        $longitude = $param['longitude'];
+        $latitude = $param['latitude'];
         $yunfei   = (float)$param['yunfei'];
         $price_switch   = (int)$param['price_switch'];
 
@@ -2466,7 +2549,7 @@ class info
         $price = $price ? $price : 0;
         //保存到主表
         $waitpay  = $amount > 0 ? 1 : 0;
-        $archives = $dsql->SetQuery("INSERT INTO `#@__infolist` (`cityid`, `typeid`, `title`, `valid`, `addr`, `price`, `body`, `person`, `tel`, `teladdr`, `qq`, `ip`, `ipaddr`, `pubdate`, `userid`, `arcrank`, `waitpay`, `alonepay`, `weight`,`video`, `yunfei`, `price_switch`) VALUES ('$cityid', '$typeid', '$title', '$valid', '$addr', '$price', '$body', '$person', '$tel', '$teladdr', '$qq', '$ip', '$ipAddr', " . GetMkTime(time()) . ", '$uid', '$arcrank', '$waitpay', '$alonepay', 1,'$video', $yunfei, '$price_switch')");
+        $archives = $dsql->SetQuery("INSERT INTO `#@__infolist` (`cityid`, `typeid`, `title`, `valid`, `addr`, `price`, `body`, `person`, `tel`, `teladdr`, `qq`, `ip`, `ipaddr`, `pubdate`, `userid`, `arcrank`, `waitpay`, `alonepay`, `weight`,`video`, `yunfei`, `price_switch`, `longitude`, `latitude`) VALUES ('$cityid', '$typeid', '$title', '$valid', '$addr', '$price', '$body', '$person', '$tel', '$teladdr', '$qq', '$ip', '$ipAddr', " . GetMkTime(time()) . ", '$uid', '$arcrank', '$waitpay', '$alonepay', 1,'$video', $yunfei, '$price_switch', '$longitude', '$latitude')");
         $aid      = $dsql->dsqlOper($archives, "lastid");
 
         if (is_numeric($aid)) {
@@ -2547,6 +2630,8 @@ class info
         $imglist = $param['imglist'];
         $valid   = $param['valid'];
         $video   = $param['video'];
+        $longitude = $param['longitude'];
+        $latitude = $param['latitude'];
         $price_switch   = (int)$param['price_switch'];
         $yunfei  = (float)$param['yunfei'];
         $yunfei = $yunfei ? $yunfei : 0;
@@ -2610,7 +2695,7 @@ class info
         $valid   = GetMkTime($valid);
 
         //保存到主表
-        $archives = $dsql->SetQuery("UPDATE `#@__infolist` SET `cityid` = '" . $cityid . "', `title` = '" . $title . "', `valid` = " . $valid . ", `addr` = " . $addr . ", `price` = " . $price . ", `body` = '" . $body . "', `person` = '" . $person . "', `tel` = '" . $tel . "', `teladdr` = '" . $teladdr . "', `qq` = '" . $qq . "', `arcrank` = '$state',`video`='$video', `price_switch`='$price_switch', `yunfei`='$yunfei' WHERE `id` = " . $id);
+        $archives = $dsql->SetQuery("UPDATE `#@__infolist` SET `cityid` = '" . $cityid . "', `title` = '" . $title . "', `valid` = " . $valid . ", `addr` = " . $addr . ", `price` = " . $price . ", `body` = '" . $body . "', `person` = '" . $person . "', `tel` = '" . $tel . "', `teladdr` = '" . $teladdr . "', `qq` = '" . $qq . "', `arcrank` = '$state',`video`='$video', `price_switch`='$price_switch', `yunfei`='$yunfei', `longitude` = '$longitude', `latitude` = '$latitude' WHERE `id` = " . $id);
         $results  = $dsql->dsqlOper($archives, "update");
 
         if ($results != "ok") {
@@ -2694,7 +2779,7 @@ class info
                 }
 
                 //删除评论
-                $archives = $dsql->SetQuery("DELETE FROM `#@__infocommon` WHERE `aid` = " . $id);
+                $archives = $dsql->SetQuery("DELETE FROM `#@__public_comment` WHERE `type` = 'tieba-detail' AND `aid` = " . $id);
                 $dsql->dsqlOper($archives, "update");
 
                 $archives = $dsql->SetQuery("SELECT * FROM `#@__infolist` WHERE `id` = " . $id);
@@ -3280,6 +3365,8 @@ class info
             $where .= " AND `title` LIKE '%$keywords%'";
         }
 
+        $where .= " AND `arcrank` = 1 AND `waitpay` = 0 AND `is_valid` = 0";
+
         $sql      = $dsql->SetQuery("SELECT * FROM `#@__infolist` WHERE `userid` = $userid" . $where . " ORDER BY `id` DESC");
         $list     = $dsql->dsqlOper($sql, "results");
         $param    = array(
@@ -3301,7 +3388,7 @@ class info
 
 
                 //会员发布信息统计
-                $archives                = $dsql->SetQuery("SELECT `id` FROM `#@__infolist` WHERE `arcrank` = 1 AND `userid` = " . $val['userid']);
+                $archives                = $dsql->SetQuery("SELECT `id` FROM `#@__infolist` WHERE `is_valid` = 0 AND `arcrank` = 1 AND `waitpay` = 0 AND `userid` = " . $val['userid']);
                 $results                 = $dsql->dsqlOper($archives, "totalCount");
                 $list[$key]['fabuCount'] = $results;
 
@@ -3354,7 +3441,7 @@ class info
 
                 $list[$key]['desc'] = cn_substrR(strip_tags($val['body']), 80);
 
-                $archives             = $dsql->SetQuery("SELECT `id` FROM `#@__infocommon` WHERE `aid` = " . $val['id'] . " AND `ischeck` = 1 AND `floor` = 0");
+                $archives             = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `type` = 'tieba-detail' AND `aid` = " . $val['id'] . " AND `ischeck` = 1 AND `pid` = 0");
                 $totalCount           = $dsql->dsqlOper($archives, "totalCount");
                 $list[$key]['common'] = $totalCount;
 
@@ -3379,11 +3466,12 @@ class info
             $page     = $param['page'];
             $lat2     = $param['lat2'];
             $lng2     = $param['lng2'];
-            $addrid     = $param['addrid'];
-            $thumb     = $param['thumb'];
-            $video     = $param['video'];
-            $title     = $param['title'];
-            $typeid     = $param['typeid'];
+            $addrid   = $param['addrid'];
+            $thumb    = $param['thumb'];
+            $video    = $param['video'];
+            $title    = $param['title'];
+            $top      = $param['top'];
+            $typeid   = $param['typeid'];
 
         } else {
             // return array('state' => 200, 'info' => $langData['info'][1][58]);
@@ -3406,7 +3494,11 @@ class info
             if(!empty($store_mems)){
                 $store_member = array_column($store_mems, "id");
             }
-            $where .= " AND `uid` in (" . join(',', $store_member) . ')';
+            if($store_member){
+                $where .= " AND `uid` in (" . join(',', $store_member) . ")";
+            }else{
+                $where .= " AND 1 = 2";
+            }
         }
 
         if($thumb){
@@ -3414,6 +3506,9 @@ class info
         }
         if($video){
             $where .= " AND `video` != ''";
+        }
+        if($top){
+            $where .= " AND `top` = 1";
         }
         //遍历地区
         if (!empty($addrid) && $addrid != 0) {
@@ -3493,17 +3588,17 @@ class info
                 $total = getCache("info", $sql, 300, array("name" => "total"));
                 $result['fabu_num'] = $total;
 
-                $sql = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__site_followmap` WHERE `userid_b` = " . $result['uid'] . " AND `temp` = 'info'" );
+                $sql = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__member_follow` WHERE `fid` = " . $result['uid']);
                 $total = getCache("info", $sql, 300, array("name" => "total"));
                 $result['fensi'] = $total;
 
-                $sql = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__site_followmap` WHERE `userid` = " . $result['uid'] . " AND `temp` = 'info'" );
+                $sql = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__member_follow` WHERE `tid` = " . $result['uid']);
                 $total = getCache("info", $sql, 300, array("name" => "total"));
                 $result['guanzhu'] = $total;
 
                 //是否关注
                 $userLoginid = $userLogin->getMemberID();
-                $sql = "SELECT `id` FROM `#@__site_followmap` WHERE `temp` = 'info' AND `userid` = $userLoginid AND `userid_b` = {$result['uid']}";
+                $sql = "SELECT `id` FROM `#@__member_follow` WHERE `tid` = $userLoginid AND `fid` = {$result['uid']}";
                 $sql = $dsql->SetQuery($sql);
                 $is_foll = $dsql->dsqlOper($sql, "results");
                 $result['is_follow'] = $is_foll ? 1 : 0;
@@ -3587,29 +3682,43 @@ class info
                 );
                 $result['url'] = getUrlPath($param);
 
-                $sql   = "SELECT * FROM `#@__info_shopcommon` WHERE `ischeck` = 1 AND `floor` = '0' AND `pid` = " . $result['id'];
-                $sql   = $dsql->SetQuery($sql);
+                // $sql   = "SELECT * FROM `#@__info_shopcommon` WHERE `ischeck` = 1 AND `floor` = '0' AND `pid` = " . $result['id'];
+                // $sql   = $dsql->SetQuery($sql);
+
+                $sql = $dsql->SetQuery("SELECT count(`id`) totalCount FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'info-business' AND `aid` = " . $result['id'] . " AND `pid` = 0");
                 $comms = $dsql->dsqlOper($sql, "results");
                 //店铺评论
-                $result['shop_common'] = count($comms);
+                $result['shop_common'] = $comms[0]['totalCount'];
                 //商家坐标
                 $result['lnglat'] = $result['lnglat'] ? explode(',', $result['lnglat']) : array(0, 0);
                 //商家距离
                 $distance = getDistance($result['lnglat']['0'], $result['lnglat']['1'], $lng2, $lat2);
                 $result['lnglat_diff'] = sprintf("%.2f", ($distance / 1000));
 
+                //取商家前5条商品
+                $this->param = array(
+                    'shopid' => $result['id'],
+                    'pageSize' => 5
+                );
+                $result['product'] = $this->ilist_v2();
+
             }
             unset($result);
-            $res1 = [];
-            $res2 = [];
-            foreach ($results as $key => $result) {
-                if ($result['top'] == 1) {
-                    $res1[$key] = $result;
-                } else {
-                    $res2[$key] = $result;
+
+            if(!$orderby){
+                $res1 = [];
+                $res2 = [];
+                foreach ($results as $key => $result) {
+                    if ($result['top'] == 1) {
+                        $res1[$key] = $result;
+                    } else {
+                        $res2[$key] = $result;
+                    }
                 }
+                $resList = array_merge($res1, $res2);
+            }else{
+                $resList = $results;
             }
-            $resList = array_merge($res1, $res2);
 
         }
         if(!$resList){
@@ -3916,7 +4025,8 @@ class info
 
 
             //统计评论数量
-            $sql                        = $dsql->SetQuery("SELECT count(`id`) totalCommon FROM `#@__info_shopcommon`  WHERE `ischeck` = 1 AND `pid` = " . $id);
+            // $sql                        = $dsql->SetQuery("SELECT count(`id`) totalCommon FROM `#@__info_shopcommon`  WHERE `ischeck` = 1 AND `pid` = " . $id);
+            $sql = $dsql->SetQuery("SELECT count(`id`) totalCommon FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'info-business' AND `aid` = '$id' AND `pid` = 0");
             $ret                        = $dsql->dsqlOper($sql, "results");
             $storeDetail['totalCommon'] = $ret[0]['totalCommon'];
 

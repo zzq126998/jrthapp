@@ -35,19 +35,19 @@
 
 <!-- 评论详细 -->
 <div id="list">
-	{#waimai action='common' peisongid=1 return='common' pageSize=100#}
+	{#member action='getComment' return='common' peisongid=1 orderby='hot' pageSize='100'#}
 	<div class="remarkDetail">
 		<p class="waimBlue fn-clear">
-			<span>【{#if $common.type == 0#}{#$langData['siteConfig'][16][48]#}{#else#}{#$langData['siteConfig'][16][49]#}{#/if#}】</span>
+			<span>【{#if $common.type == 'waimai-order'#}{#$langData['siteConfig'][16][48]#}{#else#}{#$langData['siteConfig'][16][49]#}{#/if#}】</span>
 			<s><b></b><i style="width:{#$common.starps/5*100#}%;"></i></s>
 		</p>
 		<span class="goodRemark">{#$common.contentps#}</span>
 		<p class="goodRemark01 fn-clear">
-			<span>{#$common.user#}</span>
+			<span>{#$common.user.nickname#}</span>
 			<i>{#$common.pubdatef#}</i>
 		</p>
 	</div>
-	{#/waimai#}
+	{#/member#}
 	{#if $pageInfo.totalCount == 0#}
 	<div class="empty">{#$langData['waimai'][2][100]#}</div>
 	{#/if#}

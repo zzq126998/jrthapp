@@ -588,7 +588,7 @@
 							<li class="add uploadbtn"><div id="filePicker" class="btn"></div></li>
 			        {#if $detail_common.pics|@count > 0#}
 			        {#foreach from=$detail_common.pics item=pics key=k#}
-			        <li class="item" id="item_{#$k#}"><img src="{#changeFileSize url="{#$pics.path#}" type="small"#}" data-val="{#$pics.val#}" data-url="{#$pics.path#}"><i class="cancel"></i></li>
+			        <li class="item thumbnail" id="item_{#$k#}"><img src="{#changeFileSize url="{#$pics.path#}" type="small"#}" data-val="{#$pics.val#}" data-url="{#$pics.path#}"><i class="cancel"></i></li>
 			        {#/foreach#}
 			        {#/if#}
 			      </ul>

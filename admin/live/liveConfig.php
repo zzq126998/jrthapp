@@ -67,6 +67,7 @@ if ($type != "") {
         $hotline_config = $hotline_rad;
         $customHotline = $hotline;
         $customAtlasMax = (int)$atlasMax;
+		$customFabuCheck = (int)$fabuCheck;
         $customCommentCheck = (int)$commentCheck;
 
         if ($customChannelName == "" || $customLogo == "" || $customChannelDomain == "")
@@ -260,6 +261,7 @@ if ($type != "") {
     $customInc .= "\$hotline_config = " . $hotline_config . ";\r\n";
     $customInc .= "\$customHotline = '" . $customHotline . "';\r\n";
     $customInc .= "\$customAtlasMax = " . $customAtlasMax . ";\r\n";
+	$customInc .= "\$customFabuCheck = ".(int)$customFabuCheck.";\r\n";
     $customInc .= "\$customCommentCheck = " . (int)$customCommentCheck . ";\r\n";
     //模板风格
     $customInc .= "\$customTemplate = '" . $customTemplate . "';\r\n";
@@ -385,6 +387,11 @@ if (file_exists($tpl . "/" . $templates)) {
     $huoniaoTag->assign('hotline', $customHotline);
 
     $huoniaoTag->assign('atlasMax', $customAtlasMax);
+
+	//发布审核-单选
+	$huoniaoTag->assign('fabuCheck', array('0', '1'));
+	$huoniaoTag->assign('fabuCheckNames',array('需要审核','不需要审核'));
+	$huoniaoTag->assign('fabuCheckChecked', (int)$customFabuCheck);
 
     //评论审核-单选
     $huoniaoTag->assign('commentCheck', array('0', '1'));

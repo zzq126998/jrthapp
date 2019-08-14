@@ -1,10 +1,29 @@
 $(function () {
-	
+
 	var thisURL   = window.location.pathname;
-		tmpUPage  = thisURL.split( "/" ); 
-		thisUPage = tmpUPage[ tmpUPage.length-1 ]; 
+		tmpUPage  = thisURL.split( "/" );
+		thisUPage = tmpUPage[ tmpUPage.length-1 ];
 		thisPath  = thisURL.split(thisUPage)[0];
-		
+
+
+	//打款
+	$("#payment").bind("click", function(){
+		$.dialog.confirm('此操作不可恢复，您确定要打款吗？', function(){
+			huoniao.showTip("loading", "正在操作，请稍候...");
+			huoniao.operaJson("withdrawEdit.php?dopost=transfers", "id="+id, function(data){
+				if(data.state == 100){
+					huoniao.showTip("success", data.info, "auto");
+					setTimeout(function() {
+						location.reload();
+					}, 500);
+				}else{
+					$.dialog.alert(data.info);
+				}
+			});
+		});
+	});
+
+
 	//提交表单
 	$("#btnSubmit").bind("click", function(event){
 		event.preventDefault();
@@ -13,7 +32,7 @@ $(function () {
 			state = $("input[name='state']:checked").val(),
 			note  = $("#note").val(),
 			tj    = true;
-		
+
 		if(state == undefined){
 			$.dialog.alert("请选择状态！");
 			return false;
@@ -54,5 +73,5 @@ $(function () {
 			});
 		}
 	});
-	
+
 });

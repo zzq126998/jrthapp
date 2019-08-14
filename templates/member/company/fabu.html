@@ -13,7 +13,7 @@
 	var id = {#$id#};
 </script>
 </head>
-{#if $type == "nanny"#}
+{#if $type == "nanny" && $type != 0#}
 {#$pageCurr = "fabu_{#$module#}_{#$type#}"#}
 {#else#}
 {#$pageCurr = "fabu_{#$module#}"#}
@@ -23,7 +23,7 @@
 
 <div class="main">
 	<div class="container fn-clear">
-		{#if $type == "nanny"#}
+		{#if $type == "nanny" && $type != 0#}
 		{#include file="fabu-{#$module#}-{#$type#}.html"#}
 		{#else#}
 		{#include file="fabu-$module.html"#}

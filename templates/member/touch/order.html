@@ -12,7 +12,7 @@
 {#if $module=='integral'#}
 <link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/order_integral.css?v={#$cfg_staticVersion#}" media="all" />
 {#/if#}
-{#if $module=='homemaking' || $module=='travel'#}
+{#if $module=='homemaking' || $module=='travel' || $module=='education'#}
 <link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/order-{#$module#}.css?v={#$cfg_staticVersion#}" media="all" />
 {#/if#}
 <script type="text/javascript" src="{#$cfg_staticPath#}js/core/touchScale.js?v={#$cfg_staticVersion#}"></script>
@@ -51,7 +51,7 @@
     	<!--改动1-->
     	<span class="orderbtn">{#$langData['siteConfig'][10][0]#}{#$typename#}{#$langData['siteConfig'][19][690]#}</span>
     	{#else#}
-		<span class="orderbtn">{#if $module == ""#}{#$langData['siteConfig'][10][0]#}{#$langData['siteConfig'][19][359]#}{#elseif $module == "tuan"#}{#$langData['siteConfig'][16][46]#}{#$langData['siteConfig'][19][359]#}{#elseif $module == "shop"#}{#$langData['siteConfig'][16][47]#}{#$langData['siteConfig'][19][359]#}{#elseif $module == "waimai"#}{#$langData['siteConfig'][16][48]#}{#$langData['siteConfig'][19][359]#}{#elseif $module == "paotui"#}{#$langData['siteConfig'][16][49]#}{#$langData['siteConfig'][19][359]#}{#elseif $module == "homemaking"#}{#$langData['homemaking'][1][27]#}{#elseif $module == "travel"#}{#$langData['travel'][5][21]#}{#elseif $module == "integral"#}积分商城{#elseif $module == "info"#}分类信息{#/if#}</span>
+		<span class="orderbtn">{#if $module == ""#}{#$langData['siteConfig'][10][0]#}{#$langData['siteConfig'][19][359]#}{#elseif $module == "tuan"#}{#$langData['siteConfig'][16][46]#}{#$langData['siteConfig'][19][359]#}{#elseif $module == "shop"#}{#$langData['siteConfig'][16][47]#}{#$langData['siteConfig'][19][359]#}{#elseif $module == "waimai"#}{#$langData['siteConfig'][16][48]#}{#$langData['siteConfig'][19][359]#}{#elseif $module == "paotui"#}{#$langData['siteConfig'][16][49]#}{#$langData['siteConfig'][19][359]#}{#elseif $module == "homemaking"#}{#$langData['homemaking'][1][27]#}{#elseif $module == "travel"#}{#$langData['travel'][5][21]#}{#elseif $module == "education"#}{#$langData['education'][7][44]#}{#elseif $module == "integral"#}积分商城{#elseif $module == "info"#}分类信息{#/if#}</span>
     	{#/if#}
     </div>
 		<div class="header-r"></div>
@@ -191,6 +191,20 @@
 			</li>
 			{#/if#}
 
+			{#if in_array("education", $installModuleArr)#}
+			<li class="tab-li">
+				<a href="{#getUrlPath service='member' type='user' template='order' module='education'#}">
+					<div class="left_tab">
+						<span class="li-icon"><img src="{#$templets_skin#}images/education.png"></span>
+						<span>{#$langData['education'][7][44]#}</span>
+					</div>
+					<div class="right_tab">
+						<i class="r-arrow"></i>
+					</div>
+				</a>
+			</li>
+			{#/if#}
+
 			{#if 'food'|in_array:$cfg_ucenterLinks#}
 			<li class="tab-li business-order">
 				<a href="{#getUrlPath service='member' type='user' template='order' module='business' param='type=diancan'#}">
@@ -260,7 +274,7 @@
 
 <script type="text/javascript" src="{#$cfg_staticPath#}js/common.js?v={#$cfg_staticVersion#}"></script>
 <script type='text/javascript' src='{#$cfg_basehost#}/include/json.php?action=lang'></script>
-{#if $module != 'business' && $module != 'waimai' && $module != 'homemaking' && $module != 'travel'#}
+{#if $module != 'business' && $module != 'waimai' && $module != 'homemaking' && $module != 'travel' && $module != 'education'#}
 <script type="text/javascript" src="{#$templets_skin#}js/order.js?v={#$cfg_staticVersion#}"></script>
 {#/if#}
 {#if $module != ""#}

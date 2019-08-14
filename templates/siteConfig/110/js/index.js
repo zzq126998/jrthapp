@@ -165,6 +165,7 @@ $(function(){
         $(this).addClass("on").siblings().removeClass("on");
         var i=$(this).index();
         $(".word-info").eq(i).addClass("show").siblings().removeClass("show");
+        $(".word .buy a").eq(i).show().siblings().hide();
     });
 
 

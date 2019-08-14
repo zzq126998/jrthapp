@@ -128,12 +128,14 @@ class member {
 
         $shop = 0;  //是否查询会员开通店铺信息
         $friend = 0;  //是否验证是否为好友
+        $from = 0;  //与哪个会员验证是否为好友
 
         // $id = is_array($id) ? $id['id'] : $id;
         if(is_array($id)){
 
             $shop = (int)$id['shop'];
             $friend = (int)$id['friend'];
+            $from = (int)$id['from'];
 
             if(isset($id['userkey'])){
                 $userkey = $id['userkey'];
@@ -243,6 +245,7 @@ class member {
             $detail['point']  = $cfg_pointState ? $results[0]['point'] : 0;
             $detail['promotion']  = $results[0]['promotion'];
             $detail['regtime']  = date("Y-m-d H:i:s", $results[0]['regtime']);
+            $detail['regtimeold']  = $results[0]['regtime'];
             $detail['regip']  = $results[0]['regip'];
             $detail['regipaddr']  = $results[0]['regipaddr'];
             $detail['lastlogintime']  = $results[0]['lastlogintime'] ? date("Y-m-d H:i:s", $results[0]['lastlogintime']) : "";
@@ -347,6 +350,9 @@ class member {
 
         //验证两人是否为好友
         if($friend){
+
+            $userid = $from ? $from : $userid;
+
             $isfriend = 0;
             $sql = $dsql->SetQuery("SELECT `delfrom`, `delto` FROM `#@__member_friend` WHERE ((`fid` = $userid AND `tid` = $id) OR (`fid` = $id AND `tid` = $userid)) AND `state` = 1 AND `delfrom` = 0 AND `delto` = 0");
             $ret = $dsql->dsqlOper($sql, "results");
@@ -636,7 +642,7 @@ class member {
         global $dsql;
         global $userLogin;
         $pageinfo = $list = array();
-        $state = $notice = $page = $pageSize = 0;
+        $state = $notice = $page = $pageSize = $im = $type = 0;
 
         if(!empty($this->param)){
             if(!is_array($this->param)){
@@ -644,12 +650,14 @@ class member {
             }else{
                 $state    = $this->param['state'];
                 $notice   = $this->param['notice'];
+                $im       = $this->param['im'];
+                $type     = $this->param['type'];
                 $page     = $this->param['page'];
                 $pageSize = $this->param['pageSize'];
             }
         }
 
-        $uid = $userLogin->getMemberID();
+        $uid = $this->param['userid'] ? $this->param['userid'] : $userLogin->getMemberID();
 
         if(!is_numeric($uid)) return array("state" => 200, "info" => self::$langData['siteConfig'][20][262]);//登录超时，请重新登录！
 
@@ -661,7 +669,7 @@ class member {
         //总条数
         $totalCount = $dsql->dsqlOper($archives, "totalCount");
 
-        if($totalCount == 0) return array("state" => 200, "info" => self::$langData['siteConfig'][21][64]);//暂无数据！
+        if($totalCount == 0 && $type != 'tongji') return array("state" => 200, "info" => self::$langData['siteConfig'][21][64]);//暂无数据！
 
         //未读
         $unread     = $dsql->dsqlOper($archives." AND log.`state` = 0", "totalCount");
@@ -669,6 +677,29 @@ class member {
         $read       = $dsql->dsqlOper($archives." AND log.`state` = 1", "totalCount");
         //总分页数
         $totalPage = ceil($totalCount/$pageSize);
+
+        if($type == 'tongji'){
+            //点赞未读
+            $archives = $dsql->SetQuery("SELECT `id` FROM `#@__public_up` WHERE `isread` = 0 and `uid` = ".$uid);
+            $upunread= $dsql->dsqlOper($archives, "totalCount");
+
+            //评论未读
+            $where_ = " AND `userid` = '$uid'";
+            $sql = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1".$where_);
+            $ret = $dsql->dsqlOper($sql, "results");
+            $sidList = array();
+            foreach ($ret as $k => $v) {
+                array_push($sidList, $v['id']);
+            }
+            if(!empty($sidList)){
+                $whereC = " AND  (`sid` in(".join(',',$sidList).") or (`masterid` = '$uid' AND `sid` = '0'))";
+            }else{
+                $whereC = " AND  `masterid` = '$uid' AND `sid` = '0'";
+            }
+
+            $archives = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `isread` = 0 " . $whereC);
+            $commentunread= $dsql->dsqlOper($archives, "totalCount");
+        }
 
         $where = "";
         if($state != ""){
@@ -689,6 +720,26 @@ class member {
             "unread" => $unread,
             "read" => $read
         );
+
+        //统计IM未读消息数量
+        if($im){
+            $im = 0;
+            $handels = new handlers("siteConfig", "getImFriendList");
+            $return  = $handels->getHandle(array("userid" => $uid, "type" => "temp"));
+            if($return['state'] == 100){
+                foreach ($return['info'] as $key => $value) {
+                    $im += (int)$value['lastMessage']['unread'];
+                }
+            }
+            $pageinfo['im'] = $im;
+        }
+
+        //如果只是获取统计信息，则不需要获取消息列表
+        if($type == "tongji"){
+            $pageinfo['upunread'] = $upunread;
+            $pageinfo['commentunread'] = $commentunread;
+            return array("pageInfo" => $pageinfo);
+        }
 
         $atpage = $pageSize*($page-1);
         $results = $dsql->dsqlOper($archives.$where." ORDER BY log.`id` DESC LIMIT $atpage, $pageSize", "results");
@@ -2352,6 +2403,11 @@ class member {
                     $actArr = explode('-', $act);
                     $act = $actArr[0].$actArr[1];
                 }
+                //教育
+                if($module == "education" && $act != "store-detail" && $act != "detail"){
+                    $actArr = explode('-', $act);
+                    $act = $actArr[0].$actArr[1];
+                }
 
                 $handels = new handlers($module, $act);
                 $detail  = $handels->getHandle($val['aid']);
@@ -3041,6 +3097,13 @@ class member {
             //消息通知
             $param['username'] = $userinfo['nickname'];
             $param['expired'] = date("Y-m-d H:i:s", $newDate);
+            $param['fields'] = array(
+                'keyword1' => '用户名',
+                'keyword2' => '开通时长',
+                'keyword3' => '开通费用',
+                'keyword4' => '到期时间'
+            );
+
             updateMemberNotice($userid, "会员-升级成功", array(), $param);
 
         }
@@ -3062,7 +3125,7 @@ class member {
         $userid = $userLogin->getMemberID();
         if($userid == -1) return array("state" => 200, "info" => $langData['siteConfig'][20][262]);  //登录超时，请重新登录！
 
-        $where = " AND `bank` != 'alipay'";
+        $where = " AND `bank` != 'alipay' AND `bank` != 'weixin'";
         if($type == "alipay"){
             $where = " AND `bank` = 'alipay'";
         }
@@ -3114,6 +3177,10 @@ class member {
      */
     public function withdraw(){
 
+        global $dsql;
+        global $userLogin;
+        global $langData;
+
         $param    =  $this->param;
         $bank     = $param['bank'];
         $cardnum  = $param['cardnum'];
@@ -3121,17 +3188,108 @@ class member {
         $amount   = $param['amount'];
         $date     = GetMkTime(time());
 
-        global $dsql;
-        global $userLogin;
-        global $langData;
+        global $cfg_minWithdraw;  //起提金额
+		global $cfg_maxWithdraw;  //最多提现
+		global $cfg_withdrawFee;  //手续费
+        global $cfg_maxCountWithdraw;  //每天最多提现次数
+        global $cfg_maxAmountWithdraw;  //每天最多提现金额
+		global $cfg_withdrawCycle;  //提现周期  0不限制  1每周  2每月
+		global $cfg_withdrawCycleWeek;  //周几
+		global $cfg_withdrawCycleDay;  //几日
+		global $cfg_withdrawPlatform;  //提现平台
+        global $cfg_withdrawCheckType;  //付款方式
+		global $cfg_withdrawNote;  //提现说明
+
+        $cfg_minWithdraw = (float)$cfg_minWithdraw;
+		$cfg_maxWithdraw = (float)$cfg_maxWithdraw;
+		$cfg_withdrawFee = (float)$cfg_withdrawFee;
+		$cfg_withdrawCycle = (int)$cfg_withdrawCycle;
+        $cfg_withdrawCheckType = (int)$cfg_withdrawCheckType;
+		$withdrawPlatform = $cfg_withdrawPlatform ? unserialize($cfg_withdrawPlatform) : array('weixin', 'alipay', 'bank');
+
+		//提现周期
+		if($cfg_withdrawCycle){
+			//周几
+			if($cfg_withdrawCycle == 1){
+
+				$week = date("w", time());
+				if($week != $cfg_withdrawCycleWeek){
+					$array = $langData['siteConfig'][34][5];  //array('周日', '周一', '周二', '周三', '周四', '周五', '周六')
+                    return array("state" => 200, "info" => str_replace('1', $array[$week], $langData['siteConfig'][36][0]));  //当前不可提现，提现时间：每周一
+				}
+
+			//几日
+			}elseif($cfg_withdrawCycle == 2){
+
+				$day = date("d", time());
+				if($day != $cfg_withdrawCycleDay){
+                    return array("state" => 200, "info" => str_replace('1', $cfg_withdrawCycleDay, $langData['siteConfig'][36][1]));  //当前不可提现，提现时间：每月1日
+				}
+
+			}
+		}
+
+        if((($bank == 'weixin' || $bank == 'alipay') && !in_array($bank, $withdrawPlatform)) || ($bank != 'weixin' && $bank != 'alipay' && !in_array('bank', $withdrawPlatform))){
+            return array("state" => 200, "info" => $langData['siteConfig'][36][2]);  //不支持的提现方式
+        }
+
         $userid = $userLogin->getMemberID();
         if($userid == -1) return array("state" => 200, "info" => $langData['siteConfig'][20][262]);  //登录超时，请重新登录！
 
-        if(empty($bank) || empty($cardnum) || empty($cardname) || empty($amount)) return array("state" => 200, "info" => self::$langData['siteConfig'][33][30]);//请填写完整！
+        if(empty($bank) || ($bank != 'weixin' && (empty($cardnum) || empty($cardname))) || empty($amount)) return array("state" => 200, "info" => $langData['siteConfig'][33][30]);//请填写完整！
 
         $this->param['id'] = $userid;
         $detail = $this->detail();
+
+        if(($detail['userType'] == 2 && $detail['licenseState'] != 1) || ($detail['userType'] == 1 && $detail['certifyState'] != 1)){
+            return array("state" => 200, "info" => $langData['siteConfig'][33][49]);  //请先进行实名认证
+        }
+
+        if($cfg_minWithdraw && $amount < $cfg_minWithdraw){
+            return array("state" => 200, "info" => str_replace('1', $cfg_minWithdraw, $langData['siteConfig'][36][3]));  //起提金额：1元
+        }
+
+        if($cfg_maxWithdraw && $amount > $cfg_maxWithdraw){
+            return array("state" => 200, "info" => str_replace('1', $cfg_maxWithdraw, $langData['siteConfig'][36][4]));  //单次最多提现：1元
+        }
+
+        //统计当天交易量
+        if($cfg_maxCountWithdraw || $cfg_maxAmountWithdraw){
+            $start = GetMkTime(date("Y-m-d"));
+            $end = $start + 86400;
+            $sql = $dsql->SetQuery("SELECT SUM(`amount`) amount, COUNT(`id`) count FROM `#@__member_withdraw` WHERE `uid` = '$userid' AND `tdate` >= $start AND `tdate` < $end");
+            $ret = $dsql->dsqlOper($sql, "results");
+            if($ret){
+                $todayAmount = $ret[0]['amount'];
+                $todayCount = $ret[0]['count'];
+
+                if($cfg_maxCountWithdraw && $todayCount > $cfg_maxCountWithdraw){
+                    return array("state" => 200, "info" => str_replace('1', $cfg_maxCountWithdraw, $langData['siteConfig'][36][5]));  //每天最多提现1次
+                }
+
+                if($cfg_maxAmountWithdraw && $todayAmount > $cfg_maxAmountWithdraw){
+                    return array("state" => 200, "info" => str_replace('1', $cfg_maxAmountWithdraw, $langData['siteConfig'][36][6]));  //每天最多提现1元
+                }
+
+            }
+        }
+
         if($detail['money'] < $amount) return array("state" => 200, "info" => $langData['siteConfig'][21][84]);  //帐户余额不足，提现失败！
+
+        //验证类型
+        $realname = $wechat_openid = '';
+        $sql = $dsql->SetQuery("SELECT `realname`, `wechat_openid` FROM `#@__member` WHERE `id` = " . $userid);
+        $ret = $dsql->dsqlOper($sql, "results");
+        if($ret){
+            $realname = $ret[0]['realname'];
+            $wechat_openid = $ret[0]['wechat_openid'];
+
+            if($bank == 'weixin' && !$wechat_openid){
+                return array("state" => 200, "info" => $langData['siteConfig'][36][7]);  //请先绑定微信账号
+            }
+        }
+
+        $ordernum = create_ordernum();
 
         //判断银行卡是否存在
         $sql = $dsql->SetQuery("SELECT `id` FROM `#@__member_withdraw_card` WHERE `uid` = '$userid' AND `bank` = '$bank' AND `cardnum` = '$cardnum' AND `cardname` = '$cardname'");
@@ -3146,23 +3304,115 @@ class member {
 
         if(is_numeric($cid)){
 
+            //会员申请后自动付款
+            if(!$cfg_withdrawCheckType && ($bank == 'weixin' || $bank == 'alipay')){
+
+                $amount_ = $cfg_withdrawFee ? $amount * (100 - $cfg_withdrawFee) / 100 : $amount;
+                $amount_ = sprintf("%.2f", $amount_);
+
+                //微信提现
+                if($bank == "weixin"){
+                    $order = array(
+                        'ordernum' => $ordernum,
+                        'openid' => $wechat_openid,
+                        'name' => $realname,
+                        'amount' => $amount_
+                    );
+
+                    require_once(HUONIAOROOT."/api/payment/wxpay/wxpayTransfers.php");
+                    $wxpayTransfers = new wxpayTransfers();
+                    $return = $wxpayTransfers->transfers($order);
+
+                    if($return['state'] != 100){
+                        return $return;
+                    }
+                }else{
+
+                    if($realname != $cardname){
+                        return array("state" => 200, "info" => $langData['siteConfig'][36][8]);  //申请失败，提现到的账户真实姓名与实名认证信息不一致！
+                    }
+                    $order = array(
+                        'ordernum' => $ordernum,
+                        'account' => $cardnum,
+                        'name' => $cardname,
+                        'amount' => $amount_
+                    );
+
+                    require_once(HUONIAOROOT."/api/payment/alipay/alipayTransfers.php");
+                    $alipayTransfers = new alipayTransfers();
+                    $return = $alipayTransfers->transfers($order);
+
+                    if($return['state'] != 100){
+                        return $return;
+                    }
+                }
+
+                $rdate = $return['date'];
+                $payment_no = $return['payment_no'];
+
+                $note = '提现成功，付款单号：'. $payment_no;
+
+                //扣除余额
+                $archives = $dsql->SetQuery("UPDATE `#@__member` SET `money` = `money` - '$amount' WHERE `id` = '$userid'");
+                $dsql->dsqlOper($archives, "update");
+
+                //保存操作日志
+				$archives = $dsql->SetQuery("INSERT INTO `#@__member_money` (`userid`, `type`, `amount`, `info`, `date`) VALUES ('$userid', '0', '$amount', '余额提现：$payment_no', '$rdate')");
+				$dsql->dsqlOper($archives, "update");
+
+                //生成提现记录
+                    $sql = $dsql->SetQuery("INSERT INTO `#@__member_withdraw` (`uid`, `bank`, `cardnum`, `cardname`, `amount`, `tdate`, `state`, `note`, `rdate`) VALUES ('$userid', '$bank', '$cardnum', '$cardname', '$amount', '$date', 1, '$note', '$rdate')");
+                $wid = $dsql->dsqlOper($sql, "lastid");
+
+                if(is_numeric($wid)){
+
+                    //自定义配置
+                    $param = array(
+        				"service"  => "member",
+        				"type"     => "user",
+        				"template" => "withdraw_log_detail",
+        				"id"       => $wid
+        			);
+
+        			$config = array(
+        				"username" => $realname,
+        				"amount" => $amount,
+        				"date" => date("Y-m-d H:i:s", $rdate),
+        				"info" => $note,
+        				"fields" => array(
+        					'keyword1' => '提现金额',
+        					'keyword2' => '提现时间',
+        					'keyword3' => '提现状态'
+        				)
+        			);
+
+                    updateMemberNotice($userid, "会员-提现申请审核通过", $param, $config);
+
+                    return $wid;
+                }else{
+                    //如果数据库写入失败，返回字符串，前端跳到提现列表页
+                    return 'error';
+                }
+
+            }
+
             //生成提现记录
             $sql = $dsql->SetQuery("INSERT INTO `#@__member_withdraw` (`uid`, `bank`, `cardnum`, `cardname`, `amount`, `tdate`, `state`) VALUES ('$userid', '$bank', '$cardnum', '$cardname', '$amount', '$date', 0)");
             $wid = $dsql->dsqlOper($sql, "lastid");
 
             if(is_numeric($wid)){
 
-                //减去余额、冻结金额
+                // 减去余额、冻结金额
                 $archives = $dsql->SetQuery("UPDATE `#@__member` SET `money` = `money` - '$amount', `freeze` = `freeze` + '$amount' WHERE `id` = '$userid'");
                 $dsql->dsqlOper($archives, "update");
 
                 return $wid;
             }else{
-                return array("state" => 200, "info" => $langData['siteConfig'][21][85].'_201');
+                return array("state" => 200, "info" => $langData['siteConfig'][21][85].'_201');  //提交失败！
             }
 
         }else{
-            return array("state" => 200, "info" => $langData['siteConfig'][21][85].'_200');
+            return array("state" => 200, "info" => $langData['siteConfig'][21][85].'_200');  //提交失败！
         }
 
     }
@@ -3201,7 +3451,7 @@ class member {
         }
 
         // $archives = $dsql->SetQuery("SELECT * FROM `#@__member_withdraw` WHERE `uid` = $userid".$where." ORDER BY `id` DESC");
-        $archives = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__member_withdraw` WHERE `uid` = $userid".$where." UNION ALL SELECT COUNT(`id`) total FROM `#@__member_putforward` WHERE `userid` = $userid".$where);
+        $archives = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__member_withdraw` WHERE `uid` = $userid".$where." UNION ALL SELECT COUNT(`id`) total FROM `#@__member_putforward` WHERE `userid` = $userid");
         $result = $dsql->dsqlOper($archives, "results");
 
         //总条数
@@ -3223,7 +3473,7 @@ class member {
             "totalCount" => $totalCount
         );
 
-        $archives = $dsql->SetQuery("SELECT `id`, 'w' as tab FROM `#@__member_withdraw` WHERE `uid` = $userid".$where." UNION ALL SELECT `id`, 'p' as tab FROM `#@__member_putforward` WHERE `userid` = $userid".$where);
+        $archives = $dsql->SetQuery("SELECT `id`, 'w' as tab FROM `#@__member_withdraw` WHERE `uid` = $userid".$where." UNION ALL SELECT `id`, 'p' as tab FROM `#@__member_putforward` WHERE `userid` = $userid ORDER BY `id` DESC");
         $atpage = $pageSize*($page-1);
         $where = " LIMIT $atpage, $pageSize";
         $results = $dsql->dsqlOper($archives.$where, "results");
@@ -5791,6 +6041,8 @@ class member {
             $tab = "house_".$type;
         }elseif($module == "car" || $module == "huodong" || $module == "tieba" || $module == "vote"){
             $tab = $module."_list";
+        }elseif($module == "education"){
+            $tab = $module."_courses";
         }else{
             $tab = $module."list";
         }
@@ -5923,7 +6175,7 @@ class member {
             // , `arcrank` = $arcrank
 
             $admin = "admin";
-            if($module == "info" || $module == "house" || $module == "car"){
+            if($module == "info" || $module == "house" || $module == "car" || $module == "education"){
                 $admin = "userid";
             }elseif($module == "tieba" || $module == "huodong"){
                 $admin = "uid";
@@ -5983,6 +6235,8 @@ class member {
                     $tab = array("house_sale", "house_zu", "house_xzl", "house_sp", "house_xzl");
                 }elseif($module == "car" || $module == "huodong" || $module == "tieba" || $module == "vote"){
                     $tab = array($module."_list");
+                }elseif($module == "education"){
+                    $tab = array($module."_courses");
                 }else{
                     $tab = array($module."list");
                 }
@@ -6047,6 +6301,8 @@ class member {
             $tab = "house_".$type;
         }elseif($module == "car" || $module == "huodong" || $module == "tieba" || $module == "vote"){
             $tab = $module."_list";
+        }elseif($module == "education"){
+            $tab = $module."_courses";
         }else{
             $tab = $module."list";
             $state = "arcrank";
@@ -6202,7 +6458,7 @@ class member {
                 $store = $ret[0]['id'];
 
                 $totalAmount = $totalCount = 0;
-                $sql = $dsql->SetQuery("SELECT o.`ordernum`, o.`amount` FROM `#@__waimai_order` o LEFT JOIN `#@__waimai_store` s ON o.`sid` = s.`id` WHERE o.`state` = 1 AND o.`pubdate` >= $began AND o.`pubdate` <= $end AND o.`sid` = $store");
+                $sql = $dsql->SetQuery("SELECT o.`ordernum`, o.`amount` FROM `#@__waimai_order` o LEFT JOIN `#@__waimai_shop` s ON o.`sid` = s.`id` WHERE o.`state` = 1 AND o.`pubdate` >= $began AND o.`pubdate` <= $end AND o.`sid` = $store");
                 $ret = $dsql->dsqlOper($sql, "results");
                 if($ret && is_array($ret)){
                     foreach ($ret as $key => $value) {
@@ -6363,11 +6619,10 @@ class member {
             $where = " ORDER BY `id` DESC LIMIT $atpage, $pageSize";
 
             $archives = $dsql->SetQuery("SELECT `id`, `amount` price, `confirmdate`, `paytype`, `ordernum`, `uid`, `okdate` FROM `#@__waimai_order` WHERE `sid` = ".$store." AND `state` = 1");
-            // echo $archives;die;
             $results = $dsql->dsqlOper($archives.$where, "results");
             if($results){
 
-                $sql = $dsql->SetQuery("SELECT `title`, `logo` FROM `#@__".$module."_store` WHERE `id` = $store");
+                $sql = $dsql->SetQuery("SELECT `shopname`, `shop_banner` FROM `#@__".$module."_shop` WHERE `id` = $store");
                 $ret = $dsql->dsqlOper($sql, "results");
 
                 $param = array(
@@ -6375,10 +6630,14 @@ class member {
                     "template" => "shop",
                     "id" => $store
                 );
+
+                $shop_banner = $ret[0]['shop_banner'] ? explode(',', $ret[0]['shop_banner']) : array();
+                $shop_banner = $shop_banner ? $shop_banner[0] : '';
+
                 $storeInfo = array(
                     "id" => $store,
-                    "title" => $ret[0]['title'],
-                    "logo" => empty($ret[0]['logo']) ? "" : getFilePath($ret[0]['logo']),
+                    "title" => $ret[0]['shopname'],
+                    "logo" => empty($shop_banner) ? "" : getFilePath($shop_banner),
                     "url" => getUrlPath($param)
                 );
 
@@ -6572,24 +6831,24 @@ class member {
 
         if($results){
             foreach($results as $key => $val){
-                $list[$key]['uid']  = $val['uid'];
 
                 //查询会员信息
-                $this->param = $val['uid'];
-                $detail = $this->detail();
-                if($detail && is_array($detail)){
-                    $list[$key]['nickname'] = $detail['nickname'];
-                    $list[$key]['level'] = $detail['level'];
-                    $list[$key]['levelName'] = $detail['levelName'];
-                    $list[$key]['levelIcon'] = $detail['levelIcon'];
-                    $list[$key]['photo'] = $detail['photo'];
-                    $addrName = explode(" > ", $detail['addrName']);
-                    $list[$key]['addrName'] = $addrName[count($addrName)-1];
-                }else{
-                    $list[$key]['state'] = 1;
+                if($val['uid'] > 0){
+                    $this->param = $val['uid'];
+                    $detail = $this->detail();
+                    if($detail && is_array($detail)){
+                        $list[$key]['uid']  = $val['uid'];
+                        $list[$key]['nickname'] = $detail['nickname'];
+                        $list[$key]['level'] = $detail['level'];
+                        $list[$key]['levelName'] = $detail['levelName'];
+                        $list[$key]['levelIcon'] = $detail['levelIcon'];
+                        $list[$key]['photo'] = $detail['photo'];
+                        $addrName = explode(" > ", $detail['addrName']);
+                        $list[$key]['addrName'] = $addrName[count($addrName)-1];
+                        $list[$key]['date'] = FloorTime(time() - $val['date']);
+                    }
                 }
 
-                $list[$key]['date'] = FloorTime(time() - $val['date']);
             }
         }
 
@@ -6719,13 +6978,14 @@ class member {
      */
     public function followMember(){
         global $dsql;
+        global $langData;
         global $userLogin;
         $id = $this->param['id'];
         $for = $this->param['for'];
 
         if(empty($id)) return array("state" => 200, "info" => self::$langData['siteConfig'][33][13]);//参数错误
 
-        $userid = $userLogin->getMemberID();
+        $userid = $this->param['from'] ? $this->param['from'] : $userLogin->getMemberID();
 
         if($userid <= 0) return array("state" => 200, "info" => $langData['siteConfig'][20][262]);   //登录超时，请重新登录！
 
@@ -7371,6 +7631,7 @@ class member {
             if($mtype == 2){
                 $param = array(
                     "service"  => "member",
+                    "type"     => "user",
                     "template" => "point"
                 );
             }else{
@@ -7381,7 +7642,21 @@ class member {
                 );
             }
 
-            updateMemberNotice($userid, "会员-积分变动通知", $param, array("username" => $username, "amount" => $reward_, "point" => $point, "date" => date("Y-m-d H:i:s", $now), "info" => $note_));
+            //自定义配置
+            $config = array(
+                "username" => $username,
+                "amount" => $reward_,
+                "point" => $point,
+                "date" => date("Y-m-d H:i:s", $now),
+                "info" => $note_,
+                "fields" => array(
+                    'keyword1' => '变动时间',
+                    'keyword2' => '变动积分',
+                    'keyword3' => '积分余额'
+                )
+            );
+
+            updateMemberNotice($userid, "会员-积分变动通知", $param, $config);
 
             //连签次数
             $sql = $dsql->SetQuery("SELECT `date` FROM `#@__member_qiandao` WHERE `uid` = $userid ORDER BY `date` DESC");
@@ -8109,6 +8384,7 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
     public function sendComment(){
         global $dsql;
         global $userLogin;
+        global $langData;
 
         $userid = $userLogin->getMemberID();
 
@@ -8122,22 +8398,330 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
         $pid     = (int)$param['pid'];
         $aid     = (int)$param['aid'];
         $oid     = (int)$param['oid'];
-        $rating  = (int)$param['rating'];
-        $sco1    = (int)$param['sco1'];
-        $content = addslashes($param['content']);
+        $rating  = $type == 'shop-order' ? $param['rating'] : (int)$param['rating'];
+        $sco1    = $type == 'shop-order' ? $param['sco1'] : (int)$param['sco1'];
+        $sco2    = $type == 'shop-order' ? $param['sco2'] : (int)$param['sco2'];
+        $sco3    = $type == 'shop-order' ? $param['sco3'] : (int)$param['sco3'];
+        $content = $type == 'shop-order' ? $param['content'] : addslashes($param['content']);
         $audio   = $param['audio'];
         $pics    = $param['pics'];
         $video   = $param['video'];
+        //外卖
+        $peisongid= (int)$param['peisongid'];
+        $star     = (int)$param['star'];
+        $starps   = (int)$param['starps'];
+        $contentps= $param['contentps'];
+        $reply    = $param['reply'];
+        $isanony  = (int)$param['isanony'];
+        $vdimgck  = filterSensitiveWords($param['vdimgck']);
+
+        $ip     = GetIP();
+        $ipaddr = getIpAddr($ip);
+        $dtime  = GetMkTime(time());
+        $replydate = GetMkTime(time());
+
+        if($type == 'paotui-order' || $type == 'waimai-order'){
+            $module = 'waimai';
+        }else{
+            $typeArr = explode('-', $type);
+            $module  = $typeArr[0];
+        }
+        include HUONIAOINC."/config/".$module.".inc.php";
+        $ischeck = (int)$customCommentCheck;
 
         if(empty($type) || empty($aid)){
             return array("state" => 200, "info" => self::$langData['siteConfig'][33][13]);//参数错误
         }
         // if(empty($rating)) return array("state" => 200, "info" => "请选择总体满意度");
-        if(($type!='info-detail' && $type!='info-business') && empty($sco1)) return array("state" => 200, "info" => self::$langData['siteConfig'][19][334]);//请选择评分
+        if(($type!='quanjing-detail' && $type!='info-detail' && $type!='info-business' && $type!='travel-ticket' && $type!='travel-video' && $type!='travel-strategy' && $type!='travel-visa' && $type!='travel-agency' && $type!='marry-store' && $type!='marry-rental' && $type!='article-detail' && $type!='waimai-order' && $type!='paotui-order' && $type!='video-detail' && $type!='tieba-detail') && empty($sco1)) return array("state" => 200, "info" => self::$langData['siteConfig'][19][334]);
+        //请选择评分
+
+        if(!isMobile() && $type=='tieba-detail'){
+			$vdimgck = strtolower($vdimgck);
+			if($vdimgck != $_SESSION['huoniao_vdimg_value']) return array("state" => 200, "info" => '验证码输入错误');
+		}
 
         // if(empty($content) && empty($audio) && empty($pics) && empty($video)){
         // 	return array("state" => 200, "info" => "评价内容为空");
         // }
+
+        if($type == 'waimai-order'){
+            if (empty($star)) return array("state" => 200, "info" => '请给店铺打分！');
+            if (empty($starps)) return array("state" => 200, "info" => '请给配送员打分！');
+        }elseif($type == 'paitui-order'){
+            if (empty($starps)) return array("state" => 200, "info" => '请给配送员打分！');
+            $star = 0;
+        }else{
+            $star = 0;
+        }
+
+        $time = 0;
+        //查询信息 获取原来的发布人ID
+        $masterid = 0;
+        if($type == 'business'){
+            $archives = $dsql->SetQuery("SELECT `uid` FROM `#@__business_list` WHERE `id` = '$aid'");
+            $results = $dsql->dsqlOper($archives, "results");
+            if($results && is_array($results)){
+                $masterid = $results[0]['uid'];
+            }
+        }elseif($type == 'info-business'){
+            $archives = $dsql->SetQuery("SELECT `uid` FROM `#@__infoshop` WHERE `id` = '$aid'");
+            $results = $dsql->dsqlOper($archives, "results");
+            if($results && is_array($results)){
+                $masterid = $results[0]['uid'];
+            }
+        }elseif($type == 'info-detail'){
+            $archives = $dsql->SetQuery("SELECT `userid` FROM `#@__infolist` WHERE `id` = '$aid'");
+            $results = $dsql->dsqlOper($archives, "results");
+            if($results && is_array($results)){
+                $masterid = $results[0]['userid'];
+            }
+        }elseif($type == 'huodong-detail'){
+            $archives = $dsql->SetQuery("SELECT `uid` FROM `#@__huodong_list` WHERE `id` = '$aid'");
+            $results = $dsql->dsqlOper($archives, "results");
+            if($results && is_array($results)){
+                $masterid = $results[0]['uid'];
+            }
+        }elseif($type == 'article-detail'){
+            $archives = $dsql->SetQuery("SELECT `admin` FROM `#@__articlelist_all` WHERE `id` = '$aid'");
+            $results = $dsql->dsqlOper($archives, "results");
+            if($results && is_array($results)){
+                $masterid = $results[0]['admin'];
+            }
+        }elseif($type == 'tieba-detail'){
+            $archives = $dsql->SetQuery("SELECT `uid` FROM `#@__tieba_list` WHERE `id` = '$aid'");
+            $results = $dsql->dsqlOper($archives, "results");
+            if($results && is_array($results)){
+                $masterid = $results[0]['uid'];
+            }
+        }elseif($type == 'video-detail'){
+            $archives = $dsql->SetQuery("SELECT `admin` FROM `#@__videolist` WHERE `id` = '$aid'");
+            $results = $dsql->dsqlOper($archives, "results");
+            if($results && is_array($results)){
+                $masterid = $results[0]['admin'];
+            }
+        }elseif($type == 'quanjing-detail'){
+            $archives = $dsql->SetQuery("SELECT `admin` FROM `#@__quanjinglist` WHERE `id` = '$aid'");
+            $results = $dsql->dsqlOper($archives, "results");
+            if($results && is_array($results)){
+                $masterid = $results[0]['admin'];
+            }
+        }elseif($type == 'marry-store'){
+            $archives = $dsql->SetQuery("SELECT `userid` FROM `#@__marry_store` WHERE `id` = '$aid'");
+            $results = $dsql->dsqlOper($archives, "results");
+            if($results && is_array($results)){
+                $masterid = $results[0]['userid'];
+            }
+        }elseif($type == 'marry-rental'){
+            $archives = $dsql->SetQuery("SELECT `company` FROM `#@__marry_weddingcar` WHERE `id` = '$aid'");
+            $results = $dsql->dsqlOper($archives, "results");
+            if($results && is_array($results)){
+                $company = $results[0]['company'];
+                $sql = $dsql->SetQuery("SELECT `id`, `userid` FROM `#@__marry_store` WHERE `id` = '$company'");
+                $res = $dsql->dsqlOper($sql, "results");
+                if($res && is_array($res)){
+                    $masterid = $res[0]['userid'];
+                }
+            }
+        }elseif($type == 'travel-store'){
+            $archives = $dsql->SetQuery("SELECT `userid` FROM `#@__travel_store` WHERE `id` = '$aid'");
+            $results = $dsql->dsqlOper($archives, "results");
+            if($results && is_array($results)){
+                $masterid = $results[0]['userid'];
+            }
+        }elseif($type == 'travel-ticket'){
+            $archives = $dsql->SetQuery("SELECT `company` FROM `#@__travel_ticket` WHERE `id` = '$aid'");
+            $results = $dsql->dsqlOper($archives, "results");
+            if($results && is_array($results)){
+                $company = $results[0]['company'];
+                $sql = $dsql->SetQuery("SELECT `id`, `userid` FROM `#@__travel_store` WHERE `id` = '$company'");
+                $res = $dsql->dsqlOper($sql, "results");
+                if($res && is_array($res)){
+                    $masterid = $res[0]['userid'];
+                }
+            }
+        }elseif($type == 'travel-video'){
+            $archives = $dsql->SetQuery("SELECT `usertype`, `userid` FROM `#@__travel_video` WHERE `id` = '$aid'");
+            $results = $dsql->dsqlOper($archives, "results");
+            if($results && is_array($results)){
+                if($results[0]['usertype'] == 1){
+                    $company = $results[0]['userid'];
+                    $sql = $dsql->SetQuery("SELECT `id`, `userid` FROM `#@__travel_store` WHERE `id` = '$company'");
+                    $res = $dsql->dsqlOper($sql, "results");
+                    if($res && is_array($res)){
+                        $masterid = $res[0]['userid'];
+                    }
+                }else{
+                    $masterid = $results[0]['userid'];
+                }
+            }
+        }elseif($type == 'travel-strategy'){
+            $archives = $dsql->SetQuery("SELECT `usertype`, `userid` FROM `#@__travel_strategy` WHERE `id` = '$aid'");
+            $results = $dsql->dsqlOper($archives, "results");
+            if($results && is_array($results)){
+                if($results[0]['usertype'] == 1){
+                    $company = $results[0]['userid'];
+                    $sql = $dsql->SetQuery("SELECT `id`, `userid` FROM `#@__travel_store` WHERE `id` = '$company'");
+                    $res = $dsql->dsqlOper($sql, "results");
+                    if($res && is_array($res)){
+                        $masterid = $res[0]['userid'];
+                    }
+                }else{
+                    $masterid = $results[0]['userid'];
+                }
+            }
+        }elseif($type == 'travel-visa'){
+            $archives = $dsql->SetQuery("SELECT `company` FROM `#@__travel_visa` WHERE `id` = '$aid'");
+            $results = $dsql->dsqlOper($archives, "results");
+            if($results && is_array($results)){
+                $company = $results[0]['company'];
+                $sql = $dsql->SetQuery("SELECT `id`, `userid` FROM `#@__travel_store` WHERE `id` = '$company'");
+                $res = $dsql->dsqlOper($sql, "results");
+                if($res && is_array($res)){
+                    $masterid = $res[0]['userid'];
+                }
+            }
+        }elseif($type == 'travel-agency'){
+            $archives = $dsql->SetQuery("SELECT `company` FROM `#@__travel_agency` WHERE `id` = '$aid'");
+            $results = $dsql->dsqlOper($archives, "results");
+            if($results && is_array($results)){
+                $company = $results[0]['company'];
+                $sql = $dsql->SetQuery("SELECT `id`, `userid` FROM `#@__travel_store` WHERE `id` = '$company'");
+                $res = $dsql->dsqlOper($sql, "results");
+                if($res && is_array($res)){
+                    $masterid = $res[0]['userid'];
+                }
+            }
+        }elseif($type == 'tuan-store'){
+
+            if(empty($content) || strlen($content) < 15) return array("state" => 200, "info" => '请输入评价内容，最少15个字！');
+
+            $sql = $dsql->SetQuery("SELECT `id`, `uid` FROM `#@__tuan_store` WHERE `id` = '$aid'");
+            $res = $dsql->dsqlOper($sql, "results");
+            if(empty($res)){
+                return array("state" => 200, "info" => '商家不存在，评价失败！');
+            }else{
+                $masterid = $res[0]['uid'];
+                if($res[0]['uid'] == $userid) return array("state" => 200, "info" => '自家店铺不能评论！');
+            }
+        }elseif($type == 'tuan-order'){
+            $sql = $dsql->SetQuery("SELECT `userid`, `orderstate`, `proid`, `id` FROM `#@__tuan_order` WHERE `id` = '$aid'");
+            $order = $dsql->dsqlOper($sql, "results");
+            if($order){
+                $oid = $order[0]['id'];
+                $aid = $order[0]['proid'];
+
+                $archives = $dsql->SetQuery("SELECT `sid` FROM `#@__tuanlist` WHERE `id` = '$aid'");
+                $results = $dsql->dsqlOper($archives, "results");
+                if($results && is_array($results)){
+                    $sid = $results[0]['sid'];
+                    $sql = $dsql->SetQuery("SELECT `id`, `uid` FROM `#@__tuan_store` WHERE `id` = '$sid'");
+                    $res = $dsql->dsqlOper($sql, "results");
+                    if($res && is_array($res)){
+                        $masterid = $res[0]['uid'];
+                    }
+                }
+
+                if($order[0]['userid'] != $userid) return array("state" => 200, "info" => '验证账户权限失败，请使用购买过此商品的账号登录后再评价！');
+                if($order[0]['orderstate'] != 3) return array("state" => 200, "info" => '订单当前状态不可评价，请使用后再评价！');
+            }else{
+                return array("state" => 200, "info" => '订单不存在，评价失败！');
+            }
+        }elseif($type == 'shop-order'){
+            $orderHandels = new handlers("shop", "orderDetail");
+            $order        = $orderHandels->getHandle($aid);
+            if(is_array($order) && $order['state'] == 100){
+                $order  = $order['info'];
+
+                if($order['userid'] != $userid) return array("state" => 200, "info" => '验证账户权限失败，请使用购买过此商品的账号登录后再评价！');
+                if($order['orderstate'] != 3) return array("state" => 200, "info" => '订单当前状态不可评价，请使用后再评价！');
+
+                foreach($order['product'] as $key => $value){
+
+                    $pid   = $value['id'];
+                    $proid = $value['proid'];
+                    $orderid = $value['orderid'];
+                    $speid = $value['speid'];
+                    $specation = $value['specation'];
+                    $rating  = $rating[$pid."_".$speid];
+                    $sco1 = $sco1[$pid."_".$speid];
+                    $sco2 = $sco2[$pid."_".$speid];
+                    $sco3 = $sco3[$pid."_".$speid];
+                    $content  = $content[$pid."_".$speid];
+                    $pics   = $pics[$pid."_".$speid];
+
+                    if(empty($rating)) return array("state" => 200, "info" => $langData['shop'][4][29]);  //请选择商品评价！
+                    if(empty($sco1)) return array("state" => 200, "info" => $langData['shop'][4][30]);  //请给商品描述打分
+                    if(empty($sco2)) return array("state" => 200, "info" => $langData['shop'][4][31]);  //请给商家服务打分
+                    if(empty($sco3)) return array("state" => 200, "info" => $langData['shop'][4][32]);  //请给商品质量打分
+                    if(empty($content)) return array("state" => 200, "info" => $langData['shop'][4][33]);  //请输入评价内容！
+
+                    $archives = $dsql->SetQuery("SELECT `store` FROM `#@__shop_product` WHERE `id` = '$proid'");
+                    $results = $dsql->dsqlOper($archives, "results");
+                    if($results && is_array($results)){
+                        $store = $results[0]['store'];
+                        $sql = $dsql->SetQuery("SELECT `id`, `userid` FROM `#@__shop_store` WHERE `id` = '$store'");
+                        $res = $dsql->dsqlOper($sql, "results");
+                        if($res && is_array($res)){
+                            $masterid = $results[0]['userid'];
+                        }
+                    }
+                    //修改
+                    if($order['common'] == 1){
+                        $sql = $dsql->SetQuery("UPDATE `#@__public_comment` SET `masterid` = '$masterid', `ischeck` = '$ischeck', `ipaddr` = '$ipaddr', `ip` = '$ip', `dtime` = '$dtime', `content` = '$content', `pics` = '$pics', `sco3` = '$sco3', `sco2` = '$sco2', `sco1` = '$sco1', `rating` = '$rating' WHERE `oid` = '$orderid'");
+                        $results  = $dsql->dsqlOper($sql, "update");
+
+                    //新增
+                    }else{
+                        $sql = $dsql->SetQuery("INSERT INTO `#@__public_comment` (`pid`, `type`, `aid`, `oid`, `userid`, `rating`, `sco1`, `content`, `pics`, `audio`, `video`, `dtime`, `ip`, `ipaddr`, `ischeck`, `zan`, `zan_user`, `sco2`, `sco3`, `speid`, `specation`, `masterid`) VALUES ('0', '$type', '$proid', '$orderid', '$userid', '$rating', '$sco1', '$content', '$pics', '$audio', '$video', '$dtime', '$ip', '$ipaddr', '$ischeck', '0', '', '$sco2', '$sco3', '$speid', '$specation', '$masterid')");
+                        $dsql->dsqlOper($sql, "update");
+                    }
+                }
+
+                $archives = $dsql->SetQuery("UPDATE `#@__shop_order` SET `common` = 1 WHERE `id` = '$aid'");
+                $dsql->dsqlOper($archives, "update");
+                return $langData['siteConfig'][20][196];  //评价成功！
+
+            }else{
+                return array("state" => 200, "info" => '订单不存在，评价失败！');
+            }
+        }elseif($type == 'waimai-order'){
+
+            $sql = $dsql->SetQuery("SELECT `id`, `sid`, `iscomment`, `uid`, `peisongid`, `paydate`, `okdate` FROM `#@__waimai_order` WHERE `id` = $aid");
+            $ret = $dsql->dsqlOper($sql, "results");
+            if ($ret) {
+                $aid       = $ret[0]['sid'];//商铺
+                $oid       = $ret[0]['id'];//订单
+                $peisongid = $ret[0]['peisongid'];
+                $paydate   = $ret[0]['paydate'];
+                $okdate    = $ret[0]['okdate'];
+                $time      = ceil(($okdate - $paydate) / 60);
+                $sql = $dsql->SetQuery("SELECT `userid` FROM `#@__waimai_store` WHERE `id` = " . $ret[0]['sid']);
+                $ret = $dsql->dsqlOper($sql, "results");
+                if($ret){
+                    $masterid  = $ret[0]['userid'];
+                }
+            } else {
+                return array("state" => 200, "info" => '订单不存在！');
+            }
+
+        }elseif($type == 'paotui-order'){
+
+            $sql = $dsql->SetQuery("SELECT `id`, `iscomment`, `peisongid`, `paydate`, `okdate` FROM `#@__paotui_order` WHERE `id` = $aid");
+            $ret = $dsql->dsqlOper($sql, "results");
+            if ($ret) {
+                $peisongid = $ret[0]['peisongid'];
+                $oid       = $ret[0]['id'];//订单
+                $aid       = 0;
+                $peisongid = $ret[0]['peisongid'];
+                $paydate   = $ret[0]['paydate'];
+                $okdate    = $ret[0]['okdate'];
+                $time      = ceil(($okdate - $paydate) / 60);
+            } else {
+                return array("state" => 200, "info" => '订单不存在！');
+            }
+
+        }
 
         if($aid && $pid){
             $sql = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `type` = '$type' AND `aid` = $aid AND `pid` = 0");
@@ -8189,17 +8773,44 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
             }
         }
 
-        $ip     = GetIP();
-        $ipaddr = getIpAddr($ip);
-        $dtime  = GetMkTime(time());
 
-        $ischeck = 1;
 
-        $sql = $dsql->SetQuery("INSERT INTO `#@__public_comment` (`pid`, `type`, `aid`, `oid`, `userid`, `rating`, `sco1`, `content`, `pics`, `audio`, `video`, `dtime`, `ip`, `ipaddr`, `ischeck`, `zan`, `zan_user`) VALUES ('$pid', '$type', '$aid', '$oid', '$userid', '$rating', '$sco1', '$content', '$pics', '$audio', '$video', '$dtime', '$ip', '$ipaddr', '$ischeck', '0', '')");
-        $ret = $dsql->dsqlOper($sql, "lastid");
+        //查询评价信息 团购、外卖需要这一步，其他的不需要
+        $commentid = 0;
+        if($type == 'tuan-order' || $type == 'waimai-order' || $type == 'paotui-order'){
+            $sql = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `type` = '$type' and `oid` = '$oid'");
+            $res = $dsql->dsqlOper($sql, "results");
+            $commentid = $res[0]['id'];
+        }
+
+        if($commentid > 0 && !empty($oid)){
+            $sql = $dsql->SetQuery("UPDATE `#@__public_comment` SET `masterid` = '$masterid', `ischeck` = '$ischeck', `ipaddr` = '$ipaddr', `ip` = '$ip', `dtime` = '$dtime', `content` = '$content', `pics` = '$pics', `sco3` = '$sco3', `sco2` = '$sco2', `sco1` = '$sco1', `rating` = '$rating', `peisongid` = '$peisongid', `star` = '$star', `starps` = '$starps', `contentps` = '$contentps', `isanony` = '$isanony' WHERE `oid` = '$oid'");
+            $results  = $dsql->dsqlOper($sql, "update");
+            if($results == "ok"){
+                $ret = $commentid;
+            }else{
+                $ret = null;
+            }
+        }else{
+            $sql = $dsql->SetQuery("INSERT INTO `#@__public_comment` (`masterid`, `pid`, `type`, `aid`, `oid`, `userid`, `rating`, `sco1`, `content`, `pics`, `audio`, `video`, `dtime`, `ip`, `ipaddr`, `ischeck`, `zan`, `zan_user`, `sco2`, `sco3`, `speid`, `specation`, `peisongid`, `star`, `starps`, `contentps`, `isanony`, `time`) VALUES ('$masterid', '$pid', '$type', '$aid', '$oid', '$userid', '$rating', '$sco1', '$content', '$pics', '$audio', '$video', '$dtime', '$ip', '$ipaddr', '$ischeck', '0', '', '$sco2', '$sco3', '$speid', '$specation', '$peisongid', '$star', '$starps', '$contentps', '$isanony', '$time')");
+            $ret = $dsql->dsqlOper($sql, "lastid");
+        }
+
         if(is_numeric($ret)){
+
+            if($type == 'tuan-order'){
+                $archives = $dsql->SetQuery("UPDATE `#@__tuan_order` SET `common` = 1 WHERE `id` = '$oid'");
+			    $dsql->dsqlOper($archives, "update");
+            }elseif($type == 'waimai-order'){
+                $sql = $dsql->SetQuery("UPDATE `#@__waimai_order` SET `iscomment` = 1 WHERE `id` = $oid");
+                $dsql->dsqlOper($sql, "update");
+            }elseif($type == 'paotui-order'){
+                $sql = $dsql->SetQuery("UPDATE `#@__paotui_order` SET `iscomment` = 1 WHERE `id` = $oid");
+                $dsql->dsqlOper($sql, "update");
+            }
+
             if($check){
-                $archives = $dsql->SetQuery("SELECT `id`, `userid`, `content`, `dtime`, `ip`, `ipaddr`, `zan`, `zan_user` FROM `#@__public_comment` WHERE `id` = " . $ret);
+                $archives = $dsql->SetQuery("SELECT `id`, `userid`, `content`, `dtime`, `ip`, `ipaddr`, `zan`, `zan_user`, `ischeck` FROM `#@__public_comment` WHERE `id` = " . $ret);
                 $results  = $dsql->dsqlOper($archives, "results");
                 if ($results) {
                     $list['id']       = $results[0]['id'];
@@ -8209,7 +8820,8 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
                     $list['ftime']    = GetMkTime(time()) - $results[0]['dtime'] > 30 ? $results[0]['dtime'] : FloorTime(GetMkTime(time()) - $results[0]['dtime']);
                     $list['ip']       = $results[0]['ip'];
                     $list['ipaddr']   = $results[0]['ipaddr'];
-                    $list['zan']     = $results[0]['zan'];
+                    $list['zan']      = $results[0]['zan'];
+                    $list['ischeck']  = $results[0]['ischeck'];
                     return $list;
                 }
             }
@@ -8242,7 +8854,7 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
 
         $sid = $id;
 
-        $sql = $dsql->SetQuery("SELECT `id`, `pid`, `rid`, `aid`, `type` FROM `#@__public_comment` WHERE `id` = $id");
+        $sql = $dsql->SetQuery("SELECT `id`, `pid`, `rid`, `aid`, `type`, `masterid` FROM `#@__public_comment` WHERE `id` = $id");
         $ret = $dsql->dsqlOper($sql, "results");
         if($ret){
             // 回复一级评论
@@ -8261,23 +8873,32 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
             $type = $parent['type'];
             $aid  = $parent['aid'];
             $oid  = $parent['oid'];
+            $masterid  = $ret[0]['masterid'];
 
             $ip     = GetIP();
             $ipaddr = getIpAddr($ip);
             $dtime  = GetMkTime(time());
 
-            $ischeck = 1;
+            if($type == 'paotui-order' || $type == 'waimai-order'){
+                $module = 'waimai';
+            }else{
+                $typeArr = explode('-', $type);
+                $module  = $typeArr[0];
+            }
+            include HUONIAOINC."/config/".$module.".inc.php";
+            $ischeck = (int)$customCommentCheck;
+
             $sco1 = 0;
             $rating = 0;
             $isanony = 0;
             $oid = $oid ? $oid : 0;
             $pics = $audio = $video = "";
 
-            $sql = $dsql->SetQuery("INSERT INTO `#@__public_comment` (`pid`, `type`, `aid`, `oid`, `userid`, `rating`, `sco1`, `content`, `pics`, `audio`, `video`, `dtime`, `ip`, `ipaddr`, `ischeck`, `zan`, `zan_user`, `isanony`, `rid`, `sid`) VALUES ('$pid', '$type', '$aid', '$oid', '$userid', '$rating', '$sco1', '$content', '$pics', '$audio', '$video', '$dtime', '$ip', '$ipaddr', '$ischeck', '0', '', '$isanony', '$rid', '$sid')");
+            $sql = $dsql->SetQuery("INSERT INTO `#@__public_comment` (`masterid`, `pid`, `type`, `aid`, `oid`, `userid`, `rating`, `sco1`, `content`, `pics`, `audio`, `video`, `dtime`, `ip`, `ipaddr`, `ischeck`, `zan`, `zan_user`, `isanony`, `rid`, `sid`) VALUES ('$masterid', '$pid', '$type', '$aid', '$oid', '$userid', '$rating', '$sco1', '$content', '$pics', '$audio', '$video', '$dtime', '$ip', '$ipaddr', '$ischeck', '0', '', '$isanony', '$rid', '$sid')");
             $ret = $dsql->dsqlOper($sql, "lastid");
             if(is_numeric($ret)){
                 if($check){
-                    $archives = $dsql->SetQuery("SELECT `id`, `userid`, `content`, `dtime`, `ip`, `ipaddr`, `zan`, `zan_user` FROM `#@__public_comment` WHERE `id` = " . $ret);
+                    $archives = $dsql->SetQuery("SELECT `id`, `userid`, `content`, `dtime`, `ip`, `ipaddr`, `zan`, `zan_user`, `ischeck` FROM `#@__public_comment` WHERE `id` = " . $ret);
                     $results  = $dsql->dsqlOper($archives, "results");
                     if ($results) {
                         $list['id']       = $results[0]['id'];
@@ -8287,7 +8908,8 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
                         $list['ftime']    = GetMkTime(time()) - $results[0]['dtime'] > 30 ? $results[0]['dtime'] : FloorTime(GetMkTime(time()) - $results[0]['dtime']);
                         $list['ip']       = $results[0]['ip'];
                         $list['ipaddr']   = $results[0]['ipaddr'];
-                        $list['zan']     = $results[0]['zan'];
+                        $list['zan']      = $results[0]['zan'];
+                        $list['ischeck']  = $results[0]['ischeck'];
                         return $list;
                     }
                 }
@@ -8323,7 +8945,7 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
         }
 
         // 评论信息
-        $sql = $dsql->SetQuery("SELECT `userid`, `zan_user` FROM `#@__public_comment` WHERE `id` = $id AND `ischeck` = 1");
+        $sql = $dsql->SetQuery("SELECT `userid`, `zan_user`, `type` FROM `#@__public_comment` WHERE `id` = $id AND `ischeck` = 1");
         $ret = $dsql->dsqlOper($sql, "results");
         if($ret){
 
@@ -8333,10 +8955,21 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
 
             $zan_ip = $ret[0]['zan_ip'];
             $zan_user = $ret[0]['zan_user'];
+            $action     = $ret[0]['type'];
 
             $zan_user_arr = $zan_user ? explode(',', $zan_user) : array();
 
             $ip = GetIP();
+
+            if($action!='paotui-order' || $action!='waimai-order'){
+                $actArr = explode('-', $action);
+                $module = $actArr[0];
+                $temp   = $action;
+            }else{
+                $module = 'waimai';
+                $temp   = $action;
+            }
+
 
             if($type == "add"){
                 if(in_array($userid, $zan_user_arr)){
@@ -8348,6 +8981,16 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
                 if($k === false) return self::$langData['siteConfig'][20][244];//操作成功;
                 unset($zan_user_arr[$k]);
             }
+
+            $param['id']     = $id;
+            $param['uid']    = $ret[0]['userid'];
+            $param['module'] = $module;
+            $param['temp']   = $temp;
+            $param['type']   = 1;
+            $this->param     = $param;
+            $this->getZan();
+
+
 
             $sql = $dsql->SetQuery("UPDATE `#@__public_comment` SET `zan` = ".count($zan_user_arr).", `zan_user` = '".join(",", $zan_user_arr)."' WHERE `id` = $id");
             $ret = $dsql->dsqlOper($sql, "update");
@@ -8390,29 +9033,76 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
         $video    = (int)$param['video'];
         $son      = (int)$param['son'];
         $u        = (int)$param['u'];
+        $onlyself = (int)$param['onlyself'];
         $isAjax   = (int)$param['isAjax'];
-        $page     = (int)$this->param['page'];
-        $pageSize = (int)$this->param['pageSize'];
+        $filter   = $param['filter'];
+        $orderby  = $param['orderby'];
+        $uid      = (int)$param['uid'];
+        $peisongid= (int)$param['peisongid'];//配送员
+        $page     = (int)$param['page'];
+        $pageSize = (int)$param['pageSize'];
 
-        if(empty($type) || empty($aid)){
-            return array("state" => 200, "info" => self::$langData['siteConfig'][33][13]);//参数错误
-        }
+        $where1 = '';
 
         $pageSize = empty($pageSize) ? 10 : $pageSize;
         $page     = empty($page) ? 1 : $page;
 
-        $where = " AND `type` = '$type' AND `aid` = '$aid' AND `pid` = '$pid'";
+        if (!$peisongid && $u!=1) {
+            if(empty($type) || empty($aid)){
+                return array("state" => 200, "info" => self::$langData['siteConfig'][33][13]);//参数错误
+            }
 
-        if($u==1){
-        	$where .= " AND `userid` = '$userid'";
+            $where = " AND `type` = '$type' AND `aid` = '$aid' AND `pid` = '$pid'";
         }
+
+        if($u==1){//只调取别人的评论自己的评论;
+            $where1 .= " AND `userid` = '$userid'";
+            if($onlyself==1){
+                $sql = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1".$where1);
+                $ret = $dsql->dsqlOper($sql, "results");
+                $sidList = array();
+				foreach ($ret as $k => $v) {
+					array_push($sidList, $v['id']);
+                }
+                if(!empty($sidList)){
+                    $where .= " AND  (`sid` in(".join(',',$sidList).") or (`masterid` = '$userid' AND `sid` = '0'))";
+                }else{
+                    $where .= " AND  `masterid` = '$userid' AND `sid` = '0'";
+                }
+            }
+        }
+
+        //指定会员ID 帖子
+		if(!empty($uid)){
+			$where .= " AND `userid` = ".$uid;
+		}
 
         if($oid){
             $where .= " AND `oid` = '$oid'";
         }
 
+        if ($peisongid) {
+            require_once(HUONIAOROOT . "/api/handlers/waimai.controller.php");
+            $peisongid = $peisongid == 1 ? checkCourierAccount() : $peisongid;
+            $where     .= " AND `peisongid` = $peisongid";
+        }
+
+        //筛选
+		if(!empty($filter)){
+			if($filter == "pic"){
+				$where .= " AND `pics` <> ''";
+			}elseif($filter == "lower"){
+				$where .= " AND `rating` < 3";
+            }elseif($filter == "h"){
+				$where .= " AND `rating` = 1";
+			}elseif($filter == "z"){
+				$where .= " AND `rating` = 2";
+			}elseif($filter == "c"){
+				$where .= " AND `rating` = 3";
+			}
+		}
         if(!$isAjax){
-            $archives = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1".$where);
+            $archives = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1".$where);//print_R($archives);exit;
             //总条数
             $totalCount = $dsql->dsqlOper($archives, "totalCount");
             //总分页数
@@ -8477,8 +9167,13 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
 
         $atpage = $pageSize*($page-1);
         $where_limit = " ORDER BY `id` DESC LIMIT $atpage, $pageSize";
+        if ($orderby == "hot") {
+            $where_limit = " ORDER BY `zan` DESC, `id` DESC LIMIT $atpage, $pageSize";
+        }elseif($orderby == "1"){
+            $where_limit = " ORDER BY `id` ASC LIMIT $atpage, $pageSize";
+        }
 
-        $archives = $dsql->SetQuery("SELECT `id`, `pid`, `type`, `aid`, `oid`, `userid`, `rating`, `sco1`, `content`, `pics`, `audio`, `video`, `dtime`, `ip`, `zan`, `zan_user`, `isanony` FROM `#@__public_comment` WHERE `ischeck` = 1".$where.$where_limit);
+        $archives = $dsql->SetQuery("SELECT `id`, `pid`, `sid`, `type`, `ipaddr`, `aid`, `oid`, `userid`, `rating`, `sco1`, `content`, `pics`, `audio`, `video`, `dtime`, `ip`, `zan`, `zan_user`, `isanony`, `specation`, `peisongid`, `star`, `starps`, `contentps`, `reply`, `replydate`, `time` FROM `#@__public_comment` WHERE `ischeck` = 1".$where.$where_limit);
         $results = $dsql->dsqlOper($archives, "results");
 
         $list = array();
@@ -8486,11 +9181,37 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
         if(is_array($results) && !empty($results)){
             $sco1Txt = self::$langData['siteConfig'][34][9];//array(0 => "", 1 => "失望", 2 => "一般", 3 => "还行", 4 => "满意", 5 => "超赞")
             foreach ($results as $key => $value) {
+                if($u==1){//只调取别人的评论自己的评论,取上一级评论;
+                    if($onlyself==1){
+                        if(!empty($value['sid'])){
+                            $sql = $dsql->SetQuery("SELECT `id`, `content` FROM `#@__public_comment` WHERE `ischeck` = 1 AND `id` = ".$value['sid']);
+                            $ret = $dsql->dsqlOper($sql, "results");
+                            if(!empty($ret[0]['id'])){
+                                $list[$key]['parent']['id']      = $ret[0]['id'];
+                                $list[$key]['parent']['content']      = $ret[0]['content'];
+                            }
+                        }
+                    }
+                }
+
                 $list[$key]['id']      = $value['id'];
+                $list[$key]['sid']     = $value['sid'];
                 $list[$key]['pid']     = $value['pid'];
                 $list[$key]['type']    = $value['type'];
                 $list[$key]['oid']     = $value['oid'];
+                $list[$key]['ipaddr']  = $value['ipaddr'];
+                $list[$key]['specation']= str_replace("$$$", "，", $value['specation']);
                 $list[$key]['isanony'] = $value['isanony'];
+                $list[$key]['ftime']    = floor((GetMkTime(time()) - $value['dtime'] / 86400) % 30) > 30 ? date("Y-m-d", $value['dtime']) : FloorTime(GetMkTime(time()) - $value['dtime']);
+
+                $list[$key]['peisongid']  = $value['peisongid'];
+                $list[$key]['star']       = $value['star'];
+                $list[$key]['starps']     = $value['starps'];
+                $list[$key]['contentps']  = $value['contentps'];
+                $list[$key]['reply']      = $value['reply'];
+                $list[$key]['time']       = $value['time'];
+                $list[$key]['replydate']  = $value['replydate'];
+                $list[$key]['replydatef'] = $value['replydate'] ? date("Y-m-d H:i:s", $value['replydate']) : "";
 
                 $is_self = $userid == $value['userid'] ? 1 : 0;
                 $list[$key]['is_self'] = $is_self;
@@ -8514,12 +9235,88 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
                 $list[$key]['dtime'] = $value['dtime'];
 
                 if($value['pid'] == 0){
-                    $param = array(
+                    /* $param = array(
                         "service" => "business",
                         "type" => "comdetail",
                         "id" => $value['id']
                     );
-                    $list[$key]['url'] = getUrlPath($param);
+                    $list[$key]['url'] = getUrlPath($param); */
+
+                }
+
+                $act    = $value['type'];
+                if($act!='paotui-order'){
+                    $actArr = explode('-', $act);
+                    $module = $actArr[0];
+                    $action = $actArr[1];
+                    $action_= $actArr[1];
+
+                    //处理商家、二手商家、团购商品详情
+                    if($module == "business" || ($module == "info" && $action == "business") || ($module == "waimai" && $action == "order")){
+                        $action = "storeDetail";
+                    }elseif(($module == "tuan" && $action == "order") || ($module == "shop" && $action == "order")){
+                        $action = "detail";
+                    }
+
+                    $param = array(
+                        "service"     => $module,
+                        "template"    => $action,
+                        "id"          => $value['aid']
+                    );
+
+                    $handels = new handlers($module, $action);
+                    $detail  = $handels->getHandle($value['aid']);
+                    if(is_array($detail) && $detail['state'] == 100){
+                        $detail  = $detail['info'];
+                        if(is_array($detail)){
+                            $list[$key]['detail'] = $detail;
+
+                            if($module == "waimai" && $action == "order"){
+                                $list[$key]['detail']['title'] = $detail['shopname'];
+                            }
+
+                            if($module == "info" && $action_ == "business"){
+                                $param = array(
+                                    "service"     => $module,
+                                    "template"    => "business",
+                                    "id"          => $detail['id'],
+                                );
+                            }
+
+                            if(!$detail['url']){
+                                $list[$key]['detail']['url'] = getUrlPath($param);
+                            }
+                        }
+                    }else{
+                        $handels = new handlers($module, $action."Detail");
+                        $detail  = $handels->getHandle($value['aid']);
+
+                        if(is_array($detail) && $detail['state'] == 100){
+                            $detail  = $detail['info'];
+                            if(is_array($detail)){
+                                $list[$key]['detail'] = $detail;
+
+                                if($module == "travel" || ($module == "marry" && $action_ == "store") || ($module == "marry" && $action_ == "rental")){
+                                    $param = array(
+                                        "service"     => $module,
+                                        "template"    => $action_ . '-' . 'detail',
+                                        "id"          => $detail['id'],
+                                    );
+                                }
+
+                                if(!$detail['url']){
+                                    $list[$key]['detail']['url'] = getUrlPath($param);
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    $sql = $dsql->SetQuery("SELECT o.`id`, o.`shop` shopname, o.`ordernum` ordernumstore FROM (`#@__public_comment` c LEFT JOIN `#@__paotui_order` o ON c.`oid` = o.`id`) WHERE c.`oid` = ".$value['oid']);
+                    $shop = $dsql->dsqlOper($sql, "results");
+                    if($shop){
+                        $list[$key]['detail']['id']    = $shop[0]['id'];
+                        $list[$key]['detail']['title'] = $shop[0]['shopname'];
+                    }
 
                 }
 
@@ -8547,6 +9344,45 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
                 }
                 $list[$key]['zan_has'] = $zan_has;
 
+                //帖子
+                if($type == 'tieba-detail'){
+                    $memberID = $value['userid'];
+                    $$tizi_memberTotal = 0;
+					$sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__tieba_list` WHERE `state` = 1 AND `uid` = $memberID");
+					$ret = $dsql->dsqlOper($sql, "results");
+					if($ret){
+						$tizi_memberTotal = $ret[0]['t'];
+                    }
+                    $list[$key]['tizi_memberTotal'] = $tizi_memberTotal;
+					//精华总数
+					$tizi_memberJinghuaTotal = 0;
+					$sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__tieba_list` WHERE `state` = 1 AND `jinghua` = 1 AND `uid` = $memberID");
+					$ret = $dsql->dsqlOper($sql, "results");
+					if($ret){
+						$tizi_memberJinghuaTotal = $ret[0]['t'];
+                    }
+                    $list[$key]['tizi_memberJinghuaTotal'] = $tizi_memberJinghuaTotal;
+
+                    //回复数量
+                    $replynums = 0;
+                    $sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'tieba-detail' AND `pid` = ".$value['id']);
+                    $ret = $dsql->dsqlOper($sql, "results");
+                    if($ret){
+                        $replynums = $ret[0]['t'];
+                    }
+                    $list[$key]['replynums'] = $replynums;
+                }
+
+                if($userid != -1){
+                    $isfollow = 0;
+					$sql = $dsql->SetQuery("SELECT `id` FROM `#@__member_follow` WHERE `tid` = $userid AND `fid` = " . $value['userid']);
+					$ret = $dsql->dsqlOper($sql, "results");
+					if($ret && is_array($ret)){
+                        $isfollow = 1;
+                    }
+                    $list[$key]['isfollow'] = $isfollow;
+                }
+
                 // 获取子评论
                 if($son){
                     $lower = array();
@@ -8569,6 +9405,10 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
                     }
                 }
 
+                
+
+
+
 
             }
         }
@@ -8586,6 +9426,8 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
         global $langData;
 
         $pageinfo = array();
+
+        $userid = $userLogin->getMemberID();
 
         $param    = $this->param;
         $pid      = (int)$param['pid'];
@@ -8650,7 +9492,9 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
                 $list[$key]['oid'] = $value['oid'];
                 $list[$key]['rid'] = $value['rid'];
                 $list[$key]['sid'] = $value['sid'];
+                $list[$key]['ipaddr']   = $value['ipaddr'];
                 $list[$key]['zan'] = $value['zan'];
+                $list[$key]['ftime']    = floor((GetMkTime(time()) - $value['dtime'] / 86400) % 30) > 30 ? date("Y-m-d", $value['dtime']) : FloorTime(GetMkTime(time()) - $value['dtime']);
 
                 if(isset($temp[$value['userid']])){
                     $user = $temp[$value['userid']];
@@ -8660,6 +9504,15 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
                     $temp[$value['userid']] = $user;
                 }
                 $list[$key]['user'] = $user;
+
+                $zan_has = 0;
+                if($userid != -1 && $value['zan_user']){
+                    $zan_user = explode(',', $value['zan_user']);
+                    if(in_array($userid, $zan_user)){
+                        $zan_has = 1;
+                    }
+                }
+                $list[$key]['zan_has'] = $zan_has;
 
                 if($rid){
                     $sid = $value['sid'];
@@ -8705,7 +9558,6 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
                         "list" => $lower
                     );
                 }
-
             }
         }
 
@@ -8727,7 +9579,7 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
         $id    = (int)$param['id'];
 
         // $sql = $dsql->SetQuery("SELECT * FROM `#@__public_comment` WHERE `id` = $id AND `isCheck` = 1 AND `pid` = 0");
-        $sql = $dsql->SetQuery("SELECT * FROM `#@__public_comment` WHERE `id` = $id AND `isCheck` = 1");
+        $sql = $dsql->SetQuery("SELECT * FROM `#@__public_comment` WHERE `id` = $id ");
         $ret = $dsql->dsqlOper($sql, "results");
         if($ret){
             $detail = array();
@@ -8816,6 +9668,9 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
       	$sql = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `id` = '$id'");
 		$ret = $dsql->dsqlOper($sql, "results");
 		if($ret){
+            $sql = $dsql->SetQuery("DELETE FROM `#@__public_up` WHERE `type` = '1' and `tid` = '$id'");
+            $dsql->dsqlOper($sql, "update");
+
 			$archives = $dsql->SetQuery("DELETE FROM `#@__public_comment` WHERE `id` = '$id'");
 			$results = $dsql->dsqlOper($archives, "update");
 			if($results != "ok"){
@@ -8839,7 +9694,8 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
         $uid      = $param['uid'];
         $module   = $param['module'];
         $temp     = $param['temp'];
-        $check    = $this->param['check'];
+        $type     = (int)$param['type'];
+        $check    = $param['check'];
 
 		$userid      = $userLogin->getMemberID();
 
@@ -8854,7 +9710,7 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
         }
 
 
-        $sql = $dsql->SetQuery("SELECT `id` FROM `#@__public_up`  WHERE `action` = '$temp' and `module` = '$module' and `tid` = '$id' and `ruid` = '$userid'");
+        $sql = $dsql->SetQuery("SELECT `id` FROM `#@__public_up`  WHERE `type` = '$type' and `action` = '$temp' and `module` = '$module' and `tid` = '$id' and `ruid` = '$userid'");
         $res = $dsql->dsqlOper($sql, "results");
         if(!empty($res)){
             if($check){
@@ -8873,7 +9729,7 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
             }
 
             if($results == 'ok'){
-                $archives = $dsql->SetQuery("DELETE FROM `#@__public_up` WHERE `action` = '$temp' and `module` = '$module' and `tid` = '$id' and `ruid` = '$userid'");
+                $archives = $dsql->SetQuery("DELETE FROM `#@__public_up` WHERE `type` = '$type' and `action` = '$temp' and `module` = '$module' and `tid` = '$id' and `ruid` = '$userid'");
 				$dsql->dsqlOper($archives, "update");
 
                 // 清除缓存
@@ -8909,7 +9765,7 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
 				return array("state" => 200, "info" => self::$langData['siteConfig'][21][72]);//操作失败，请重试！
 			}else{
 				//插入点赞人信息
-				$archives = $dsql->SetQuery("INSERT INTO `#@__public_up` (`uid`, `tid`, `ruid`, `module`, `action`, `puctime`) VALUES ('$uid', '$id', '$userid', '$module', '$temp', '$puctime')");
+				$archives = $dsql->SetQuery("INSERT INTO `#@__public_up` (`uid`, `tid`, `ruid`, `module`, `action`, `puctime`, `type`) VALUES ('$uid', '$id', '$userid', '$module', '$temp', '$puctime', '$type')");
 				$dsql->dsqlOper($archives, "update");
 
                 // 清除缓存
@@ -8933,7 +9789,7 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
 		global $dsql;
 		global $userLogin;
 		$pageinfo = $list = array();
-		$orderby = $page = $pageSize = $where = $where1 = "";
+        $orderby = $page = $pageSize = $where = $where1 = "";
 
 		if(!empty($this->param)){
 			if(!is_array($this->param)){
@@ -8941,16 +9797,27 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
 			}else{
                 $tid      = $this->param['tid'];
                 $module   = $this->param['module'];
+                $uid      = (int)$this->param['uid'];
+                $u        = (int)$this->param['u'];
+                $type     = (int)$this->param['type'];
                 $temp     = $this->param['temp'];
 				$page     = $this->param['page'];
 				$pageSize = $this->param['pageSize'];
 			}
 		}
 
-		$userid = $userLogin->getMemberID();
+        $userid = $userLogin->getMemberID();
+
+        if($u==1){
+            $where .=" AND `uid` = '$userid'";
+        }
 
 		if(!empty($tid)){
-			$where .=" and tid='$tid'";
+			$where .=" AND `tid` in ($tid)";
+        }
+
+        if($type != ''){
+			$where .=" AND `type` = '$type'";
         }
 
         if(!empty($module)){
@@ -8983,14 +9850,14 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
 			"totalCount" => $totalCount
 		);
 
-		$archives = $dsql->SetQuery("SELECT `id`, `uid`, `tid`, `ruid`, `puctime` FROM `#@__public_up` l WHERE 1 = 1".$where);
+		$archives = $dsql->SetQuery("SELECT `id`, `uid`, `tid`, `ruid`, `puctime`, `type`, `action`, `module` FROM `#@__public_up` l WHERE 1 = 1".$where);
 		$atpage = $pageSize*($page-1);
 		$where = " LIMIT $atpage, $pageSize";
 		$results = $dsql->dsqlOper($archives.$where1.$order.$where, "results");
 		if($results){
 			foreach($results as $key => $val){
 				//楼主信息
-				$upUsername = $upPhoto = "";
+				/* $upUsername = $upPhoto = "";
 				$sql = $dsql->SetQuery("SELECT `nickname`, `photo` FROM `#@__member` WHERE `id` = ".$val['uid']);
 				$upRet = $dsql->dsqlOper($sql, "results");
 				if($upRet){
@@ -8998,7 +9865,7 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
 					$upPhoto    = getFilePath($upRet[0]['photo']);
 				}
 				$list[$key]['upUsername'] = $upUsername;
-				$list[$key]['upPhoto'] = $upPhoto;
+				$list[$key]['upPhoto'] = $upPhoto; */
 
 				//点赞人信息
 				$uid = $username = $photo = "";
@@ -9013,6 +9880,124 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
 				$list[$key]['username'] = $username;
                 $list[$key]['photo'] = $photo;
 
+                //点赞信息
+                $list[$key]['puctime'] = $val['puctime'];
+                $list[$key]['type'] = $val['type'];
+                $list[$key]['id']   = $val['id'];
+                $module = $val['module'];
+                if($val['action']!='paotui-order'){
+                    if($val['type'] == 1){//评论点赞
+                        $actArr = explode('-', $val['action']);
+                        $action = $actArr[1];
+                        $action_= $actArr[1];
+                        if($module == "business" && $val['action'] == 'business'){
+                            $action_= 'detail';
+                        }
+                        //处理商家、二手商家、团购商品详情
+                        if($module == "business" || ($module == "info" && $action == "business") || ($module == "waimai" && $action == "order")){
+                            $action = "storeDetail";
+                        }elseif(($module == "tuan" && $action == "order") || ($module == "shop" && $action == "order")){
+                            $action = "detail";
+                        }
+                        $commentcontent = '';
+                        $sql = $dsql->SetQuery("SELECT `aid`, `oid`, `content` FROM `#@__public_comment` WHERE `id` = '".$val['tid']."' ");
+                        $ret = $dsql->dsqlOper($sql, "results");
+                        if($ret){
+                            $commentcontent = $ret[0]['content'];
+                            $tid = $ret[0]['aid'];
+                        }
+
+                    }else{//信息点赞
+
+                        $action = $val['action'];
+                        $action_= $val['action'];
+                        if($val['module'] == 'travel' && $val['action'] == 'video-detail'){
+                            $action = 'videoDetail';
+                        }elseif($val['module'] == 'live' && $val['action'] == 'h_detail'){
+                            $action = 'detail';
+                        }
+
+                        $tid = $val['tid'];
+                    }
+
+                    $param = array(
+                        "service"     => $module,
+                        "template"    => $action_,
+                        "id"          => $tid
+                    );
+
+                    $handels = new handlers($module, $action);
+                    $detail  = $handels->getHandle($tid);
+                    if(is_array($detail) && $detail['state'] == 100){
+                        $detail  = $detail['info'];
+                        if(is_array($detail)){
+                            $list[$key]['detail'] = $detail;
+
+                            if($module == "waimai" && $action == "order"){
+                                $list[$key]['detail']['title'] = $detail['shopname'];
+                            }
+
+                            if($commentcontent){
+                                $list[$key]['detail']['commentcontent'] = $commentcontent;
+                            }
+
+                            if($module == "info" && $action_ == "business"){
+                                $param = array(
+                                    "service"     => $module,
+                                    "template"    => "business",
+                                    "id"          => $detail['id'],
+                                );
+                            }
+
+                            if(!$detail['url']){
+                                $list[$key]['detail']['url'] = getUrlPath($param);
+                            }
+                        }
+                    }else{
+                        $handels = new handlers($module, $action."Detail");
+                        $detail  = $handels->getHandle($tid);
+
+                        if(is_array($detail) && $detail['state'] == 100){
+                            $detail  = $detail['info'];
+                            if(is_array($detail)){
+                                $list[$key]['detail'] = $detail;
+
+                                if($module == "travel" || ($module == "marry" && $action_ == "store") || ($module == "marry" && $action_ == "rental")){
+                                    $param = array(
+                                        "service"     => $module,
+                                        "template"    => $action_ . '-' . 'detail',
+                                        "id"          => $detail['id'],
+                                    );
+                                }
+
+                                if($commentcontent){
+                                    $list[$key]['detail']['commentcontent'] = $commentcontent;
+                                }
+
+                                if(!$detail['url']){
+                                    $list[$key]['detail']['url'] = getUrlPath($param);
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    $commentcontent = '';
+                    $sql = $dsql->SetQuery("SELECT `aid`, `oid`, `content` FROM `#@__public_comment` WHERE `id` = '".$val['tid']."' ");
+                    $ret = $dsql->dsqlOper($sql, "results");
+                    if($ret){
+                        $commentcontent = $ret[0]['content'];
+                        $tid = $ret[0]['oid'];
+                    }
+
+                    $sql = $dsql->SetQuery("SELECT o.`id`, o.`shop` shopname, o.`ordernum` ordernumstore FROM (`#@__public_comment` c LEFT JOIN `#@__paotui_order` o ON c.`oid` = o.`id`) WHERE c.`oid` = ".$tid);
+                    $shop = $dsql->dsqlOper($sql, "results");
+                    if($shop){
+                        $list[$key]['detail']['id']    = $shop[0]['id'];
+                        $list[$key]['detail']['title'] = $shop[0]['shopname'];
+                        $list[$key]['detail']['commentcontent'] = $commentcontent;
+                    }
+                }
+
                 $totalAudit = 0;
                 if($module == 'article' && $temp == 'detail'){
                     $sub = new SubTable('article', '#@__articlelist');
@@ -9024,6 +10009,13 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
                     }
                 }
                 $list[$key]['infoTotal'] = $totalAudit;
+
+                //帖子总数
+                if($module == 'tieba'){
+                    $sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__tieba_list` WHERE `state` = 1 AND `uid` = " . $val['ruid']);
+                    $ret = $dsql->dsqlOper($sql, "results");
+                    $list[$key]['tiziTotal'] = $ret[0]['t'];
+                }
 
 				//关注人数
 				$sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__member_follow` WHERE `tid` = " . $val['ruid']);
@@ -9043,7 +10035,7 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
 					$list[$key]['isfollow'] = 2;
 				}else{
 					$list[$key]['isfollow'] = 0;
-				}
+                }
 			}
 		}
 
@@ -9177,6 +10169,7 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
         global $cfg_returnPoint_waimai;
         global $cfg_returnPoint_homemaking;
         global $cfg_returnPoint_travel;
+        global $cfg_returnPoint_education;
         global $installModuleTitleArr;
 
         $ratio = 0;
@@ -9199,6 +10192,9 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
                 break;
             case 'travel':
                 $ratio = $cfg_returnPoint_travel;
+                break;
+            case 'education':
+                $ratio = $cfg_returnPoint_education;
                 break;
         }
         $title = $installModuleTitleArr[$module].$tit.$ordernum;
@@ -9912,6 +10908,50 @@ VALUES ('$mtype', '$phone', '$passwd', '$nickname', '$areaCode', '$phone', '1', 
             $url = getUrlPath($param);
         }
         return array('state' => $state, 'url' => $url);
+    }
+
+    /**
+     * 将点赞和评论更新为已读
+     */
+    public function updateRead(){
+        global $dsql;
+        global $userLogin;
+
+        $param = $this->param;
+
+        $uid = $userLogin->getMemberID();
+        if($uid <= 0) return array("state" => 200, "info" => self::$langData['siteConfig'][20][262]);//登录超时，请重新登录！
+
+        $type = $param['type'];
+
+        if($type == 'zan'){//点赞
+
+            $archives = $dsql->SetQuery("UPDATE `#@__public_up` SET `isread` = 1 WHERE `isread` = 0 and `uid` = '$uid'");
+            $res = $dsql->dsqlOper($archives, "update");
+        }else{
+            //评论未读
+            $where_ = " AND `userid` = '$uid'";
+            $sql = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1".$where_);
+            $ret = $dsql->dsqlOper($sql, "results");
+            $sidList = array();
+            foreach ($ret as $k => $v) {
+                array_push($sidList, $v['id']);
+            }
+            if(!empty($sidList)){
+                $whereC = " AND  (`sid` in(".join(',',$sidList).") or (`masterid` = '$uid' AND `sid` = '0'))";
+            }else{
+                $whereC = " AND  `masterid` = '$uid' AND `sid` = '0'";
+            }
+
+            $archives = $dsql->SetQuery("UPDATE `#@__public_comment` SET `isread` = 1 WHERE `isread` = 0 " . $whereC);
+            $res = $dsql->dsqlOper($archives, "update");
+        }
+
+        if($res == 'ok'){
+            return 'ok';
+        }else{
+            return '参数错误！';
+        }
     }
 
 }

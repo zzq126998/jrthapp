@@ -32,6 +32,7 @@ if(!empty($kongjian)) $kongjian = join(",", $kongjian);
 if(!empty($jubu)) $jubu = join(",", $jubu);
 if(empty($comstyle)) $comstyle = 0;
 if(empty($style)) $style = 0;
+if(empty($units)) $units = 0;
 
 if($_POST['submit'] == "提交"){
 

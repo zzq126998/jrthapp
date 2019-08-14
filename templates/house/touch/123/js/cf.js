@@ -157,7 +157,14 @@ $(function() {
 								vScrollbar: false
 							});
 						}else{
-
+							var html = [];
+							html.push('<li data-area="'+id+'" data-pname="'+name+'"><a href="javascript:;">全部</a></li>');
+							$("#scroll-third .scroll").html(html.join(""));
+							$('.cf .choose-local-second').css('width', '60.5%');
+							$('.area-third .choose-local-third').show();
+							myscroll = new iScroll("scroll-third", {
+								vScrollbar: false
+							});
 						}
 					}
 				},

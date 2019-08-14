@@ -213,6 +213,14 @@ if($dopost == "getList"){
 
 		}
 
+
+		//推送给所有设备（APP）
+		if($userType == 5){
+			sendapppush(0, $title, $_POST['body'], $_POST['url'], 'default', true);
+			die('{"state": 100, "info": "发送完成，请到推送平台查看统计信息！"}');
+			die;
+		}
+
 		if(empty($sql)) die('{"state": 200, "info": "没有符合条件的会员"}');
 		$ret = $dsql->dsqlOper($sql, "results");
 		if(!$ret) die('{"state": 200, "info": "没有符合条件的会员"}');

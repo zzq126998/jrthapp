@@ -1,5 +1,5 @@
-@charset utf8;
 html, body {background: #f5f5f5;}
+body {padding-bottom: .5rem;}
 .module {margin-top: .2rem;background: #fff;font-size: .24rem;}
 .module .title {height: .82rem;line-height: .82rem;padding:0 .24rem;border-bottom: 1px solid #ededed;}
 .module .title h3 {position: relative;float: left;padding-left: .3rem;font-size: .3rem;color: #2d2d2d;}

@@ -85,7 +85,7 @@ if($dopost == "getList"){
 			$list[$key]["tel"] = $value["tel"];
 			$list[$key]["address"] = $value["address"];
 			$list[$key]["state"] = $value["state"];
-			
+
 			$list[$key]["weight"] = $value["weight"];
 			$list[$key]["pubdate"] = date('Y-m-d H:i:s', $value["pubdate"]);
 
@@ -219,11 +219,11 @@ if(file_exists($tpl."/".$templates)){
 	$travel = new travel();
 	$moduleList = $travel->module_type();
 	$huoniaoTag->assign('moduleListArr', json_encode($moduleList));
-	
+
 	$huoniaoTag->assign('notice', $notice);
     $huoniaoTag->assign('cityList', json_encode($adminCityArr));
 	$huoniaoTag->assign('jsFile', includeFile('js', $jsFile));
-	$huoniaoTag->compile_dir = HUONIAOROOT."/templates_c/admin/marry";  //设置编译目录
+	$huoniaoTag->compile_dir = HUONIAOROOT."/templates_c/admin/travel";  //设置编译目录
 	$huoniaoTag->display($templates);
 }else{
 	echo $templates."模板文件未找到！";

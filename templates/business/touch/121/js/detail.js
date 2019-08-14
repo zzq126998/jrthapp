@@ -1,4 +1,10 @@
 $(function(){
+
+    /*调起大图 S*/
+    $.fn.bigImage({
+        artMainCon:".introCon",  //图片所在的列表标签
+    });
+
      // 轮播
     new Swiper('.swiper-container', {pagination: {el: '.swiper-pagination',type: 'fraction',},loop: false,grabCursor: true,paginationClickable: true});
 
@@ -93,11 +99,12 @@ $(function(){
     
     // 介绍
 	var slideHeight = 100; 
-    var defHeight = $('.textCon').height();
-    if(defHeight >= slideHeight){
+    var defHeight = $('.textCon > div').height();
+    if(defHeight >= slideHeight || $('.textCon img').length){
         $('.textCon').css('height' , slideHeight + 'px');
         $('.readMore').append('<a href="javascript:;">展开更多<i class="rmDown"></i></a>');
         $('.readMore a').click(function(){
+            defHeight = $('.textCon > div').height();
             var curHeight = $('.textCon').height();
             if(curHeight == slideHeight){
                 $('.textCon').animate({height: defHeight}, "normal");

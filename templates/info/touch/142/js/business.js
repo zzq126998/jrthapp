@@ -331,7 +331,7 @@ $(function () {
         
         var wcmt_text = $('#wcmt_text').val();
         $.ajax({
-            url: "/include/ajax.php?service=info&action=shopsendCommon&aid="+id+"&id="+0,
+            url : "/include/ajax.php?service=member&action=sendComment&type=info-business&check=1&aid="+id,
 			data: "content="+wcmt_text,
             type: "GET",
             dataType: "json",
@@ -342,7 +342,7 @@ $(function () {
                     var nickname = list.userinfo.nickname == null ? langData['info'][1][4] : list.userinfo.nickname;//匿名
                     var comdReplayUrl = comdetailUrl.replace("%id%", list.id);
 
-                    var list = '<li><div class="imgbox"><img src="'+photo+'" alt=""></div><div class="rightInfo"><h4>'+nickname+'</h4><p class="txtInfo">'+list.content+'</p><div class="rbottom"><div class="rtime">'+huoniao_.transTimes(list.dtime, 5)+'</div><div class="rbInfo"><a href="'+comdReplayUrl+'" class="btnReply"> <s></s> '+langData['info'][1][35]+' </a><a href="javascript:;" class="btnUp numZan" data-id="'+list.id+'"><em>'+list.good+'</em> </a></div></div></div></li>';
+                    var list = '<li><div class="imgbox"><img src="'+photo+'" alt=""></div><div class="rightInfo"><h4>'+nickname+'</h4><p class="txtInfo">'+list.content+'</p><div class="rbottom"><div class="rtime">'+huoniao_.transTimes(list.dtime, 5)+'</div><div class="rbInfo"><a href="'+comdReplayUrl+'" class="btnReply"> <s></s> '+langData['info'][1][35]+' </a><a href="javascript:;" class="btnUp numZan" data-id="'+list.id+'"><em>'+list.zan+'</em> </a></div></div></div></li>';
                     
                     $('.commentList ul').prepend(list);
                     $('.mark').hide();
@@ -369,20 +369,35 @@ $(function () {
           return false;
         }
         var t = $(this), id = t.attr("data-id");
-        if(t.hasClass("al_zan")) return false;
+        // if(t.hasClass("al_zan")) return false;
         var num = t.find("em").html();
         if( typeof(num) == 'object') {
             num = 0;
         }
-        num++;
+        var type = 'add';
+        if(t.hasClass("al_zan")){
+            type = 'del';
+            num--;
+        }else{
+            num++;
+        }
 
         $.ajax({
-            url: "/include/ajax.php?service=info&action=shopdingCommon&id="+id,
+            url: "/include/ajax.php?service=member&action=dingComment&id="+id+"&type="+type,
             type: "GET",
             dataType: "jsonp",
             success: function (data) {
-              t.addClass('al_zan');
-              t.find('em').html(num);
+                if(data.state==100){
+                    if(t.hasClass("al_zan")){
+                        t.removeClass('al_zan');
+                    }else{
+                        t.addClass('al_zan');
+                    }
+                    t.find('em').html(num);
+                }else{
+                    alert(data.info);
+                    t.removeClass('al_zan');
+                }
             }
         });
     });

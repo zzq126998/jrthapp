@@ -526,7 +526,7 @@ function getList(){
 							huodongHtml.push('</ul>');
 							huodongHtml.push('<div class="huodong_foot fn-clear"><em>'+langData['siteConfig'][23][123]+'</em><div class="share_box"><div class="bdsharebuttonbox"  data-url="'+list[i].url+'" data-litpic="'+list[i].litpic+'" data-title="'+list[i].title+'"><div class="Share_QQ Share"><a href="#"class="bds_sqq"data-cmd="sqq"title="'+langData['siteConfig'][23][119]+'"></a><i></i></div><div class="Share_weixin Share"><a href="#"class="bds_weixin"data-cmd="weixin"title="'+langData['siteConfig'][23][120]+'"></a><i></i></div><div class="Share_weibo Share"><a href="#"class="bds_tsina"data-cmd="tsina"title="'+langData['siteConfig'][23][121]+'"></a><i></i></div></div></div></div>');
 							//分享到--分享到QQ好友--分享到微信--分享到新浪微博
-							var baoming = nowStamp > list[i].end ? '<span class="donthave">'+langData['siteConfig'][19][507]+'</span>' : '<a href="' + list[i].url + '" class="have">'+langData['siteConfig'][6][149]+'</a>';   
+							var baoming = nowStamp > list[i].end ? '<span class="donthave">'+langData['siteConfig'][19][507]+'</span>' : '<a href="' + list[i].url + '" class="have">'+langData['siteConfig'][6][149]+'</a>';
 							//已结束--我要报名
 							huodongHtml.push('<div class="huodong_btnbox fn-clear"><div class="per_num"><em>'+langData['siteConfig'][23][124]+'</em><span>' + list[i].reg + langData['siteConfig'][13][32]+'</span></div><div class="in_btn">'+baoming+'</div></div>');
 							//新浪微博----年龄、性别、区域
@@ -558,7 +558,7 @@ function getList(){
 								tiebaHtml.push('</ul>');
 							}
 
-							tiebaHtml.push('<div class="tie_foot"><em>' + transTimes(list[i].pubdate, 3) + '</em><span> '+langData['siteConfig'][16][114] + list[i].reply + '</span></div>');  //已接单
+							tiebaHtml.push('<div class="tie_foot"><em>' + transTimes(list[i].pubdate, 3) + '</em><span> '+langData['siteConfig'][19][394] + list[i].reply + '</span></div>');  //浏览
 							tiebaHtml.push('</div>');
 							tiebaHtml.push('</div>');
 
@@ -603,7 +603,7 @@ function getList(){
 								houseHtml.push('<div class="hosue_tips">');
 								houseHtml.push('</div>');
 								houseHtml.push('<div class="house_type">'+list[i].community+' / '+list[i].area+'m² / '+list[i].room+' / '+list[i].bno+langData['siteConfig'][13][12]+'<em>('+langData['siteConfig'][13][13]+list[i].floor+langData['siteConfig'][13][12]+')</em> / '+list[i].direction+' / '+list[i].zhuangxiu+'</div>');
-								// 层---共---层 
+								// 层---共---层
 								var addr = list[i].addr[1] != undefined ? '-'+list[i].addr[1] : '';
 								houseHtml.push('<div class="house_location"><i></i>'+list[i].addr[0]+addr+'</div>');
 								houseHtml.push('<div class="hosue_foot fn-clear"><div class="house_time"><i></i>' + transTimes(list[i].pubdate, 3) + '</div><div class="house_sell_price"><em>'+echoCurrency('symbol')+list[i].price+'</em> /'+langData['siteConfig'][13][18]+'</div></div>');
@@ -655,7 +655,7 @@ function getList(){
 								houseHtml.push('<div class="hosue_tips">');
 								houseHtml.push('</div>');
 								houseHtml.push('<div class="house_type">'+list[i].protype+' / '+list[i].area+'m² / '+list[i].bno+langData['siteConfig'][13][12]+'<em>('+langData['siteConfig'][13][13]+list[i].floor+langData['siteConfig'][13][12]+')</em> / '+list[i].zhuangxiu+'</div>');
-								// 层---共---层 
+								// 层---共---层
 
 								var addr = list[i].addr[1] != undefined ? '-'+list[i].addr[1] : '';
 								houseHtml.push('<div class="house_location"><i></i>'+list[i].addr[0]+addr+'</div>');

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<title>{#$detail_title#}，{#$detail_addr[0]#}{#$detail_addr[1]#}租房-{#$house_title#}</title>
+<title>{#$detail_title#}</title>
 <meta name="keywords" content="{#$detail_community#} {#$detail_room#} {#$detail_area#}平米 {#$detail_price#}{#echoCurrency type='short'#}租房,{#$siteCityInfo['name']#}{#$detail_community#}推荐房屋出租,{#$detail_community#}租房房源" />
 <meta name="description" content="{#$siteCityInfo['name']#}{#$cfg_shortname#}{#$detail_community#} {#$detail_room#} {#$detail_area#}平米 {#$detail_price#}{#echoCurrency type='short'#}租房推荐，{#$detail_community#} {#$detail_room#} {#$detail_area#}平米 {#$detail_price#}{#echoCurrency type='short'#}是用户值得关注的好房源，向{#$siteCityInfo['name']#}租房用户推荐{#$siteCityInfo['name']#}{#$detail_community#}优质租房房源。" />
 <link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/core/touchBase.css?v={#$cfg_staticVersion#}" />
@@ -36,6 +36,15 @@
 		"action" : 'zu',
 		"id" : '{#$detail_id#}'
 	};
+
+	var imconfig = {
+		'mod':'house',
+		'chatid':"{#$detail_user.uid#}",
+		'title': '[{#$detail_rentype#}]{#$detail_title#}',
+		"price": '{#$detail_price#}元/月',
+		"imgUrl": '{#changeFileSize url={#$detail_litpic#} type='small'#}',
+		"link": '{#getUrlPath service="house" template="zu-detail" id=$detail_id#}',
+	}
 </script>
 </head>
 
@@ -147,7 +156,7 @@
             <p>{#if $detail_user.zjcomId#}{#$detail_user.zjcomName#}{#else#}独立经纪人{#/if#}</p>
         </div>
         <div class="im_icon">
-            {#if $detail_user.qq#}<span class="im_qq"></span>{#/if#}
+{#*            {#if $detail_user.qq#}<span class="im_qq"></span>{#/if#}
         {#if $detail_contact == '' || $detail_contact == $detail_user.phone#}
             {#if $detail_user.wx || $detail_user.wxQr#}
                 <span class="im_wx"></span>
@@ -156,6 +165,8 @@
                 <span class="im_wx"></span>
         {#/if#}
             <span class="im_iphone"></span>
+*#}
+			<span class="im_iphone phone_btn">电话咨询</span>
         </div>
         {#else#}
         <div class="im_name">
@@ -165,7 +176,7 @@
             <p>{#$detail_contact#}</p>
         </div>
         <div class="im_icon">
-            <span class="im_iphone"></span>
+            <span class="im_iphone phone_btn">电话咨询</span>
         </div>
         {#/if#}
     </div>
@@ -234,7 +245,8 @@
         {#/if#}
     </div>
     <div class="big-wrapper">
-        <a href="{#getUrlPath service=house template=yuyue param="type=zu&id={#$detail_id#}"#}" class="button post_ulog"><i></i>预约看房</a> <a href="tel:{#if $detail_usertype == 1#}{#$detail_user.phone#}{#else#}{#$detail_contact#}{#/if#}" class="button call_phone"><i></i>电话咨询</a>
+        <a href="{#getUrlPath service=house template=yuyue param="type=zu&id={#$detail_id#}"#}" class="button post_ulog"><i></i>预约看房</a>
+		{#if $detail_user.uid#}<a href="javascript:;" class="button call_phone chat_to-Link" data-type="detail"><i></i>在线咨询</a>{#/if#}
     </div>
 </div>
 
@@ -293,7 +305,8 @@
     {#/if#}
     <i class="phone_cuo"></i>
 </div>
-
+<!-- 图片放大 -->
+{#include file="../../../siteConfig/bigimg_1.2.html"#}
 <script type="text/javascript">
 	var cenicon = "{#$templets_skin#}images/mark_ditu.png";
     var iconimg = "{#$templets_skin#}images/map_icon.png";
@@ -313,5 +326,11 @@
 <script src="{#$cfg_staticPath#}js/publicOpenMap.js?v={#$cfg_staticVersion#}"></script>
 {#include file="{#$HUONIAOROOT#}/templates/siteConfig/public_location.html"#}
 <script type="text/javascript" src="{#$templets_skin#}js/map-detail-{#$site_map#}.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript">
+    //放大图片
+    $.fn.bigImage({
+        artMainCon:".housing_txt",  //图片所在的列表标签
+    });
+</script>
 </body>
 </html>

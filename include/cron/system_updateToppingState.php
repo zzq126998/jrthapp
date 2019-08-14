@@ -33,6 +33,10 @@ if(in_array('car', $installModuleArr)){
   array_push($topping_tab, 'car_list');
 }
 
+if(in_array('education', $installModuleArr)){
+  array_push($topping_tab, 'education_courses');
+}
+
 if($topping_tab){
   foreach ($topping_tab as $key => $value) {
     $sql = $dsql->SetQuery("UPDATE `#@__".$value."` SET `isbid` = 0 WHERE `bid_end` < $topping_time");

@@ -63,24 +63,24 @@ function getData(id){
 								html.push('</li>')
 							}
 						}
-						$('#chanel_'+id).append(html.join(''));
+						$('#chanel_'+$('.item'+id).index()).append(html.join(''));
 						$('#nav_item_'+id).attr('data-type',0);
 						if(atpage >= data.info.pageInfo.totalPage){
 							$('#nav_item_'+id).attr('data-type',1);
-							$('#chanel_'+id).append('<div class="loading">已经到最后一页了</div>');
+							$('#chanel_'+$('.item'+id).index()).append('<div class="loading">已经到最后一页了</div>');
 						}
-						
+
 					//请求失败
 					}else{
 						console.log(data.info);
-						$('#chanel_'+id).append('<div class="loading">暂无数据</div>');
+						$('#chanel_'+$('.item'+id).index()).append('<div class="loading">暂无数据</div>');
 					}
 				//加载失败
 				}else{
 					console.log(data.info);
-					$('#chanel_'+id).append('<div class="loading">暂无数据</div>');
+					$('#chanel_'+$('.item'+id).index()).append('<div class="loading">暂无数据</div>');
 				}
-				hchange = $('#chanel_'+id).height();
+				hchange = $('#chanel_'+$('.item'+id).index()).height();
 				console.log('此时高度'+hchange);
 			},
 			error: function(){
@@ -90,10 +90,10 @@ function getData(id){
 		});
 }
 
- 
+
 // 下拉加载
 $(window).scroll(function() {
-	
+
 	var id = $('.curr').attr('data-id')
 	var h = $('.footer').height() + $('.content li').height() * 2;
 	var allh = $('body').height();
@@ -110,12 +110,11 @@ $(window).scroll(function() {
 		return 0;
 //		$('.swiper-container').css('height',hchange)
 	}else{
-		
 		mySwiper.updateAutoHeight(hnochange);
 		console.log('这是滚动不加载的高度');
 		return 0;
 	};
-	
+
 });
 
 //导航栏加载成功时
@@ -129,11 +128,11 @@ for(var i=0;i<len;i++){
 		on: {
 		    init: function(){
 		      console.log('当前的slide序号是'+this.activeIndex);
-		      getData(this.activeIndex);
-		    }, 
-			
+		      getData($("#nav_list .item:eq("+this.activeIndex+")").attr('data-id'));
+		    },
+
 		    slideChangeTransitionEnd: function(){
-		      var x = $('#nav_item_'+this.activeIndex).offset();
+		      var x = $('#nav_list .item:eq('+this.activeIndex+')').offset();
 			  hnochange = $('.item').eq(this.activeIndex).height()
 		      $('.item').eq(this.activeIndex).addClass('curr').siblings('.item').removeClass('curr');
 		      isload =  $('.item').eq(this.activeIndex).attr('data-type');
@@ -147,11 +146,11 @@ for(var i=0;i<len;i++){
 		        }else{
 		        	$('#nav').scrollLeft(0);
 		        }
-		      if(isload==0&& len==0){
+		      if(isload==0 && len==0){
 		      	$(window).scrollTop(0);
 		      	atpage=1;
 		      	$('#chanel_'+this.activeIndex).html('');
-		      	getData(this.activeIndex*1);
+		      	getData($("#nav_list .item:eq("+(this.activeIndex*1)+")").attr('data-id'));
 		      	mySwiper.updateAutoHeight(hchange)
 		      	console.log('这是第一次加载的高度')
 		      }else{
@@ -161,7 +160,7 @@ for(var i=0;i<len;i++){
 		    },
 		  },
 	});
-	
+
 	// 点击导航
     $('#nav_list .item').click(function(){
         $(window).scrollTop(0);
@@ -179,22 +178,22 @@ for(var i=0;i<len;i++){
         	console.log('已经加载过数据，点击事件');
         }else{
         	$(this).addClass('curr').siblings('.item').removeClass('curr');
-        	
-        	mySwiper.slideTo(id, 500, false);//切换到第一个slide，速度为1秒;
-        	var len = $('#chanel_'+id).children('li').length;
+
+        	mySwiper.slideTo(index, 500, false);//切换到第一个slide，速度为1秒;
+        	var len = $('#chanel_'+index).children('li').length;
         	console.log('长度'+len)
         	//判断是否加载过数据,如果没有加载数据
         	if(isload==0&&len==0){
         		atpage=1;
-        		$('#chanel_'+id).html('');
+        		$('#chanel_'+index).html('');
         		getData(id);
         		console.log('点击'+id);
         	}
         }
 
     });
-    
-    
-    
+
+
+
 
 })

@@ -22,6 +22,9 @@
         var page = 1, pageSize = 10, detailListId = 'maincontent', keyword = "{#$keywords#}";
         var user_id = '{#$userInfo_['userid']#}';
         var detail_video='{#$detail_video#}';
+        var imconfig = {
+        	chatid : '{#$userInfo_['userid']#}',
+        }
     </script>
 </head>
 <body>
@@ -85,7 +88,8 @@
         <!--<div class="plBox l-item"><a href=""><s></s><p>评论</p></a></div>-->
     </div>
     <div class="f_right">
-        <div class="ftel tel-box r-item"><a href="javascript:;"><i></i><span>{#$langData['info'][0][14]#}</span></a></div>{#* 联系咨询 *#}
+        <div class="f_chat r-item chat_to-Link" data-type="user"><a href="javascript:;"><i></i><span>在线咨询</span></a></div>{#* 在线咨询 *#}
+        <div class="ftel tel-box r-item"><a href="javascript:;"><i></i><span>电话联系</span></a></div>{#* 电话联系 *#}
     </div>
 </div>
 

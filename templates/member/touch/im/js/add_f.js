@@ -1,31 +1,51 @@
-//积分充值
-
+var userinfo;
 $(function(){
+	//获取当前登录用户的信息
+    $.ajax({
+        url: '/include/ajax.php?service=siteConfig&action=getImToken',
+        type: 'post',
+        dataType: 'json',
+        success: function(data){
+            if(data.state == 100){
+                var info = data.info;
+               userinfo = info;
+//              chatToken = info.token;
+//              chatServer = info.server;
+//              AccessKeyID = info.AccessKeyID;
+				console.log(userid)
+            }else{
+                alert(data.info);
+            }
+        },
+        error: function(){
+            alert('网络错误，初始化失败！');
+        }
+    });
 	//此处为积分充值 的js
-	$('.im-integral_box').delegate('a','click',function(){
-		var integral = $(this).find('.im-get_integral').text();
-		var money = $(this).find('.im-button_money').text();
-		var dialog = jqueryAlert({
-	      'title'   : '',
-	      'content' : ' 确定充值'+integral+'？<br/> 实际支付'+money,
-	       'modal'   : true,
-//	       'animateType':'linear',
-	       'height':'2.6rem',
-	       'buttons' :{
-	          '去支付' : function(){
-	             dialog.close();
-	             setTimeout(function(){
-	             	showMsg('此处应该跳转页面')//跳转支付页面
-	             },400)
-	           },
-	           '再看看' : function(){
-	               dialog.close();
-	           },
-	           
-	      }
-		});
-	});
-	
+//	$('.im-integral_box').delegate('a','click',function(){
+//		var integral = $(this).find('.im-get_integral').text();
+//		var money = $(this).find('.im-button_money').text();
+//		var dialog = jqueryAlert({
+//	      'title'   : '',
+//	      'content' : ' 确定充值'+integral+'？<br/> 实际支付'+money,
+//	       'modal'   : true,
+////	       'animateType':'linear',
+//	       'height':'2.6rem',
+//	       'buttons' :{
+//	          '去支付' : function(){
+//	             dialog.close();
+//	             setTimeout(function(){
+//	             	showMsg('此处应该跳转页面')//跳转支付页面
+//	             },400)
+//	           },
+//	           '再看看' : function(){
+//	               dialog.close();
+//	           },
+//	           
+//	      }
+//		});
+//	});
+
 	//截取url
 	var str = window.location.hash;
 //	var type = str.slice(1);//1是好友  2是关注  3是粉丝
@@ -34,7 +54,7 @@ $(function(){
 //	}else if(type==2||type==3){
 //		$('.im-add_btn_group .im-add_btn').removeClass('im-del_btn').text('加好友');  //删除好友
 //	}
-	
+
 	//获取用户信息
 	var url = window.location.pathname;
 	if (url.indexOf("-") != -1){
@@ -71,8 +91,8 @@ $(function(){
 					$('.userid .im-info_right').text(detail.userid);
 					var addr =  detail.addrName?(detail.addrName.split('>')[0]+detail.addrName.split('>')[1]):''
 					$('.userarea .im-info_right').text(addr);
-					
-	               
+
+
 	            }else{
 	                alert(data.info);
 	            }
@@ -85,9 +105,9 @@ $(function(){
 
 
 	}
-	
 
-	
+
+
 	//添加好友
 	$('body').delegate('.im-add_btn','click',function(){
 		if($(this).hasClass('im-del_btn')){
@@ -102,7 +122,7 @@ $(function(){
 		            		showMsg(data.info);
 		            		$('.im-add_btn_group .im-add_btn').removeClass('im-del_btn').text('加好友');
 		            	},500)
-		            	
+
 		            }else{
 		                alert(data.info);
 		            }
@@ -118,9 +138,24 @@ $(function(){
 		}
 	});
 	
-	$('body').delegate('.im-chat_width','click',function(){
-		var url = 'chat-'+userid+'.html';
-		window.location.href = url;
-	});
-	
+//	$('body').delegate('.im-chat_width','click',function(){
+//		var url = 'chat-'+userid+'.html';
+//		window.location.href = url;
+//	});
+	$('.im-add_infobox').delegate('.im-chat_width','click',function(){
+		var to = $(this).attr('data-id');
+		if(device.indexOf('huoniao') > -1){
+			var param = {
+			    from: userinfo['uid'],
+			    to: userid,
+			}; 
+			setupWebViewJavascriptBridge(function(bridge) {
+			     bridge.callHandler('invokePrivateChat',  param, function(responseData){});
+			});
+			return false;
+		}else{
+			var url = 'chat-'+userid+'.html';
+			window.location.href = url;
+		}
+	})
 })

@@ -14,7 +14,8 @@ $userLogin = new userLogin($dbo);
 $tpl = dirname(__FILE__)."/../templates/message";
 $huoniaoTag->template_dir = $tpl; //设置后台模板目录
 
-$dbname = "waimai_common";
+// $dbname = "waimai_common";
+$dbname = "public_comment";
 $templates = "waimaiCommonReply.html";
 
 if(!empty($action) && !empty($id)){
@@ -37,7 +38,7 @@ if($action == "reply"){
         die;
     }
 
-    $sql = $dsql->SetQuery("SELECT `replydate` FROM `#@__waimai_common` WHERE `id` = $id");
+    $sql = $dsql->SetQuery("SELECT `replydate` FROM `#@__public_comment` WHERE `id` = $id");
     $ret = $dsql->dsqlOper($sql, "results");
     if(!$ret){
         echo '{"state":200, "info":"评论不存在"}';
@@ -47,7 +48,7 @@ if($action == "reply"){
     if($ret[0]['replydate'] != 0){
         echo '{"state":200, "info":"您已经回复过"}';
     }else{
-        $sql = $dsql->SetQuery("UPDATE `#@__waimai_common` SET `reply` = '$content', `replydate` = '$pubdate' WHERE `id` = $id");
+        $sql = $dsql->SetQuery("UPDATE `#@__public_comment` SET `reply` = '$content', `replydate` = '$pubdate' WHERE `id` = $id");
         $ret = $dsql->dsqlOper($sql, "results");
         if($ret = "ok"){
             echo '{"state":100, "info":"提交成功"}';
@@ -60,7 +61,7 @@ if($action == "reply"){
 }
 
 $where = " AND c.`sid` in ($managerIds)";
-$sql = $dsql->SetQuery("SELECT c.*, s.`shopname` FROM `#@__$dbname` c LEFT JOIN `#@__waimai_shop` s ON s.`id` = c.`sid` WHERE c.`id` = $id".$where);
+$sql = $dsql->SetQuery("SELECT c.*, s.`shopname` FROM `#@__$dbname` c LEFT JOIN `#@__waimai_shop` s ON s.`id` = c.`aid` WHERE c.`id` = $id".$where);
 $ret = $dsql->dsqlOper($sql, "results");
 if($ret){
     $pics = $ret[0]['pics'];

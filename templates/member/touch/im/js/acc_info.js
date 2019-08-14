@@ -202,7 +202,7 @@ $('.im-acc_info').click(function(){
         success: function(data){
             if(data.state == 100){
                var detail = data.info;
-               $('.im-left_head').children('img').attr('src',detail.photo);   //头像
+               $('.im-left_head').children('img').attr('src',detail.photo?detail.photo:staticPath+"images/noPhoto_60.jpg"); //头像
                $('.im-right_info h2').text(detail.nickname);
                if(detail.levelIcon != ''){
                		$('.vip_level img').attr('src',detail.levelIcon);   //vip的图标
@@ -233,7 +233,11 @@ $('.im-acc_info').click(function(){
     });
     
 
-
+function nofind(){ 
+	var img = event.srcElement; 
+	img.src = staticPath+"images/noPhoto_60.jpg"; 
+	img.onerror = null;
+} 
 //加好友
 $('.im-add_btn').click(function(){
 	var url = userDomain+'f_test-'+user_id+'.html'
@@ -299,7 +303,7 @@ function msgto(msg,type){
         //拼接对话
         if (from == userinfo['uid']) {
         	gest ='im-to_other';
-        	imghead = '<div class="im-m_head"><a href="javascript:;"><img src="'+userinfo['photo']+'"></a></div>';
+        	imghead = '<div class="im-m_head"><a href="javascript:;"><img src="'+(userinfo['photo']?userinfo['photo']:staticPath+"images/noPhoto_60.jpg")+'"></a></div>';
             var fromUser = "<span style='color: red;'>你</span>";
             sf = true;
         } else {
@@ -308,7 +312,7 @@ function msgto(msg,type){
 		
         if (to == userinfo['uid']) {
         	gest ='im-from_other';
-        	imghead = '<div class="im-m_head"><a href="'+userDomain+'acc_info-'+toUserinfo['uid']+'.html"><img src="'+toUserinfo['photo']+'"></a></div>';
+        	imghead = '<div class="im-m_head"><a href="'+userDomain+'acc_info-'+toUserinfo['uid']+'.html"><img src="'+(toUserinfo['photo']?toUserinfo['photo']:staticPath+"images/noPhoto_60.jpg")+'"></a></div>';
            
         } else {
             var toUser = toUserinfo['name'];
@@ -366,7 +370,7 @@ function msgto(msg,type){
         //好友推荐
         if(data.contentType == 'recfriend'){
         	typemsg = 'im-recf_content';
-        	text = '<a href="add_friend-'+data.content.f_id+'.html"><dl><dt>推荐好友</dt><dd class="fn-clear"><div class="im-recf_head"><img src="'+data.content.f_photo+'"/><i class="level"></i></div><div class="im-recf_info"><h2>'+data.content.f_name+'</h2><p>ID：'+data.content.f_id+'</p></div></dd></dl></a>'
+        	text = '<a href="add_friend-'+data.content.f_id+'.html"><dl><dt>推荐好友</dt><dd class="fn-clear"><div class="im-recf_head"><img src="'+(data.content.f_photo?data.content.f_photo:staticPath+"images/noPhoto_60.jpg")+'"/><i class="level"></i></div><div class="im-recf_info"><h2>'+data.content.f_name+'</h2><p>ID：'+data.content.f_id+'</p></div></dd></dl></a>'
 			console.log(data)
         }
         

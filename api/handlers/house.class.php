@@ -5673,13 +5673,14 @@ class house {
 			if($userid != 0 && $userid != -1){
 
 				if($results[0]['zjcom'] == 0){
-					$archives = $dsql->SetQuery("SELECT m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr` FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
+					$archives = $dsql->SetQuery("SELECT m.`id`, m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr` FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
 				}else{
-					$archives = $dsql->SetQuery("SELECT m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr`, zjcom.`title`, zjcom.`id` zjcomId FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` LEFT JOIN `#@__house_zjcom` zjcom ON zj.`zjcom` = zjcom.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
+					$archives = $dsql->SetQuery("SELECT m.`id`, m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr`, zjcom.`title`, zjcom.`id` zjcomId FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` LEFT JOIN `#@__house_zjcom` zjcom ON zj.`zjcom` = zjcom.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
 				}
 
 				$member = $dsql->dsqlOper($archives, "results");
 				if($member){
+					$uid       = $member[0]['id'];
 					$nickname  = $member[0]['nickname'];
 					$photo     = $member[0]['litpic'] ? getFilePath($member[0]['litpic']) : getFilePath($member[0]['photo']);
 					$phone     = $member[0]['phone'];
@@ -5703,6 +5704,7 @@ class house {
 
 				$url = getUrlPath(array("service" => "house", "template" => "broker-detail", "id" => $userid));
 
+				$userArr['uid']       = (int)$uid;
 				$userArr['nickname']  = $nickname;
 				$userArr['photo']     = $photo;
 				$userArr['phone']     = $phone;
@@ -6899,13 +6901,14 @@ class house {
 			if($userid != 0 && $userid != -1){
 
 				if($results[0]['zjcom'] == 0){
-					$archives = $dsql->SetQuery("SELECT m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr` FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
+					$archives = $dsql->SetQuery("SELECT m.`id`, m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr` FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
 				}else{
-					$archives = $dsql->SetQuery("SELECT m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr`, zjcom.`title`, zjcom.`id` zjcomId FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` LEFT JOIN `#@__house_zjcom` zjcom ON zj.`zjcom` = zjcom.`id` WHERE zj.`state` = 1 AND zjcom.`state` = 1 AND zj.`id` = ".$userid);
+					$archives = $dsql->SetQuery("SELECT m.`id`, m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr`, zjcom.`title`, zjcom.`id` zjcomId FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` LEFT JOIN `#@__house_zjcom` zjcom ON zj.`zjcom` = zjcom.`id` WHERE zj.`state` = 1 AND zjcom.`state` = 1 AND zj.`id` = ".$userid);
 				}
 
 				$member = $dsql->dsqlOper($archives, "results");
 				if($member){
+					$uid       = $member[0]['id'];
 					$nickname  = $member[0]['nickname'];
                     $photo     = $member[0]['litpic'] ? getFilePath($member[0]['litpic']) : getFilePath($member[0]['photo']);
 					$phone     = $member[0]['phone'];
@@ -6929,6 +6932,7 @@ class house {
 
 				$url = getUrlPath(array("service" => "house", "template" => "broker-detail", "id" => $userid));
 
+				$userArr['uid']       = (int)$uid;
 				$userArr['nickname']  = $nickname;
 				$userArr['photo']     = $photo;
 				$userArr['phone']     = $phone;
@@ -7702,13 +7706,14 @@ class house {
 			if($userid != 0 && $userid != -1){
 
 				if($results[0]['zjcom'] == 0){
-					$archives = $dsql->SetQuery("SELECT m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr` FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
+					$archives = $dsql->SetQuery("SELECT m.`id`, m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr` FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
 				}else{
-					$archives = $dsql->SetQuery("SELECT m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr`, zjcom.`title`, zjcom.`id` zjcomId FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` LEFT JOIN `#@__house_zjcom` zjcom ON zj.`zjcom` = zjcom.`id` WHERE zj.`state` = 1 AND zjcom.`state` = 1 AND zj.`id` = ".$userid);
+					$archives = $dsql->SetQuery("SELECT m.`id`, m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr`, zjcom.`title`, zjcom.`id` zjcomId FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` LEFT JOIN `#@__house_zjcom` zjcom ON zj.`zjcom` = zjcom.`id` WHERE zj.`state` = 1 AND zjcom.`state` = 1 AND zj.`id` = ".$userid);
 				}
 
 				$member = $dsql->dsqlOper($archives, "results");
 				if($member){
+					$uid       = $member[0]['id'];
 					$nickname  = $member[0]['nickname'];
                     $photo     = $member[0]['litpic'] ? getFilePath($member[0]['litpic']) : getFilePath($member[0]['photo']);
 					$phone     = $member[0]['phone'];
@@ -7732,6 +7737,7 @@ class house {
 
 				$url = getUrlPath(array("service" => "house", "template" => "broker-detail", "id" => $userid));
 
+				$userArr['uid']       = (int)$uid;
 				$userArr['nickname']  = $nickname;
 				$userArr['photo']     = $photo;
 				$userArr['phone']     = $phone;
@@ -8449,12 +8455,13 @@ class house {
 			$nickname = $photo = $phone = $certify = $flag = $zjcomName = $zjcomId = "";
 			if($userid != 0 && $userid != -1){
 				if($results[0]['zjcom'] == 0){
-					$archives = $dsql->SetQuery("SELECT m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr` FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
+					$archives = $dsql->SetQuery("SELECT m.`id`, m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr` FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
 				}else{
-					$archives = $dsql->SetQuery("SELECT m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr`, zjcom.`title`, zjcom.`id` zjcomId FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` LEFT JOIN `#@__house_zjcom` zjcom ON zj.`zjcom` = zjcom.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
+					$archives = $dsql->SetQuery("SELECT m.`id`, m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr`, zjcom.`title`, zjcom.`id` zjcomId FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` LEFT JOIN `#@__house_zjcom` zjcom ON zj.`zjcom` = zjcom.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
 				}
 				$member = $dsql->dsqlOper($archives, "results");
 				if($member){
+					$uid       = $member[0]['id'];
 					$nickname  = $member[0]['nickname'];
                     $photo     = $member[0]['litpic'] ? getFilePath($member[0]['litpic']) : getFilePath($member[0]['photo']);
 					$phone     = $member[0]['phone'];
@@ -8477,6 +8484,7 @@ class house {
 					$qqQr      = $member[0]['qqQr'] ? getFilePath($member[0]['qqQr']) : "";
 					$wxQr      = $member[0]['wxQr'] ? getFilePath($member[0]['wxQr']) : "";
 				}
+				$userArr['uid']       = (int)$uid;
 				$userArr['nickname']  = $nickname;
 				$userArr['photo']     = $photo;
 				$userArr['phone']     = $phone;
@@ -9168,13 +9176,14 @@ class house {
 			if($userid != 0 && $userid != -1){
 
 				if($results[0]['zjcom'] == 0){
-					$archives = $dsql->SetQuery("SELECT m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr` FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
+					$archives = $dsql->SetQuery("SELECT m.`id`, m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr` FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
 				}else{
-					$archives = $dsql->SetQuery("SELECT m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr`, zjcom.`title`, zjcom.`id` zjcomId FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` LEFT JOIN `#@__house_zjcom` zjcom ON zj.`zjcom` = zjcom.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
+					$archives = $dsql->SetQuery("SELECT m.`id`, m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr`, zjcom.`title`, zjcom.`id` zjcomId FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` LEFT JOIN `#@__house_zjcom` zjcom ON zj.`zjcom` = zjcom.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
 				}
 
 				$member = $dsql->dsqlOper($archives, "results");
 				if($member){
+					$uid       = $member[0]['id'];
 					$nickname  = $member[0]['nickname'];
                     $photo     = $member[0]['litpic'] ? getFilePath($member[0]['litpic']) : getFilePath($member[0]['photo']);
 					$phone     = $member[0]['phone'];
@@ -9198,6 +9207,7 @@ class house {
 
 				$url = getUrlPath(array("service" => "house", "template" => "broker-detail", "id" => $userid));
 
+				$userArr['uid']       = (int)$uid;
 				$userArr['nickname']  = $nickname;
 				$userArr['photo']     = $photo;
 				$userArr['phone']     = $phone;
@@ -9491,6 +9501,8 @@ class house {
 		global $dsql;
 		$type = $page = $pageSize = $where = "";
 
+		$cityid = getCityId();
+
 		if(!empty($this->param)){
 			if(!is_array($this->param)){
 				return array("state" => 200, "info" => '格式错误！');
@@ -9502,7 +9514,7 @@ class house {
 			}
 		}
 		// $results = $dsql->getTypeList($type, "house_newstype", $son, $page, $pageSize);
-        $results = getCache("house_newstype", function() use($dsql, $type, $son, $page, $pageSize){
+        $results = getCache("house_newstype_" . $cityid, function() use($dsql, $type, $son, $page, $pageSize){
             return $dsql->getTypeList($type, "house_newstype", $son, $page, $pageSize);
         }, 0, array("sign" => $type."_".(int)$son, "savekey" => 1));
 		if($results){
@@ -13985,12 +13997,13 @@ class house {
 			$nickname = $photo = $phone = $certify = $flag = $zjcomName = $zjcomId = "";
 			if($userid != 0 && $userid != -1){
 				if($results[0]['zjcom'] == 0){
-					$archives = $dsql->SetQuery("SELECT m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr` FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
+					$archives = $dsql->SetQuery("SELECT m.`id`, m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr` FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
 				}else{
-					$archives = $dsql->SetQuery("SELECT m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr`, zjcom.`title`, zjcom.`id` zjcomId FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` LEFT JOIN `#@__house_zjcom` zjcom ON zj.`zjcom` = zjcom.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
+					$archives = $dsql->SetQuery("SELECT m.`id`, m.`nickname`, m.`photo`, m.`phone`, m.`certifyState`, m.`sex`, zj.`flag`, zj.`zjcom`, zj.`litpic`, zj.`wx`, zj.`wxQr`, zj.`qq`, zj.`qqQr`, zjcom.`title`, zjcom.`id` zjcomId FROM `#@__member` m LEFT JOIN `#@__house_zjuser` zj ON zj.`userid` = m.`id` LEFT JOIN `#@__house_zjcom` zjcom ON zj.`zjcom` = zjcom.`id` WHERE zj.`state` = 1 AND zj.`id` = ".$userid);
 				}
 				$member = $dsql->dsqlOper($archives, "results");
 				if($member){
+					$uid       = $member[0]['id'];
 					$nickname  = $member[0]['nickname'];
                     $photo     = $member[0]['litpic'] ? getFilePath($member[0]['litpic']) : getFilePath($member[0]['photo']);
 					$phone     = $member[0]['phone'];
@@ -14014,6 +14027,7 @@ class house {
                 }
                 $url = getUrlPath(array("service" => "house", "template" => "broker-detail", "id" => $userid));
 
+                $userArr['uid']       = (int)$uid;
                 $userArr['nickname']  = $nickname;
 				$userArr['photo']     = $photo;
 				$userArr['phone']     = $phone;

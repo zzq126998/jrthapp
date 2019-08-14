@@ -274,7 +274,7 @@ if($dopost == "updateDetail"){
 			array_push($search, "(`module` = 'tieba' AND `aid` in ($idList))");
 		}
 		//贴吧评论
-		$archives = $dsql->SetQuery("SELECT `id` FROM `#@__tieba_reply` WHERE `content` like '%$sKeyword%'");
+		$archives = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `content` like '%$sKeyword%' AND `type` = 'tieba-detail'");
 		$results  = $dsql->getTypeName($archives);
 		if($results && is_array($results)){
 			$list = array();
@@ -477,7 +477,7 @@ if($dopost == "updateDetail"){
 				$title = $typename[0]['title'];
 				$url = getUrlPath(array("service" => "tieba", "template" => "detail", "id" => $value['aid']));
 				if(!empty($value['commonid'])){
-					$contentSql = $dsql->SetQuery("SELECT `content` FROM `#@__tieba_reply` WHERE `tid`='".$value['aid']."' and `id` = ". $value['commonid']);
+					$contentSql = $dsql->SetQuery("SELECT `content` FROM `#@__public_comment` WHERE `aid`='".$value['aid']."' and `id` = ". $value['commonid']);
 					$contentA = $dsql->getTypeName($contentSql);
 					$commoncontent  = $contentA[0]['content'];
 				}

@@ -135,7 +135,7 @@ function job($params, $content = "", &$smarty = array(), &$repeat = array()){
 			$sql = $dsql->SetQuery("SELECT `typename` FROM `#@__site_area` WHERE `id` = ".$addr);
 			$ret = $dsql->dsqlOper($sql, "results");
 			if($ret){
-				$addrName = $ret;
+				$addrName = $ret[0]['typename'];
 			}
 		}
 		$huoniaoTag->assign("addrName", $addrName);

@@ -195,10 +195,23 @@ function CheckRequest(&$val){
 //var_dump($_REQUEST);exit;
 CheckRequest($_REQUEST);
 
+if(!defined('HUONIAOADMIN')) {
+	define('HUONIAOADMIN', "");
+}
 foreach(Array('_GET','_POST','_COOKIE') as $_request){
 	foreach($$_request as $_k => $_v){
 		if($_k == 'nvarname') ${$_k} = $_v;
 		else ${$_k} = _RunMagicQuotes($_v);
+
+		//get请求过滤
+		if($_request == '_GET' && $_v != 'getDatabaseStructure' && !HUONIAOADMIN){
+			${$_k} = RemoveXSS(${$_k});
+		}
+
+		//搜索关键字过滤
+		if((strstr($_k, 'title') || strstr($_k, 'keyword')) && !HUONIAOADMIN){
+			${$_k} = RemoveXSS(${$_k});
+		}
 	}
 }
 
@@ -266,6 +279,8 @@ $huoniaoTag->assign("thumbSize",      $cfg_thumbSize);       //缩略图上传�
 $huoniaoTag->assign("atlasSize",      $cfg_atlasSize);       //图集单张图片上传大小限制
 $huoniaoTag->assign("thumbType",      "*.".str_replace("|", ";*.", $cfg_thumbType));     //缩略图上传类型限制
 $huoniaoTag->assign("atlasType",      "*.".str_replace("|", ";*.", $cfg_atlasType));     //图集上传类型限制
+$huoniaoTag->assign("audioType",      "*.".str_replace("|", ";*.", $cfg_audioType));     //音频上传类型限制
+$huoniaoTag->assign("audioSize",      $cfg_audioSize);     //音频上传大小
 $huoniaoTag->assign("HUONIAOINC",     HUONIAOINC);
 $huoniaoTag->assign("HUONIAOROOT",    HUONIAOROOT);
 $huoniaoTag->assign("HUONIAODATA",    HUONIAODATA);
@@ -414,6 +429,7 @@ if($ret && is_array($ret)){
     $huoniaoTag->assign('cfg_app_android_version', $data['android_version']);
     $huoniaoTag->assign('cfg_app_ios_version', $data['ios_version']);
     $huoniaoTag->assign('cfg_app_android_download', $data['android_download']);
+    $huoniaoTag->assign('cfg_app_yyb_download', $data['yyb_download']);
     $huoniaoTag->assign('cfg_app_ios_download', $data['ios_download']);
 
     $huoniaoTag->assign('cfg_app_business_appname', $data['business_appname']);
@@ -421,6 +437,7 @@ if($ret && is_array($ret)){
     $huoniaoTag->assign('cfg_app_business_android_version', $data['business_android_version']);
     $huoniaoTag->assign('cfg_app_business_ios_version', $data['business_ios_version']);
     $huoniaoTag->assign('cfg_app_business_android_download', $data['business_android_download']);
+    $huoniaoTag->assign('cfg_app_business_yyb_download', $data['business_yyb_download']);
     $huoniaoTag->assign('cfg_app_business_ios_download', $data['business_ios_download']);
 
     $huoniaoTag->assign('cfg_app_peisong_appname', $data['peisong_appname']);
@@ -428,6 +445,7 @@ if($ret && is_array($ret)){
     $huoniaoTag->assign('cfg_app_peisong_android_version', $data['peisong_android_version']);
     $huoniaoTag->assign('cfg_app_peisong_ios_version', $data['peisong_ios_version']);
     $huoniaoTag->assign('cfg_app_peisong_android_download', $data['peisong_android_download']);
+    $huoniaoTag->assign('cfg_app_peisong_yyb_download', $data['peisong_yyb_download']);
     $huoniaoTag->assign('cfg_app_peisong_ios_download', $data['peisong_ios_download']);
 
     $huoniaoTag->assign('cfg_ios_shelf', $data['ios_shelf']);

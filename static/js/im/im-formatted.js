@@ -46,7 +46,7 @@ var css_1;
 
 ;(function(){ //code
 	// <!--新消息底部弹出框s-->
-	$('body').append('<div class="im-msg_tip  fn-clear"><span class="im-tip_head"><img src="'+staticPath+'images/noPhoto_60.jpg"/></span><p>加载中~</p><i></i></div>');
+	$('body').append('<div class="im-msg_tip  fn-clear"><span class="im-tip_head"><img onerror="nofind();" src="'+staticPath+'images/noPhoto_60.jpg"/></span><p>加载中~</p><i></i></div>');
 	// <!--新消息底部弹出框e-->
 	//聊天框
 	var html = [], login=0;
@@ -54,7 +54,7 @@ var css_1;
 	html.push('<div class="im-panel_box" ><div class="im-mask"></div>')
 	//==-----==
 	html.push('<div class="im-panel_list"><div class="im-pub_box"><div class="im-user_info fn-clear"><a class="im-_left '+login_if+'" href="javascript:;">');
-	html.push('<i><img src="'+staticPath+'images/noPhoto_60.jpg"/></i><span>未登录</span></a><a href="javascript:;" class="im-hide_btn" title="收起"></a></div>')
+	html.push('<i><img onerror="nofind();" src="'+staticPath+'images/noPhoto_60.jpg"/></i><span>未登录</span></a><a href="javascript:;" class="im-hide_btn" title="收起"></a></div>')
 	html.push('<ul class="im-tab_ul fn-clear"><li class="im-cur_btn im-on"><a href="javascript:;" title="进行中的会话"><i></i></a></li><li class="im-F_btn"><a href="javascript:;" title="好友"><i ></i></a></li><li class="im-tip_btn"><a href="javascript:;" title="通知"><i class="im-tip_num">0</i></a></li></ul></div>	');
 	//==-----==
 	html.push('<div class="im-listBox">');
@@ -62,7 +62,7 @@ var css_1;
 	html.push('</div>');
 	//==---此处需要根据后台请求获取数据--==
 	html.push('<div class="im-bottom_btn im-btn_group"><a href="javascript:;" class="im-search_btn" title="搜索用户"></a>');
-	html.push('<a href="javascript:;" class="im-msg_btn"><i class="im-tip_num">3</i><div class="im-op_tip"><ul><li class="im-btn_comm"><span>评论</span></li><li class="im-btn_zan"><span>赞<em>（3）</em></span></li></ul></div></a>');
+	html.push('<a href="javascript:;" class="im-msg_btn"><div class="im-op_tip"><ul><li class="im-btn_comm"><span>评论</span></li><li class="im-btn_zan"><span>赞</span></li></ul></div></a>');
 	html.push('</div></div>');
 	$('body').append(html.join(''));
 
@@ -82,7 +82,7 @@ var css_1;
 		}else{
 			m=i
 		}
-		emoj_list.push('<li><a href="javascript:;"><img src="'+staticPath+'images/im/emot/baidu/i_f'+m+'.png" alt="" /></a></li>');
+		emoj_list.push('<li><a href="javascript:;"><img src="/static/images/im/emot/baidu/i_f'+m+'.png" alt="" /></a></li>');
 	}
 	$('.im-emoji-hide .im-emoji-list').html(emoj_list.join(''));
 

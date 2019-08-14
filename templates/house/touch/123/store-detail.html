@@ -25,6 +25,9 @@
 	};
 	var comid='{#$storeId#}';
 	var hideFileUrl = {#$cfg_hideUrl#}, cookiePre = '{#$cfg_cookiePre#}';
+	var imconfig = {
+		chatid:"{#$detail_userid#}",
+	}
 </script>
 
 </head>
@@ -226,9 +229,12 @@
 <div class="bottom-fixed-container">
 	<div class="big-wrapper">
         <a href="{#getUrlPath service='house' template='weituo' param="type=store&id={#$detail_id#}"#}" class="button post_ulog"><i></i>房源委托</a>
-        <a href="tel:{#$detail_tel#}" class="button call_phone"><i></i>电话咨询</a>
+       <a href="javascript:;" class="button call_phone chat_to-Link " data-type = "user"><i></i>在线咨询</a>
     </div>
 </div>
+
+<!-- 图片放大 -->
+{#include file="../../../siteConfig/bigimg_1.2.html"#}
 
 <script src="{#$templets_skin#}js/swiper.min.js"></script>
 <script type="text/javascript" src="{#$templets_skin#}js/touch.drag.js"></script>

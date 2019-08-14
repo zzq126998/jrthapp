@@ -61,6 +61,7 @@ if($type != ""){
 		$customSeoDescription  = $description;
 		$customAgreement       = $agreement;
 		$customBusinessTag     = $businessTag;
+		$customCommentCheck    = (int)$commentCheck;
 
 
 		if($customChannelName == "" || $customLogo == "" || $customChannelDomain == "")
@@ -341,6 +342,7 @@ if($type != ""){
 	$customInc .= "\$custom_enterpriseName = '".$custom_enterpriseName."';\r\n";
 	$customInc .= "\$custom_enterpriseCost = '".$custom_enterpriseCost."';\r\n";
 	$customInc .= "\$custom_joinAuth = '".$custom_joinAuth."';\r\n";
+	$customInc .= "\$customCommentCheck = " . (int)$customCommentCheck . ";\r\n";
 
 	//模板风格
 	$customInc .= "\$customTemplate = '".$customTemplate."';\r\n";
@@ -721,6 +723,11 @@ if(file_exists($tpl."/".$templates)){
 	$huoniaoTag->assign('acceptTypeed', $customAcceptType);
 	$huoniaoTag->assign('partnerId', $customPartnerId);
 	$huoniaoTag->assign('printKey', $customPrintKey);
+
+	//评论审核-单选
+    $huoniaoTag->assign('commentCheck', array('0', '1'));
+    $huoniaoTag->assign('commentCheckNames', array('需要审核', '不需要审核'));
+    $huoniaoTag->assign('commentCheckChecked', (int)$customCommentCheck);
 
 
 	//获取所有频道

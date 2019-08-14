@@ -4,8 +4,8 @@
 .main-tit p{font-size: .22rem;color: #83868f;line-height: .4rem;padding: .04rem 0;}
 .main-tit .time {font-family: Arial;margin-right: .1rem;}
 .main-txt{font-size: .3rem;line-height: .52rem;padding: .2rem .28rem .4rem;word-wrap: break-word;color: #3c3f46;text-align: justify;}
-.main-txt p{text-indent: .6rem;padding: 0 0 .3rem;}
-.main-txt img{max-width: 100%!important;height: 100%!important; display: block; vertical-align: middle;}
+/*.main-txt p{text-indent: .6rem;padding: 0 0 .3rem;}*/
+.main-txt img{max-width: 100%!important;display: block; vertical-align: middle;}
 
 /*相关阅读*/
 .main-read{margin: 0 .3rem 0 .3rem;}

@@ -75,14 +75,16 @@ function getList(is){
 										break;
 								}
 
+                                var account = (bank == 'weixin' ? '微信' : (bank == 'alipay' ? '支付宝' : '银行卡')) + (bank != 'weixin' ? " | "+cardnum+" | "+cardname : '');
+
 								html.push('<tr><td class="fir"></td>');
 								html.push('<td>'+tdate+'</td>');
-								html.push('<td>'+cardnum+" | "+cardname+'</td>');
+								html.push('<td>'+account+'</td>');
 								html.push('<td>'+amount+'</td>');
 								html.push('<td>'+stateTxt+'</td>');
 								html.push('<td><a href="'+url+'" class="link" target="_blank">'+langData['waimai'][1][210]+'</a></td>');  //详情
 								html.push('</tr>');
-							
+
 							}else if(list[i].tab == "p"){
 								var item     = [],
 										type = list[i].type,
@@ -98,7 +100,8 @@ function getList(is){
 
 								var stateTxt = "";
 								if(type == 'bank'){
-									account = "..."+order_id.substr(order_id.length-4)+"|"+"*"+cardname.substr(1);
+									account = (bank == 'weixin' ? '微信' : (bank == 'alipay' ? '支付宝' : '银行卡')) + (bank != 'weixin' ? " | "+order_id.substr(order_id.length-4)+" | "+"*"+cardname.substr(1) : '');
+
 									switch(state){
 										case "0":
 											stateTxt = "<font color='#999999'>"+langData['siteConfig'][9][14]+"</font>";   //审核中

@@ -2,7 +2,7 @@
 {#include file="fabu-$module.html"#}
 {#else if $module=='house'#}
 {#include file="fabu-{#$module#}{#if $type != ''#}-{#$type#}{#/if#}.html"#}
-{#else if $module=='travel'#}
+{#else if $module=='travel' || $module=='education'#}
 {#include file="fabu-{#$module#}{#if $type != ''#}-{#$type#}{#/if#}.html"#}
 {#else#}
 <!DOCTYPE html>

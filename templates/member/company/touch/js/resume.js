@@ -151,9 +151,9 @@ function getList(is){
               html.push('<span class="link">'+langData['siteConfig'][6][138]);
               html.push('<select class="select">');
               html.push('<option value="">'+langData['siteConfig'][7][2]+'</option>');
-              html.push('<option value="0">'+langData['siteConfig'][9][31]+'</option>');
-              html.push('<option value="1">'+langData['siteConfig'][9][32]+'</option>');
-              html.push('<option value="2">'+langData['siteConfig'][9][33]+'</option>');
+              html.push('<option value="0"'+(state == 0 ? ' selected' : '')+'>'+langData['siteConfig'][9][31]+'</option>');
+              html.push('<option value="1"'+(state == 1 ? ' selected' : '')+'>'+langData['siteConfig'][9][32]+'</option>');
+              html.push('<option value="2"'+(state == 2 ? ' selected' : '')+'>'+langData['siteConfig'][9][33]+'</option>');
               html.push('</select>');
               html.push('</span>');
               html.push('</div>');

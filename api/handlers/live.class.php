@@ -305,8 +305,10 @@ class live
     {
         global $dsql;
         global $userLogin;
+        global $langData;
         $pageinfo = $list = array();
-        $typeid   = $type = $title = $where = $where1 = "";
+        $typeid   = $type = $title = $rec = $hot = $where = $where1 = $inner = "";
+        $uid   = $userLogin->getMemberID();
 
         if (!empty($this->param)) {
             if (!is_array($this->param)) {
@@ -316,18 +318,42 @@ class live
                 $userid = $this->param['uid'];
                 $title    = $this->param['title'];
                 $type     = $this->param['type'];
+                $lng      = $this->param['lng'];
+				$lat      = $this->param['lat'];
                 $u        = $this->param['u'];
                 $state    = $this->param['state'];
+                $rec      = $this->param['rec'];
+                $hot      = $this->param['hot'];
                 $orderby  = $this->param['orderby'];
                 $page     = $this->param['page'];
                 $pageSize = $this->param['pageSize'];
                 $typename = $this->param['typename'];
+                $myfollow = (int)$this->param['myfollow'];//我关注的主播发布的
+                $mybooking = (int)$this->param['mybooking'];//我的预约
                 $mo = $this->param['mo'];
             }
         }
 
+        if($myfollow){
+            if($uid < 1){
+                return array("state" => 200, "info" => '您还没有登录');
+            }
+            // $inner = "INNER JOIN (SELECT f.fid FROM huoniao_member_follow f WHERE f.for = ''AND f.tid = $uid ) AS tmp";
+            $inner = "INNER JOIN (SELECT a.`uid` FROM `#@__live_anchor` a LEFT JOIN `#@__member_follow` f ON f.`fid` = a.`uid` WHERE f.`tid` = $uid AND f.`for` = '') AS tmp";
+            $where .= " AND tmp.`uid` = l.`user`";
+        }
+        if(!$myfollow && $mybooking){
+            if($uid < 1){
+                return array("state" => 200, "info" => '您还没有登录');
+            }
+            $inner = "INNER JOIN (SELECT b.`aid` FROM `#@__live_booking` b WHERE b.`uid` = $uid) AS tmp";
+            $where .= " AND tmp.`aid` = l.`id`";
+        }else{
+            $mybooking = 0;
+        }
+
         if($typename){
-            $types = $dsql->SetQuery("SELECT `id` FROM `#@__livetype` WHERE `typename` LIKE '%发布会%'");
+            $types = $dsql->SetQuery("SELECT `id` FROM `#@__livetype` WHERE `typename` LIKE '%$typename%'");
             $type_ret = $dsql->dsqlOper($types, "results");
             if($type_ret){
                 $typeid = $type_ret[0]['id'];
@@ -335,37 +361,44 @@ class live
         }
 
         if ($u) {
-            $uid   = $userLogin->getMemberID();
-            $where .= " AND `user` = " . $uid;
+            $where .= " AND l.`user` = " . $uid;
         }else{
-            $where .= " AND `arcrank` = 1";
+            $where .= " AND l.`arcrank` = 1";
         }
 
         if ($state != '') {
-            $where .= " AND `state` = " . $state;
+            $where .= " AND l.`state` = " . $state;
         }
 
 
         if (!empty($type)) {
             if ($type == 1) {
-                $where .= " and `state` in (1,2)";
+                $where .= " and l.`state` in (1,2)";
             } elseif ($type == 2) {//未直播的、结束直播的和正在直播的
-                $where .= " and `state` in (0,1,2)";
+                $where .= " and l.`state` in (0,1,2)";
             } elseif ($type == 3) {//结束直播的和正在直播的
-                $where .= " and `state` in (1,2)";
-            } elseif ($type == 4) {//结束直播的和正在直播的
-                $where .= " and `state` = 1";
+                $where .= " and l.`state` in (1,2)";
+            } elseif ($type == 4) {//正在直播的
+                $where .= " and l.`state` = 1";
             }elseif ($type == 5) {//精彩回放
-                $where .= " and `state` = 2";
+                $where .= " and l.`state` = 2";
             }
         }
 
         //$userid = $userLogin->getMemberID();
         if (!empty($userid) && $type != 1) {
-            $where .= " and `user` = '$userid'";
+            $where .= " and l.`user` = '$userid'";
         }
         if (!empty($typeid)) {
-            $where .= " and `typeid` = '$typeid'";
+            $where .= " and l.`typeid` = '$typeid'";
+        }
+
+        if($rec){
+            $where .= " AND l.`flag_r` = 1";
+        }
+
+        if($hot){
+            $where .= " AND l.`flag_h` = 1";
         }
 
         if (!empty($title)) {
@@ -381,38 +414,55 @@ class live
                         $list_name[] = $value["id"];
                     }
                     $idList = join(",", $list_name);
-                    $where .= " AND  `user` in ($idList) ";
+                    $where .= " AND  l.`user` in ($idList) ";
                 }
             }else{
-                $where .= " AND `title` like '%" . $title . "%'";
+                $where .= " AND l.`title` like '%" . $title . "%'";
             }
         }
         if($mo){
-            $where .= " and `way` = 0 ";
+            $where .= " and l.`way` = 0 ";
         }
+
+        //查询距离
+		if((!empty($lng))&&(!empty($lat))){
+            $select="(2 * 6378.137* ASIN(SQRT(POW(SIN(3.1415926535898*(".$lat."-l.`lat`)/360),2)+COS(3.1415926535898*".$lat."/180)* COS(l.`lat` * 3.1415926535898/180)*POW(SIN(3.1415926535898*(".$lng."-l.`lng`)/360),2))))*1000 AS distance,";
+        }else{
+            $select="";
+        }
+
         if ($type == 1) {
-            $order = " ORDER BY `state` asc, `id` DESC";
+            $order = " ORDER BY l.`state` asc, l.`id` DESC";
         } elseif ($type == 2) {
-            $order = " ORDER BY FIELD(`state`, 0, 1, 2), `id` DESC";
+            $order = " ORDER BY FIELD(l.`state`, 0, 1, 2), l.`id` DESC";
         } elseif ($type == 3) {
-            $order = " ORDER BY FIELD(`state`, 1, 2), `id` DESC";
+            $order = " ORDER BY FIELD(l.`state`, 1, 2), l.`id` DESC";
         }
 
         if ($orderby == 'click' || $orderby == '1') {
-            $order = " ORDER BY `click` DESC, `id` DESC";
+            $order = " ORDER BY l.`click` DESC, l.`id` DESC";
         }else if($orderby == 'time' || $orderby == '2'){
-            $order = " ORDER BY `ftime` DESC, `id` DESC";
+            $order = " ORDER BY l.`ftime` DESC, l.`id` DESC";
         }elseif($orderby == "active" || $orderby == '3'){//直播最多的用户
-			$order = " GROUP BY `user` order by count(`click`) desc, count(`id`) desc";
-		}
+			$order = " GROUP BY l.`user` order by count(`click`) desc, count(`id`) desc";
+        }elseif ($orderby == 4) {
+            if((!empty($lng))&&(!empty($lat))){
+                $order = " ORDER BY `distance` ASC";
+            }
+        }elseif ($orderby == 5) {
+            $order = " ORDER BY FIELD(l.`state`, 1, 2), l.`id` DESC, l.`click` DESC, l.`id` DESC";
+        }
+
+
 
         $pageSize = empty($pageSize) ? 10 : $pageSize;
         $page     = empty($page) ? 1 : $page;
         if($orderby == "active" || $orderby == '3'){
-            $archives_count = $dsql->SetQuery("SELECT count(distinct `user`) count FROM `#@__livelist` WHERE 1=1" . $where);
+            $archives_count = $dsql->SetQuery("SELECT count(distinct `user`) count FROM `#@__livelist` l $inner WHERE 1=1" . $where);
         }else{
-            $archives_count = $dsql->SetQuery("SELECT count(`id`) count FROM `#@__livelist` WHERE 1=1" . $where);
+            $archives_count = $dsql->SetQuery("SELECT count(`id`) count FROM `#@__livelist` l $inner WHERE 1=1" . $where);
         }
+
         //总条数
         $totalResults = $dsql->dsqlOper($archives_count, "results");
         $totalResults = $totalResults[0]['count'];
@@ -429,7 +479,7 @@ class live
             "totalCount" => $totalCount
         );
 
-        $archives = $dsql->SetQuery("SELECT  `id`,`way`,`user`,`up`,`title`,`typeid`,`starttime`,`litpic`,`click`,`state`,`ftime`, `livetime`, `arcrank`, `pulltype`, `pullurl_pc`, `pullurl_touch`, `state`, `ossurl`, `streamname` FROM `#@__livelist` WHERE 1=1" . $where);
+        $archives = $dsql->SetQuery("SELECT l.`id`,l.`way`,l.`user`,l.`up`,l.`lng`,l.`lat`,l.`title`,l.`typeid`,l.`starttime`,l.`litpic`,l.`click`,l.`state`,l.`ftime`,l.`livetime`,l.`arcrank`,l.`pulltype`,l.`pullurl_pc`,l.`pullurl_touch`,l.`state`,l.`ossurl`, ".$select." l.`streamname` FROM `#@__livelist` l $inner WHERE 1=1" . $where);
 
         $atpage  = $pageSize * ($page - 1);
         $limit   .= " LIMIT $atpage, $pageSize";
@@ -440,6 +490,8 @@ class live
                 $list[$key]['user']   = $val['user'];
                 $list[$key]['title']  = $val['title'];
                 $list[$key]['typeid'] = $val['typeid'];
+                $list[$key]['lng']    = $val['lng'];
+                $list[$key]['lat']    = $val['lat'];
                 if (!empty($val['litpic'])) {
                     if (strpos($val['litpic'], 'images')) {
                         $list[$key]['litpic'] = $val['litpic'];
@@ -449,6 +501,12 @@ class live
                 } else {
                     $list[$key]['litpic'] = '/static/images/404.jpg';
                 }
+                $list[$key]['distance']  = $val['distance'] > 1000 ? sprintf("%.1f", $val['distance'] / 1000) . $langData['siteConfig'][13][23] : sprintf("%.1f", $val['distance']) . $langData['siteConfig'][13][22];  //距离   //千米  //米
+				if(strpos($list[$key]['distance'],'千米')){
+					$list[$key]['distance'] = str_replace("千米",'km',$list[$key]['distance']);
+				}elseif(strpos($list[$key]['distance'],'米')){
+					$list[$key]['distance'] = str_replace("米",'m',$list[$key]['distance']);
+				}
 
                 $sql  = $dsql->SetQuery("SELECT `typename` FROM `#@__livetype` where id = '".$val['typeid']."'");
                 $ret  = $dsql->dsqlOper($sql, "results");
@@ -559,18 +617,20 @@ class live
                 if($orderby=='active' || $orderby=='3'){
                     //粉丝人数
                     // $sql     = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__live_follow` WHERE `fid` = " . $val['user']);
-                    $sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__member_follow` WHERE `fid` = " . $val['user']);
+                    $sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__member_follow` WHERE `fid` = " . $val['user'] . " AND `for` = ''");
                     $fansret = $dsql->dsqlOper($sql, "results");
                     $list[$key]['totalFans'] = $fansret[0]['t'];
 
                     $sql = $dsql->SetQuery("SELECT `id` FROM `#@__livelist` WHERE `state` = 1 AND `user` = " . $val['user']);
                     $res = $dsql->dsqlOper($sql, "results");
                     $list[$key]['online'] = $res[0]['id'] ? 1 : 0;
+                }
 
-                    //是否相互关注
-                    $uid = $userLogin->getMemberID();
-                    // $sql = $dsql->SetQuery("SELECT `id` FROM `#@__live_follow` WHERE `tid` = $uid AND `fid` = " . $val['user']);
-                    $sql = $dsql->SetQuery("SELECT `id` FROM `#@__member_follow` WHERE `tid` = $uid AND `fid` = " . $val['user']);
+
+                //是否关注发布人
+	            $uid = $userLogin->getMemberID();
+	            if($uid > 0){
+		            $sql = $dsql->SetQuery("SELECT `id` FROM `#@__member_follow` WHERE `tid` = $uid AND `fid` = " . $val['user'] . " AND `for` = ''");
 					$ret = $dsql->dsqlOper($sql, "results");
 					if($ret){
 						$list[$key]['isMfollow'] = 1;//关注
@@ -579,8 +639,10 @@ class live
 					}else{
 						$list[$key]['isMfollow'] = 0;//未关注
 					}
-
+				}else{
+                    $list[$key]['isMfollow'] = 0;//未关注
                 }
+
 
                 $param = array(
                     "service" => "live",
@@ -588,6 +650,30 @@ class live
                     "userid" => $val['user']
                 );
                 $list[$key]['userurl'] = getUrlPath($param);
+
+                // 预约状态
+                $booking = 0;
+                if($mybooking){
+                    $booking = 1;
+                }else{
+                    if($uid > 0){
+                        $sql = $dsql->SetQuery("SELECT `id` FROM `#@__live_booking` WHERE `uid` = $uid AND `aid` = ".$val['id']);
+                        $res = $dsql->dsqlOper($sql, "results");
+                        if($res){
+                            $booking = 1;
+                        }
+                    }
+                }
+                $list[$key]['booking'] = $booking;
+
+                //预约人数
+                $bookingCount = 0;
+                $sql = $dsql->SetQuery("SELECT count(`id`) totalCount FROM `#@__live_booking` WHERE `aid` = ".$val['id']);
+                $res = $dsql->dsqlOper($sql, "results");
+                if($res){
+                    $bookingCount = $res[0]['totalCount'];
+                }
+                $list[$key]['bookingCount'] = $bookingCount;
 
             }
         }
@@ -754,6 +840,14 @@ class live
         $pullurl_touch    = trim($param['pullurl_touch']);
         $note       = $param['note'];
         $menu       = empty($param['menu']) ? array() : $param['menu'];
+        $lnglat        = $param['lnglat'];
+        if($lnglat){
+            $a = explode(",", $lnglat);
+            $lng = $a[0];
+            $lat = $a[1];
+        }else{
+            $lng = $lat = "";
+        }
 
         if (empty($title)) return array("state" => 200, "info" => '标题不得为空');
 
@@ -769,11 +863,12 @@ class live
             if (empty($endmoney)) return array("state" => 200, "info" => '结束收费不得为空');
         }
 
-        $sql = $dsql->SetQuery("SELECT `id`, `pulltype`, `pushurl` FROM `#@__livelist` WHERE `id` = $id AND `user` = $uid");
+        $sql = $dsql->SetQuery("SELECT `id`, `pulltype`, `pushurl`, `ftime` FROM `#@__livelist` WHERE `id` = $id AND `user` = $uid");
         $res = $dsql->dsqlOper($sql, "results");
         if(!$res){
             return array("state" => 200, "info" => '信息不存在');
         }
+        $ftime_ = $res[0]['ftime'];
         $pushurl_ = '';
         // if($res[0]['pushtype']){
         //     if(empty($pushurl)) return array("state" => 200, "info" => '请输入第三方推流地址');
@@ -820,7 +915,7 @@ class live
         }
 
         //保存到主表
-        $archives = $dsql->SetQuery("UPDATE `#@__livelist` SET  `title`='$title',`litpic`='$litpic',`typeid`='$typeid',`catid`='$catid',`ftime`='$ftime',`password`='$password',`startmoney`='$startmoney',`endmoney`='$endmoney',`way`='$way',`flow`='$flow',`note` = '$note', `menu` = '$menuData', `arcrank` = 0 $pushurl_ WHERE `id` = " . $id);
+        $archives = $dsql->SetQuery("UPDATE `#@__livelist` SET  `title`='$title',`litpic`='$litpic',`typeid`='$typeid',`catid`='$catid',`ftime`='$ftime',`password`='$password',`startmoney`='$startmoney',`endmoney`='$endmoney',`way`='$way',`flow`='$flow',`note` = '$note', `menu` = '$menuData', `arcrank` = 0 $pushurl_, `lng` = '$lng', `lat` = '$lat' WHERE `id` = " . $id);
         $results  = $dsql->dsqlOper($archives, "update");
         if ($results != "ok") {
             return array("state" => 200, "info" => '保存到数据时发生错误，请检查字段内容！');
@@ -836,6 +931,12 @@ class live
             $configHandels->getHandle(array("userid" => $uid, "mark" => "chatRoom" . $id, "title" => $title, "url" => getUrlPath($param)));
 
             //return $id;
+
+            // 更新直播预约表中时间
+            if($ftime_ != $ftime){
+                $sql = $dsql->SetQuery("UPDATE `#@__live_booking` SET `ftime` = $ftime WHERE `aid` = $id AND `notice` = 0");
+                $dsql->dsqlOper($sql, "update");
+            }
             return array("id" => $id);
         }
     }
@@ -929,6 +1030,17 @@ class live
         $pullurl_touch = trim($param['pullurl_touch']);
         $note          = $param['note'];
         $menu          = empty($param['menu']) ? array() : $param['menu'];
+        $lnglat        = $param['lnglat'];
+        if($lnglat){
+            $a = explode(",", $lnglat);
+            $lng = $a[0];
+            $lat = $a[1];
+        }else{
+            $lng = $lat = "";
+        }
+
+        include HUONIAOINC."/config/live.inc.php";
+        $arcrank     = (int)$customFabuCheck;
 
         if (empty($title)) {
             return array("state" => 200, "info" => '请填写直播标题！');
@@ -998,7 +1110,7 @@ class live
                 exit();
             }
 
-            $sql = $dsql->SetQuery("INSERT INTO `#@__livelist` (`user`, `pushurl`,`title`,`typeid`,`catid`,`ftime`,`password`,`startmoney`,`endmoney`,`way`,`flow`,`litpic`,`state`, `note`, `menu`, `pulltype`, `pullurl_pc`, `pullurl_touch`, `arcrank`, `starttime`, `streamname`) VALUES ('$userid', '$pushurl','$title','$typeid','$catid','$ftime','$password','$startmoney','$endmoney','$way','$flow','$litpic','0', '$note', '$menuData', $pulltype, '$pullurl_pc', '$pullurl_touch', 0, 0, '')");
+            $sql = $dsql->SetQuery("INSERT INTO `#@__livelist` (`user`, `pushurl`,`title`,`typeid`,`catid`,`ftime`,`password`,`startmoney`,`endmoney`,`way`,`flow`,`litpic`,`state`, `note`, `menu`, `pulltype`, `pullurl_pc`, `pullurl_touch`, `arcrank`, `starttime`, `streamname`, `lng`, `lat`) VALUES ('$userid', '$pushurl','$title','$typeid','$catid','$ftime','$password','$startmoney','$endmoney','$way','$flow','$litpic','0', '$note', '$menuData', $pulltype, '$pullurl_pc', '$pullurl_touch', '$arcrank', 0, '', '$lng', '$lat')");
             $lid = $dsql->dsqlOper($sql, "lastid");
             if (is_numeric($lid)) {
 
@@ -1049,6 +1161,15 @@ class live
 
                 $configHandels = new handlers('siteConfig', "createChatRoom");
 				$configHandels->getHandle(array("userid" => $userid, "mark" => "chatRoom" . $maxid, "title" => $title, "url" => getUrlPath($param)));
+
+                // 创建主播
+                $sql = $dsql->SetQuery("SELECT `id` FROM `#@__live_anchor` WHERE `uid` = $userid");
+                $res = $dsql->dsqlOper($sql, "results");
+                if(!$res){
+                    $now = time();
+                    $sql = $dsql->SetQuery("INSERT INTO `#@__live_anchor` (`uid`, `rec`, `pubdate`) VALUES ($userid, 0, $now)");
+                    $dsql->dsqlOper($sql, "lastid");
+                }
 
                 return array("pushurl" => $pushurl, "id" => $maxid, "typename" => $typename, "catidtype" => $catidtype, "wayname" => $wayname, "flowname" => $flowname);
 
@@ -1337,9 +1458,15 @@ class live
 
         if (!is_numeric($id)) return array("state" => 200, "info" => '格式错误！');
 
-        $archives = $dsql->SetQuery("SELECT `id`,`user`,`pushurl`,`title`,`up`,`litpic`,`way`,`streamname`,`state`,`click`, `ossurl`, `catid` , `startmoney`, `endmoney` , `ftime`, `note`, `menu`, `pulltype`, `pullurl_pc`, `pullurl_touch`, `typeid` FROM `#@__livelist` WHERE `id` = " . $id." AND `arcrank` = 1");
+        $archives = $dsql->SetQuery("SELECT `id`,`user`,`pushurl`,`title`,`up`,`litpic`,`way`,`streamname`,`state`,`click`, `ossurl`, `catid` , `startmoney`, `endmoney` , `ftime`, `note`, `menu`, `pulltype`, `pullurl_pc`, `pullurl_touch`, `typeid`, `lng`, `lat` FROM `#@__livelist` WHERE `id` = " . $id." AND `arcrank` = 1");
         $results  = $dsql->dsqlOper($archives, "results");
         if ($results) {
+            $results[0]['lng'] = $results[0]['lng'];
+            $results[0]['lat'] = $results[0]['lat'];
+            if(!empty($results[0]['lng']) && !empty($results[0]['lat'])){
+                $results[0]["lnglat"]     = $results[0]['lng'] . ',' . $results[0]['lat'];
+            }
+
             if (!empty($results[0]['litpic'])) {
                 if (strpos($results[0]['litpic'], 'images')) {
                     $results[0]['litpic'] = $cfg_secureAccess . $cfg_basehost . $results[0]['litpic'];
@@ -1427,8 +1554,8 @@ class live
 
             //是否点赞
             $iszan = 0;
-            $sql                    = $dsql->SetQuery("SELECT * FROM `#@__site_zanmap` WHERE `vid` = $id AND `temp` = 'live' ");
-            // $sql                    = $dsql->SetQuery("SELECT `id` FROM `#@__public_up` WHERE `tid` = $id AND `module` = 'live' AND `action` = 'h_detail' ");
+            // $sql                    = $dsql->SetQuery("SELECT * FROM `#@__site_zanmap` WHERE `vid` = $id AND `temp` = 'live' ");
+            $sql                    = $dsql->SetQuery("SELECT `id` FROM `#@__public_up` WHERE `type` = '0' AND `tid` = $id AND `module` = 'live' AND `action` = 'h_detail' ");
             $ret                    = $dsql->dsqlOper($sql, 'totalCount');
             $results[0]['zanCount'] = $ret;
 
@@ -1445,16 +1572,17 @@ class live
                 $sql = $dsql->SetQuery("SELECT `id` FROM `#@__member_follow` WHERE `tid` = $uid AND `fid` = " . $userid);
                 $isMfollow = $dsql->dsqlOper($sql, "results");
 
-                $sql = $dsql->SetQuery("SELECT `id` FROM `#@__site_zanmap` WHERE `vid` = $id AND `userid` = $uid AND `temp` = 'live'");
+                /* $sql = $dsql->SetQuery("SELECT `id` FROM `#@__site_zanmap` WHERE `vid` = $id AND `userid` = $uid AND `temp` = 'live'");
                 $ret = $dsql->dsqlOper($sql, "results");
-                $iszan = $ret ? 1 : 0;
-                /* $zanparams = array(
+                $iszan = $ret ? 1 : 0; */
+                $zanparams = array(
                     "module" => "live",
                     "temp"   => "h_detail",
                     "id"     => $id,
                     "check"  => 1
                 );
-                $iszan = checkIsZan($zanparams); */
+                $iszan = checkIsZan($zanparams);
+                $iszan = $iszan == 'has' ? 1 : 0;
             }
             $results[0]['isfollow'] = $isfollow;
             $results[0]['isMfollow'] = $isMfollow[0]['id'] ? 1 : 0;
@@ -1465,7 +1593,7 @@ class live
             $fansret = $dsql->dsqlOper($sql, "results");
             $results[0]['totalFans'] = $fansret[0]['t'];
 
-            
+
 
             // 自媒体信息
             // $obj = new article();
@@ -2010,7 +2138,7 @@ class live
                         header("location:" . $url);
                         die;
                     }
-                    
+
                 }
 
             }
@@ -2091,7 +2219,7 @@ class live
                     $userret = $dsql->dsqlOper($sql, "results");
                     $userto  = $userret[0]['user'];
                 }
-                
+
 
                 $sql_in = $dsql->SetQuery("UPDATE `#@__livelist_auth` set `is_auth` = 1 where `user_id` = {$to} AND `live_id` = '$lid'");
                 $dsql->dsqlOper($sql_in, "update");
@@ -2226,7 +2354,7 @@ class live
                         $IMtokn = new siteConfig($this->param);
                         $IMtokn->sendImChatRoom();
                     }
-                    
+
 
                     // 发送红包
                     $this->param = [
@@ -3042,8 +3170,8 @@ class live
         global $dsql;
         $param = $this->param;
 
-        $id  = $param['id']; 
-        
+        $id  = $param['id'];
+
         if(empty($id)) return array('state' => 200, 'info' => '参数不正确！');
 
         //会员信息
@@ -3080,8 +3208,8 @@ class live
         global $userLogin;
         $param = $this->param;
 
-        $h_id  = (int)$param['h_id']; 
-        $type  = (int)$param['type']; 
+        $h_id  = (int)$param['h_id'];
+        $type  = (int)$param['type'];
 
         if(empty($h_id)) return array('state' => 200, 'info' => '参数不正确！');
 
@@ -3119,8 +3247,197 @@ class live
     }
 
 
+    /**
+     * 直播预约
+     */
+    public function liveBooking(){
+        global $dsql;
+        global $userLogin;
+        $uid = $userLogin->getMemberID();
+        if($uid < 1) return array('state' => 200, 'info' => '登陆超时，请重新登陆');
 
+        $param = $this->param;
+        $aid = (int)$this->param['aid'];
 
+        $now = time();
+
+        $sql = $dsql->SetQuery("SELECT `ftime`, `state` FROM `#@__livelist` WHERE `id` = $aid AND `arcrank` = 1");
+        $res = $dsql->dsqlOper($sql, "results");
+        if(!$res) return array('state' => 200, 'info' => '直播不存在');
+        if($res[0]['state'] == 1) return array('state' => 200, 'info' => '直播正在进行');
+        if($res[0]['state'] == 2) return array('state' => 200, 'info' => '直播已结束');
+        $ftime = $res[0]['ftime'];
+
+        $sql = $dsql->SetQuery("SELECT `id` FROM `#@__live_booking` WHERE `uid` = $uid AND `aid` = $aid");
+        $res = $dsql->dsqlOper($sql, "results");
+
+        //已经预约的，取消预约
+        if($res) {
+        	$sql = $dsql->SetQuery("DELETE FROM `#@__live_booking` WHERE `aid` = $aid AND `uid` = '$uid'");
+        	$ret = $dsql->dsqlOper($sql, "update");
+        	if($ret == 'ok'){
+        		return "取消成功";
+        	}else{
+        		return array('state' => 200, 'info' => '取消失败');
+        	}
+        }
+
+        // 距离开始时间大于30分钟可以预约
+        if($ftime > $now && $ftime - $now < 1800){
+            return array('state' => 200, 'info' => '离直播时间不足30分钟，无需预约');
+        }
+
+        $sql = $dsql->SetQuery("INSERT INTO `#@__live_booking` (`aid`, `uid`, `ftime`, `notice`, `pubdate`) VALUES ($aid, $uid, $ftime, 0, $now)");
+        $id = $dsql->dsqlOper($sql, "lastid");
+        if(is_numeric($id)){
+            return "预约成功";
+        }else{
+            return array('state' => 200, 'info' => '预约失败，请稍后重试');
+        }
+    }
+
+    /**
+     * 主播列表
+     */
+    public function anchorList(){
+        global $dsql;
+        global $userLogin;
+        $where = "";
+        $r        = $this->param['r'];
+        $myfollow = $this->param['myfollow'];
+        $order    = $this->param['order'];
+        $title    = $this->param['title'];
+        $page     = $this->param['page'];
+        $pageSize = $this->param['pageSize'];
+        $pageSize = empty($pageSize) ? 10 : $pageSize;
+        $page     = empty($page) ? 1 : $page;
+
+        $uid = $userLogin->getMemberID();
+
+        if($r){
+            $where .= " AND `rec` = 1";
+        }
+        if($myfollow){
+            if($uid < 1){
+                return array("state" => 200, "info" => '您还没有登录');
+            }
+            $where .= " AND f.`id` is not null";
+        }
+
+        if($title){
+        	$where .= " AND m.`nickname` like '%".$title."%'";
+        }
+
+        $order = " ORDER BY `id` DESC";
+
+        if($order == "r"){
+            $order = " ORDER BY `rec` DESC, `id` DESC";
+        }elseif($order == "fans"){
+            $order = " ORDER BY `fans` DESC, `id` DESC";
+        }
+
+        $sql = $dsql->SetQuery("SELECT COUNT(*) c FROM `#@__live_anchor` a LEFT JOIN `#@__member_follow` f ON f.`fid` = a.`uid` AND f.`tid` = $uid AND f.`for` = '' LEFT JOIN `#@__member` m ON m.`id` = a.`uid` WHERE 1 = 1".$where);
+        $res = $dsql->dsqlOper($sql, "results");
+        $totalCount = $res[0]['c'];
+
+        if($totalCount == 0) return array("state" => 200, "info" => '暂无数据！');
+
+        //总分页数
+        $totalPage = ceil($totalCount/$pageSize);
+
+        $pageinfo = array(
+            "page" => $page,
+            "pageSize" => $pageSize,
+            "totalPage" => $totalPage,
+            "totalCount" => $totalCount
+        );
+
+        $atpage = $pageSize*($page-1);
+        $where .= " LIMIT $atpage, $pageSize";
+
+        $list = array();
+        $sql = $dsql->SetQuery("SELECT a.`id`, a.`uid`, m.`username`, m.`nickname`, m.`addr`, m.`photo`, (SELECT COUNT(*) FROM `#@__member_follow` f WHERE f.`fid` = a.`uid` AND f.`for` = '') fans, (SELECT COUNT(*) FROM `#@__member_follow` f WHERE f.`tid` = a.`uid` AND f.`for` = '') gz FROM `#@__live_anchor` a LEFT JOIN `#@__member_follow` f ON f.`fid` = a.`uid` AND f.`tid` = $uid AND f.`for` = '' LEFT JOIN `#@__member` m ON m.`id` = a.`uid` WHERE 1 = 1".$where);
+        $res = $dsql->dsqlOper($sql, "results");
+        if($res){
+            $uid = $userLogin->getMemberID();
+            foreach ($res as $key => $value) {
+                $list[$key]['id'] = $value['id'];
+                $list[$key]['uid'] = $value['uid'];
+                $list[$key]['nickname'] = $value['nickname'] ? $value['nickname'] : $value['username'];
+                $list[$key]['photo'] = getFilePath($value['photo']);
+                $list[$key]['totalFans'] = $value['fans'];
+                $list[$key]['gz'] = $value['gz'];
+
+                //是否关注发布人
+                if($uid > 0){
+	                $sql = $dsql->SetQuery("SELECT `id` FROM `#@__member_follow` WHERE `tid` = $uid AND `fid` = " . $value['uid'] . " AND `for` = ''");
+	                $ret = $dsql->dsqlOper($sql, "results");
+	                if($ret){
+	                    $list[$key]['isMfollow'] = 1;//关注
+	                }elseif($uid == $value['uid']){
+	                    $list[$key]['isMfollow'] = 2;//自己
+	                }else{
+	                    $list[$key]['isMfollow'] = 0;//未关注
+	                }
+                }else{
+                	$list[$key]['isMfollow'] = 0;//未关注
+                }
+
+                //发布直播数量
+                $liveCount = 0;
+                $sql = $dsql->SetQuery("SELECT count(*) total FROM `#@__livelist` WHERE `user` = " . $value['uid'] . " AND `arcrank` = 1");
+                $ret = $dsql->dsqlOper($sql, "results");
+                if($ret){
+                	$liveCount = $ret[0]['total'];
+                }
+                $list[$key]['liveCount'] = $liveCount;
+
+                //最近直播
+                $sql = $dsql->SetQuery("SELECT `title` FROM `#@__livelist` WHERE `user` = " . $value['uid'] . " AND `arcrank` = 1 ORDER BY `ftime` DESC, `id` DESC limit 1");
+                $ret = $dsql->dsqlOper($sql, "results");
+                if($ret){
+                    $list[$key]['liveTitle'] = $ret[0]['title'];
+                }
+
+                //区域
+                $addr = $value['addr'];
+                global $data;
+	            $data = "";
+	            $addrArr = getParentArr("site_area", $addr);
+	            if($addrArr){
+	                $addrArr = array_reverse(parent_foreach($addrArr, "typename"));
+	                $list[$key]['addrname'] = $addrArr;
+	            }else{
+	                $list[$key]['addrname'] = array();
+	            }
+
+	            //是否正在直播
+	            $isLiving = 0;
+	            $sql = $dsql->SetQuery("SELECT count(`id`) total FROM `#@__livelist` WHERE `state` = 1 AND `arcrank` = 1 AND `user` = " . $value['uid']);
+	            $ret = $dsql->dsqlOper($sql, "results");
+	            if($ret && $ret[0]['total'] > 0){
+	            	$isLiving = 1;
+	            }
+	            $list[$key]['isLiving'] = $isLiving;
+
+	            //会员等级
+	            $userinfo = $userLogin->getMemberInfo($value['uid']);
+	            $list[$key]['level'] = array(
+	            	'id' => $userinfo['level'],
+	            	'name' => $userinfo['levelName'],
+	            	'icon' => $userinfo['levelIcon']
+	            );
+
+                $param = array(
+                    "service" => "live",
+                    "template" => "anchor_index",
+                    "userid" => $value['id']
+                );
+                $list[$key]['url'] = getUrlPath($param);
+            }
+        }
+        return array("pageInfo" => $pageinfo, "list" => $list);
+    }
 
 }
 

@@ -239,7 +239,7 @@ $(function(){
 
 
     // 电话弹框
-    $(".tel").on("touchend",function(){
+    $(".tel,.fbuy").on("touchend",function(){
         $.smartScroll($('.modal-public'), '.modal-main');
         $('html').addClass('nos');
         $('.m-telphone').addClass('curr');
@@ -255,7 +255,7 @@ $(function(){
 
 
     // 点击收藏
-    $('.service_f .service_03').click(function(){
+    $('.foot_bottom .scBox').click(function(){
     	var userid = $.cookie(cookiePre+"login_user");
 		if(userid == null || userid == ""){
 			window.location.href = masterDomain+'/login.html';
@@ -263,22 +263,21 @@ $(function(){
 		}
 
         var t = $(this), type = "add";
-        if(t.hasClass('cang')){
-            t.removeClass('cang');
-            t.addClass('cang_active');
-            t.text('已收藏');
-        }else{
+        if(t.hasClass('has')){
         	type = "del";
-            t.removeClass('cang_active');
-            t.addClass('cang');
-            t.text('收藏');
+            t.removeClass('has');
+           
+              t.html('<s></s>收藏');
+        }else{
+            t.addClass('has');
+            t.html('<s></s>已收藏');
         }
         $.post("/include/ajax.php?service=member&action=collect&module=tuan&temp=store&type="+type+"&id="+detailID);
     });
 
     //$('.appMapBtn').attr('href', OpenMap_URL);
 
-
+ 
 
 
 

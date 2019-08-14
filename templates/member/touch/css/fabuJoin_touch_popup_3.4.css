@@ -3,12 +3,14 @@
 /*入驻店铺&&发布信息*/
 .postBox{position: fixed; z-index: 99; background: #fff; left: 0; top: 0; right: 0; bottom: 0; min-height:9rem;overflow-y: auto;-webkit-overflow-scrolling: touch;}
 .tabHead{padding:.4rem .2rem;background: #fff;}
-.tabHead ul{width: 5.5rem;height: .8rem;line-height:.8rem;margin:auto;border-radius: .4rem;background: #f8f8f8;}
-.tabHead ul li{width:50%;float: left;text-align: center;}
-.tabHead ul li a{display:block;font-size: .36rem;}
-.tabHead ul li.active a{background: #f65963;color:#fff;border-radius: .4rem;}
+.tabHead ul{width: 5rem;height: .76rem;line-height:.76rem;margin:auto;border-radius: .4rem;background: #f6f6f8;}
+.tabHead ul li{width:50%;float: left;text-align: center;font-weight: bold;}
+.tabHead ul li a{display:block;font-size: .3rem;color: #c8c9ca;line-height: .78rem}
+.tabHead ul li.active a{background: #fff;color:#313233;border-radius: .4rem;box-shadow: 0px .13rem .37rem 0px rgba(0, 6, 59, 0.11);    line-height: .78rem;}
 .tabContent{display: none;background:#fff;}
 .showMain{display: block;}
+
+
 /*发布信息*/
 .tabContent .tableft{width:2rem;float: left;}
 .tabContent .tableft ul li{width: 100%;height: .94rem;line-height: .94rem;font-size: .32rem;background: #f8f8f8;text-align: center;margin-bottom: .1rem;}
@@ -20,12 +22,31 @@
 .tabright .tabtitle h4:before,.tabright .tabtitle h4:after{width:27%;display:block;margin-top: .2rem;height:.02rem;}
 .tabright .tabtitle h4:before{content:'';float:left;background:linear-gradient(to left,#e2e2e2,#f8f8f8);}
 .tabright .tabtitle h4:after{content:'';float:right;background:linear-gradient(to left,#f8f8f8,#e2e2e2);}
-.tabright .tabcon{padding:.2rem 0;}
-.tabright .tabcon ul li{width: 33%;float: left;text-align: center;margin-bottom: .2rem;}
-.tabright .tabcon ul li a{display: block;font-size: .28rem;}
-.tabright .tabcon ul li img{width: 1.1rem;}
-.tabright .tabcon.job ul li{width: 50%;float: left;}
+.tabright .tabcon{padding-top: .25rem}
+.tabright .tabcon .tab_ul1{padding: 0 .18rem}
+.tabright .tabcon .tab_ul1 li{width: 25%;float: left;text-align: center;margin-bottom: .2rem;}
+.tabright .tabcon .tab_ul1 li a{display: block;font-size: .28rem;}
 
+.tabright .tabcon .tab_ul1 li img{width: 1rem;display: block;margin: 0 auto;}
+.tabright .tabcon .tab_ul1 li p{margin-top: .1rem;font-size: .26rem;color:#313233 }
+.tabright .tabcon.job .tab_ul1 li{width: 50%;float: left;}
+
+
+.tabright .tabcon .tab_ul2{border: 1px solid #dce1f7;border-radius: .2rem;position: relative;padding: .5rem .25rem .15rem;margin:.5rem .25rem 0;padding-right: .15rem;background:#fcfdff ;display: flex;justify-content: space-between;}
+.tabright .tabcon .tab_ul2 li{float: left;text-align: center;margin-bottom: .2rem;width: 21%}
+.tabright .tabcon .tab_ul2 li:first-child{width: 18%}
+.tabright .tabcon .tab_ul2 li a{display: block;font-size: .26rem;color: #313233}
+.tabright .tabcon .tab_ul2 li img{width: .56rem;}
+
+.tabright .tabcon .tab_ul2:before{content: '房产';position: absolute;top: -.19rem;left: .2rem;width: .74rem ; height: .38rem;background-image: -moz-linear-gradient( 0deg, rgb(128,161,255) 0%, rgb(49,107,255) 100%);background-image: -webkit-linear-gradient( 0deg, rgb(128,161,255) 0%, rgb(49,107,255) 100%);background-image: -ms-linear-gradient( 0deg, rgb(128,161,255) 0%, rgb(49,107,255) 100%);font-size: .22rem;font-weight: bold;color: #fff;border-radius: .19rem;text-align: center;line-height: .4rem}
+.tabright .tabcon .tab_ul3{border: 1px solid #dce1f7;border-radius: .2rem;position: relative;padding: .5rem .25rem .15rem;margin:.7rem .25rem 0;background:#fcfdff;}
+.tabright .tabcon .tab_ul3 li:first-child{width: 17%}
+.tabright .tabcon .tab_ul3 li{width: 22%;float: left;text-align: center;margin-bottom: .2rem;}
+.tabright .tabcon .tab_ul3 li a{display: block;font-size: .26rem;color: #313233}
+.tabright .tabcon .tab_ul3 li img{width: .56rem;}
+.tabright .tabcon .tab_ul3 li.spe_li{width: 28%}
+.tabright .tabcon .tab_ul3 li.spe_li2{width: 21%}
+.tabright .tabcon .tab_ul3:before{content: '招聘';position: absolute;top: -.19rem;left: .2rem;width: .74rem ; height: .38rem;  background-image: -moz-linear-gradient( 0deg, rgb(98,222,196) 0%, rgb(0,196,144) 100%); background-image: -webkit-linear-gradient( 0deg, rgb(98,222,196) 0%, rgb(0,196,144) 100%);background-image: -ms-linear-gradient( 0deg, rgb(98,222,196) 0%, rgb(0,196,144) 100%);font-size: .22rem;font-weight: bold;color: #fff;border-radius: .19rem;text-align: center;line-height: .4rem}
 .join_disab {padding:.5rem 0;text-align: center;font-size: .3rem;color: #f00;}
 /*入驻店铺*/
 .shop{background: #f8f8f8;}
@@ -167,9 +188,12 @@ input:checked+.checkbox-icon-round:after{-webkit-transform: rotate(45deg) scale(
 .m-baseInfo .modal-main .main,.m-server .modal-main .main{padding:.2rem;text-align: left;line-height: .5rem;letter-spacing: 0.01rem;font-size: .3rem;    max-height: 7rem;overflow-y: auto;}
 
 /*底部关闭*/
-.closeBox {margin:1rem .4rem;position: relative;}
+.closeBox {margin:.65rem .4rem;position: relative;}
 .closeBox a{display: block;}
-.closeBox i{ margin: auto;width:1.5rem;height:1.5rem;display:block;background:url(../images/fabuJoin_touch_popup_3.4/pclose.png) no-repeat center center;    background-size: cover;}
+.closeBox i{ margin: auto;width:.9rem;height:.9rem;display:block;   background-size: cover;border-radius: 50%;border: 1px solid #cacbcf ;background: url(../images/fabuJoin_touch_popup_3.4/tclose.png) no-repeat center;background-size:.28rem;
+}
+
+
 
 /*成功2&&失败提示层*/
 .tipBox-hide{opacity:0;visibility:hidden;-webkit-transform: translateY(-100%);transform: translateY(-100%);}

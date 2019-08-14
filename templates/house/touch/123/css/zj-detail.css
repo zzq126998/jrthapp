@@ -90,3 +90,6 @@ body {background:#f4f4f4;margin-bottom:1.4rem!important;}
 .house-item dd.jy-item-type-1 em:first-child {color:#a0a0a0;}
 .house-item dd.jy-item-type-1 {height:.5rem;line-height:.5rem;}
 .house-item dd.jy-item-type-1 button {width:1.5rem;height:.5rem;font-size:.28rem;background:#f1370b;border:none;color:#fff;border-radius:.1rem;}
+
+
+.main-list .introduce img{width: 100%;max-height: 8rem;object-fit: cover;}

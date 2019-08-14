@@ -13,7 +13,7 @@
     <button class="btn dropdown-toggle" data-toggle="dropdown">评论内容<span class="caret"></span></button>
     <ul class="dropdown-menu">
       <li><a href="javascript:;" data-id="0">评论内容</a></li>
-      <li><a href="javascript:;" data-id="1">标题</a></li>
+      <li><a href="javascript:;" data-id="1">信息名称</a></li>
       <li><a href="javascript:;" data-id="2">评论人</a></li>
       <li><a href="javascript:;" data-id="3">评论IP</a></li>
     </ul>
@@ -80,7 +80,7 @@
   <li class="row35">评论内容</li>
   <li class="row12 left">评论人</li>
   <li class="row17 left">评论IP</li>
-  <li class="row13 left">评论时间</li>
+  <li class="row13 left">评论/回复时间</li>
   <li class="row10">状态</li>
   <li class="row10">操 作</li>
 </ul>
@@ -97,35 +97,56 @@
 <script id="quickEdit" type="text/html">
   <form action="" class="quick-editForm" name="editForm">
     <dl class="clearfix">
-      <dt>评论标题 ：</dt>
-      <dd id="articleTitle"></dd>
+      <dt>评论标题：</dt>
+      <dd id="store"></dd>
     </dl>
     <dl class="clearfix">
       <dt>评论用户：</dt>
-      <dd id="commonUser"></dd>
+      <dd id="user"></dd>
     </dl>
     <dl class="clearfix">
       <dt>评论内容：</dt>
-      <dd><textarea id="commonContent" name="commonContent" style="width:90%; height:100px;" /></textarea></dd>
+      <dd><textarea id="content" name="content" style="width:90%; height:100px;" /></textarea></dd>
     </dl>
-	<dl class="clearfix">
-      <dt>评论时间：</dt>
-      <dd><input type="text" id="commonTime" name="commonTime" class="input-medium" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;评论IP：<input type="text" id="commonIp" name="commonIp" class="input-medium" /></dd>
+
+    <dl class="clearfix hide" id="pics">
+      <dt>图集：</dt>
+      <dd>
+        <div class="list-holder">
+          <ul id="listSection" class="piece clearfix"></ul>
+        </div>
+      </dd>
     </dl>
-	<dl class="clearfix">
-      <dt>顶：</dt>
-      <dd><input type="number" min="0" id="commonGood" name="commonGood" class="input-mini" />&nbsp;&nbsp;&nbsp;踩：<input type="number" min="0" id="commonBad" name="commonBad" class="input-mini" /></dd>
+
+    <dl class="clearfix">
+      <dt>总评分：</dt>
+      <dd>
+        <input type="number" min="1" max="5" id="rating" name="rating" class="input-mini" />
+      </dd>
     </dl>
 	<dl class="clearfix">
       <dt>审核通过：</dt>
       <dd>
-        <select id="commonIsCheck" name="commonIsCheck" class="input-medium">
+        <select id="isCheck" name="isCheck" class="input-medium">
           <option value="0">等待审核</option>
           <option value="1" selected="selected">审核通过</option>
           <option value="2">审核拒绝</option>
-        </select>
+        </select>&nbsp;&nbsp;&nbsp;
+        评论时间：<input type="text" id="time" name="time" class="input-medium" />&nbsp;&nbsp;&nbsp;评论IP：<input type="text" id="ip" name="ip" class="input-medium" />
       </dd>
     </dl>
+
+    <dl class="clearfix hide">
+      <dt>回复内容：</dt>
+      <dd><textarea id="reply" name="reply" style="width:90%; height:100px;" /></textarea></dd>
+    </dl>
+    <dl class="clearfix hide">
+      <dt>回复：</dt>
+      <dd>
+        <input type="text" id="rtime" name="rtime" class="input-medium" />
+      </dd>
+    </dl>
+
   </form>
 </script>
 

@@ -113,6 +113,9 @@ class userLogin extends db_connect{
         $this->userName = $username;
         $this->userPwd = $userpwd;
 
+        global $cfg_errLoginCount;
+        global $cfg_loginLock;
+
         $ip = GetIP();
         $archives = $this->SetQuery("SELECT * FROM `#@__failedlogin` WHERE `ip` = '$ip'");
         $results = $this->db->prepare($archives);
@@ -120,9 +123,9 @@ class userLogin extends db_connect{
         $results = $results->fetchAll(PDO::FETCH_ASSOC);
         if($results){
             //验证错误次数，并且上次登录错误是在15分钟之内
-            if($results[0]['count'] >= 5){
+            if($results[0]['count'] >= $cfg_errLoginCount){
                 $timedifference = GetMkTime(time()) - $results[0]['date'];
-                if($timedifference/60 < 15){
+                if($timedifference/60 < $cfg_loginLock){
                     return -1;
                 }
             }
@@ -211,6 +214,9 @@ class userLogin extends db_connect{
         $this->userName = addslashes($username);
         $this->userPwd = addslashes($userpwd);
 
+        global $cfg_errLoginCount;
+        global $cfg_loginLock;
+
         $ip = GetIP();
         $archives = $this->SetQuery("SELECT * FROM `#@__failedlogin` WHERE `ip` = '$ip'");
         $results = $this->db->prepare($archives);
@@ -218,9 +224,9 @@ class userLogin extends db_connect{
         $results = $results->fetchAll(PDO::FETCH_ASSOC);
         if($results){
             //验证错误次数，并且上次登录错误是在15分钟之内
-            if($results[0]['count'] >= 5){
+            if($results[0]['count'] >= $cfg_errLoginCount){
                 $timedifference = GetMkTime(time()) - $results[0]['date'];
-                if($timedifference/60 < 15){
+                if($timedifference/60 < $cfg_loginLock){
                     return -1;
                 }
             }
@@ -340,7 +346,7 @@ class userLogin extends db_connect{
     function memberLoginCheck($user){
         //根据用户输入的密码生成散列后的密码
         $hash = $this->_getSaltedHash($this->userPwd, $user['password']);
-        
+
         //会员状态
         if($user['state'] != 1){
             return -1;
@@ -1085,6 +1091,9 @@ class userLogin extends db_connect{
 
         DropCookie($this->keepMemberID);
 
+        global $HN_memory;
+        $HN_memory->rm('member_' . $userid);
+
         global $cfg_bbsState;
         global $cfg_bbsType;
         if($cfg_bbsState == 1 && $cfg_bbsType != ""){
@@ -1206,6 +1215,7 @@ class userLogin extends db_connect{
                     return -1;
                     // 已退出但cookie还存在:独立域名情况下会有这种情况
                 }elseif($res[0]['online'] == 0){
+                    $this->exitMember();
                     return -2;
                     // DropCookie($this->keepMemberID);
                     // die('<meta charset="UTF-8"><script type="text/javascript">location.reload();</script>');
@@ -1517,12 +1527,14 @@ class userLogin extends db_connect{
             $sql = $this->SetQuery("UPDATE `#@__member` SET `point` = `point` + $cfg_pointRegGiving WHERE `id` = $userid");
             $ret = $this->db->prepare($sql);
             $ret->execute();
+            $ret->closeCursor();
 
             $date = GetMkTime(time());
             //保存操作日志
             $sql = $this->SetQuery("INSERT INTO `#@__member_point` (`userid`, `type`, `amount`, `info`, `date`) VALUES ('$userid', '1', '$cfg_pointRegGiving', '注册获得积分', '$date')");
             $ret = $this->db->prepare($sql);
             $ret->execute();
+            $ret->closeCursor();
         }
 
         // 推荐注册送积分
@@ -1538,14 +1550,16 @@ class userLogin extends db_connect{
                 $now = time();
                 $point = $cfg_pointRegGivingRec;
                 $archives = $this->SetQuery("UPDATE `#@__member` SET `point` = `point` + $point WHERE `id` = $fromShare");
-                $ret = $this->db->prepare($sql);
+                $ret = $this->db->prepare($archives);
                 $ret->execute();
-                
+                $ret->closeCursor();
+
                 $title = "推荐注册送积分，来自用户ID：".$userid;
                 //保存操作日志
                 $sql = $this->SetQuery("INSERT INTO `#@__member_point` (`userid`, `type`, `amount`, `info`, `date`) VALUES ('$fromShare', '1', '$point', '$title', '$now')");
                 $ret = $this->db->prepare($sql);
                 $ret->execute();
+                $ret->closeCursor();
             }
             if(is_file(HUONIAOINC.'/config/fenxiaoConfig.inc.php')){
                 include HUONIAOINC.'/config/fenxiaoConfig.inc.php'; //分销配置
@@ -1553,6 +1567,7 @@ class userLogin extends db_connect{
                     $sql = $this->SetQuery("UPDATE `#@__member` SET `from_uid` = $fromShare WHERE `id` = $userid");
                     $ret = $this->db->prepare($sql);
                     $ret->execute();
+                    $ret->closeCursor();
                 }
             }
             DropCookie('fromShare');

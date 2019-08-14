@@ -999,7 +999,7 @@ if ($type == "delThumb" || $type == "delAtlas" || $type == "delConfig" || $type 
                 list($ret, $err) = $uploadMgr->putFile($token, $url[1], HUONIAOROOT . $cfg_uploadDir . $url[1]);
 
                 if($filetype == 'video' && $fileClass_ != 'mp4'){
-                  $url[1] = $url1;
+                  // $url[1] = $url1;
                 }
 
                 if ($type != "config") {

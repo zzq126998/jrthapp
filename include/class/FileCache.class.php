@@ -51,7 +51,7 @@ class FileCache
         $this->gc_probality = $gc_probality;
         $this->basepath = realpath($this->path) . DIRECTORY_SEPARATOR;
         if(!file_exists($this->path)){
-            mkdir($path, 0777, true);
+            mkdir($this->path, 0777, true);
         }
     }
 

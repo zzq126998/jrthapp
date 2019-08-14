@@ -16,13 +16,14 @@ $huoniaoTag->template_dir = $tpl; //设置后台模板目录
 $pagetitle = "贴吧回复管理";
 
 if(empty($tid)) die('网站信息传递失败！');
-$tab = "tieba_reply";
+// $tab = "tieba_reply";
+$tab = "public_comment";
 
 if($dopost == "getList"){
 	$pagestep = $pagestep == "" ? 10 : $pagestep;
 	$page     = $page == "" ? 1 : $page;
 
-	$where = " AND `tid` = $tid";
+	$where = " AND `aid` = $tid AND `type` = 'tieba-detail'";
 
 	if($sKeyword != ""){
 		$where .= " AND (`content` like '%$sKeyword%' OR `ip` like '%$sKeyword%')";
@@ -35,14 +36,14 @@ if($dopost == "getList"){
 	//总分页数
 	$totalPage = ceil($totalCount/$pagestep);
 	//待审核
-	$totalGray = $dsql->dsqlOper($archives." AND `state` = 0".$where, "totalCount");
+	$totalGray = $dsql->dsqlOper($archives." AND `ischeck` = 0".$where, "totalCount");
 	//已审核
-	$totalAudit = $dsql->dsqlOper($archives." AND `state` = 1".$where, "totalCount");
+	$totalAudit = $dsql->dsqlOper($archives." AND `ischeck` = 1".$where, "totalCount");
 	//拒绝审核
-	$totalRefuse = $dsql->dsqlOper($archives." AND `state` = 2".$where, "totalCount");
+	$totalRefuse = $dsql->dsqlOper($archives." AND `ischeck` = 2".$where, "totalCount");
 
 	if($state != ""){
-		$where .= " AND `state` = $state";
+		$where .= " AND `ischeck` = $state";
 
 		if($state == 0){
 			$totalPage = ceil($totalGray/$pagestep);
@@ -57,7 +58,7 @@ if($dopost == "getList"){
 
 	$atpage = $pagestep*($page-1);
 	$where .= " LIMIT $atpage, $pagestep";
-	$archives = $dsql->SetQuery("SELECT `id`, `tid`, `rid`, `uid`, `content`, `pubdate`, `ip`, `state` FROM `#@__".$tab."` WHERE 1 = 1".$where);
+	$archives = $dsql->SetQuery("SELECT `id`, `aid` tid, `userid` uid, `content`, `dtime` pubdate, `ip`, `ischeck` state FROM `#@__".$tab."` WHERE 1 = 1".$where);
 	$results = $dsql->dsqlOper($archives, "results");
 
 	if(count($results) > 0){
@@ -80,7 +81,6 @@ if($dopost == "getList"){
 				"id"       => $value['tid']
 			);
 			$list[$key]["url"] = getUrlPath($param);
-			$list[$key]["rid"] = $value["rid"];
 			$list[$key]["uid"] = $value["uid"];
 
 			$username = "无";
@@ -114,6 +114,8 @@ if($dopost == "getList"){
 	if(!testPurview("tiebaReply")){
 		die('{"state": 200, "info": '.json_encode("对不起，您无权使用此功能！").'}');
 	};
+	$sql = $dsql->SetQuery("DELETE FROM `#@__public_up` WHERE `type` = '1' and `tid` IN (".$id.")");
+	$dsql->dsqlOper($sql, "update");
 
 	$archives = $dsql->SetQuery("DELETE FROM `#@__".$tab."` WHERE `id` IN (".$id.")");
 	$dsql->dsqlOper($archives, "update");
@@ -130,7 +132,7 @@ if($dopost == "getList"){
 	$error = array();
 	if($id != ""){
 		foreach($each as $val){
-			$archives = $dsql->SetQuery("UPDATE `#@__".$tab."` SET `state` = ".$state." WHERE `id` = ".$val);
+			$archives = $dsql->SetQuery("UPDATE `#@__".$tab."` SET `ischeck` = ".$state." WHERE `id` = ".$val);
 			$results = $dsql->dsqlOper($archives, "update");
 			if($results != "ok"){
 				$error[] = $val;

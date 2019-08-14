@@ -756,9 +756,9 @@ if(file_exists($tpl."/".$templates)){
                 $huoniaoTag->assign($key, $value);
             }
 
-            $license = '';
+            $licenseArr = '';
             if(empty($ret[0]['food_license_img']) && empty($ret[0]['business_license_img'])){
-                $license = '[]';
+                $licenseArr = '[]';
             }else{
                 $licenseArr = array();
                 if($ret[0]['food_license_img']){

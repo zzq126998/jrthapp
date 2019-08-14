@@ -11,19 +11,21 @@ $(function(){
 		commt_list(type);
 		$('.header span').text('赞');
 	}
-	
+	$.ajax({
+	       url: '/include/ajax.php?service=member&action=updateRead&type='+type,
+	       type: "GET",
+	       dataType: "json",
+	       success: function (data) {
+		     console.log('更新完成')
+	       },
+	       error: function(){
+	         console.log('请求出错请刷新重试');  //请求出错请刷新重试
+	       }
+	});
 	var u = navigator.userAgent, app = navigator.appVersion; 
 	var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);   //ios终端 
 	
-	$('.textarea').focus(function(){
-		
-//		if (isiOS){ 
-//		　　window.setTimeout(function(){ 
-//		     window.scrollTo(0,document.body.clientHeight); 
-//		　　}, 500); 
-//		};
-		
-	});
+
 	
 
 set_focus($('.textarea'));
@@ -127,13 +129,27 @@ set_focus($('.textarea'));
 	//点击发送
 	$('.addf_btn').click(function(){
 		if($(this).hasClass('btn_full')){
+			var id=$(this).attr('data-id');
 			if($('.textarea').html()!=''){
-				showMsg('<img class="gou" src="'+templets_skin+'images/gou.png">已发送');
-				$('.textarea').html('');
-				$(this).removeClass('btn_full');
-				setTimeout(function(){
-					$('.reply_page').animate({'bottom':'-100%'},150);
-				},1000);
+				var content = $('.textarea').html();
+				$.ajax({
+			        url: '/include/ajax.php?service=member&action=replyComment&id='+id+'&content='+content,
+			        type: 'post',
+			        dataType: 'json',
+			        success: function(data){
+			            if(data.state == 100){
+			            	showMsg('<img class="gou" src="'+templets_skin+'images/gou.png">已发送');
+			            	setTimeout(function(){
+								$('.reply_page').animate({'bottom':'-100%'},150);
+							},1000);
+			            }else{
+			                alert(data.info);
+			            }
+			        },
+			        error: function(){
+			            alert('网络错误，初始化失败！');
+			        }
+			    });
 			}
 			
 			
@@ -151,17 +167,18 @@ set_focus($('.textarea'));
 	
 	//回复
 	$('body').delegate('.reply_btn','click',function(){
-		var nickreply = $(this).parent('.f_info').find('.right_info h2').text()
+		var nickreply = $(this).parent('.f_info').find('.right_info h2').text();
 		$('.reply_page').animate({'bottom':0},150);
 		$('.textarea').attr('placeholder','回复    '+nickreply+'：');
 		var box_top = $(window).scrollTop();
 		$('body').css({'position':'fixed','top':-box_top});
-		
+		$('.reply_page .addf_btn').attr('data-id',$(this).attr('data-id'));
 		$('body').delegate('.reply_page .back_btn','click',function(){
 			$('.reply_page').animate({'bottom':'-100%'},150);
 			$('.textarea').html();
 			$('body').css('position','static')
 			$(window).scrollTop(box_top);
+			$('.reply_page .addf_btn').attr('data-id','');
 		});
 		
 	})

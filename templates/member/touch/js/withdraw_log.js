@@ -4,7 +4,7 @@
  */
  var objId = $("#list");
 
- huoniao = {
+ huoniao_ = {
 
  	//转换PHP时间戳
  	transTimes: function(timestamp, n){
@@ -96,7 +96,7 @@ function getList(is){
   									cardname = list[i].cardname,
   									cardname = "*"+cardname.substr(1),
   									amount   = list[i].amount,
-  									tdate    = huoniao.transTimes(list[i].tdate, 1),
+  									tdate    = huoniao_.transTimes(list[i].tdate, 1),
   									state    = list[i].state,
   									url      = list[i].url;
 
@@ -117,7 +117,7 @@ function getList(is){
   							html.push('<a href="'+url+'" class="fn-clear">');
   							html.push('<div class="lbox fn-left">');
   							html.push('<p class="state">'+stateTxt+'</p>');
-  							html.push('<p class="name">'+cardnum+" | "+cardname+'</p>');
+  							html.push('<p class="name">'+(bank == 'weixin' ? '微信' : (bank == 'alipay' ? '支付宝' : '银行卡')) + (bank != 'weixin' ? " | "+cardnum+" | "+cardname : '') +'</p>');
   							html.push('</div>');
   							html.push('<div class="rbox fn-right">');
   							html.push('<p class="number">'+amount+'</p>');
@@ -131,7 +131,7 @@ function getList(is){
                     type = list[i].type,
                     amount = list[i].amount,
                     order_id = list[i].order_id,
-                    pubdate = huoniao.transTimes(list[i].pubdate),
+                    pubdate = huoniao_.transTimes(list[i].pubdate),
                     paydate = list[i].paydate,
                     cardname = list[i].cardname,
                     state = list[i].state,

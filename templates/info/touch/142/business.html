@@ -33,6 +33,9 @@
         };
         var lat='{#$detail_lnglat[1]#}',lng= '{#$detail_lnglat[0]#}';
         var comdetailUrl = '{#getUrlPath service='info' template='comdetail' id="%id%"#}?type=1';
+        var imconfig = {
+        	chatid : '{#$detail_user['userid']#}',
+        }
     </script>
 </head>
 <body>
@@ -143,10 +146,10 @@
                 <!--评论 s-->
                     <div class="commentList newList">
                         <ul>
-                            {#info action='shopcommon' return='common' infoid={#$detail_id#} orderby='hot' pageSize='3'#}
-                            {#if is_array($common.userinfo)#}
-                            {#$nickname = $common.userinfo.nickname#}
-                            {#$photo = $common.userinfo.photo|default: '/static/images/noPhoto_40.jpg'#}
+                            {#member action='getComment' return='common' type='info-business' son='1' aid={#$detail_id#} orderby='hot' pageSize='3'#}
+                            {#if is_array($common.user)#}
+                            {#$nickname = $common.user.nickname#}
+                            {#$photo = $common.user.photo|default: '/static/images/noPhoto_40.jpg'#}
                             {#else#}
                             {#$nickname = {#$langData['info'][2][33]#}#}
                             {#$photo = '/static/images/noPhoto_40.jpg'#}
@@ -158,14 +161,14 @@
                                 <div class="rightInfo">
                                     <h4>{#$nickname#}</h4>
                                     <p class="txtInfo">{#$common.content#}</p>
-                                    {#if $common.lower!=null#}
-                                        {#if count($common.lower)>1#}
+                                    {#if $common.lower.list!=null#}
+                                        {#if count($common.lower.list)>1#}
                                         <div class="replyCon">
-                                            {#foreach from=$common.lower key=ck item=clist#}
+                                            {#foreach from=$common.lower.list key=ck item=clist#}
                                             {#if $ck<=2#}
 
-                                            {#if is_array($clist.userinfo)#}
-                                            {#$nickname = $clist.userinfo.nickname#}
+                                            {#if is_array($clist.user)#}
+                                            {#$nickname = $clist.user.nickname#}
                                             {#else#}
                                             {#$nickname = {#$langData['info'][2][33]#}#}
                                             {#/if#}
@@ -174,36 +177,32 @@
                                             {#/if#}
                                             {#/foreach#}
                                             {#if $ck>=2#}
-                                            <a href="{#getUrlPath service='info' template='comdetail' id={#$common.id#}#}?type=1" class="pmore">{#$langData['info'][2][34]#}{#count($common.lower)#}{#$langData['info'][2][35]#} ></a>
+                                            <a href="{#getUrlPath service='info' template='comdetail' id={#$common.id#}#}?type=1" class="pmore">{#$langData['info'][2][34]#}{#count($common.lower.list)#}{#$langData['info'][2][35]#} ></a>
                                             {#/if#}
                                         </div>
                                         {#else#}
                                         <div class="replyCon">
                                                 {#$n=1#}
-                                                {#foreach from=$common.lower key=ck item=clist#}
-
-                                                {#if is_array($clist.userinfo)#}
-                                                {#$nickname = $clist.userinfo.nickname#}
+                                                {#foreach from=$common.lower.list key=ck item=clist#}
+                                                {#if is_array($clist.user)#}
+                                                {#$nickname = $clist.user.nickname#}
                                                 {#else#}
                                                 {#$nickname = {#$langData['info'][2][33]#}#}
                                                 {#/if#}
-
                                                 {#$n=$n+1#}
                                                 {#if $ck<1#}
                                                 <dl><dt><span class="spColor">{#$nickname#}：</span></dt><dd>{#$clist.content#}</dd></dl>
-                                                    {#if $clist.lower!=null#}
-                                                        {#foreach from=$clist.lower key=cks item=clists#}
-
-                                                        {#if is_array($clists.userinfo)#}
-                                                        {#$nickname2 = $clists.userinfo.nickname#}
+                                                    {#if $clist.lower.list!=null#}
+                                                        {#foreach from=$clist.lower.list key=cks item=clists#}
+                                                        {#if is_array($clists.user)#}
+                                                        {#$nickname2 = $clists.user.nickname#}
                                                         {#else#}
                                                         {#$nickname2 = {#$langData['info'][2][33]#}#}
                                                         {#/if#}
-
                                                         <dl><dt><span class="spColor">{#$nickname2#}</span>{#$langData['marry'][5][55]#} <span class="spColor">{#$nickname#}：</span></dt><dd>{#$clists.content#}</dd></dl>
                                                         {#/foreach#}
                                                         {#if $n>1#}
-                                                        <a href="{#getUrlPath service='info' template='comdetail' id={#$clist.id#}#}?type=1" class="pmore">{#$langData['marry'][5][60]#}{#count($clist.lower)#}{#$langData['marry'][5][61]#} ></a>
+                                                        <a href="{#getUrlPath service='info' template='comdetail' id={#$clist.id#}#}?type=1" class="pmore">{#$langData['marry'][5][60]#}{#count($clist.lower.list)#}{#$langData['marry'][5][61]#} ></a>
                                                         {#/if#}
                                                     {#/if#}
                                                 {#/if#}
@@ -215,12 +214,12 @@
                                         <div class="rtime">{#$common.dtime|date_format:'%m-%d %H:%M'#}</div>
                                         <div class="rbInfo">
                                             <a href="{#getUrlPath service='info' template='comdetail' id={#$common.id#}#}?type=1" class="btnReply"> <s></s> {#$langData['marry'][5][55]#} </a>
-                                            <a href="javascript:;" class="btnUp numZan {#if $common.already==1#}al_zan{#/if#}" data-id="{#$common.id#}"><em>{#$common.good#}</em> </a>
+                                            <a href="javascript:;" class="btnUp numZan {#if $common.zan_has==1#}al_zan{#/if#}" data-id="{#$common.id#}"><em>{#$common.zan#}</em> </a>
                                         </div>
                                     </div>
                                 </div>
                             </li>
-                            {#/info#}
+                            {#/member#}
                             <div class="allmore"><a href="{#getUrlPath service='info' template='comment' id={#$detail_id#}#}?type=1">{#if $detail_shop_common > 0#}{#$langData['info'][1][36]#}{#$detail_shop_common#}{#$langData['info'][1][37]#}{#else#}{#$langData['info'][1][38]#}{#/if#} <s></s></a></div>
                         </ul>
                     </div>
@@ -243,7 +242,8 @@
         <div class="plBox l-item"><a href="javascript:;"><s></s><p>{#$langData['info'][0][13]#}</p></a></div>{#* 评论 *#}
     </div>
     <div class="f_right">
-        <div class="ftel tel-box r-item"><a href="javascript:;"><i></i><span>{#$langData['info'][0][14]#}</span></a></div>{#* 联系咨询 *#}
+        <div class="f_chat r-item chat_to-Link" data-type="user"><a href="javascript:;"><i></i><span>在线咨询</span></a></div>{#* 在线咨询 *#}
+        <div class="ftel tel-box r-item"><a href="javascript:;"><i></i><span>电话联系</span></a></div>{#* 电话联系 *#}
     </div>
 </div>
 

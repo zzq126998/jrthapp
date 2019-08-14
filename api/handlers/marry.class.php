@@ -720,7 +720,8 @@ class marry {
 			$storeDetail['city'] = count($addrArr) > 2 ? $addrArr[1] : $addrArr[0];
 			$storeDetail["address"]    = $results[0]['address'];
 
-			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__marrycommon` WHERE `aid` = ".$results[0]['id']." AND `type` = 0 AND `ischeck` = 1 AND `floor` = 0");
+			// $archives = $dsql->SetQuery("SELECT `id` FROM `#@__marrycommon` WHERE `aid` = ".$results[0]['id']." AND `type` = 0 AND `ischeck` = 1 AND `floor` = 0");
+			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'marry-store' AND `aid` = '$id' AND `pid` = 0");
 			$totalCount = $dsql->dsqlOper($archives, "totalCount");
             $storeDetail['common'] = $totalCount;
 
@@ -934,7 +935,7 @@ class marry {
 
 				return $aid;
 			}else{
-				return array("state" => 101, "info" => $langDatap['marry']['5']['16']);//发布到数据时发生错误，请检查字段内容！
+				return array("state" => 101, "info" => $langData['marry']['5']['16']);//发布到数据时发生错误，请检查字段内容！
 			}
 		}elseif($oper == 'update'){
 			$archives = $dsql->SetQuery("SELECT l.`id` FROM `#@__marry_hotelfield` l LEFT JOIN `#@__marry_store` s ON s.`id` = l.`company` WHERE l.`id` = ".$id);
@@ -944,7 +945,7 @@ class marry {
 				$archives = $dsql->SetQuery("UPDATE `#@__marry_hotelfield` SET `title` = '$title', `userid` = '$userid', `company` = '$company', `pics` = '$pics', `maxtable` = '$maxtable', `besttable` = '$besttable', `floorheight` = '$floorheight', `area` = '$area', `column` = '$column', `fields` = '$fields', `state` = '$custommarryhotelfieldCheck' WHERE `id` = ".$id);
 				$results = $dsql->dsqlOper($archives, "update");
 				if($results != "ok"){
-					return array("state" => 200, "info" => $langDatap['marry']['5']['18']); //保存到数据时发生错误，请检查字段内容！
+					return array("state" => 200, "info" => $langData['marry']['5']['18']); //保存到数据时发生错误，请检查字段内容！
 				}
 
 				updateAdminNotice("marry", "hotelfield");
@@ -1389,7 +1390,7 @@ class marry {
 
 				return $aid;
 			}else{
-				return array("state" => 101, "info" => $langDatap['marry']['5']['16']);//发布到数据时发生错误，请检查字段内容！
+				return array("state" => 101, "info" => $langData['marry']['5']['16']);//发布到数据时发生错误，请检查字段内容！
 			}
 		}elseif($oper == 'update'){
 			$archives = $dsql->SetQuery("SELECT l.`id` FROM `#@__marry_hotelmenu` l LEFT JOIN `#@__marry_store` s ON s.`id` = l.`company` WHERE l.`id` = ".$id);
@@ -1399,7 +1400,7 @@ class marry {
 				$archives = $dsql->SetQuery("UPDATE `#@__marry_hotelmenu` SET `title` = '$title', `userid` = '$userid', `company` = '$company', `price` = '$price', `dishname` = '$dishname', `state` = '$custommarryhotelmenuCheck' WHERE `id` = ".$id);
 				$results = $dsql->dsqlOper($archives, "update");
 				if($results != "ok"){
-					return array("state" => 200, "info" => $langDatap['marry']['5']['18']); //保存到数据时发生错误，请检查字段内容！
+					return array("state" => 200, "info" => $langData['marry']['5']['18']); //保存到数据时发生错误，请检查字段内容！
 				}
 
 				updateAdminNotice("marry", "hotelmenu");
@@ -1822,7 +1823,7 @@ class marry {
 
 				return $aid;
 			}else{
-				return array("state" => 101, "info" => $langDatap['marry']['5']['16']);//发布到数据时发生错误，请检查字段内容！
+				return array("state" => 101, "info" => $langData['marry']['5']['16']);//发布到数据时发生错误，请检查字段内容！
 			}
 		}elseif($oper == 'update'){
 			$archives = $dsql->SetQuery("SELECT l.`id` FROM `#@__marry_host` l LEFT JOIN `#@__marry_store` s ON s.`id` = l.`company` WHERE l.`id` = ".$id);
@@ -1832,7 +1833,7 @@ class marry {
 				$archives = $dsql->SetQuery("UPDATE `#@__marry_host` SET `hostname` = '$hostname', `userid` = '$userid', `company` = '$company', `photo` = '$photo', `tel` = '$tel', `price` = '$price', `note` = '$note', `state` = '$custommarryhostCheck' WHERE `id` = ".$id);
 				$results = $dsql->dsqlOper($archives, "update");
 				if($results != "ok"){
-					return array("state" => 200, "info" => $langDatap['marry']['5']['18']); //保存到数据时发生错误，请检查字段内容！
+					return array("state" => 200, "info" => $langData['marry']['5']['18']); //保存到数据时发生错误，请检查字段内容！
 				}
 
 				updateAdminNotice("marry", "host");
@@ -2300,7 +2301,7 @@ class marry {
 
 				return $aid;
 			}else{
-				return array("state" => 101, "info" => $langDatap['marry']['5']['16']);//发布到数据时发生错误，请检查字段内容！
+				return array("state" => 101, "info" => $langData['marry']['5']['16']);//发布到数据时发生错误，请检查字段内容！
 			}
 		}elseif($oper == 'update'){
 			$archives = $dsql->SetQuery("SELECT l.`id` FROM `#@__marry_weddingcar` l LEFT JOIN `#@__marry_store` s ON s.`id` = l.`company` WHERE l.`id` = ".$id);
@@ -2310,7 +2311,7 @@ class marry {
 				$archives = $dsql->SetQuery("UPDATE `#@__marry_weddingcar` SET `title` = '$title', `userid` = '$userid', `company` = '$company', `pics` = '$pics', `price` = '$price', `duration` = '$duration', `kilometre` = '$kilometre', `state` = '$customweddingcarCheck' WHERE `id` = ".$id);
 				$results = $dsql->dsqlOper($archives, "update");
 				if($results != "ok"){
-					return array("state" => 200, "info" => $langDatap['marry']['5']['18']); //保存到数据时发生错误，请检查字段内容！
+					return array("state" => 200, "info" => $langData['marry']['5']['18']); //保存到数据时发生错误，请检查字段内容！
 				}
 
 				updateAdminNotice("marry", "weddingcar");
@@ -2625,7 +2626,8 @@ class marry {
 			$storeDetail["duration"]    = $results[0]['duration'];
 			$storeDetail["kilometre"]   = $results[0]['kilometre'];
 
-			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__marrycommon` WHERE `aid` = ".$results[0]['id']." AND `type` = 1 AND `ischeck` = 1 AND `floor` = 0");
+			// $archives = $dsql->SetQuery("SELECT `id` FROM `#@__marrycommon` WHERE `aid` = ".$results[0]['id']." AND `type` = 1 AND `ischeck` = 1 AND `floor` = 0");
+			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'marry-rental' AND `aid` = '$id' AND `pid` = 0");
 			$totalCount = $dsql->dsqlOper($archives, "totalCount");
             $storeDetail['common'] = $totalCount;
 
@@ -2746,7 +2748,7 @@ class marry {
 
 				return $aid;
 			}else{
-				return array("state" => 101, "info" => $langDatap['marry']['5']['16']);//发布到数据时发生错误，请检查字段内容！
+				return array("state" => 101, "info" => $langData['marry']['5']['16']);//发布到数据时发生错误，请检查字段内容！
 			}
 		}elseif($oper == 'update'){
 			$archives = $dsql->SetQuery("SELECT l.`id` FROM `#@__marry_plancase` l LEFT JOIN `#@__marry_store` s ON s.`id` = l.`company` WHERE l.`id` = ".$id);
@@ -2756,7 +2758,7 @@ class marry {
 				$archives = $dsql->SetQuery("UPDATE `#@__marry_plancase` SET `title` = '$title', `userid` = '$userid', `company` = '$company', `pics` = '$pics', `holdingtime` = '$holdingtime', `hoteltitle` = '$hoteltitle', `state` = '$custommarryplancaseCheck' WHERE `id` = ".$id);
 				$results = $dsql->dsqlOper($archives, "update");
 				if($results != "ok"){
-					return array("state" => 200, "info" => $langDatap['marry']['5']['18']); //保存到数据时发生错误，请检查字段内容！
+					return array("state" => 200, "info" => $langData['marry']['5']['18']); //保存到数据时发生错误，请检查字段内容！
 				}
 
 				updateAdminNotice("marry", "plancase");
@@ -3192,7 +3194,7 @@ class marry {
 
 				return $aid;
 			}else{
-				return array("state" => 101, "info" => $langDatap['marry']['5']['16']);//发布到数据时发生错误，请检查字段内容！
+				return array("state" => 101, "info" => $langData['marry']['5']['16']);//发布到数据时发生错误，请检查字段内容！
 			}
 		}elseif($oper == 'update'){
 			$archives = $dsql->SetQuery("SELECT l.`id` FROM `#@__marry_planmeal` l LEFT JOIN `#@__marry_store` s ON s.`id` = l.`company` WHERE l.`id` = ".$id);
@@ -3202,7 +3204,7 @@ class marry {
 				$archives = $dsql->SetQuery("UPDATE `#@__marry_planmeal` SET `title` = '$title', `userid` = '$userid', `company` = '$company', `pics` = '$pics', `type` = '$typeid', `price` = '$price', `tag` = '$tag', `state` = '$custommarryplanmealCheck' WHERE `id` = ".$id);
 				$results = $dsql->dsqlOper($archives, "update");
 				if($results != "ok"){
-					return array("state" => 200, "info" => $langDatap['marry']['5']['18']); //保存到数据时发生错误，请检查字段内容！
+					return array("state" => 200, "info" => $langData['marry']['5']['18']); //保存到数据时发生错误，请检查字段内容！
 				}
 
 				updateAdminNotice("marry", "planmeal");

@@ -38,6 +38,8 @@ var adminPath = "{#$adminPath#}";
   {#if in_array("house", $installModuleArr)#}<button type="button" class="btn{#if !in_array("info", $installModuleArr)#} active{#/if#}" data-type="house">房产</button>{#/if#}
   {#if in_array("job", $installModuleArr)#}<button type="button" class="btn{#if !in_array("info", $installModuleArr) && !in_array("house", $installModuleArr)#} active{#/if#}" data-type="job">招聘</button>{#/if#}
   {#if in_array("car", $installModuleArr)#}<button type="button" class="btn{#if !in_array("info", $installModuleArr) && !in_array("house", $installModuleArr) && !in_array("job", $installModuleArr)#} active{#/if#}" data-type="car">汽车</button>{#/if#}
+
+  {#if in_array("education", $installModuleArr)#}<button type="button" class="btn{#if !in_array("car", $installModuleArr) && !in_array("info", $installModuleArr) && !in_array("house", $installModuleArr) && !in_array("job", $installModuleArr)#} active{#/if#}" data-type="education">教育</button>{#/if#}
 </div>
 
 <form action="" method="post" name="editform" id="editform" class="editform">
@@ -1239,6 +1241,301 @@ var adminPath = "{#$adminPath#}";
                   <td>
                     <div class="input-append">
                       <input class="input-small price" step="0.01" name="car_topPlan[day][]" value="{#$job_topPlan[6]['day']#}" type="number">
+                      <span class="add-on">元</span>
+                    </div>
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </dd>
+    </dl>
+  </div>
+  {#/if#}
+
+  {#if in_array("education", $installModuleArr)#}
+  <div class="item{#if in_array("car", $installModuleArr) || in_array("info", $installModuleArr) || in_array("house", $installModuleArr) || in_array("job", $installModuleArr)#} hide{#/if#}">
+    <dl class="clearfix">
+      <dt><strong style="font-size: 16px;">刷新配置&nbsp;&nbsp;&nbsp;&nbsp;</strong></dt>
+      <dd>&nbsp;</dd>
+    </dl>
+    <dl class="clearfix">
+      <dt><label for="education_refreshFreeTimes">免费次数：</label></dt>
+      <dd>
+        <div class="input-append">
+          <input class="input-mini" type="number" id="education_refreshFreeTimes" name="education_refreshFreeTimes" value="{#$education_refreshFreeTimes#}">
+          <span class="add-on">次</span>
+        </div>
+      </dd>
+    </dl>
+    <dl class="clearfix">
+      <dt><label for="car_refreshNormalPrice">普通刷新：</label></dt>
+      <dd>
+        <div class="input-append">
+          <input class="input-mini refreshNormalPrice" type="number" id="education_refreshNormalPrice" name="education_refreshNormalPrice" value="{#$education_refreshNormalPrice#}">
+          <span class="add-on">元/次</span>
+        </div>
+      </dd>
+    </dl>
+    <dl class="clearfix">
+      <dt><label>智能刷新：</label></dt>
+      <dd>
+        <h5 class="stit" style="margin-top: 0;"><span class="label label-info">折扣、单价、优惠的值按照普通刷新一次的价格计算</span></h5>
+        <div class="priceWrap">
+          <table class="table table-hover table-bordered table-striped refreshSmartTable">
+            <thead>
+              <tr>
+                <th>次数</th>
+                <th>时长</th>
+                <th>价格</th>
+                <th>折扣</th>
+                <th>单价</th>
+                <th>优惠</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {#if $education_refreshSmart#}
+              {#foreach from=$education_refreshSmart item=refresh#}
+              <tr>
+                <td>
+                  <div class="input-append">
+                    <input class="span1 times" name="education_refresh[times][]" value="{#$refresh.times#}" type="number">
+                    <span class="add-on">次</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-append">
+                    <input class="span1 day" name="education_refresh[day][]" value="{#$refresh.day#}" type="number">
+                    <span class="add-on">天</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-append">
+                    <input class="input-small price" step="0.01" name="education_refresh[price][]" value="{#$refresh.price#}" type="number">
+                    <span class="add-on">元</span>
+                  </div>
+                </td>
+                <td class="discount">无</td>
+                <td class="unit">0元</td>
+                <td class="offer">0元</td>
+                <td><a href="javascript:;" class="del" title="删除"><i class="icon-trash"></i></a></td>
+              </tr>
+              {#/foreach#}
+              {#else#}
+              <tr>
+                <td>
+                  <div class="input-append">
+                    <input class="span1 times" name="education_refresh[times][]" value="" type="number">
+                    <span class="add-on">次</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-append">
+                    <input class="span1 day" name="education_refresh[day][]" value="" type="number">
+                    <span class="add-on">天</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-append">
+                    <input class="input-small price" step="0.01" name="education_refresh[price][]" value="" type="number">
+                    <span class="add-on">元</span>
+                  </div>
+                </td>
+                <td class="discount">无</td>
+                <td class="unit">0元</td>
+                <td class="offer">0元</td>
+                <td><a href="javascript:;" class="del" title="删除"><i class="icon-trash"></i></a></td>
+              </tr>
+              {#/if#}
+            </tbody>
+            <tbody>
+              <tr>
+                <td colspan="7">
+                  <button type="button" class="btn btn-small addPrice" data-type="refresh">增加一行</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </dd>
+    </dl>
+
+    <dl class="clearfix">
+      <dt><strong style="font-size: 16px;">置顶配置&nbsp;&nbsp;&nbsp;&nbsp;</strong></dt>
+      <dd>&nbsp;</dd>
+    </dl>
+    <dl class="clearfix">
+      <dt><label>普通置顶：</label></dt>
+      <dd>
+        <h5 class="stit" style="margin-top: 0;"><span class="label label-info">折扣、优惠的值按照第一条的价格计算</span></h5>
+        <div class="priceWrap">
+          <table class="table table-hover table-bordered table-striped topNormalTable">
+            <thead>
+              <tr>
+                <th>时长</th>
+                <th>价格</th>
+                <th>折扣</th>
+                <th>优惠</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {#if $education_topNormal#}
+              {#foreach from=$education_topNormal item=top#}
+              <tr>
+                <td>
+                  <div class="input-append">
+                    <input class="span1 day" name="education_topNormal[day][]" value="{#$top.day#}" type="number">
+                    <span class="add-on">天</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-append">
+                    <input class="input-small price" step="0.01" name="education_topNormal[price][]" value="{#$top.price#}" type="number">
+                    <span class="add-on">元</span>
+                  </div>
+                </td>
+                <td class="discount">无</td>
+                <td class="offer">0元</td>
+                <td><a href="javascript:;" class="del" title="删除"><i class="icon-trash"></i></a></td>
+              </tr>
+              {#/foreach#}
+              {#else#}
+              <tr>
+                <td>
+                  <div class="input-append">
+                    <input class="span1 day" name="education_topNormal[day][]" value="" type="number">
+                    <span class="add-on">天</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-append">
+                    <input class="input-small price" step="0.01" name="education_topNormal[price][]" value="" type="number">
+                    <span class="add-on">元</span>
+                  </div>
+                </td>
+                <td class="discount">无</td>
+                <td class="offer">0元</td>
+                <td><a href="javascript:;" class="del" title="删除"><i class="icon-trash"></i></a></td>
+              </tr>
+              {#/if#}
+            </tbody>
+            <tbody>
+              <tr>
+                <td colspan="5">
+                  <button type="button" class="btn btn-small addPrice" data-type="topNormal">增加一行</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </dd>
+    </dl>
+    <dl class="clearfix">
+      <dt><label>计划置顶：</label></dt>
+      <dd>
+        <div class="priceWrap">
+          <table class="table table-hover table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>时长</th>
+                <th>周一</th>
+                <th>周二</th>
+                <th>周三</th>
+                <th>周四</th>
+                <th>周五</th>
+                <th>周六</th>
+                <th>周日</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>全天</td>
+                <td>
+                  <div class="input-append">
+                    <input class="input-small price" step="0.01" name="education_topPlan[all][]" value="{#$job_topPlan[0]['all']#}" type="number">
+                    <span class="add-on">元</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-append">
+                    <input class="input-small price" step="0.01" name="education_topPlan[all][]" value="{#$job_topPlan[1]['all']#}" type="number">
+                    <span class="add-on">元</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-append">
+                    <input class="input-small price" step="0.01" name="education_topPlan[all][]" value="{#$job_topPlan[2]['all']#}" type="number">
+                    <span class="add-on">元</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-append">
+                    <input class="input-small price" step="0.01" name="education_topPlan[all][]" value="{#$job_topPlan[3]['all']#}" type="number">
+                    <span class="add-on">元</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-append">
+                    <input class="input-small price" step="0.01" name="education_topPlan[all][]" value="{#$job_topPlan[4]['all']#}" type="number">
+                    <span class="add-on">元</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-append">
+                    <input class="input-small price" step="0.01" name="education_topPlan[all][]" value="{#$job_topPlan[5]['all']#}" type="number">
+                    <span class="add-on">元</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-append">
+                    <input class="input-small price" step="0.01" name="education_topPlan[all][]" value="{#$job_topPlan[6]['all']#}" type="number">
+                    <span class="add-on">元</span>
+                  </div>
+                </td>
+              </tr>
+                <tr>
+                  <td>早8点-晚8点</td>
+                  <td>
+                    <div class="input-append">
+                      <input class="input-small price" step="0.01" name="education_topPlan[day][]" value="{#$job_topPlan[0]['day']#}" type="number">
+                      <span class="add-on">元</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="input-append">
+                      <input class="input-small price" step="0.01" name="education_topPlan[day][]" value="{#$job_topPlan[1]['day']#}" type="number">
+                      <span class="add-on">元</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="input-append">
+                      <input class="input-small price" step="0.01" name="education_topPlan[day][]" value="{#$job_topPlan[2]['day']#}" type="number">
+                      <span class="add-on">元</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="input-append">
+                      <input class="input-small price" step="0.01" name="education_topPlan[day][]" value="{#$job_topPlan[3]['day']#}" type="number">
+                      <span class="add-on">元</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="input-append">
+                      <input class="input-small price" step="0.01" name="education_topPlan[day][]" value="{#$job_topPlan[4]['day']#}" type="number">
+                      <span class="add-on">元</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="input-append">
+                      <input class="input-small price" step="0.01" name="education_topPlan[day][]" value="{#$job_topPlan[5]['day']#}" type="number">
+                      <span class="add-on">元</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="input-append">
+                      <input class="input-small price" step="0.01" name="education_topPlan[day][]" value="{#$job_topPlan[6]['day']#}" type="number">
                       <span class="add-on">元</span>
                     </div>
                   </td>

@@ -33,4 +33,9 @@ body, html{font-size: .3rem; background: #f9f9f9;}
 .inp-count{position: relative;}
 .inp-count em{position: absolute; left: 0; bottom: -0.05rem; padding: 0 .1rem 0 0; background: #fff;}
 
-a#tj{display: block; padding: .3rem 0; text-align: center; font-size: .3rem; background: #00a0e9; color: #fff; margin: 1rem .3rem 0; border-radius: 0.08rem;}
+a#tj{display: block; padding: .3rem 0; text-align: center; font-size: .3rem; background: #00a0e9; color: #fff; margin: .6rem .3rem 0; border-radius: 0.08rem;}
+
+.tips {padding: 1rem .3rem .5rem; font-size: .24rem; color: #666; line-height: 1.8em;}
+.not {line-height: 1.8em;}
+.agree {padding: 0 .3rem; font-size: .24rem; margin-top: .5rem;}
+.agree a {text-decoration: underline;}

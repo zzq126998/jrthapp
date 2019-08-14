@@ -676,7 +676,7 @@ if($state !== ""){
 
 $pageSize = 50;
 
-$sql = $dsql->SetQuery("SELECT o.`id`, o.`uid`, o.`sid`, o.`ordernum`, o.`ordernumstore`, o.`state`, o.`food`, o.`priceinfo`, o.`person`, o.`tel`, o.`address`, o.`paytype`, o.`preset`, o.`note`, o.`pubdate`, o.`okdate`, o.`paydate`, o.`amount`, o.`peisongid`, o.`peisongidlog`, o.`failed`, o.`refrundstate`, o.`refrunddate`, o.`refrundno`, o.`refrundfailed`, o.`refrundadmin`, o.`transaction_id`, o.`paylognum`, s.`shopname`, s.`merchant_deliver`, s.`selftake` FROM `#@__$dbname` o LEFT JOIN `#@__waimai_shop` s ON s.`id` = o.`sid` WHERE 1 = 1".$where." ORDER BY o.`id` DESC");
+$sql = $dsql->SetQuery("SELECT o.`id`, o.`uid`, o.`sid`, o.`ordernum`, o.`ordernumstore`, o.`state`, o.`food`, o.`priceinfo`, o.`person`, o.`tel`, o.`address`, o.`paytype`, o.`preset`, o.`note`, o.`pubdate`, o.`okdate`, o.`paydate`, o.`amount`, o.`peisongid`, o.`peisongidlog`, o.`failed`, o.`refrundstate`, o.`refrunddate`, o.`refrundno`, o.`refrundfailed`, o.`refrundadmin`, o.`transaction_id`, o.`paylognum`, s.`shopname`, s.`merchant_deliver`, s.`selftake` FROM `#@__$dbname` o LEFT JOIN `#@__waimai_shop` s ON s.`id` = o.`sid` WHERE 1 = 1 AND s.`del` = 0 ".$where." ORDER BY o.`id` DESC");
 // echo $sql;die;
 
 //总条数
@@ -822,9 +822,9 @@ $huoniaoTag->assign("pagelist", $pagelist->show());
 
 
 //查询待确认的订单
-$sql = $dsql->SetQuery("SELECT `id` FROM `#@__waimai_order` WHERE `state` = 2");
-$ret = $dsql->dsqlOper($sql, "totalCount");
-$huoniaoTag->assign("state2", $ret);
+$sql = $dsql->SetQuery("SELECT count(o.`id`) totalCount FROM `#@__waimai_order` o LEFT JOIN `#@__waimai_shop` s ON s.`id` = o.`sid` WHERE o.`state` = 2 AND s.`del` = 0 ");
+$ret = $dsql->dsqlOper($sql, "results");
+$huoniaoTag->assign("state2", (int)$ret[0]['totalCount']);
 
 $huoniaoTag->assign('city', $adminCityArr);
 

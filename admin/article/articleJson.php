@@ -144,7 +144,7 @@ if ($action == "") {
 
     // $unionSql = $dsql->SetQuery("SELECT `id`, `cityid`, `title`, `color`, `flag`, `flag_h`, `flag_r`, `flag_b`, `flag_t`, `flag_p`, `redirecturl`, `typeid`, `weight`, `admin`, `arcrank`, `pubdate`, `mold` FROM `" . $table_all . "` WHERE `del` = $del" . $where);
     // $unionSql .= " order by `id` desc" . " LIMIT $atpage, $pagestep";
-    
+
     $article = $dsql->SetQuery("SELECT b.`id`, b.`cityid`, b.`title`, b.`color`, b.`flag`, b.`flag_h`, b.`flag_r`, b.`flag_b`, b.`flag_t`, b.`flag_p`, b.`redirecturl`, b.`typeid`, b.`weight`, b.`admin`, b.`arcrank`, b.`pubdate`, b.`mold` FROM `" . $table_all . "` AS b INNER JOIN ( SELECT `id` FROM `" . $table_all . "` WHERE `del` = $del ".$where." order by `id` desc LIMIT $atpage, $pagestep) AS tmp ON tmp.id = b.id;");
     // echo $article;die;
     //结果列表
@@ -729,7 +729,7 @@ if ($action == "") {
 
         echo $json;
     }
-    
+
 //获取评论详细信息
 } else if ($action == "getArticleCommonDetail") {
     if ($id != "") {
@@ -1617,7 +1617,7 @@ if ($action == "") {
         				'keyword3' => '进展状态'
         			)
         		);
-                
+
                 if($type == "join"){
                     // 状态改变
                     if($state_ != $state){
@@ -1815,6 +1815,36 @@ if ($action == "") {
 
         echo $json;
     }
+}else if($action == "checkUeditorVideo_face"){
+    $where = "";
+
+    $c = new FileCache();
+    $lattime = (int)$c->get('checkUeVideo_lasttime');
+    if($lattime){
+        $where = " AND `pubdate` > $lattime";
+    }
+    $where .= " AND `path` regexp '/article/editor/video/(.*).mp4' ORDER BY `id` LIMIT 10";
+    $sql = $dsql->SetQuery("SELECT `id`, `filename`, `path`, `pubdate` FROM `#@__attachment` WHERE 1 = 1".$where);
+    $res = $dsql->dsqlOper($sql, "results");
+    $list = array();
+    if($res){
+        $k = 0;
+        foreach ($res as $key => $value) {
+            if(strstr($value['filename'], "is_createface_")) continue;
+            $list[$k]['src'] = getFilePath($value['path']);
+            $list[$k]['path'] = $value['path'];
+            $name = 'is_createface_'.$value['filename'];
+            $sql = $dsql->SetQuery("UPDATE `#@__attachment` SET `filename` = '$name' WHERE `id` = ".$value['id']);
+            $dsql->dsqlOper($sql, "update");
+            $k++;
+        }
+        $c->set('checkUeVideo_lasttime', $res[count($res)-1]['pubdate']);
+    }else{
+        $c->set('checkUeVideo_lasttime', time());
+    }
+    echo json_encode($list);
+    die;
+
 } else {
     echo '{"state": 200, "info": ' . json_encode("操作失败，参数错误！") . '}';
 }

@@ -42,3 +42,5 @@ html,body{height: 100%; background-color: #f2f2f2;}
   background: linear-gradient(left,#8ec2ff, #6076f6); /* 标准的语法 */}
   
 .im-popMsg{padding: .56rem .46rem; border-radius: .12rem; background-color: rgba(0,0,0,.77); position: fixed; left: 50%; top: 30%; transform: translate(-50%,-50%); font-size: .3rem; color: #fff; line-height: .5rem; text-align: center;}
+
+.HN_PublicShare{display: none;}

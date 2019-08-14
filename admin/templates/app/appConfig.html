@@ -141,6 +141,10 @@ var imglist = {
         <dd><input class="input-xxlarge" type="text" name="android_download" id="android_download" value="{#$android_download#}" /></dd>
       </dl>
       <dl class="clearfix">
+        <dt><label for="yyb_download">应用宝链接地址：</label></dt>
+        <dd><input class="input-xxlarge" type="text" name="yyb_download" id="yyb_download" value="{#$yyb_download#}" /></dd>
+      </dl>
+      <dl class="clearfix">
         <dt><label for="ios_download">iOS安装包下载地址：</label></dt>
         <dd><input class="input-xxlarge" type="text" name="ios_download" id="ios_download" value="{#$ios_download#}" /></dd>
       </dl>
@@ -345,7 +349,7 @@ var imglist = {
               </tr>
               {#/for#}
               {#/if#}
-              
+
             </tbody>
           </table>
         </dd>
@@ -430,13 +434,17 @@ var imglist = {
         <input type="hidden" name="business_logo" value="" class="imglist-hidden" id="business_logo">
       </dd>
       </dl>
-      
+
       <dl class="clearfix">
-        <dt><label for="android_download">Android安装包下载地址：</label></dt>
+        <dt><label for="business_android_download">Android安装包下载地址：</label></dt>
         <dd><input class="input-xxlarge" type="text" name="business_android_download" id="business_android_download" value="{#$business_android_download#}" /></dd>
       </dl>
       <dl class="clearfix">
-        <dt><label for="ios_download">iOS安装包下载地址：</label></dt>
+        <dt><label for="business_yyb_download">应用宝链接地址：</label></dt>
+        <dd><input class="input-xxlarge" type="text" name="business_yyb_download" id="business_yyb_download" value="{#$business_yyb_download#}" /></dd>
+      </dl>
+      <dl class="clearfix">
+        <dt><label for="business_ios_download">iOS安装包下载地址：</label></dt>
         <dd><input class="input-xxlarge" type="text" name="business_ios_download" id="business_ios_download" value="{#$business_ios_download#}" /></dd>
       </dl>
   </div>
@@ -520,11 +528,15 @@ var imglist = {
       </dd>
       </dl>
       <dl class="clearfix">
-        <dt><label for="android_download">Android安装包下载地址：</label></dt>
+        <dt><label for="peisong_android_download">Android安装包下载地址：</label></dt>
         <dd><input class="input-xxlarge" type="text" name="peisong_android_download" id="peisong_android_download" value="{#$peisong_android_download#}" /></dd>
       </dl>
       <dl class="clearfix">
-        <dt><label for="ios_download">iOS安装包下载地址：</label></dt>
+        <dt><label for="peisong_yyb_download">应用宝链接地址：</label></dt>
+        <dd><input class="input-xxlarge" type="text" name="peisong_yyb_download" id="peisong_yyb_download" value="{#$peisong_yyb_download#}" /></dd>
+      </dl>
+      <dl class="clearfix">
+        <dt><label for="peisong_ios_download">iOS安装包下载地址：</label></dt>
         <dd><input class="input-xxlarge" type="text" name="peisong_ios_download" id="peisong_ios_download" value="{#$peisong_ios_download#}" /></dd>
       </dl>
     <dl class="clearfix">
@@ -573,7 +585,7 @@ var imglist = {
         </dd>
     </dl>
   </div>
-  
+
   <dl class="clearfix formbtn">
     <dt>&nbsp;</dt>
     <dd><input class="btn btn-large btn-success" type="submit" name="submit" id="btnSubmit" value="确认提交" /></dd>

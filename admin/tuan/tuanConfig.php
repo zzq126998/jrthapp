@@ -54,6 +54,7 @@ if ($type != "") {
         $customChannelDomain = $channeldomain;
         $customChannelSwitch = $channelswitch;
         $customCloseCause = $closecause;
+        $customCommentCheck    = (int)$commentCheck;
 
         //seo设置
         $customSeoTitle = $title;
@@ -281,6 +282,7 @@ if ($type != "") {
     $customInc .= "\$hotline_config = " . $hotline_config . ";\r\n";
     $customInc .= "\$customHotline = '" . $customHotline . "';\r\n";
     $customInc .= "\$customAtlasMax = " . $customAtlasMax . ";\r\n";
+    $customInc .= "\$customCommentCheck = " . (int)$customCommentCheck . ";\r\n";
     //推荐返现金额
     $customInc .= "\$recMoney = " . $recMoney . ";\r\n";
     $customInc .= "\$singelnum = " . $singelnum . ";\r\n";
@@ -645,6 +647,11 @@ if (file_exists($tpl . "/" . $templates)) {
             $huoniaoTag->assign('markFileSelected', $custom_markFile);
         }
     }
+
+    //评论审核-单选
+    $huoniaoTag->assign('commentCheck', array('0', '1'));
+    $huoniaoTag->assign('commentCheckNames', array('需要审核', '不需要审核'));
+    $huoniaoTag->assign('commentCheckChecked', (int)$customCommentCheck);
 
     $huoniaoTag->assign('markPadding', $custom_markPadding);
     $huoniaoTag->assign('transparent', $custom_markTransparent);

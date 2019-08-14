@@ -32,7 +32,7 @@ $(function(){
 		getDataList();
 	});
 
-	var page = 0, pageSize = 10, totalPage = 0, totalCount = 0, isload = false;
+	var page = 0, pageSize = 10, totalPage = 0, totalCount = 0, isload = false, pagetoken = '';
 	directory = getQueryString('directory');
 
 	document.title = directory;
@@ -42,34 +42,41 @@ $(function(){
 	//当前关键字
 	$('.ftit li:eq(0)').find('label').html(directory);
 
-	HN_Location.init(function(data){
-    if (data == undefined || data.address == "" || data.name == "" || data.lat == "" || data.lng == "") {
-			msg('定位获取失败');
-    }else{
-			lat = data.lat;
-      lng = data.lng;
-			address = data.address instanceof Array ? data.address[0] : data.address;
+    window.addEventListener('pageshow', function () {
+        HN_Location.init(function (data) {
+            if (data == undefined || data.address == "" || data.lat == "" || data.lng == "") {
+				msg('定位获取失败');
+            } else {
+                lat = data.lat;
+                lng = data.lng;
+                address = data.address instanceof Array ? data.address[0] : data.address;
 
-			$('.location').html(address);
-			getDataList();
+                $('.location').html(address);
+                getDataList();
 
-			//到底加载
-			$(window).bind("scroll", function(){
-				if($(window).scrollTop()>=$(document).height()-$(window).height()-80 && !isload && page < totalPage){
-					page++;
-					getDataList();
-				}
-			});
-    }
-  })
+                //到底加载
+                $(window).bind("scroll", function () {
+                    if ($(window).scrollTop() >= $(document).height() - $(window).height() - 80 && !isload && page < totalPage) {
+						page++;
+						if(site_map=='google' && pagetoken!='' && pagetoken!=undefined){
+							getDataList(pagetoken);
+						}else{
+							getDataList();
+						}
+                    }
+                });
+            }
+        })
+    });
 
 
-	function getDataList(){
+	function getDataList(pagetokentmp){
+		pagetokentmp = pagetokentmp == '' || pagetokentmp == undefined ? '' : pagetokentmp;
 		isload = true;
 		$('.loading').remove();
 		$('.list').append('<div class="loading"><span>加载中...</span></div>');
 		$.ajax({
-			url: masterDomain + '/include/ajax.php?service=siteConfig&action=get114ConveniencePoiList&pageSize='+pageSize+'&page='+page+'&lng='+lng+'&lat='+lat+'&directory='+directory+'&radius='+radius,
+			url: masterDomain + '/include/ajax.php?service=siteConfig&action=get114ConveniencePoiList&pageSize='+pageSize+'&page='+page+'&lng='+lng+'&lat='+lat+'&directory='+directory+'&radius='+radius+"&pagetoken="+pagetoken,
 			dataType: 'jsonp',
 			success: function(data){
 				isload = false;
@@ -78,6 +85,7 @@ $(function(){
 
 					totalPage = data.info.totalPage;
 					totalCount = data.info.totalCount;
+					pagetoken = data.info.pagetoken == '' || data.info.pagetoken == null ? '' : data.info.pagetoken;
 					var list = data.info.list;
 					if(list.length > 0){
 						var tmp = '';
@@ -103,7 +111,7 @@ $(function(){
 									}else if(site_map == 'qq'){
 										mapUrl = 'http://apis.map.qq.com/uri/v1/search?keyword=' + n.address + ' ' + n.name;
 									}
-								  tmp += '    <a href="'+mapUrl+'" class="route map" data-lat="'+n.lat+'" data-lng="'+n.lng+'" data-title="'+n.name+'" data-address="'+n.address+'"><img src="'+templatePath+'images/114/locationRoute.png" /></a>';
+								  tmp += '    <a href="javascript:;" data-href="'+mapUrl+'" class="route map" data-lat="'+n.lat+'" data-lng="'+n.lng+'" data-title="'+n.name+'" data-address="'+n.address+'"><img src="'+templatePath+'images/114/locationRoute.png" /></a>';
 								}
 							  tmp += '    <a href="' + n.url + '" class="info">';
 							  tmp += '      <h5>' + n.name + '</h5>';
@@ -136,7 +144,7 @@ $(function(){
 	//导航
 	$('.list').delegate('.map', 'click', function(e){
 		e.preventDefault();
-		var t = $(this), lat = t.attr('data-lat'), lng = t.attr('data-lng'), title = t.attr('data-title'), address = t.attr('data-address'), href = t.attr('href');
+		var t = $(this), lat = t.attr('data-lat'), lng = t.attr('data-lng'), title = t.attr('data-title'), address = t.attr('data-address'), href = t.attr('data-href');
 
 		var x_pi = 3.14159265358979324 * 3000.0 / 180.0;
 		var x = lng - 0.0065;
@@ -150,7 +158,7 @@ $(function(){
 		pageData.title = title;
 		pageData.address = address;
 
-		$('.appMapBtn').attr('href', href);
+		$('.appMapBtn').attr('data-href', href);
 		$('.appMapBtn').click();
 	});
 

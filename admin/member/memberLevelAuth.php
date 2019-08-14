@@ -57,6 +57,9 @@ if(!empty($_POST)){
 			$configFile .= "\$cfg_huodongFee = ".(float)$cfg_huodongFee.";\r\n";
 			$configFile .= "\$cfg_voteFee = ".(float)$cfg_voteFee.";\r\n";
 			$configFile .= "\$cfg_liveFee = ".(float)$cfg_liveFee.";\r\n";
+			$configFile .= "\$cfg_homemakingFee = ".(float)$cfg_homemakingFee.";\r\n";
+			$configFile .= "\$cfg_educationFee = ".(float)$cfg_educationFee.";\r\n";
+			$configFile .= "\$cfg_travelFee = ".(float)$cfg_travelFee.";\r\n";
 			$configFile .= "?".">";
 
 			$configIncFile = HUONIAOINC.'/config/settlement.inc.php';

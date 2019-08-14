@@ -69,10 +69,14 @@ var getflist = function (){
          			}
 					var list = [];
 					list.push('<li class="fn-clear friend'+datalist[i].userinfo.uid+'" data-id="'+datalist[i].userinfo.uid+'" data-token = '+datalist[i].token+' data-f= "1">');
-						list.push('<div class="im-headimg"><img src="'+datalist[i].userinfo.photo+'"></div>');
+						list.push('<div class="im-headimg"><img onerror="nofind();"  src="'+(datalist[i].userinfo.photo?datalist[i].userinfo.photo:staticPath+"images/noPhoto_60.jpg")+'"></div>');
 							list.push('<div class="im-_right">');
 								list.push('<h2 class="im-f_name" title="'+datalist[i].userinfo.name+'"><span>'+datalist[i].userinfo.name+'</span>'+online+'</h2>');
-								list.push('<div class="im-f_msg"><span>这里是签名这里是签名这里是签名这里是签名</span></div>');
+								if(val.lastMessage.type=="link"){
+									list.push('<div class="im-f_msg"><span>[链接消息]</span></div>');
+								}else{
+									list.push('<div class="im-f_msg"><span>'+datalist[i].lastMessage.content.replace(/△(.+?)△/g,'<img src="$1"/>')+'</span></div>');
+								}
 							list.push('</div>');
 							list.push('<div class="im-op_box">');
 								list.push('<ul><li class="im-chat_to">和他聊天</li>');
@@ -185,10 +189,15 @@ var getcurlist = function (){
 		            }
 		            if(datalist[i].userinfo.uid != '0'){
 		            	list.push('<li class="fn-clear '+curr+' friend'+datalist[i].userinfo.uid+'" data-token = '+datalist[i].token+' data-id="'+datalist[i].userinfo.uid+'" data-type = "'+val['lastMessage']['type']+'" data-read="'+val['lastMessage']['unread']+'">' );
-						list.push('<div class="im-headimg"><img src="'+datalist[i].userinfo.photo+'"></div>')
-						list.push('<div class="im-_right">')
+						list.push('<div class="im-headimg"><img onerror="nofind();"  src="'+(datalist[i].userinfo.photo?datalist[i].userinfo.photo:staticPath+"images/noPhoto_60.jpg")+'"></div>')
+						list.push('<div class="im-_right">');
 						list.push('<h2 class="im-f_name" title="'+datalist[i].userinfo.name+'"><span>'+datalist[i].userinfo.name+'</span><i>'+(val['lastMessage'] && val['lastMessage'] != false ? transTimes(val['lastMessage']['time'], 4):'') + '</i></h2>');
-						list.push('<div class="im-f_msg"><span>'+(val['lastMessage'] && val['lastMessage'] != false ? (val['lastMessage']['content']) : '')+'</span>'+unread+'</div>')
+						if(val.lastMessage.type=="link"){
+							list.push('<div class="im-f_msg"><span>[链接消息]</span>'+unread+'</div>');
+						}else{
+							list.push('<div class="im-f_msg"><span>'+(val['lastMessage'] && val['lastMessage'] != false ? (val['lastMessage']['content'].replace(/△(.+?)△/g,'<img src="$1"/>')) : '')+'</span>'+unread+'</div>');
+						}
+						
 						list.push('</div>')
 						list.push('<div class="im-delbox"><a href="javascript:;" title="删除会话"></a></div>')
 						list.push('</li>')
@@ -198,7 +207,7 @@ var getcurlist = function (){
          			
          		}
          		
-         		newTip(news_num);
+//       		getnum();
          		$('.im-cur_chat.im-chat_list').html(html)
          	}
          }else{
@@ -210,13 +219,24 @@ var getcurlist = function (){
         }
      });
 }
-
+function nofind(){ 
+	console.log('图片异常')
+	var img = event.srcElement; 
+	img.src = staticPath+"images/noPhoto_60.jpg"; 
+	img.onerror = null;
+}
+function nofind_c(){ 
+	console.log('图片异常')
+	var img = event.srcElement; 
+	img.src = staticPath+"images/404.jpg"; 
+	img.onerror = null;
+}
 //获取最新消息的列表
 var totalpage = 0,req_page=1,isload=0;
 var gettiplist = function (){
 //	$('.im-msg_list').append('<p class="im-msg_loading"><i></i>加载中</p>');
 	$.ajax({
-        url: "/include/ajax.php?service=member&state=0&action=message&page=1&pageSize=100",
+        url: "/include/ajax.php?service=member&action=message&state=0&page=1&pageSize=100",
         type: "GET",
         dataType: "json", //指定服务器返回的数据类型
         crossDomain:true,
@@ -229,10 +249,10 @@ var gettiplist = function (){
          	var html = [];
          	
          	if(datalist.length==0 ){
-         		$('.im-tip_num').hide();
+         		$('.im-tip_btn .im-tip_num').hide();
          		$('.im-msg_list').html('<div class="im-no_list"><img src="'+staticPath+'images/im/no_notice.png" /><p>暂无未读通知~</p><a class="im-notice_all" href="'+masterDomain+'/u/message.html">查看历史</a></div>');
          	}else{
-         		$('.im-tip_num').show();
+         		$('.im-tip_btn .im-tip_num').show();
          		for(var i=0; i< datalist.length; i++ ){
 					var list  = [];
 					var info = datalist[i].body
@@ -240,17 +260,20 @@ var gettiplist = function (){
 					var newtip = datalist[i].state==0?'im-new':'';
 					
 					if(info.first){
-						list.push('<li class="fn-clear" data-url="'+datalist[i].url+'"><a href="javascript:;"><dl>');
+						list.push('<li class="fn-clear" data-url="'+datalist[i].url+'" data-id="'+datalist[i].id+'"><a href="javascript:;"><dl>');
 						list.push('<dt class="'+newtip+'">'+info.first.value+'</dt>');
-						list.push('<dd><label>'+Object.keys(info)[2]+'</label><span>'+info[Object.keys(info)[2]].value+'</span></dd>');
-	         			list.push('<dd class="im-acc_jian"><label>'+Object.keys(info)[3]+'</label><span>'+info[Object.keys(info)[3]].value+'</span></dd>');
-	         			
+	         			for(var m = 0; m < Object.keys(info).length; m++){
+	         				if(Object.keys(info)[m] != 'first' && Object.keys(info)[m]!='remark'){
+	         					list.push('<dd class="fn-clear"><label>'+Object.keys(info)[m]+'</label><span>'+info[Object.keys(info)[m]].value+'</span></dd>');
+	         				}
+	         			}
 					}else{
-						list.push('<li class="fn-clear" data-url="'+datalist[i].url+'"><dl>');
+						list.push('<li class="fn-clear" data-url="'+datalist[i].url+'" data-id="'+datalist[i].id+'"><dl>');
 						list.push('<dt class="'+newtip+'"><span>'+datalist[i].title+'</span></dt>');
 						list.push('<dd>'+info+'</dd>');
+						list.push('<dd><label>变动时间</label><span>'+datalist[i].date+'</span></dd>');
+         					
 					}
-         			list.push('<dd><label>变动时间</label><span>'+datalist[i].date+'</span></dd>');
          			list.push('<dd class="im-delbox"><i></i></dd>');
          			list.push('</dl></li>');
          			
@@ -279,6 +302,9 @@ var gettiplist = function (){
 ////              $('.im-msg_list').append('<p class="im-msg_loading">已经全部加载</p>');
 //           }
 //       	req_page++;
+         }else{
+         	$('.im-tip_btn .im-tip_num').hide();
+         	$('.im-msg_list').html('<div class="im-no_list"><img src="'+staticPath+'images/im/no_notice.png" /><p>暂无未读通知~</p><a class="im-notice_all" href="'+masterDomain+'/u/message.html">查看历史</a></div>');
          }
         },
         error:function(err){
@@ -288,10 +314,11 @@ var gettiplist = function (){
 }
 
 //获取聊天记录
-var rec_page=1,recload=0,fin=1;
+var rec_page=1,recload=0,fin=1,totalPage=0;
 var getrecord = function(type){
+	console.log(rec_page)
 	$('.im-more').remove();
-	if(recload || rec_page > totalPage) return false;
+	if((recload || rec_page > totalPage) && rec_page!=1) return false;
         recload = 1;
 	$.ajax({
          url: '/include/ajax.php?service=siteConfig&action=getImChatLog',
@@ -362,13 +389,16 @@ var getrecord = function(type){
             	$('.im-cur_chat .friend' + from).find('.im-f_msg span').html( '[图片]');
             }else if(data.contentType == "apply"){
             	$('.im-cur_chat .friend' + from).find('.im-f_msg span').html( '[验证消息]')
+            }else if(data.contentType == "link"){
+            	$('.im-cur_chat .friend' + from).find('.im-f_msg span').html( '[链接消息]')
             }
             if(!$('.im-cur_chat .friend' + from).hasClass('im-pannel_curr')){
                 if($('.im-cur_chat .friend' + from).find('.im-f_msg i').size() == 0){
                     $('.im-cur_chat .friend' + from).find('.im-f_msg').append('<i></i>');
                 }
                 $('.im-cur_chat .friend' + from).find('.im-f_msg i').html(data.unread);
-                newTip(data.unread);
+//              newTip(data.unread);
+				getnum();
                 
             }
          
@@ -379,7 +409,7 @@ var getrecord = function(type){
         //拼接对话
         if (from == userinfo['uid']) {
         	gest ='im-to_other';
-        	imghead = '<div class="im-m_head"><img src="'+userinfo['photo']+'"></div>';
+        	imghead = '<div class="im-m_head"><img onerror="nofind();"  src="'+(userinfo['photo']?userinfo['photo']:staticPath+"images/noPhoto_60.jpg")+'"></div>';
             var fromUser = "<span style='color: red;'>你</span>";
             sf = true;
         } else {
@@ -388,7 +418,7 @@ var getrecord = function(type){
 		
         if (to == userinfo['uid']) {
         	gest ='im-from_other';
-        	imghead = '<div class="im-m_head im-to_fdetail"><img src="'+toUserinfo['photo']+'"></div>';
+        	imghead = '<div class="im-m_head im-to_fdetail"><img onerror="nofind();"   src="'+(toUserinfo['photo']?toUserinfo['photo']:staticPath+"images/noPhoto_60.jpg")+'"></div>';
             var toUser = "<span style='color: red;'>你</span>";
         } else {
             var toUser = toUserinfo['name'];
@@ -398,7 +428,10 @@ var getrecord = function(type){
 
         // 文本
         if(data.contentType == "text"){
-            text = '<div class="im-text_msg">'+data.content.replace(/\\/g,"")+'</div>';
+        	var pattern =/△(.+?)△/g;
+        	var mytext;
+        	mytext = data.content.replace(/△(.+?)△/g,'<img src="$1"/>');
+            text = '<div class="im-text_msg">'+mytext+'</div>';
             typemsg= '';
             style="";
             attrbuite=""
@@ -422,8 +455,9 @@ var getrecord = function(type){
         
          //语音消息
         if(data.contentType == 'audio'){
+        	console.log(data)
         	 typemsg= 'im-s_content';
-        	 text = '<div class="im-speak_msg"><em>23"</em></div>'
+        	 text = '<div class="im-speak_msg" style="width:'+(50+5*data.content.audioTime)+'px; max-width:328px;"><em>'+data.content.audioTime+'"</em><audio class="chat_audio" src="'+data.content.audioUrl+'"></audio></div>'
         }
         
         //视频
@@ -453,7 +487,7 @@ var getrecord = function(type){
          //好友推荐
         if(data.contentType == 'recfriend'){
         	typemsg = 'im-recf_content';
-        	text = '<a data-id="'+data.content.f_id+'" href="add_friend-'+data.content.f_id+'.html"><dl><dt>推荐好友</dt><dd class="fn-clear"><div class="im-recf_head"><img src="'+data.content.f_photo+'"/><i class="level"></i></div><div class="im-recf_info"><h2>'+data.content.f_name+'</h2><p>ID：'+data.content.f_id+'</p></div></dd></dl></a>';
+        	text = '<a data-id="'+data.content.f_id+'" href="add_friend-'+data.content.f_id+'.html"><dl><dt>推荐好友</dt><dd class="fn-clear"><div class="im-recf_head"><img onerror="nofind();"  src="'+(data.content.f_photo?data.content.f_photo:staticPath+"images/noPhoto_60.jpg")+'"/><i class="level"></i></div><div class="im-recf_info"><h2>'+data.content.f_name+'</h2><p>ID：'+data.content.f_id+'</p></div></dd></dl></a>';
         }
         //好友申请
         if(data.contentType == "apply"){
@@ -478,9 +512,54 @@ var getrecord = function(type){
             style="";
             attrbuite="";
         }
+        var item;
         
-        var item = '<div class="'+gest+' im-chat_item fn-clear" data-time="'+data.time+'" data-size="'+attrbuite+'">'+imghead+'<div style="'+style+'" class="im-m_content '+typemsg+'" data-lng="'+lng+'" data-lat="'+lat+'">'+text+'</div></div>';
-        
+        if(data.contentType=="link"){
+        	var content = data.content;
+        	var im_class = '', ctn_text ='',title = content.title;
+        	if(content.mod == 'job'){
+        		im_class = 'im-pro_description';
+        		ctn_text =  '<p class="'+ im_class +'">'+content.description+'</p><p class="'+ im_class +'">薪资范围：'+ content.salary +'</p>'	
+        		title = '[招聘]'+content.title;
+        	}else{
+        		im_class = 'im-pro_price';
+        		title = content.title;
+        		ctn_text = '<p class="'+im_class+'">'+ (content.price!=""?(content.price):"面议") +'</p>';
+//      		if(content.mod == 'house'){
+//      			if(content.housetype=="sale"){
+//      				title = '[二手房]'+content.title;
+//      				ctn_text = '<p class="'+im_class+'">'+ (content.price>0?("￥"+content.price+" 万"):"面议") +'</p>';
+//      			}else if(content.housetype=="cf"){
+//      				ctn_text = '<p class="'+im_class+'">'+ (content.price>0?("￥"+content.price+" /月"):"面议") +'</p>';
+//      			}else if(content.housetype=="xzl"){
+//      				ctn_text = '<p class="'+im_class+'">'+ (content.price>0?(content.price+" 元/m<sup>2</sup>·月"):"面议") +'</p>';
+//      			}else if(content.housetype=="zu"){
+//      				title = '[出租]'+content.title;
+//      				ctn_text = '<p class="'+im_class+'">'+ (content.price>0?(content.price+" 元/月"):"面议") +'</p>';
+//      			}else if(content.housetype=="sp" || content.housetype=="cw"){
+//      				if(content.sptype=="出售"){
+//      					title = '[出售]'+content.title;
+//      					ctn_text = '<p class="'+im_class+'">'+ (content.price>0?("￥"+content.price+" 万"):"面议") +'</p>';
+//      				}else if(content.sptype=="出租"){
+//      					title = '[出租]'+content.title;
+//      					ctn_text = '<p class="'+im_class+'">'+ (content.price>0?(content.price+" 元/月"):"面议") +'</p>';
+//      				}else{
+//      					title = '[转让]'+content.title;
+//      					ctn_text = '<p class="'+im_class+'">'+ (content.price>0?(content.price+" 元/月"):"面议") +'</p>';
+//      				}
+//      				
+//      			}else{
+//      				ctn_text = '<p class="'+im_class+'">'+ (content.price!=""?(content.price):"面议") +'</p>';
+//      			}
+//      		}else{
+//      			ctn_text = '<p class="'+im_class+'">'+ (content.price>0?("￥"+content.price):"面议") +'</p>';
+//      		}
+        		
+        	}
+	        item = '<div class="im-LinkBox im-chat_item"><a href="'+content.link+'"><div class="im-pro_img"><img onerror="nofind_c();" src="'+ (content.imgUrl?content.imgUrl:"/static/404.jpg") +'" /></div><div class="im-pro_info"><h2>'+title+'</h2>'+ ctn_text +'</div></a></div>'	
+	    }else{
+	    	item = '<div class="'+gest+' im-chat_item fn-clear" data-time="'+data.time+'" data-size="'+attrbuite+'">'+imghead+'<div style="'+style+'" class="im-m_content '+typemsg+'" data-lng="'+lng+'" data-lat="'+lat+'">'+text+'</div></div>';
+	    }
         appendLog('mine', item, type, data.time);
 	
         //已读上报
@@ -501,9 +580,9 @@ var getrecord = function(type){
      //创建历史对话
     var appendLog = function (ele, item, type, time) {
         var log = $('.im-record_box');
-		
-        if(log.find('.im-chat_item').size() == 0){
+        if(log.find('.im-chat_item').size() == 0 ){
             log.append('<div class="im-msg_time" data-time="'+time+'">'+getDateDiff(time)+'</div>');
+            
            
         }else{
         	
@@ -624,7 +703,7 @@ var getrecord_1 = function(page,datachose){
 			//有聊天记录的日期
 			
          	for(var i=0; i< datalist.length; i++ ){
-         		var value_time = transTimes(datalist[1].time,2);
+         		var value_time = transTimes(datalist[0].time,2);
 				$('#im-date').val(value_time);
 				var list  = [];
 				var msgt,nickname;
@@ -693,7 +772,7 @@ var zan_page=1, zan_total=0, zanload=0,fin_zan=1;
 var getzan = function(){
 	$('.com_loading').show();
 	$.ajax({
-        url: "https://ihuoniao.cn/include/ajax.php?service=info&action=ilist_v2&page="+zan_page+"&pageSize=4",
+        url: "/include/ajax.php?service=member&action=upList&u=1&pageSize=10&zan_page="+zan_page,
         type: "GET",
         dataType: "jsonp", //指定服务器返回的数据类型
         crossDomain:true,
@@ -703,20 +782,31 @@ var getzan = function(){
          	zan_total = data.info.pageInfo.totalPage;
          	var html = [];
          	if(datalist.length==0){
-         		$('.im-act_box .im-zan').html('<div class="im-no_list"><img src="'+staticPath+'images/im/no_img.png" /><p>没有任何消息~</p></div>');
+         		$('.im-act_box .im-zan').html('<div class="im-no_list"><img src="'+staticPath+'images/im/no_img.png" /><p>没有任何点赞~</p></div>');
          	}else{
          		for(var i=0; i< datalist.length; i++ ){
 					var list  = [];
-					list.push('<li><a href="#" class="fn-clear">');
-						list.push('<div class="im-zan_head"><img src="'+templets_skin+'upfile/head01.jpg" /></div>');	
+					list.push('<li><a href="'+datalist[i].detail.url+'" class="fn-clear" data-type="'+datalist[i].detail.type+'">');
+						list.push('<div class="im-zan_head"><img onerror="nofind();" src="'+(datalist[i].photo?datalist[i].photo:"/static/images/noPhoto_60.jpg")+'" /></div>');	
 						list.push('<div class="im-zan_con">');	
-							list.push('<div class="im-con_img"><img src="'+templets_skin+'upfile/img_01.png" /></div>');	
-							list.push('<h3><span class="im-nicname">SIMMO</span>赞了我的发布</h3>');
-							list.push('<p>自己也有写过一些文章来分享，同时自己也在不断收集和整理作品，并在公众号开始发</p>');	
-							list.push('<div class="im-reply_box"><em>12:31</em><span class="im-btn_reply">回复</span></div>');	
+							if(datalist[i].detail.litpic){
+								list.push('<div class="im-con_img"><img onerror="nofind_c();" src="'+(datalist[i].detail.litpic?datalist[i].detail.litpic:"/static/images/404.jpg")+'" /></div>');	
+							}else if(datalist[i].detail.imglist.length>0){
+								list.push('<div class="im-con_img"><img onerror="nofind_c();"  src="'+(datalist[i].detail.imglist[0].path?"/include/attachment.php?f="+datalist[i].detail.imglist[0].path:"/static/images/404.jpg")+'" /></div>');
+							}	
+							if(datalist[i].type=='1'){
+				            		className="commt_con";
+				            		list.push('<h3><span class="im-nicname">'+datalist[i].username+'</span>赞了我的评论</h3>');
+				            		list.push('<p>'+datalist[i].detail.commentcontent+'</p>');
+				            }else{
+				            		className="con_box";
+				            		list.push('<h3><span class="im-nicname">'+datalist[i].username+'</span>赞了我的发布</h3>');
+				            		list.push('<p>'+(datalist[i].detail.description?datalist[i].detail.description:datalist[i].detail.title)+'</p>');	
+				            }
+							list.push('<div class="im-reply_box"><em>'+(getDateDiff(datalist[i].puctime))+'</em><span data-id="'+datalist[i].id+'"  class="im-btn_reply">回复</span></div>');	
 						list.push('</div>');
          			list.push('</a></li>');
-         			html.push(list.join(''))
+         			html.push(list.join(''));
          		}
          		$('.im-act_box .im-zan').append(html);
          		$('.com_loading').hide();
@@ -728,6 +818,9 @@ var getzan = function(){
 	        }
          	zan_page++;
          	fin_zan=1;
+         }else{
+         	 $('.com_loading').hide();
+         		$('.im-act_box .im-zan').html('<div class="im-no_list"><img src="'+staticPath+'images/im/no_img.png" /><p>没有任何点赞~</p></div>');
          }
          
         },
@@ -741,7 +834,7 @@ var cm_page=1,cm_total=0,cmload=0,fin_comm=1;
 var getcommt = function(){
 	$('.com_loading').show();
 	$.ajax({
-        url: "https://ihuoniao.cn/include/ajax.php?service=info&action=ilist_v2&page="+cm_page+"&pageSize=6",
+        url: "/include/ajax.php?service=member&action=getComment&u=1&son=1&onlyself=1&page="+cm_page+"&pageSize=10",
         type: "GET",
         dataType: "jsonp", //指定服务器返回的数据类型
         crossDomain:true,
@@ -751,20 +844,30 @@ var getcommt = function(){
          	cm_total = data.info.pageInfo.totalPage;
          	var html = [];
          	if(datalist.length==0){
-         		$('.im-act_box .im-commt').html('<div class="im-no_list" style="display: none;"><img src="'+staticPath+'images/im/no_img.png" /><p>没有任何消息~</p></div>');
+         		$('.im-act_box .im-commt').html('<div class="im-no_list" ><img src="'+staticPath+'images/im/no_img.png" /><p>没有任何消息~</p></div>');
          	}else{
          		for(var i=0; i< datalist.length; i++ ){
 					var list  = [];
-					list.push('<li><a href="#" class="fn-clear">');
-						list.push('<div class="im-zan_head"><img src="'+datalist[i].litpic+'" /></div>');	
+					list.push('<li><a href="'+(datalist[i].detail?datalist[i].detail.url:'javascript:;')+'" class="fn-clear">');
+						list.push('<div class="im-zan_head"><img src="'+(datalist[i].user.photo?datalist[i].user.photo:"/static/images/noPhoto_60.jpg")+'" /></div>');	
 						list.push('<div class="im-zan_con">');	
-							list.push('<div class="im-con_img"><img src="'+templets_skin+'upfile/img_01.png" /></div>');	
-							list.push('<h3><span class="im-nicname">'+datalist[i].member.nickname+'</span></h3>');
-							list.push('<p>自己也有写过一些文章来分享</p>');	
-							list.push('<div class="im-reply_box"><em>12:31</em><span class="im-btn_reply">回复</span></div>');	
+							if(datalist[i].detail && datalist[i].detail.litpic){
+								list.push('<div class="im-con_img"><img  onerror="nofind_c();"  src="'+(datalist[i].detail.litpic?datalist[i].detail.litpic:"/static/images/noPhoto_60.jpg")+'" /></div>');	
+							}else if(datalist[i].detail && datalist[i].detail.imglist){
+								if(datalist[i].detail.imglist.length>0){
+									list.push('<div class="im-con_img"><img onerror="nofind_c();"  src="'+datalist[i].detail.imglist[0].path+'" /></div>');
+								}
+								
+							}else if(datalist[i].detail && datalist[i].detail.imgGroup){  //评论
+								list.push('<div class="im-con_img"><img onerror="nofind_c();"  src="'+datalist[i].detail.imgGroup[0]+'" /></div>');
+								
+							}
+							list.push('<h3><span class="im-nicname">'+datalist[i].user.username+'</span></h3>');
+				            list.push('<p>'+datalist[i].content+'</p>');
+							list.push('<div class="im-reply_box"><em>'+(getDateDiff(datalist[i].dtime))+'</em><span data-id="'+datalist[i].id+'" class="im-btn_reply">回复</span></div>');	
 						list.push('</div>');
          			list.push('</a></li>');
-         			html.push(list.join(''))
+         			html.push(list.join(''));
          		}
          		$('.im-act_box .im-commt').append(html);
          		$('.com_loading').hide();
@@ -778,6 +881,9 @@ var getcommt = function(){
 			}
          cm_page++;
          fin_comm=1;
+         }else{
+         		$('.com_loading').remove();
+         		$('.im-act_box .im-commt').html('<div class="im-no_list" ><img src="'+staticPath+'images/im/no_img.png" /><p>没有任何评论~</p></div>');
          }
         
         },
@@ -787,42 +893,42 @@ var getcommt = function(){
      });
 }
 
-//加载个人资料
-var getinfo =  function(id){
-	$.ajax({
-        url: "https://ihuoniao.cn/include/ajax.php?service=info&action=ilist_v2&pageSize=4",
-        type: "GET",
-        dataType: "jsonp", //指定服务器返回的数据类型
-        crossDomain:true,
-        success: function (data) {
-         if(data.state == 100){
-         	var datalist = data.info.list;
-         	var html = [],info=[];
-
-         		for(var i=0; i< datalist.length; i++ ){
-					var list  = [];
-					if(i!=2){
-						list.push('<li class="im-shop"><a href="#" class=" fn-clear"><div class="im-_leftLogo "><i></i><span>商城</span></div><div class="im-shop_info"><h3>蔓延时尚潮流女装  </h3><p>服装服饰、鞋帽、针纺织品、服装辅料、</p></div></a></li>');
-					}else{
-						list.push('<li class="im-zhaopin"><a href="#" class=" fn-clear"><div class="im-_leftLogo"><i></i><span>招聘</span></div><div class="im-shop_info"><h3>蔓延时尚潮流女装  </h3><p><span>在招职位  12</span><em>|</em><span>薪资  5000~7000</span></p></div></a></li>');
-					}
-         			html.push(list.join(''))
-         		} 
-         		$('.im-shop_box ul').html(html)
-         }
-        },
-        error:function(err){
-        	console.log('fail');
-        }
-     });
-}
+////加载个人资料
+//var getinfo =  function(id){
+//	$.ajax({
+//      url: "/include/ajax.php?service=member&action=getComment&u=1&son=1",
+//      type: "GET",
+//      dataType: "jsonp", //指定服务器返回的数据类型
+//      crossDomain:true,
+//      success: function (data) {
+//       if(data.state == 100){
+//       	var datalist = data.info.list;
+//       	var html = [],info=[];
+//
+//       		for(var i=0; i< datalist.length; i++ ){
+//					var list  = [];
+//					if(i!=2){
+//						list.push('<li class="im-shop"><a href="#" class=" fn-clear"><div class="im-_leftLogo "><i></i><span>商城</span></div><div class="im-shop_info"><h3>蔓延时尚潮流女装  </h3><p>服装服饰、鞋帽、针纺织品、服装辅料、</p></div></a></li>');
+//					}else{
+//						list.push('<li class="im-zhaopin"><a href="#" class=" fn-clear"><div class="im-_leftLogo"><i></i><span>招聘</span></div><div class="im-shop_info"><h3>蔓延时尚潮流女装  </h3><p><span>在招职位  12</span><em>|</em><span>薪资  5000~7000</span></p></div></a></li>');
+//					}
+//       			html.push(list.join(''))
+//       		} 
+//       		$('.im-shop_box ul').html(html)
+//       }
+//      },
+//      error:function(err){
+//      	console.log('fail');
+//      }
+//   });
+//}
 
 var timer,step=0;
 var newTip = function(num){
 	//新消息闪烁
 	clearInterval(timer);
 	if(num==0){
-		$('.im-msg_tip').html('<span class="im-tip_head"><img src="'+userinfo["photo"]+'"/></span><p>'+userinfo["name"]+'</p><i></i>');
+		$('.im-msg_tip').html('<span class="im-tip_head"><img onerror="nofind();"   src="'+(userinfo["photo"]?userinfo["photo"]:staticPath+"images/noPhoto_60.jpg")+'"/></span><p>'+userinfo["name"]+'</p><i></i>');
 		return false;
 				
 	}else{
@@ -836,12 +942,46 @@ var newTip = function(num){
 			};
 		}, 500);
 	}
-			
-
-//		$('.im-msg_tip').html('<span class="im-tip_head"><img src="'+userinfo["photo"]+'"/></span><p>'+userinfo["name"]+'</p><i></i>')
 
 }
-
+//获取消息数目
+var getnum = function(){
+		$.ajax({
+	       url: '/include/ajax.php?service=member&action=message&type=tongji&im=1',
+	       type: "GET",
+	       dataType: "json",
+	       success: function (data) {
+		       var html = [];
+		       if(data.state == 100){
+		       	  var info = data.info.pageInfo;
+		       	  var count = info.im + info.unread + info.upunread + info.commentunread;
+		       	  if(info.commentunread>0){
+		       	  	$('.im-btn_comm span').html('评论（'+info.commentunread+'）');
+		       	  }else{
+		       	  	$('.im-btn_comm span').html('评论');
+		       	  }
+		       	  if(info.upunread>0){
+		       	  	$('.im-btn_zan span').html('赞（'+info.upunread+'）');
+		       	  }else{
+		       	  	$('.im-btn_zan span').html('赞');
+		       	  }
+		       	  $('.im-msg_btn .im-tip_num').remove();
+		       	  if(info.commentunread>0 || info.upunread>0){
+		       	  	$('.im-msg_btn').append('<i class="im-tip_num">'+(info.commentunread+info.upunread)+'</i>');
+		       	  }
+		       	  newTip(count);
+		       }
+	       },
+	       error: function(){
+	         console.log('请求出错请刷新重试');  //请求出错请刷新重试
+	       }
+	    });
+	}
+//	setTimeout(function(){
+//		getnum();
+//	},500);
+	
+	setInterval(getnum,5000)
 //文本框过滤样式
 $('[contenteditable]').each(function() {
     // 干掉IE http之类地址自动加链接

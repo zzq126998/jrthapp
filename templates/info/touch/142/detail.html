@@ -38,12 +38,66 @@
         var collect = {#$detail_info.collect#};
         var detail_video='{#$detail_video#}';
         var comdetailUrl = '{#getUrlPath service='info' template='comdetail' id="%id%"#}';
+        var is_video_ = '{#$is_video#}';
+        var imconfig = {
+			'mod':'info',
+			'chatid':"{#$detail_member.userid#}",
+			'title': '{#$detail_title#}',
+			"price": '<em>￥</em>{#$detail_price#}',
+			"imgUrl": '{#changeFileSize url={#$detail_imglist[0]["path"]#} type='small'#}',
+			"link": '{#getUrlPath service="info" template="detail" id=$detail_id#}',
+
+		}
     </script>
 </head>
 <body>
 <!-- 头部 -->
 {#include file="../../../siteConfig/touch_top.html" pageTitle={#$langData['info'][2][29]#}#}
 <!-- 头部 end -->
+
+<!-- 视频-->
+{#if $is_video#}
+<div class="top-video">
+	<i class="vClose"></i>
+	<div class="video-box">
+	    <video width="100%" height="100%" preload="meta" x5-video-player-type="h5" x5-playsinline playsinline webkit-playsinline  src="{#$detail_info['video']#}" id="video" poster="{#$detail_info_video_pic#}"></video>
+	    <div class="video-btn">
+	        <div class="play-box video-icon-box" id="vbplay">
+	            <i class="play-icon video-icon"></i>
+	        </div>
+	        <div class="load-box video-icon-box" style="display: none;">
+	            <i class="load-icon video-icon"></i>
+	        </div>
+	        <div class="reload-box video-icon-box" style="display: none;">
+	            <i class="reload-icon"></i>
+	            <p>重新播放</p>
+	        </div>
+	        <div class="error-box video-icon-box" style="display: none;">
+	            <p class="err-info">视频出错了，请检查网络状况</p>
+	            <div class="reload-box">
+	                <i class="reload-icon"></i>
+	                <p>重新加载</p>
+	            </div>
+	        </div>
+	    </div>
+	    <div id="video-control" style="display: none;">
+		  <div class="btn-control">
+		    <div id="play" class="play"> </div>
+		  </div>
+		  <div id="time" class="time"> 00:00 </div>
+		  <div id="progress"> <span id="bar"></span>
+		    <div id="control"> </div>
+		  </div>
+		  <div class="btn-control">
+		    <div id="sound" class="soundon"> </div>
+		  </div>
+		  <div id="full" class="full"> </div>
+		</div>
+	</div>
+</div>
+{#/if#}
+<!-- 视频 e-->
+
 <div class="top">
     <div class="title"><h3>{#$detail_info['titlenew']#}</h3> <a class="share HN_PublicShare" href="javascript:;"></a></div>
     {#if $detail_price_switch==0#}
@@ -70,11 +124,12 @@
         <a class="fn-clear" href="{#$shop_url#}">
             <div class="user-img fn-left"><img src="{#$detail_info['member']['photo']#}" alt=""></div>
             <div class="user-info">
-                <p class="name">{#$detail_info['member']['nickname']#} {#if $is_shop#}<i class="com_tab"></i> {#else#}<i class="panel_tab">{#$langData['info'][1][18]#}</i>{#/if#}</p>
+                <p class="name"><em>{#$detail_info['member']['nickname']#}</em> {#if $is_shop#}<i class="com_tab"></i> {#else#}<i class="panel_tab">{#$langData['info'][1][18]#}</i>{#/if#}</p>
                 <p class="msg-num">{#$langData['info'][1][19]#} <em>{#$detail_info['fabuCount']#}</em>{#$langData['info'][1][20]#}</p>
             </div>
-            <i class="next_icon"></i>
+            <!--<i class="next_icon"></i>-->
         </a>
+        <span class="im_iphone phone_btn ftel">电话咨询</span>
     </div>
     {#else#}
     {#if $detail_info['member']['userid']#}
@@ -82,16 +137,18 @@
         <a class="fn-clear" href="{#getUrlPath service="info" template="homepage" id={#$detail_info['member']['userid']#}#}">
             <div class="user-img fn-left"><img src="{#$detail_info['member']['photo']#}" alt=""></div>
             <div class="user-info">
-                <p class="name">{#$detail_info['member']['nickname']#}  {#if $is_shop#}<i class="com_tab"></i> {#else#}<i class="panel_tab">{#$langData['info'][1][18]#}</i>{#/if#}</p>
+                <p class="name"><em>{#$detail_info['member']['nickname']#}</em>  {#if $is_shop#}<i class="com_tab"></i> {#else#}<i class="panel_tab">{#$langData['info'][1][18]#}</i>{#/if#}</p>
                 <p class="msg-num">{#$langData['info'][1][19]#} <em>{#$detail_info['fabuCount']#}</em>{#$langData['info'][1][20]#}</p>
             </div>
-            <i class="next_icon"></i>
+            <!--<i class="next_icon"></i>-->
         </a>
+        <span class="im_iphone phone_btn ftel">电话咨询</span>
     </div>
     {#else#}
     <div class="info fn-clear">
         <div><span style="margin-left: 24px;font-size: .28rem;">{#$langData['info'][1][21]#}</span></div>
-        <i class="next_icon"></i>
+        <!--<i class="next_icon"></i>-->
+        <span class="im_iphone phone_btn ftel ">电话咨询</span>
     </div>
     {#/if#}
     {#/if#}
@@ -154,10 +211,10 @@
     </div>
     <div class="commentList newList">
         <ul>
-            {#info action='common' return='common' infoid={#$detail_id#} orderby='hot' pageSize='3'#}
-            {#if is_array($common.userinfo)#}
-            {#$nickname = $common.userinfo.nickname#}
-            {#$photo = $common.userinfo.photo|default: '/static/images/noPhoto_40.jpg'#}
+            {#member action='getComment' return='common' type='info-detail' son='1' aid={#$detail_id#} orderby='hot' pageSize='3'#}
+            {#if is_array($common.user)#}
+            {#$nickname = $common.user.nickname#}
+            {#$photo = $common.user.photo|default: '/static/images/noPhoto_40.jpg'#}
             {#else#}
             {#$nickname = {#$langData['info'][2][33]#}#}
             {#$photo = '/static/images/noPhoto_40.jpg'#}
@@ -169,14 +226,14 @@
                 <div class="rightInfo">
                     <h4>{#$nickname#}</h4>
                     <p class="txtInfo">{#$common.content#}</p>
-                    {#if $common.lower!=null#}
-                        {#if count($common.lower)>1#}
+                    {#if $common.lower.list!=null#}
+                        {#if count($common.lower.list)>1#}
                         <div class="replyCon">
-                            {#foreach from=$common.lower key=ck item=clist#}
+                            {#foreach from=$common.lower.list key=ck item=clist#}
                             {#if $ck<=2#}
 
-                            {#if is_array($clist.userinfo)#}
-                            {#$nickname = $clist.userinfo.nickname#}
+                            {#if is_array($clist.user)#}
+                            {#$nickname = $clist.user.nickname#}
                             {#else#}
                             {#$nickname = {#$langData['info'][2][33]#}#}
                             {#/if#}
@@ -185,32 +242,32 @@
                             {#/if#}
                             {#/foreach#}
                             {#if $ck>=2#}
-                            <a href="{#getUrlPath service='info' template='comdetail' id={#$common.id#}#}" class="pmore">{#$langData['info'][2][34]#}{#count($common.lower)#}{#$langData['info'][2][35]#} ></a>
+                            <a href="{#getUrlPath service='info' template='comdetail' id={#$common.id#}#}" class="pmore">{#$langData['info'][2][34]#}{#count($common.lower.list)#}{#$langData['info'][2][35]#} ></a>
                             {#/if#}
                         </div>
                         {#else#}
                         <div class="replyCon">
                                 {#$n=1#}
-                                {#foreach from=$common.lower key=ck item=clist#}
-                                {#if is_array($clist.userinfo)#}
-                                {#$nickname = $clist.userinfo.nickname#}
+                                {#foreach from=$common.lower.list key=ck item=clist#}
+                                {#if is_array($clist.user)#}
+                                {#$nickname = $clist.user.nickname#}
                                 {#else#}
                                 {#$nickname = {#$langData['info'][2][33]#}#}
                                 {#/if#}
                                 {#$n=$n+1#}
                                 {#if $ck<1#}
                                 <dl><dt><span class="spColor">{#$nickname#}：</span></dt><dd>{#$clist.content#}</dd></dl>
-                                    {#if $clist.lower!=null#}
-                                        {#foreach from=$clist.lower key=cks item=clists#}
-                                        {#if is_array($clists.userinfo)#}
-                                        {#$nickname2 = $clists.userinfo.nickname#}
+                                    {#if $clist.lower.list!=null#}
+                                        {#foreach from=$clist.lower.list key=cks item=clists#}
+                                        {#if is_array($clists.user)#}
+                                        {#$nickname2 = $clists.user.nickname#}
                                         {#else#}
                                         {#$nickname2 = {#$langData['info'][2][33]#}#}
                                         {#/if#}
                                         <dl><dt><span class="spColor">{#$nickname2#}</span>{#$langData['marry'][5][55]#} <span class="spColor">{#$nickname#}：</span></dt><dd>{#$clists.content#}</dd></dl>
                                         {#/foreach#}
                                         {#if $n>1#}
-                                        <a href="{#getUrlPath service='info' template='comdetail' id={#$clist.id#}#}" class="pmore">{#$langData['marry'][5][60]#}{#count($clist.lower)#}{#$langData['marry'][5][61]#} ></a>
+                                        <a href="{#getUrlPath service='info' template='comdetail' id={#$clist.id#}#}" class="pmore">{#$langData['marry'][5][60]#}{#$clist.lower.count#}{#$langData['marry'][5][61]#} ></a>
                                         {#/if#}
                                     {#/if#}
                                 {#/if#}
@@ -222,12 +279,12 @@
                         <div class="rtime">{#$common.dtime|date_format:'%m-%d %H:%M'#}</div>
                         <div class="rbInfo">
                             <a href="{#getUrlPath service='info' template='comdetail' id={#$common.id#}#}" class="btnReply"> <s></s> {#$langData['marry'][5][55]#} </a>
-                            <a href="javascript:;" class="btnUp numZan {#if $common.already==1#}al_zan{#/if#}" data-id="{#$common.id#}"><em>{#$common.good#}</em> </a>
+                            <a href="javascript:;" class="btnUp numZan {#if $common.zan_has==1#}al_zan{#/if#}" data-id="{#$common.id#}"><em>{#$common.zan#}</em> </a>
                         </div>
                     </div>
                 </div>
             </li>
-            {#/info#}
+            {#/member#}
             <div class="allmore"><a href="{#getUrlPath service='info' template='comment' id={#$detail_id#}#}">{#if $detail_common > 0#}{#$langData['info'][1][36]#}{#$detail_common#}{#$langData['info'][1][37]#}{#else#}{#$langData['info'][1][38]#}{#/if#} <s></s></a></div>
         </ul>
     </div>
@@ -247,7 +304,7 @@
                 <div class="info_r ">
                     <h4 class="fn-clear">{#if !empty($infos['member']['nickname'])#}{#$infos['member']['nickname']#}{#else#}{#$langData['info'][1][4]#}{#/if#} {#if $infos['is_shop']==1#}<i class="com_tab"></i> {#else#}<i class="panel_tab">{#$langData['info'][1][5]#}</i>{#/if#}
                         {#if $infos['price_switch']==0#}
-                        <span class="price fn-right">{#if $infos['price'] neq 0#}<i>{#echoCurrency type='symbol'#}</i>1500{#else#}{#$langData['info'][1][22]#}{#/if#}</span>
+                        <span class="price fn-right">{#if $infos['price'] neq 0#}<i>{#echoCurrency type='symbol'#}</i>{#$infos['price']#}{#else#}{#$langData['info'][1][22]#}{#/if#}</span>
                         {#/if#}
                     </h4>
                     <p class="con"><span class="type" >#<em>{#$infos['typename']#}</em>#</span>{#$infos['title']#}</p>
@@ -287,7 +344,7 @@
             <div class="plBox l-item"><a href="javascript:;"><s></s><p>{#$langData['info'][0][13]#}</p></a></div>{#* 评论 *#}
         </div>
         <div class="f_right">
-            <div class="ftel r-item"><a href="javascript:;"><i></i><span>{#$langData['info'][0][14]#}</span></a></div>{#* 联系咨询 *#}
+            {#if $detail_member.userid#}<div class="ftel r-item chat_to-Link" data-type="detail"><a href="javascript:;"><i></i><span>在线咨询</span></a></div>{#/if#} {#* 在线咨询 *#}
             <div class="fbuy r-item"><a href="{#getUrlPath service='info' template='confirm' id={#$detail_info['id']#}#}">{#$langData['info'][0][15]#}</a></div>{#* 立即购买 *#}
         </div>
     </div>
@@ -298,7 +355,7 @@
             <div class="plBox l-item"><a href="javascript:;"><s></s><p>{#$langData['info'][0][13]#}</p></a></div>{#* 评论 *#}
         </div>
         <div class="f_right">
-            <div class="ftel r-item"><a href="javascript:;"><i></i><span>{#$langData['info'][0][14]#}</span></a></div>{#* 联系咨询 *#}
+            {#if $detail_member.userid#}<div class="ftel r-item chat_to-Link"><a href="javascript:;"><i></i><span>在线咨询</span></a></div>{#/if#} {#* 联系咨询 *#}
         </div>
     </div>
 {#/if#}
@@ -348,6 +405,124 @@
     };
 
     document.write(unescape("%3Cscript src='{#$cfg_staticPath#}js/publicShare.js?v="+~(-new Date())+"'type='text/javascript'%3E%3C/script%3E"));
+
+    if(is_video_){
+        var box = document.getElementById("video-control"); //box对象
+        var video = document.getElementById("video"); //视频对象
+        var play = document.getElementById("play"); //播放按钮
+        var vbplay = document.getElementById("vbplay");//视频中间播放按钮
+        var time = document.getElementById('time');
+        var progress = document.getElementById("progress"); //进度条
+        var bar = document.getElementById("bar"); //蓝色进度条
+        var control = document.getElementById("control"); //声音按钮
+        var sound = document.getElementById("sound"); //喇叭
+        var full = document.getElementById("full") //全屏
+
+        video.addEventListener('play', function() {
+            play.className = "pause";
+            $('.play-box').find('i').removeClass('play-icon').addClass('pause-icon');
+        });
+        video.addEventListener('pause', function() {
+            play.className = "play";
+            $('.play-box').find('i').removeClass('pause-icon').addClass('play-icon');
+        });
+        video.addEventListener('timeupdate', function() {
+            var timeStr = parseInt(video.currentTime);
+            var minute = parseInt(timeStr/60);
+            if(minute == 0){
+                if(timeStr < 10){
+                    timeStr = "0"+timeStr  ;
+                }
+                minute = "00:"+timeStr;
+            }else{
+                var timeStr = timeStr%60;
+                if(timeStr < 10){
+                    timeStr = "0"+timeStr  ;
+                }
+                minute = minute +":"+timeStr;
+            }
+            time.innerHTML = minute;
+        });
+        video.addEventListener('volumechange', function() {
+            if(video.muted) {
+                sound.className = "soundoff"
+            } else {
+                sound.className = "soundon"
+            }
+        });
+        full.addEventListener("click", function() {
+            $('.video-box').parent().toggleClass('fullscreen-box');
+            var type = $(this).hasClass('small') ? "del" : "add";
+            if(type=="del"){
+                $(this).removeClass('small')
+            }else if(type=="add"){
+                $(this).addClass('small')
+            }
+
+        }, false)
+        play.onclick = function() {
+            if(video.paused) {
+                play.className = "pause";
+                video.play();
+            } else {
+                play.className = "play";
+                video.pause();
+            }
+        }
+        vbplay.onclick = function() {
+            if (video.paused){
+                video.play();
+                video.value = "pause";
+            }else{
+                video.pause();
+                video.value = "play";
+            }
+        }
+        //进度条
+        video.addEventListener("timeupdate", function() {
+            var scales = video.currentTime / video.duration;
+            bar.style.width = progress.offsetWidth * scales + "px";
+            control.style.left = progress.offsetWidth * scales + "px";
+        }, false);
+        var move = 'ontouchmove' in document ? 'touchmove' : 'mousemove';
+        control.addEventListener("touchstart", function(e) {
+            var leftv = e.touches[0].clientX - progress.offsetLeft - box.offsetLeft;
+            if(leftv <= 0) {
+                leftv = 0;
+            }
+            if(leftv >= progress.offsetWidth) {
+                leftv = progress.offsetWidth;
+            }
+            control.style.left = leftv + "px"
+        }, false);
+        control.addEventListener('touchmove', function(e) {
+            var leftv = e.touches[0].clientX - progress.offsetLeft - box.offsetLeft;
+            if(leftv <= 0) {
+                leftv = 0;
+            }
+            if(leftv >= progress.offsetWidth) {
+                leftv = progress.offsetWidth;
+            }
+            control.style.left = leftv + "px"
+        }, false);
+        control.addEventListener("touchend", function(e) {
+            var scales = control.offsetLeft / progress.offsetWidth;
+            video.currentTime = video.duration * scales;
+            video.play();
+            document.onmousemove = null;
+            document.onmousedown = null;
+            //video.pause();
+        }, false);
+        sound.onclick = function() {
+            if(video.muted) {
+                video.muted = false;
+                sound.className = "soundon"
+            } else {
+                video.muted = true;
+                sound.className = "soundoff"
+            }
+        }
+    }
 </script>
 <script type='text/javascript' src='{#$cfg_basehost#}/include/json.php?action=lang'></script>
 <script type="text/javascript" src="{#$cfg_staticPath#}js/ui/jquery.smartScroll.js?v={#$cfg_staticVersion#}"></script>

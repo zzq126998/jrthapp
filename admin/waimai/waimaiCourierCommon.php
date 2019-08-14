@@ -14,7 +14,8 @@ $userLogin = new userLogin($dbo);
 $tpl = dirname(__FILE__)."/../templates/waimai";
 $huoniaoTag->template_dir = $tpl; //设置后台模板目录
 
-$dbname = "waimai_common";
+// $dbname = "waimai_common";
+$dbname = "public_comment";
 $templates = "waimaiCourierCommon.html";
 
 $where2 = " AND `cityid` in (0,$adminCityIds)";
@@ -67,7 +68,7 @@ if($peisongid){
     // 查询个人评分情况
 
     // 外卖
-    $sql = $dsql->SetQuery("SELECT avg(`starps`) s, p.`name` FROM `#@__waimai_common` c LEFT JOIN `#@__waimai_courier` p ON p.`id` = $peisongid WHERE `peisongid` = $peisongid AND `type` = 0");
+    $sql = $dsql->SetQuery("SELECT avg(`starps`) s, p.`name` FROM `#@__public_comment` c LEFT JOIN `#@__waimai_courier` p ON p.`id` = $peisongid WHERE `peisongid` = $peisongid AND `type` = 'waimai-order'");
     $ret = $dsql->dsqlOper($sql, "results");
     $starperson = $ret[0]['s'];
     $starperson = number_format($starperson, 1);
@@ -76,21 +77,21 @@ if($peisongid){
     $huoniaoTag->assign('peisong', $ret[0]['name']);
 
     // 今日
-    $sql = $dsql->SetQuery("SELECT avg(`starps`) s  FROM `#@__waimai_common` WHERE `peisongid` = $peisongid AND DATE_FORMAT(FROM_UNIXTIME(pubdate),'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d') AND `type` = 0");
+    $sql = $dsql->SetQuery("SELECT avg(`starps`) s  FROM `#@__public_comment` WHERE `peisongid` = $peisongid AND DATE_FORMAT(FROM_UNIXTIME(dtime),'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d') AND `type` = 'waimai-order'");
     $ret = $dsql->dsqlOper($sql, "results");
     $starpersonToday = $ret[0]['s'];
     $starpersonToday = number_format($starpersonToday, 1);
     $huoniaoTag->assign('starpersonToday', $starpersonToday);
 
     // 跑腿
-    $sql = $dsql->SetQuery("SELECT avg(`starps`) s FROM `#@__waimai_common` c LEFT JOIN `#@__waimai_courier` p ON p.`id` = $peisongid WHERE `peisongid` = $peisongid AND `type` = 1");
+    $sql = $dsql->SetQuery("SELECT avg(`starps`) s FROM `#@__public_comment` c LEFT JOIN `#@__waimai_courier` p ON p.`id` = $peisongid WHERE `peisongid` = $peisongid AND `type` = 'paotui-order'");
     $ret = $dsql->dsqlOper($sql, "results");
     $paotui_starperson = $ret[0]['s'];
     $paotui_starperson = number_format($paotui_starperson, 1);
     $huoniaoTag->assign('paotui_starperson', $paotui_starperson);
 
     // 今日
-    $sql = $dsql->SetQuery("SELECT avg(`starps`) s  FROM `#@__waimai_common` WHERE `peisongid` = $peisongid AND DATE_FORMAT(FROM_UNIXTIME(pubdate),'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d') AND `type` = 1");
+    $sql = $dsql->SetQuery("SELECT avg(`starps`) s  FROM `#@__public_comment` WHERE `peisongid` = $peisongid AND DATE_FORMAT(FROM_UNIXTIME(dtime),'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d') AND `type` = 'paotui-order'");
     $ret = $dsql->dsqlOper($sql, "results");
     $paotui_starpersonToday = $ret[0]['s'];
     $paotui_starpersonToday = number_format($paotui_starpersonToday, 1);
@@ -113,7 +114,7 @@ $p = (int)$p == 0 ? 1 : (int)$p;
 $atpage = $pageSize * ($p - 1);
 
 $sql = $dsql->SetQuery("SELECT c.*, p.`name`, m.`username` FROM (`#@__$dbname` c LEFT JOIN `#@__waimai_courier` p ON p.`id` = c.`peisongid`)
-    LEFT JOIN `#@__member` m ON m.`id` = c.`uid`
+    LEFT JOIN `#@__member` m ON m.`id` = c.`userid`
     WHERE `peisongid` != 0".$where." ORDER BY `id` DESC");
 
 $ret = $dsql->dsqlOper($sql." LIMIT $atpage, $pageSize", "results");
@@ -121,9 +122,9 @@ $ret = $dsql->dsqlOper($sql." LIMIT $atpage, $pageSize", "results");
 if($ret){
     foreach ($ret as $key => $value) {
 
-        if(empty($value['type'])){
+        if($value['type'] == 'waimai-order'){
             $sql = $dsql->SetQuery("SELECT o.`ordernumstore`, s.`shopname` FROM (`#@__$dbname` c LEFT JOIN `#@__waimai_order` o ON c.`oid` = o.`id`)
-                LEFT JOIN `#@__waimai_shop` s ON c.`sid` = s.`id`
+                LEFT JOIN `#@__waimai_shop` s ON c.`aid` = s.`id`
                 WHERE c.`id` = ".$value['id']);
             $shop = $dsql->dsqlOper($sql, "results");
             if($shop){

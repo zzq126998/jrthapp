@@ -2,6 +2,7 @@
 var device = navigator.userAgent;
 if (device.indexOf('huoniao_iOS') > -1) {
   $('body').addClass('huoniao_iOS');
+  $('.head .close').hide();
 }
 var huoniao = {
   transTimes: function(timestamp, n){
@@ -134,6 +135,10 @@ $(function(){
       url = masterDomain + "/include/ajax.php?service=huodong&action=hlist&page="+page+"&pageSize=10";
     }else if (action == "live") {
       // url = masterDomain + "/include/ajax.php?service=huodong&action=hlist&page=1&pageSize=10";
+    }else if(action == "car"){
+      url = masterDomain + "/include/ajax.php?service=car&action=car&page="+page+"&pageSize=10";
+    }else if(action == "homemaking"){
+      url = masterDomain + "/include/ajax.php?service=homemaking&action=hList&page="+page+"&pageSize=10";
     }else{
       url = masterDomain + "/include/ajax.php?service=info&action=ilist&page=1&pageSize=10";
     }
@@ -497,6 +502,37 @@ $(function(){
                 html.push('</a>');
                 html.push('</div>');
 
+              //汽车
+              }else if(action == "car"){
+                var litpic = list[i].litpic;
+                html.push('<div class="item">');
+                html.push('<a href="' + list[i].url + '" class="fn-clear">');
+                if (litpic) {
+                  html.push('<div class="imgbox"><img src="' + list[i].litpic + '"></div>');
+                }
+                html.push('<div class="txtbox">');
+
+                html.push('<p class="tit">' + list[i].title + '</p>');
+                html.push('<p class="tag"><span class="source">'+list[i].address+'</span><span class="time">' + returnHumanTime(list[i].pubdate,3) + '</span></p>');
+                html.push('</div>');
+                html.push('</a>');
+                html.push('</div>');
+              //家政
+              }else if(action == "homemaking"){
+                var litpic = list[i].litpic;
+                html.push('<div class="item">');
+                html.push('<a href="' + list[i].url + '" class="fn-clear">');
+                if (litpic) {
+                  html.push('<div class="imgbox"><img src="' + list[i].litpic + '"></div>');
+                }
+                html.push('<div class="txtbox">');
+
+                html.push('<p class="tit">' + list[i].title + '</p>');
+                html.push('<p class="desc">' + list[i].typename + '</p>');
+                html.push('<p class="tag"><span class="source">'+list[i].addrname[0]+' '+list[i].addrname[1]+'</span><span class="time">' + returnHumanTime(list[i].pubdate,3) + '</span></p>');
+                html.push('</div>');
+                html.push('</a>');
+                html.push('</div>');
               }else {
 
               }

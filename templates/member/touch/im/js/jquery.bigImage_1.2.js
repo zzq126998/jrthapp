@@ -18,7 +18,7 @@
                 imgs.src = src;
                 imgs.onload = function(){
                     var w = this.width, h = this.height;
-                    div.append('<a href='+src+' data-size="'+(w*5)+'x'+(h*5)+'"  data-med='+this.src+' data-med-size="'+(w)+'x'+(h)+'"><img src='+src+' alt="" /></a>');
+                    div.append('<a href='+this.src+' data-size="'+(w*5)+'x'+(h*5)+'"  data-med='+this.src+' data-med-size="'+(w)+'x'+(h)+'"><img src='+this.src+' alt="" /></a>');
                   
                 }
             }

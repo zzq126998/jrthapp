@@ -8,7 +8,7 @@ $(function(){
     var data = [];
     data['mod'] = 'member';
     data['filetype'] = 'image';
-    data['type'] = 'altas';
+    data['type'] = 'atlas';
 
     $.ajaxFileUpload({
       url: "/include/upload.inc.php",

@@ -19,6 +19,14 @@
 	var hideFileUrl = {#$cfg_hideUrl#}, redirectUrl = '{#$redirectUrl#}', site = '{#$site#}';
 	var cookiePre = '{#$cfg_cookiePre#}';
 	var templets = '{#$templets_skin#}';
+
+	if(device.indexOf('huoniao') > -1){
+        setTimeout(function(){
+            setupWebViewJavascriptBridge(function(bridge) {
+                bridge.callHandler('goToIndex', {}, function(){});
+            });
+        }, 500);
+    }
 </script>
 {#* 微信分享 *#}
 {#$Share_description = {#$cfg_description#}#}
@@ -33,7 +41,7 @@
 	<div class="logo fn-clear"><img src="{#$cfg_weblogo#}"></div>
 	<div class="top-con fn-clear">
         {#if $cfg_app_ios_download || $cfg_app_android_download#}
-		<div class="top-box">
+		<div class="top-box app">
 			<a href="{#getUrlPath service='siteConfig' template='mobile'#}">
 				<img src="{#$templets_skin#}images/app-icon.png">
 				<span>APP端</span>
@@ -118,11 +126,16 @@
 
 {#if in_array("article", $installModuleArr)#}
 <!-- 同城头条 s -->
-<div class="pubBox tcNews">
-	<div class="lBox"><img src="{#$templets_skin#}images/tcNews.png"></div>
+<div class="pubBox tcNews fn-clear">
+	<div class="lBox"><img src="{#$templets_skin#}images/tcNews.png?v={#$cfg_staticVersion#}"></div>
 	<div class="mBox">
 		<div class="swiper-container">
-		    <div class="swiper-wrapper"></div>
+		    <div class="swiper-wrapper">
+                <div class="pl_h fn-clear">
+                    <div class="pl_h_l"></div>
+                    <div class="pl_h_r"></div>
+                </div>
+            </div>
 	    	<div class="pagination"></div>
 		</div>
 	</div>
@@ -132,139 +145,62 @@
 
 <!-- 同城信息 s -->
 <div class="pubBox tcInfo">
-	<!--<div class="tabBox">-->
-		<!--<ul class="fn-clear">-->
-			<!--<li class="active"><a href="javascript:;">同城信息</a></li>-->
-			<!--&lt;!&ndash;<li><a href="javascript:;">口碑商家</a></li>&ndash;&gt;-->
-			<!--&lt;!&ndash;<li><a href="javascript:;">同城促销</a></li>&ndash;&gt;-->
-		<!--</ul>-->
-	<!--</div>-->
 	<div class="tabMain show">
 	    <div class="swiper-container swipre00">
 	        <div class="swiper-wrapper">
 	            <div class="swiper-slide">
 	            	<ul>
-						{#siteConfig action="siteModule" return="module" type="1"#}
-						{#if $module.code != "special" && $module.code != "paper" && $module.code != "website"#}
-	            		<li>
-	            			<a href="{#$module.url#}"{#if $module.target#} target="_blank"{#/if#}>
-	            				 <span class="icon-circle"><img src="{#$module.icon#}"></span>
-        						 <span class="icon-txt">{#$module.name#}</span>
-	            			</a>
-	            		</li>
-						{#/if#}
-						{#/siteConfig#}
+                        <li class="pl_h"></li>
+                        <li class="pl_h"></li>
+                        <li class="pl_h"></li>
+                        <li class="pl_h"></li>
+                        <li class="pl_h"></li>
 	            	</ul>
 	            </div>
 	        </div>
 	        <div class="pagination pag00"></div>
 	    </div>
 	</div>
-	<div class="tabMain">
-		<div class="swiper-container swipre01">
-	        <div class="swiper-wrapper">
-	            <div class="swiper-slide">
-	            	<ul></ul>
-	            </div>
-	        </div>
-	        <div class="pagination pag01"></div>
-	    </div>
-	</div>
-	<div class="tabMain">
-		<div class="swiper-container swipre02">
-	        <div class="swiper-wrapper">
-	            <div class="swiper-slide">
-	            	<ul></ul>
-	            </div>
-	        </div>
-	        <div class="pagination pag02"></div>
-	    </div>
-	</div>
 </div>
 <!-- 同城信息 e -->
-
-{#*
-<!-- 生活管家 s -->
-<!-- <div class="pubBox manager fn-clear">
-	<h3>生活管家</h3>
-	<div class="manageBox fn-clear">
-		<div class="coBox coBox1">
-			<a href="javascript:;">
-				<h4>便民出行</h4>
-				<p>绿色便民出行</p>
-			</a>
-		</div>
-		<div class="coBox coBox2">
-			<a href="javascript:;">
-				<h4>违章查询</h4>
-				<p>车辆违章查询</p>
-			</a>
-		</div>
-	</div>
-	<div class="manageBox fn-clear">
-		<div class="maBox maBox1">
-			<a href="javascript:;">
-				<h4>社保查询</h4>
-				<p>个人社保查询</p>
-			</a>
-		</div>
-		<div class="maBox maBox2">
-			<a href="javascript:;">
-				<h4>快递查询</h4>
-				<p>轻智能收寄时代</p>
-			</a>
-		</div>
-		<div class="maBox maBox3">
-			<a href="javascript:;">
-				<h4>充值缴费</h4>
-				<p>话费流量宽带</p>
-			</a>
-		</div>
-	</div>
-</div> -->
-<!-- 生活管家 e -->
-*#}
 
 {#if in_array("article", $installModuleArr)#}
 <!-- 生活资讯 s -->
 <div class="pubBox lNews fn-clear">
 	<h3>本地生活资讯</h3>
 	<ul class="ttab fn-clear">
-        {#article action="type" return="atype"#}
-        <li><a href="{#$atype.url#}">{#$atype.typename#}</a></li>
-        {#/article#}
+        <li class="pl_h"></li>
+        <li class="pl_h"></li>
+        <li class="pl_h"></li>
+        <li class="pl_h"></li>
+        <li class="pl_h"></li>
+        <li class="pl_h"></li>
 	</ul>
-    {#article action="alist" return="alist" pageSize="5" group_img="1"#}
-    {#if $alist.group_img#}
-    <div class="articleBox">
-        <a href="{#$alist.url#}" class="fn-clear">
-            <h2>{#$alist.title#}</h2>
-            <ul class="imgBox fn-clear">
-                {#foreach from=$alist.group_img item=img name=group#}
-                {#if $smarty.foreach.group.index < 3#}
-                <li><img src="{#$img.path#}"></li>
-                {#/if#}
-                {#/foreach#}
-            </ul>
-            <p><span>{#$alist.typeName[$alist.typeName|@count-1]#}</span> <span>{#$alist.common#}评论</span> <span>{#FloorTimeByTemp timestamp={#$alist.pubdate#} format='1'#}</span></p>
-        </a>
+    <div class="newsList">
+        <div class="pl_h_s fn-clear">
+            <div class="pl_h_r"></div>
+            <div class="pl_h_l"><p></p></div>
+        </div>
+        <div class="pl_h fn-clear">
+            <div class="pl_h_t"></div>
+            <div class="pl_h_c"></div>
+            <div class="pl_h_b"></div>
+        </div>
+        <div class="pl_h_s fn-clear">
+            <div class="pl_h_r"></div>
+            <div class="pl_h_l"><p></p></div>
+        </div>
+        <div class="pl_h fn-clear">
+            <div class="pl_h_t"></div>
+            <div class="pl_h_c"></div>
+            <div class="pl_h_b"></div>
+        </div>
+        <div class="pl_h_s fn-clear">
+            <div class="pl_h_r"></div>
+            <div class="pl_h_l"><p></p></div>
+        </div>
     </div>
-    {#else#}
-	<div class="articleBox firstBox">
-        <a href="{#$alist.url#}" class="fn-clear">
-            {#if $alist.litpic#}
-            <div class="aright_">
-                <img src="{#$alist.litpic#}">
-            </div>
-            {#/if#}
-            <div class="aleft">
-                <h2>{#$alist.title#}</h2>
-                <p><span>{#$alist.typeName[$alist.typeName|@count-1]#}</span> <span>{#$alist.common#}评论</span> <span>{#FloorTimeByTemp timestamp={#$alist.pubdate#} format='1'#}</span></p>
-            </div>
-        </a>
-	</div>
-    {#/if#}
-    {#/article#}
+
 	<div class="moreBox">
 		<a href="{#$article_channelDomain#}" class="btnMore">查看更多</a>
 	</div>
@@ -346,20 +282,11 @@
 <div class="pubBox tchengInfo">
 	<h3>同城分类信息</h3>
 	<ul class="fn-clear">
-        {#info action='ilist' return='ilist' pageSize='6'#}
-		<li>
-			<a href="{#$ilist.url#}">
-				<img src="{#$ilist.litpic#}">
-				<h4>{#$ilist.title#}</h4>
-				<p class="fn-clear"><span class="pleft"><b>{#$ilist.price#}</b><span class="symbol">元</span></span> <span class="pright">{#FloorTimeByTemp timestamp={#$ilist.pubdate#} format='3'#}</span></p>
-			</a>
-		</li>
-        {#/info#}
-	</ul>
+        <li class="loading">加载中...</li>
+    </ul>
 	<div class="moreBox">
 		<a href="{#$info_channelDomain#}" class="btnMore">查看更多</a>
 	</div>
-
 </div>
 <!-- 同城二手 e -->
 {#/if#}
@@ -369,25 +296,7 @@
 <div class="pubBox huangye">
 	<h3>便民黄页</h3>
 	<ul class="fn-clear">
-        {#huangye action='ilist' return='ilist' pageSize='5'#}
-		<li class="fn-clear">
-			<div class="hleft">
-				<a href="{#$ilist.url#}">
-					<div class="lleft">
-						<img src="{#$ilist.litpic#}">
-					</div>
-					<div class="lright">
-						<h4>{#$ilist.title#}</h4>
-						<span class="tip">{#$ilist.typeLevel[$ilist.typeLevel|@count-1]#}</span>
-						<p>{#$ilist.addressdet#}</p>
-					</div>
-				</a>
-			</div>
-			<div class="hright tel">
-				<a href="tel:{#$ilist.tel#}"><img src="{#$templets_skin#}images/hPhone.png"></a>
-			</div>
-		</li>
-        {#/huangye#}
+        <li class="loading">加载中...</li>
 	</ul>
 	<div class="moreBox">
 		<a href="{#$huangye_channelDomain#}" class="btnMore">查看更多</a>
@@ -401,35 +310,11 @@
 <div class="pubBox house">
 	<h3>热销楼盘</h3>
 	<ul class="recomHouse fn-clear">
-        {#house action='loupanList' return='loupan' filter='hot' pageSize='4'#}
-		<li>
-			<a href="{#$loupan.url#}">
-				<div class="hBox">
-					<img src="{#$loupan.litpic#}">
-                    {#if $loupan.videocount#}
-					<div class="hImg">
-						<img src="{#$templets_skin#}images/h-video.png">
-					</div>
-                    {#/if#}
-                    {#if $loupan.quanjingcount#}<div class="mark mark1">全景</div>{#/if#}
-                    {#if $loupan.quanjingcount#}<div class="mark mark2">沙盘</div>{#/if#}
-				</div>
-				<div class="hIntro">
-					<div class="htitle fn-clear">
-                        <p>{#$loupan.title#}</p>
-                        {#if $loupan.salestate == 0#}<span class="hTip htip2">待售</span>{#elseif $loupan.salestate == 1#}<span class="hTip htip1">在售</span>{#elseif $loupan.salestate == 2#}<span class="hTip htip1">尾盘</span>{#elseif $loupan.salestate == 3#}<span class="hTip htip1">售罄</span>{#/if#}
-                    </div>
-					<p class="harea">{#if $loupan.price != 0#}<span><b>{#$loupan.price#}</b></span>{#if $loupan.ptype == 1#}{#echoCurrency type='short'#}/㎡{#else#}万{#echoCurrency type='short'#}/套{#/if#}{#else#}待定{#/if#}</p>
-					<p class="telphone">电话 {#$loupan.tel#}</p>
-				</div>
-			</a>
-		</li>
-        {#/house#}
+        <li class="loading">加载中...</li>
 	</ul>
 	<div class="moreBox">
 		<a href="{#getUrlPath service='house' template='loupan'#}" class="btnMore">查看更多</a>
 	</div>
-
 	<div class="conBox fn-clear">
 		<div class="liBox box1">
 			<a href="{#getUrlPath service='house' template='sale'#}">
@@ -473,71 +358,17 @@
 		</div>
 		<div class="recommBox loupan show">
 			<ul>
-                {#house action='loupanList' return='loupan' filter='rec' pageSize='5'#}
-				<li class="fn-clear">
-					<div class="rleft">
-                        <a href="{#$loupan.url#}">
-                            <img src="{#$loupan.litpic#}">
-                            {#if $loupan.videocount#}
-                            <div class="hImg">
-                                <img src="{#$templets_skin#}images/h-video.png">
-                            </div>
-                            {#/if#}
-                        </a>
-					</div>
-					<div class="rright">
-                        <a href="{#$loupan.url#}">
-                            <div class="rtitle fn-clear">
-                                <p>{#$loupan.title#}</p>
-                                {#if $loupan.salestate == 0#}<span class="hTip htip2">待售</span>{#elseif $loupan.salestate == 1#}<span class="hTip htip1">在售</span>{#elseif $loupan.salestate == 2#}<span class="hTip htip1">尾盘</span>{#elseif $loupan.salestate == 3#}<span class="hTip htip1">售罄</span>{#/if#}
-                                {#if $loupan.quanjingcount#}<span class="hTip htip3">全景</span>{#/if#}
-                                {#if $loupan.quanjingcount#}<span class="hTip htip4">沙盘</span>{#/if#}
-                            </div>
-                            <p class="harea">{#if $loupan.price != 0#}<span><b>{#$loupan.price#}</b></span>{#if $loupan.ptype == 1#}{#echoCurrency type='short'#}/㎡{#else#}万{#echoCurrency type='short'#}/套{#/if#}{#else#}待定{#/if#}</p>
-                            <p class="addr"><span>{#$loupan.addr[$loupan.addr|@count-2]#}-{#$loupan.addr[$loupan.addr|@count-1]#}</span></p>
-                        </a>
-						<div class="tel">
-                            <a href="tel:{#$loupan.tel#}"><img src="{#$templets_skin#}images/hPhone.png"></a>
-						</div>
-					</div>
-				</li>
-                {#/house#}
+                <li class="loading">加载中...</li>
 			</ul>
 		</div>
 		<div class="recommBox second">
 			<ul>
-                {#house action='saleList' return='sale' pageSize='5'#}
-				<li class="fn-clear">
-                    <a href="{#$sale.url#}">
-                        <div class="rleft">
-                            <img src="{#$sale.litpic#}">
-                        </div>
-                        <div class="rright fn-clear">
-                            <div class="rtitle fn-clear"><p>{#$sale.title#}</p></div>
-                            <div class="rArea fn-clear"><p>{#$sale.room#}  {#$sale.area#}平米</p>  <span><b>{#$sale.price#}</b>万</span></div>
-                            <div class="price fn-clear"><p>{#$sale.community#}</p> <span>均价 {#$sale.unitprice#}{#echoCurrency type='short'#}/m²</span></div>
-                        </div>
-                    </a>
-				</li>
-                {#/house#}
+                <li class="loading">加载中...</li>
 			</ul>
 		</div>
 		<div class="recommBox third">
 			<ul>
-                {#house action='zuList' return='zu' pageSize='5'#}
-				<li class="fn-clear">
-                    <a href="{#$zu.url#}">
-                        <div class="rleft">
-                            <img src="{#$zu.litpic#}">
-                        </div>
-                        <div class="rright">
-                            <div class="rtitle fn-clear">{#$zu.title#}</div>
-                            <div class="rArea fn-clear"><p>{#$zu.rentype#}  {#$zu.room#}  {#$zu.area#}平米  </p>  <span><b>{#$zu.price#}</b>元/月</span></div>
-                            <div class="price fn-clear"><p>{#$zu.community#}</p> </div>
-                        </div>
-                    </a>
-				</li>
-                {#/house#}
+                <li class="loading">加载中...</li>
 			</ul>
 		</div>
 	</div>
@@ -552,10 +383,10 @@
 	<h3>招聘求职</h3>
 	<div class="jobTop fn-clear">
 		<div class="topBox box1">
-			<a href="javascript:;">我要找工作	</a>
+			<a href="{#getUrlPath service='job' template='zhaopin'#}">我要找工作</a>
 		</div>
 		<div class="topBox box2">
-			<a href="javascript:;">发布招聘职位</a>
+			<a href="{#getUrlPath service='job' template='resume'#}">我要找人才</a>
 		</div>
 	</div>
 	<div class="jobTab">
@@ -567,68 +398,32 @@
 		</ul>
 	</div>
 	<div class="jobMain show">
-		<ul>
-			{#job action="post" return="post" pageSize="5"#}
-			<li>
-				<a href="{#$post.url#}">
-					<div class="mainTitle fn-clear"><h4>{#$post.title#}</h4> {#if $post.isbid#}<span class="jTip tip1">顶</span>{#/if#}{#if strstr($post.property, 'u')#}<span class="jTip tip2">急</span>{#/if#}  <span class="jTime">{#$post.timeUpdate#}</span></div>
-					<div class="mainSalary fn-clear"><p><b>{#$post.salary#}</b>元</p> <span class="jPos">{#$post.type#}</span></div>
-					<div class="mainExper fn-clear"><p>{#$post.experience#}工作经验 {#$post.educational#}</p> <span >{#$post.addr[$post.addr|@count-2]#}-{#$post.addr[$post.addr|@count-1]#}</span></div>
-				</a>
-			</li>
-			{#/job#}
+		<ul class="job_zhaopin">
+            <li class="loading">加载中...</li>
 		</ul>
 		<div class="moreBox">
-			<a href="{#getUrlPath service='job' template='post'#}" class="btnMore">查看更多</a>
+			<a href="{#getUrlPath service='job' template='zhaopin'#}" class="btnMore">查看更多</a>
 		</div>
 	</div>
 	<div class="jobMain">
-		<ul>
-			{#job action='sentence' return='sentence' type='0' pageSize='5'#}
-			<li>
-				<a href="{#getUrlPath service='job' template='sentence' param='type=0'#}">
-					<div class="mainTitle fn-clear"><h4>{#$sentence.title#}</h4> <span class="jTime">{#$sentence.pubdate#}</span></div>
-					<div class="mainSalary fn-clear"><span class="jTel">{#$sentence.contact#}</span><span class="jPeo">{#$sentence.people#}</span></div>
-				</a>
-			</li>
-			{#/job#}
+		<ul class="job_sentence0">
+            <li class="loading">加载中...</li>
 		</ul>
 		<div class="moreBox">
 			<a href="{#getUrlPath service='job' template='sentence' param='type=0'#}" class="btnMore">查看更多</a>
 		</div>
 	</div>
 	<div class="jobMain">
-		<ul>
-			{#job action='sentence' return='sentence' type='1' pageSize='5'#}
-			<li>
-				<a href="{#getUrlPath service='job' template='sentence' param='type=1'#}">
-					<div class="mainTitle fn-clear"><h4>{#$sentence.title#}</h4> <span class="jTime">{#$sentence.pubdate#}</span></div>
-					<div class="mainSalary fn-clear"><span class="jTel">{#$sentence.contact#}</span><span class="jPeo">{#$sentence.people#}</span></div>
-				</a>
-			</li>
-			{#/job#}
+		<ul class="job_sentence1">
+            <li class="loading">加载中...</li>
 		</ul>
 		<div class="moreBox">
 			<a href="{#getUrlPath service='job' template='sentence' param='type=1'#}" class="btnMore">查看更多</a>
 		</div>
 	</div>
 	<div class="jobMain">
-		<ul>
-			{#job action="resume" return="resume"  pageSize="5"#}
-			<li class="fn-clear">
-				<a href="{#$resume.url#}">
-					<div class="jleft">
-						<img src="{#$resume.photo#}">
-					</div>
-					<div class="jright">
-						<h4>{#$resume.name#} <span>{#if $resume.salary#}{#$resume.salary#}{#else#}面议{#/if#}</span></h4>
-						<div class="jInfo">{#if $resume.sex == 1#}女{#else#}男{#/if#}  {#$resume.age#}岁 {#$resume.workyear#}年 {#$resume.educational#}</div>
-						<p>期望职位：{#$resume.type#}</p>
-						<p>期望地点：{#$resume.addr[$resume.addr|@count-2]#}-{#$resume.addr[$resume.addr|@count-1]#}</p>
-					</div>
-				</a>
-			</li>
-			{#/job#}
+		<ul class="job_resume">
+            <li class="loading">加载中...</li>
 		</ul>
 		<div class="moreBox">
 			<a href="{#getUrlPath service='job' template='resume'#}" class="btnMore">查看更多</a>
@@ -637,22 +432,8 @@
 	<!-- 最新入驻企业 -->
 	<div class="businessBox">
 		<div class="buTitle">最新入驻企业</div>
-		<ul>
-			{#job action="company" return="com" pageSize="5"#}
-			<li class="fn-clear">
-				<a href="javascript:;">
-					<div class="jleft">
-						<img src="{#$com.logo#}">
-					</div>
-					<div class="jright">
-						<h4 class="fn-clear"><p>{#$com.title#}</p> {#if $com.license#}<span class="require">认证</span>{#/if#} </h4>
-						<div class="pMark fn-clear"> <span class="jmark">{#$com.scale#}</span><span class="jPos">{#$com.industry#}</span></div>
-						<p>该企业有 <span>{#$com.pcount#}</span> 个招聘职位 </p>
-						<p>地址：{#$com.addr[$com.addr|@count-2]#} {#$com.addr[$com.addr|@count-1]#} {#$com.address#}</p>
-					</div>
-				</a>
-			</li>
-			{#/job#}
+		<ul class="job_business">
+            <li class="loading">加载中...</li>
 		</ul>
 		<div class="moreBox">
 			<a href="{#getUrlPath service='job' template='company'#}" class="btnMore">查看更多</a>
@@ -662,23 +443,8 @@
 	<!-- 职场资讯 -->
 	<div class="businessBox workBox">
 		<div class="buTitle">职场资讯</div>
-		<ul>
-			{#job action="news" return="news" pageSize="5"#}
-			<li class="fn-clear">
-				<a href="javascript:;">
-					{#if $news.litpic#}
-					<div class="jleft">
-						<img src="{#$news.litpic#}">
-					</div>
-					{#/if#}
-					<div class="jright">
-						<h4 class="fn-clear">{#$news.title#}</h4>
-						<div class="pMark fn-clear"> <span class="jmark1">{#$news.typename#}</span></div>
-						<p> <span class="w-time"><i></i>{#$news.pubdate|date_format:"%Y.%m.%d"#}</span> <span class="w-see"><i></i>{#$news.click#}</span></p>
-					</div>
-				</a>
-			</li>
-			{#/job#}
+		<ul class="job_news">
+            <li class="loading">加载中...</li>
 		</ul>
 		<div class="moreBox">
 			<a href="{#getUrlPath service='job' template='news'#}" class="btnMore">查看更多</a>
@@ -693,7 +459,9 @@
 <!-- 推荐商家 s -->
 <div class="pubBox recomBus">
 	<h3>推荐商家</h3>
-	<ul class="fn-clear"></ul>
+	<ul class="fn-clear">
+        <li class="loading">加载中...</li>
+    </ul>
 	<div class="moreBox">
 		<a href="javascript:;" class="btnMore">查看更多</a>
 	</div>

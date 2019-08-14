@@ -1,25 +1,25 @@
 $(function(){
-
+  var flag;
   var needVcode = false;
-  
+
 	//选择框点击效果
 	$('.checkbox dd').click(function(){
 		$(this).addClass('on').siblings('dd').removeClass('on');
-		
+
 	});
-	
+
 	//单选框
 	$('.radioBox .active').click(function(){
 		$(this).addClass('chose_btn').siblings('.active').removeClass('chose_btn');
 		var value = $(this).find('a').data('id')
 		$('#usersex').val(value);
 	});
-	
+
 	//字符限制
 	$('#req_textarea').on('input',function(){
         $('.num').text($(this).val().length+'/200');
 	});
-	
+
 //输入手机号，发送验证码
 $('#contact').bind('change',function(){
   var v = $(this).val();
@@ -62,18 +62,18 @@ $('#contact').bind('change',function(){
   }
 })
 
-	
+
 	//点击返回按钮
 	$('.go_back,.back-bottom').click(function(){
-		
+
 		$('.container').removeClass('fn-hide');
         $('.gz-address').removeClass('show');
          $('html').removeClass('nos');
          $('.popupRightBottom').show();
-         
+
 	});
-	
-	
+
+
 var dataInfo = {
 			type: '',
 			parid: '',
@@ -89,7 +89,7 @@ var dataInfo = {
 			industryName: '',
 			genreName:'',
 			isBack: true
-	};	
+	};
 	var aid = 0;
 	$('.sub_btn button').click(function(){
 		var t = $(this);
@@ -106,32 +106,32 @@ var dataInfo = {
             sex = $('#usersex').val(),
             contact = $.trim($('#contact').val()),
             password = $.trim($('#password').val());
-            
+
             if(type == '' || type == undefined){
 	            alert('请选择发布类型！');
 	            return false;
 	        }
-            
+
 	        if(act == '' || act == 0 || act == undefined){
 	            alert('请选择房源类别！');
 	            return false;
 	        }
-	        
+
             if(title == ''){
 	            alert('请输入标题！');
 	            return false;
 	        }
-	
+
 	        if(note == ''){
 	            alert('请输入需求描述！');
 	            return false;
 	        }
-	        
+
 	        if(addr == '' || addr == 0){
 	            alert('请选择位置！');
 	            return false;
 	        }
-	
+
 	        if(person == ''){
 	            alert('请输入您的称呼！');
 	            return false;
@@ -144,7 +144,7 @@ var dataInfo = {
 	        	 alert('您输入的联系方式不正确！');
 	            return false;
 	        }
-	
+
 	        if(password == ''){
 	            alert('请输入管理密码！');
 	            return false;
@@ -226,10 +226,10 @@ var dataInfo = {
             }
         });
 	})
-	
+
   var dataGeetest = "";
   var ftype = "phone";
-    
+
     //发送验证码
   function sendPhoneVerCode(){
     var btn = $('.test_btn button');
@@ -267,7 +267,7 @@ var dataInfo = {
         dataType: "json",
         success: function (data) {
           //获取成功
-          
+
           if(data && data.state == 100){
           //获取失败
            alert(langData['siteConfig'][20][298]);
@@ -318,7 +318,7 @@ var dataInfo = {
       window.captchaObjFpwd = captchaObjFpwd;
     };
 
-   
+
     //获取验证码
     $('.test_btn button').click(function(){
       if($(this).hasClass("disabled")) return;
@@ -333,16 +333,16 @@ var dataInfo = {
         }else{
           ftype = "phone";
         }
-		
+
         if (captchaObjFpwd) {
             captchaObjFpwd.verify();
         }
-      
+
       }
     });
 
 
-   
+
 
     $.ajax({
         url: masterDomain+"/include/ajax.php?service=siteConfig&action=geetest&terminal=mobile&t=" + (new Date()).getTime(), // 加随机数防止缓存

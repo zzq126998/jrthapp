@@ -35,7 +35,6 @@
             <li {#if $pageCurr == "video"#} class="currpage"{#/if#}><a href="{#getUrlPath service="article" template="video"#}">视频逛街</a></li>
             <li {#if $pageCurr == "media"#} class="currpage"{#/if#}><a href="{#getUrlPath service="article" template="media"#}">自媒体</a> <i class="picon-hot1"></i></li>
             <li {#if $pageCurr == "short_video"#} class="currpage"{#/if#}><a href="{#getUrlPath service="article" template="short_video"#}">短视频</a></li>
-            <li {#if $pageCurr == "zhuanti"#} class="currpage"{#/if#}><a href="{#getUrlPath service="article" template="zhuanti"#}">测试专题</a></li>
             {#if in_array("special", $installModuleArr)#}<li><a href="{#$special_channelDomain#}">{#$special_channelName#}</a></li>{#/if#}
             {#if in_array("paper", $installModuleArr)#}<li><a href="{#$paper_channelDomain#}">{#$paper_channelName#}</a> <i class="picon-hot2"></i></li>{#/if#}
             <li><a href="{#getUrlPath service='member' type='user' template='config-selfmedia'#}" class="zmt" target="_blank">入驻自媒体</a></li>

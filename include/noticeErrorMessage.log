@@ -103,28 +103,3 @@
 [2019-06-10 23:49:39][debug] 错误内容："The following From address failed: admin@rucheng.pro : MAIL FROM command failed,Insufficient system storage\r\n,452,4.3.1SMTP server error: MAIL FROM command failed Detail: Insufficient system storage\r\n SMTP code: 452 Additional SMTP info: 4.3.1SMTP server error: MAIL FROM command failed Detail: Insufficient system storage\r\n SMTP code: 452 Additional SMTP info: 4.3.1"
 
 
-[2019-08-12 16:21:48][debug] 邮件发送错误日志
-[2019-08-12 16:21:49][debug] 发送内容：{"邮箱：":"123654@qq.com","标题：":"新闻-入驻自媒体审核结果通知","内容：":"您提交的入驻自媒体申请\/自媒体资料更新申请，审核结果为：审核通过。"}
-[2019-08-12 16:21:49][debug] 错误内容："SMTP connect() failed. https:\/\/github.com\/PHPMailer\/PHPMailer\/wiki\/Troubleshooting"
-
-
-[2019-08-13 10:36:26][debug] 邮件发送错误日志
-[2019-08-13 10:36:26][debug] 发送内容：{"邮箱：":"123654@qq.com","标题：":"店铺审核通知-汝城老乡网 汝城县综合门户网站","内容：":"HI，测试周<br \/><br \/>您的店铺15153，已经通过审核。<a href=\"http:\/\/ziyuan.cc\/b\/config-business.html\" target=\"_blank\">点击查看<\/a>。<br \/><br \/>汝城老乡网 汝城县综合门户网站<br \/>2019-08-13 10:36:22<br \/><br \/>这是一封系统自动发出的邮件，请不要直接回复。"}
-[2019-08-13 10:36:26][debug] 错误内容："SMTP connect() failed. https:\/\/github.com\/PHPMailer\/PHPMailer\/wiki\/Troubleshooting"
-
-
-[2019-08-13 10:37:56][debug] 邮件发送错误日志
-[2019-08-13 10:37:56][debug] 发送内容：{"邮箱：":"123654@qq.com","标题：":"店铺审核通知-汝城老乡网 汝城县综合门户网站","内容：":"HI，测试周<br \/><br \/>您的店铺15153，进入等待审核状态。<a href=\"http:\/\/ziyuan.cc\/b\/config-business.html\" target=\"_blank\">点击查看<\/a>。<br \/><br \/>汝城老乡网 汝城县综合门户网站<br \/>2019-08-13 10:37:52<br \/><br \/>这是一封系统自动发出的邮件，请不要直接回复。"}
-[2019-08-13 10:37:56][debug] 错误内容："SMTP connect() failed. https:\/\/github.com\/PHPMailer\/PHPMailer\/wiki\/Troubleshooting"
-
-
-[2019-08-13 10:38:35][debug] 邮件发送错误日志
-[2019-08-13 10:38:35][debug] 发送内容：{"邮箱：":"123654@qq.com","标题：":"店铺审核通知-汝城老乡网 汝城县综合门户网站","内容：":"HI，测试周<br \/><br \/>您的店铺15153，审核失败。<a href=\"http:\/\/ziyuan.cc\/b\/config-business.html\" target=\"_blank\">点击查看<\/a>。<br \/><br \/>汝城老乡网 汝城县综合门户网站<br \/>2019-08-13 10:38:31<br \/><br \/>这是一封系统自动发出的邮件，请不要直接回复。"}
-[2019-08-13 10:38:35][debug] 错误内容："SMTP connect() failed. https:\/\/github.com\/PHPMailer\/PHPMailer\/wiki\/Troubleshooting"
-
-
-[2019-08-13 10:41:12][debug] 邮件发送错误日志
-[2019-08-13 10:41:12][debug] 发送内容：{"邮箱：":"123654@qq.com","标题：":"店铺审核通知-汝城老乡网 汝城县综合门户网站","内容：":"HI，测试周<br \/><br \/>您的店铺你大爷爷爷，已经通过审核。<a href=\"http:\/\/ziyuan.cc\/b\/config-business.html\" target=\"_blank\">点击查看<\/a>。<br \/><br \/>汝城老乡网 汝城县综合门户网站<br \/>2019-08-13 10:41:08<br \/><br \/>这是一封系统自动发出的邮件，请不要直接回复。"}
-[2019-08-13 10:41:12][debug] 错误内容："SMTP connect() failed. https:\/\/github.com\/PHPMailer\/PHPMailer\/wiki\/Troubleshooting"
-
-

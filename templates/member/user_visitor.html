@@ -28,11 +28,11 @@
 					{#member action="visitor" return="visitor" uid={#$id#} page={#$page#} pageSize="25"#}
 					<li>
 						<div class="member_pic">
-							<a href="{#$cfg_basehost#}/user/{#$visitor.uid#}" title="{#$visitor.nickname#}" target="_blank"><img src="{#if !$visitor.state#}{#$visitor.photo#}{#else#}/static/images/noPhoto_60.jpg{#/if#}" onerror="this.src='/static/images/noPhoto_60.jpg'" alt="{#$visitor.nickname#}"></a>
+							<a {#if !$visitor.state#}href="{#$cfg_basehost#}/user/{#$visitor.uid#}" target="_blank"{#else#}href="javascript:;"{#/if#}><img src="{#if !$visitor.state#}{#$visitor.photo#}{#else#}/static/images/noPhoto_60.jpg{#/if#}" onerror="this.src='/static/images/noPhoto_60.jpg'" alt="{#$visitor.nickname#}"></a>
 						</div>
 						{#if $visitor.level#}<i><img src="{#$visitor.levelIcon#}" title="{#$visitor.levelName#}" /></i>{#/if#}
 						{#if !$visitor.state#}
-						<h1><a href="{#$cfg_basehost#}/user/{#$visitor.uid#}" title="{#$visitor.nickname#}" target="_blank">{#$visitor.nickname#}</a></h1>
+						<h1><a {#if !$visitor.state#}href="{#$cfg_basehost#}/user/{#$visitor.uid#}" target="_blank"{#else#}href="javascript:;"{#/if#} title="{#$visitor.nickname#}">{#$visitor.nickname#}</a></h1>
 						<!-- <h2>{#$visitor.addrName#}</h2> -->
 						<h2>{#$visitor.date#}</h2>
 						{#if $visitor.isfollow#}

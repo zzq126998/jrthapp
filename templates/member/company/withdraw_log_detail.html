@@ -23,7 +23,7 @@
 
 		<!-- put_forward -->
 			{#if $tab == 'p'#}
-				
+
 				<!-- 银行 -->
 				{#if $type == 'bank'#}
 
@@ -60,10 +60,10 @@
 					</ul>
 				</dd>
 			</dl>
-				
+
 				<!-- 支付宝微信 -->
 				{#else#}
-			
+
 			<dl class="info-section">
 				<dt><span class="info-title">{#$langData['siteConfig'][19][863]#}：</span><em class="info-text">提现申请已提交</em></dt>
 				<dd class="last"><p>{#$stateNote#}</p>资金到账可能有延迟，请耐心等待</dd>
@@ -93,11 +93,6 @@
 			<dl class="info-section">
 				{#if $state == 0#}
 					{#$stateTxt = $langData['siteConfig'][9][14]#}
-					{#if $bank == "alipay"#}
-						{#$stateNote = $langData['siteConfig'][19][392]#}
-					{#else#}
-						{#$stateNote = $langData['siteConfig'][19][393]#}
-					{#/if#}
 				{#elseif $state == 1#}
 					{#$stateTxt = $langData['siteConfig'][9][5]#}
 					{#$stateNote = $note#}
@@ -115,16 +110,19 @@
 				<dt>{#$langData['siteConfig'][19][864]#}</dt>
 				<dd>
 					<ul>
-						{#if $bank == "alipay"#}
-						<li>{#$langData['siteConfig'][19][40]#}：{#$cardnum#}</li>
-						<li>{#$langData['siteConfig'][19][41]#}：{#$cardname#}</li>
+						{#if $bank == "weixin"#}
+						<li>{#$langData['siteConfig'][32][72]#}：微信</li>
+						{#elseif $bank == "alipay"#}
+						<li>{#$langData['siteConfig'][32][72]#}：支付宝</li>
+						<li>{#$langData['siteConfig'][19][40]#}：{#$cardnum#}</li>{#* 收款人帐号 *#}
+						<li>{#$langData['siteConfig'][19][41]#}：{#$cardname#}</li>{#* 收款人姓名 *#}
 						{#else#}
-						<li>{#$langData['siteConfig'][23][96]#}：{#$bank#}</li>
-						<li>{#$langData['siteConfig'][19][865]#}：{#$cardnum#}</li>
-						<li>{#$langData['siteConfig'][19][866]#}：{#$cardname#}</li>
+						<li>{#$langData['siteConfig'][23][96]#}：{#$bank#}</li>{#* 提现银行 *#}
+						<li>{#$langData['siteConfig'][19][865]#}：{#$cardnum#}</li>{#* 提现卡号 *#}
+						<li>{#$langData['siteConfig'][19][866]#}：{#$cardname#}</li>{#* 收款人 *#}
 						{#/if#}
-						<li>{#$langData['siteConfig'][19][46]#}：{#$tdate#}</li>
-						<li>{#$langData['siteConfig'][19][39]#}：<strong>{#$amount#}</strong></li>
+						<li>{#$langData['siteConfig'][19][46]#}：{#$tdate#}</li>{#* 申请时间 *#}
+						<li>{#$langData['siteConfig'][19][39]#}：<strong>{#$amount#}</strong></li>{#* 提现金额 *#}
 					</ul>
 				</dd>
 			</dl>

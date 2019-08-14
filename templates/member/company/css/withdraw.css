@@ -45,6 +45,8 @@
 .tips {margin-top: 30px;}
 .tips p {padding: 5px 0; color: #999;}
 
+.not {font-size: 14px; color: #f00; line-height: 1.8em;}
+
 
 /* 历史记录 */
 .history-list {position: absolute; z-index: 100; width: 270px; overflow: hidden; padding: 4px; background: #e8e8e8; border: 1px #d2d2d2 solid; border-radius: 5px;}

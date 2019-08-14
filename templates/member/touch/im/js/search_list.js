@@ -1,3 +1,26 @@
+var userinfo;
+$(function(){
+//获取当前登录用户的信息
+    $.ajax({
+        url: '/include/ajax.php?service=siteConfig&action=getImToken',
+        type: 'post',
+        dataType: 'json',
+        success: function(data){
+            if(data.state == 100){
+                var info = data.info;
+               userinfo = info;
+//              chatToken = info.token;
+//              chatServer = info.server;
+//              AccessKeyID = info.AccessKeyID;
+				console.log(userid)
+            }else{
+                alert(data.info);
+            }
+        },
+        error: function(){
+            alert('网络错误，初始化失败！');
+        }
+    });
 $('body').delegate('.search_btn','click',function(){
 	var val = $("#search_val").val();
 	if(val==''){
@@ -27,3 +50,20 @@ $('body').delegate('.im-del_btn.im-add_btn','click',function(){
 		showMsg('已经删除好友');
 		return false;
 	});
+	
+$('.search_result').delegate('.im-chat_width','click',function(){
+	var to = $(this).attr('data-id');
+	if(device.indexOf('huoniao') > -1){
+		var param = {
+		    from: userinfo['uid'],
+		    to: to,
+		}; 
+		setupWebViewJavascriptBridge(function(bridge) {
+		     bridge.callHandler('invokePrivateChat',  param, function(responseData){});
+		});
+		return false;      
+	}
+	
+})
+
+});

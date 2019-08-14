@@ -45,7 +45,7 @@ if($submit == "提交"){
         $flag_sql_val = ",'$flag_h', '$flag_r', '$flag_b', '$flag_t', '$flag_p'";
     }else{
 			$flag_sql_field = ', `flag_h`, `flag_r`, `flag_b`, `flag_t`, `flag_p`';
-			$flag_sql_val = ",'', '', '', '', ''";
+			$flag_sql_val = ", 0, 0, 0, 0, 0";
 		}
     $pubdate = GetMkTime($pubdate);       //发布时间
 
@@ -322,6 +322,11 @@ if($dopost == "edit"){
 
 		//保存到主表
 		// videoface
+		$flag_h = (int)$flag_h;
+		$flag_r = (int)$flag_r;
+		$flag_b = (int)$flag_b;
+		$flag_p = (int)$flag_p;
+		$flag_t = (int)$flag_t;
 		$archives = $dsql->SetQuery("UPDATE `".$break_table."` SET `cityid` = '$cityid', `title` = '$title', `subtitle` = '$subtitle', `flag` = '$flags', `flag_h` = '$flag_h', `flag_r` = '$flag_r', `flag_b` = '$flag_b', `flag_p` = '$flag_p', `flag_t` = '$flag_t',`redirecturl` = '$redirecturl', `weight` = '$weight', `litpic` = '$litpic', `source` = '$source', `sourceurl` = '$sourceurl', `writer` = '$writer', `typeid` = '$typeid', `keywords` = '$keywords', `description` = '$description', `mbody` = '$mbody', `notpost` = '$notpost', `click` = '$click', `color` = '$color', `arcrank` = '$arcrank', `pubdate` = '$pubdate', `audit_edit` = '$audit_edit', `reward_switch` = '$reward_switch', `mold` = $mold, `videotype` = $videotype, `videourl` = '$videourl', `admin` = $admin, `media_arctype` = $media_arctype, `typeset` = $typeset, `zhuanti` = $zhuantiId, `media` = $mediaId, `media_state` = $media_state WHERE `id` = ".$id);
 		$results = $dsql->dsqlOper($archives, "update");
 
@@ -345,8 +350,15 @@ if($dopost == "edit"){
 		}
 
 		//保存内容表
-		$art = $dsql->SetQuery("UPDATE `#@__".$action."` SET `body` = '$body' WHERE `aid` = ".$id);
-		$results = $dsql->dsqlOper($art, "update");
+		$archives = $dsql->SetQuery("SELECT `body` FROM `#@__".$action."` WHERE `aid` = ".$id);
+        $results = $dsql->dsqlOper($archives, "results");
+      	if(!empty($results)){
+        	$art = $dsql->SetQuery("UPDATE `#@__".$action."` SET `body` = '$body' WHERE `aid` = ".$id);
+			$results = $dsql->dsqlOper($art, "update");
+        }else{
+        	$art = $dsql->SetQuery("INSERT INTO `#@__".$action."` (`aid`, `body`) VALUES ('$id', '$body')");
+			$dsql->dsqlOper($art, "update");
+        }
 
 		// 检查缓存
         checkCache("article_list", $id);
@@ -546,7 +558,6 @@ if($dopost == "edit"){
 							// print_r($audit_log);die;
 
 						}else{
-							echo "ddd";
 							$levelID = getAdminOrganId($adminid);
 
 							// 验证是否可修改审核状态，高级别审核人员是否已有操作
@@ -814,8 +825,8 @@ if($dopost == "edit"){
 			$audit_fields = ", `audit_state`, `audit_log`, `audit_edit`";
 			$audit_values = ", '$audit_state', '$audit_log', ''";
 		}else{
-			$audit_fields = ", `audit_log`";
-			$audit_values = ", ''";
+			$audit_fields = ", `audit_log`, `audit_edit`";
+			$audit_values = ", '', ''";
 		}
 
 		//保存到文章列表
@@ -881,11 +892,12 @@ if($dopost == "edit"){
 		$url = getUrlPath($param);
 
 		if($arcrank == 1){
-			updateCache("article_list", 300);
+			// 这里会影响发布信息的速度，注释掉后需要手动清除缓存
+			// updateCache("article_list", 300);
 		}
 
 		echo '{"state": 100, "url": "'.$url.'"}';die;
- 
+
 	}
 
 }elseif($dopost == "getTree"){

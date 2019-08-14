@@ -15,7 +15,8 @@ $tpl = dirname(__FILE__)."/../templates/";
 $tpl = isMobile() ? $tpl."touch/message" : $tpl."message";
 $huoniaoTag->template_dir = $tpl; //设置后台模板目录
 
-$dbname = "waimai_common";
+// $dbname = "waimai_common";
+$dbname = "public_comment";
 $templates = "waimaiCommon.html";
 
 
@@ -29,10 +30,10 @@ if($ret){
 $huoniaoTag->assign('shop', $shop);
 
 $list = array();
-$where = " AND c.`sid` in ($managerIds)";
+$where = " AND c.`aid` in ($managerIds)";
 $pageSize = 20;
 if($shopid){
-    $where .= " AND c.`sid` = $shopid";
+    $where .= " AND c.`aid` = $shopid";
     $huoniaoTag->assign('shopid', $shopid);
 }
 $sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__$dbname` c WHERE 1 = 1".$where);
@@ -45,11 +46,12 @@ $p = (int)$p == 0 ? 1 : (int)$p;
 $atpage = $pageSize * ($p - 1);
 
 
-$sql = $dsql->SetQuery("SELECT c.*, o.`ordernumstore`, s.`shopname`, m.`username` FROM (`#@__$dbname` c LEFT JOIN `#@__waimai_order` o ON c.`oid` = o.`id`) LEFT JOIN `#@__waimai_shop` s ON c.`sid` = s.`id` LEFT JOIN `#@__member` m ON m.`id` = c.`uid` WHERE 1 = 1".$where);
+$sql = $dsql->SetQuery("SELECT c.*, o.`ordernumstore`, s.`shopname`, m.`username` FROM (`#@__$dbname` c LEFT JOIN `#@__waimai_order` o ON c.`oid` = o.`id`) LEFT JOIN `#@__waimai_shop` s ON c.`aid` = s.`id` LEFT JOIN `#@__member` m ON m.`id` = c.`userid` WHERE 1 = 1".$where);
 $ret = $dsql->dsqlOper($sql." LIMIT $atpage, $pageSize", "results");
 if($ret){
   foreach ($ret as $key => $value) {
-    $value['pubdatef'] = date("Y-m-d H:i:s", $value['pubdate']);
+    // $value['pubdatef'] = date("Y-m-d H:i:s", $value['pubdate']);
+    $value['pubdatef'] = date("Y-m-d H:i:s", $value['dtime']);
     $value['replydatef'] = $value['replydate'] ? date("Y-m-d H:i:s", $value['replydate']) : "";
 
     $pics = $value['pics'];

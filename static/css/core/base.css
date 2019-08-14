@@ -48,6 +48,9 @@ ins, a {text-decoration:none;}
 .wrap {width: 1000px; margin: 0 auto;}
 .w1200 .wrap {width: 1200px;}
 
+/* 支付成功回调页面隐藏LOGO右侧文字 */
+.header .logo h2 {display: none;}
+
 a {color: #333; transition: all 0.1s; -moz-transition: all 0.1s; -webkit-transition: all 0.1s; -o-transition: all 0.1s;}
 .adv ,.ad ,.tladv{overflow: hidden;}
 .adv img ,.ad img ,.tladv img {display: block;width: 100%;}
@@ -95,6 +98,11 @@ a.more:hover {text-decoration: underline;}
 .topInfo .dropdown a {padding-left: 2px;}
 .topInfo .dropdown .picon-down {display: inline-block;width: 8px;height: 5px;margin-left: 4px;vertical-align: middle;-webkit-transition:all .3s;transition:all .3s;}
 .topInfo .submenu {display: none;position: absolute;top:35px;left:-1px;min-width: 82px; padding: 5px 0; border: 1px solid #ddd; border-top: none; background: #fff;-webkit-animation: topFadeIn .3s ease-out; -moz-animation: topFadeIn .3s ease-out; animation: topFadeIn .3s ease-out; z-index: 10;}
+.topInfo .submenu.tonglan {left: -1118px; width: 1146px; padding: 16px 26px 13px;}
+.topInfo .submenu.tonglan a {float: left; position: relative; padding: 0 20px; height: 40px; line-height: 40px; font-size: 14px; color: #5c5c5e; display: inline-block; min-width: 63px; text-align: center; border-radius: 20px; margin-bottom: 3px; z-index: 1;}
+.topInfo .submenu.tonglan a:after {position: absolute; content: ''; width: 1px; height: 12px; background: #e6e7ed; right: -2px; top: 50%; margin-top: -6px;}
+.topInfo .submenu.tonglan a:hover {background-color: #ffefed; color: #ff523b!important; z-index: 2;}
+.topInfo .submenu.tonglan a:nth-child(11n+0):after, .topInfo .submenu.tonglan a:hover:after {display: none;}
 .topInfo li.user .submenu {min-width: 106px;}
 .topInfo .submenu a {display: block;padding:0 10px;line-height: 26px;white-space:nowrap;}
 .topInfo li:hover .picon-down {-webkit-transform:rotate(180deg);transform:rotate(180deg);}
@@ -224,6 +232,7 @@ a.more:hover {text-decoration: underline;}
 /* 友情链接 */
 .friendlink {border-bottom: 1px solid #5d5d5d; padding-bottom: 15px; margin-bottom: 20px;}
 .gray .friendlink {border-bottom-color: #ececec;}
+.white .friendlink {border-bottom-color: #ececec;}
 .friendlink h5 {font-size: 16px; color: #fff;}
 .friendlink ul {margin-top: 10px;}
 .friendlink li {float: left; margin: 0 40px 5px 0;}
@@ -255,6 +264,10 @@ a.more:hover {text-decoration: underline;}
 .footer.gray {background: #f8f8f8;}
 .gray .friendlink h5, .gray .friendlink li a, .gray .help .helplist dl dt, .gray .help .helplist dl dd, .gray .help .helplist dl dd a, .gray .copyright, .gray .copyright a, .gray .help .qr .qr-img {color: #333;}
 .gray .friendlink li a:hover, .gray .help .list dl a:hover, .gray .copyright a:hover {color: #2babff;}
+
+.footer.white {background: #fff;}
+.white .friendlink h5, .white .friendlink li a, .white .help .helplist dl dt, .white .help .helplist dl dd, .white .help .helplist dl dd a, .white .copyright, .white .copyright a, .white .help .qr .qr-img {color: #333;}
+.white .friendlink li a:hover, .white .help .list dl a:hover, .white .copyright a:hover {color: #2babff;}
 
 
 /* 第三方登陆授权后提示绑定手机号 */
@@ -302,7 +315,7 @@ a.more:hover {text-decoration: underline;}
 
 /* 广告标识 */
 .siteAdvObj {position: relative;}
-.siteAdvObj .advMark {position: absolute; width: 24px; height: 14px; z-index: 999; background: url('../../images/advMark.png') no-repeat; font-size: 0; text-indent: -999em;}
+.siteAdvObj .advMark {position: absolute; width: 24px; height: 14px; z-index: 1; background: url('../../images/advMark.png') no-repeat; font-size: 0; text-indent: -999em;}
 .siteAdvObj .advMark.pos0 {left: 5px; top: 5px;}
 .siteAdvObj .advMark.pos1 {right: 5px; top: 5px;}
 .siteAdvObj .advMark.pos2 {left: 5px; bottom: 5px;}

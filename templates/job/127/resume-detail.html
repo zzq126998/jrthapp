@@ -165,9 +165,11 @@
 			<dl><dt><em>*</em><span>面试职位 ：</span></dt><dd>
 				<select name="zhiwei" id="zhiwei">
 					<option value="0">请选择面试职位</option>
+					{#*
 					{#job action="post" return="post" #}
-			        <option value="{#$post.id#}">{#$post.title#}</option>
-			        {#/job#}
+	        <option value="{#$post.id#}">{#$post.title#}</option>
+	        {#/job#}
+	        *#}
 				</select>
 			</dd></dl>
 			<dl class="mstime"><dt><em>*</em><span>面试时间 ：</span></dt>

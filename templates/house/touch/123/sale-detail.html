@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<title>{#$detail_title#}-{#$detail_addr[0]#}{#$detail_addr[1]#}{#$detail_community#}二手房-{#$house_title#}</title>
+<title>{#$detail_title#}</title>
 <meta name="keywords" content="{#$siteCityInfo['name']#}二手房出售,{#$detail_community#}二手房,{#numberDaxie number=$detail_room#}室{#numberDaxie number=$detail_hall#}厅{#numberDaxie number=$detail_guard#}卫二手房"
 />
 <meta name="description" content="{#$siteCityInfo['name']#}二手房-{#$cfg_shortname#}提供{#$siteCityInfo['name']#}{#$detail_community#}二手房出售信息，{#$siteCityInfo['name']#}{#$detail_addr[0]#}{#$detail_addr[1]#}{#$detail_address#}，{#$detail_community#}二手房出售，{#numberDaxie number=$detail_room#}室{#numberDaxie number=$detail_hall#}厅{#numberDaxie number=$detail_guard#}卫。找更多{#$siteCityInfo['name']#}{#$detail_community#}二手房信息就到{#$siteCityInfo['name']#}二手房-{#$cfg_shortname#}。"
@@ -27,6 +27,15 @@
 		"action" : 'sale',
 		"id" : '{#$detail_id#}'
 	};
+	var imconfig = {
+		'mod':'house',
+		'housetype':'sale',
+		'chatid':"{#$detail_user.uid#}",
+		'title': '{#$detail_title#}',
+		"price": '{#$detail_price#}',
+		"imgUrl": '{#changeFileSize url={#$detail_litpic#} type='small'#}',
+		"link": '{#getUrlPath service="house" template="sale-detail" id=$detail_id#}',
+	}
 </script>
 </head>
 
@@ -147,9 +156,9 @@
                 <p>{#if $detail_user.zjcomId#}{#$detail_user.zjcomName#}{#else#}独立经纪人{#/if#}</p>
             </div>
             <div class="im_icon">
-                {#if $detail_user.qq#}<span class="im_qq"></span>{#/if#}
+{#*                {#if $detail_user.qq#}<span class="im_qq"></span>{#/if#}      *#}
           {#if $detail_usertype == 1#}
-            {#if $detail_contact == '' || $detail_contact == $detail_user.phone#}
+{#*           {#if $detail_contact == '' || $detail_contact == $detail_user.phone#}
                 {#if $detail_user.wx || $detail_user.wxQr#}
                     <span class="im_wx"></span>
                 {#/if#}
@@ -157,6 +166,8 @@
                     <span class="im_wx"></span>
             {#/if#}
                 <span class="im_iphone"></span>
+*#}
+				<span class="im_iphone phone_btn">电话咨询</span>
             </div>
             {#else#}
             <div class="im_name">
@@ -177,8 +188,9 @@
                 <p>{#$detail_contact#}</p>
             </div>
             <div class="im_icon">
-                {#if $detail_wx_tel#}<span class="im_wx"></span>{#/if#}
-                <span class="im_iphone"></span>
+              {#*  {#if $detail_wx_tel#}<span class="im_wx"></span>{#/if#}
+                <span class="im_iphone"></span>*#}
+                <span class="im_iphone phone_btn">电话咨询</span>
             </div>
           {#/if#}
         </div>
@@ -197,7 +209,7 @@
                 {#if $detail_rights_to == 1#}
                     {#$rights_to = '使用权房'#}
                 {#elseif $detail_rights_to == 2#}
-                    {#$rights_to = '使用权房'#}
+                    {#$rights_to = '产权房'#}
                 {#else#}
                     {#$rights_to = '不详'#}
                 {#/if#}
@@ -214,7 +226,7 @@
                 </div>
                 <div><span>付税方式：</span><span>{#$paytax#}&nbsp;</span></div>
                 <div><span>产&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;权：</span><span>{#$rights_to#}&nbsp;</span></div>
-                
+
             </div>
             <div class="housing_txt">{#$detail_note#}</div>
         </div>
@@ -245,7 +257,7 @@
                 <ul class="nav-wrapper"></ul>
                 <div class="map-container">
                     <div class="map-wrapper" id="map-wrapper" data-lng="{#$detail_longitude#}" data-lat="{#$detail_latitude#}"></div>
-                </div>  
+                </div>
             </div>
             <a href="javascript:;" class="btn-all appMapBtn">查看全部配套 > </a>
         </div>
@@ -283,7 +295,8 @@
                 {#/if#}
             </div>
             <div class="big-wrapper">
-                <a href="{#getUrlPath service=house template=yuyue param="type=sale&id={#$detail_id#}"#}" class="button post_ulog"><i></i>预约看房</a> <a href="tel:{#if $detail_usertype == 1#}{#$detail_contact|default:$detail_user.phone#}{#else#}{#$detail_contact#}{#/if#}" class="button call_phone"><i></i>电话咨询</a>
+                <a href="{#getUrlPath service=house template=yuyue param="type=sale&id={#$detail_id#}"#}" class="button post_ulog"><i></i>预约看房</a>
+                {#if $detail_user.uid#}<a href="javascript:;" class="button call_phone chat_to-Link" data-type="detail"><i></i>在线咨询</a>{#/if#}
             </div>
         </div>
     </div>
@@ -355,9 +368,10 @@
         {#/if#}
         <i class="phone_cuo"></i>
     </div>
+<!-- 图片放大 -->
+{#include file="../../../siteConfig/bigimg_1.2.html"#}
 
 
-    
 <script type="text/javascript">
 	var cenicon = "{#$templets_skin#}images/mark_ditu.png";
     var iconimg = "{#$templets_skin#}images/map_icon.png";
@@ -378,5 +392,12 @@
 <script src="{#$cfg_staticPath#}js/publicOpenMap.js?v={#$cfg_staticVersion#}"></script>
 {#include file="{#$HUONIAOROOT#}/templates/siteConfig/public_location.html"#}
 <script type="text/javascript" src="{#$templets_skin#}js/map-detail-{#$site_map#}.js?v={#$cfg_staticVersion#}"></script>
+
+<script type="text/javascript">
+    //放大图片
+    $.fn.bigImage({
+        artMainCon:".housing_txt",  //图片所在的列表标签
+    });
+</script>
 </body>
 </html>

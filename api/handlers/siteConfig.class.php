@@ -190,6 +190,8 @@ class siteConfig {
 		global $cfg_secureAccess;
 		global $cfg_basehost;
 		global $cfg_staticVersion;
+		global $cfg_sharePic;
+
 		$platform = $this->param['platform'];    //平台
 		$type = $this->param['type'];    //默认只输出系统已安装模块，如果为 1 则输出后台模块管理中的所有数据，包括自定义导航
 
@@ -250,7 +252,10 @@ class siteConfig {
 							"target" => $value['target'],
 							"color" => $value['color'],
 							"searchUrl" => $cfg_secureAccess.$cfg_basehost.'/search-list.html?action='.$sName.'&keywords=',
-							"url" => $value['type'] ? $value['link'] : $moduleConfig['channelDomain']
+							"url" => $value['type'] ? $value['link'] : $moduleConfig['channelDomain'],
+							'title' => $moduleConfig['title'],
+							'description' => $moduleConfig['description'],
+							'logo' => $customSharePic ? getFilePath($customSharePic) : ($cfg_sharePic ? getFilePath($cfg_sharePic) : $moduleConfig['logoUrl'])
 						);
 
 					}
@@ -1202,9 +1207,16 @@ class siteConfig {
 
 				//其他情况
 				}else{
-					$sql = $dsql->SetQuery("SELECT `id` FROM `#@__advlist` WHERE `title` = '$title' ORDER BY `id` DESC LIMIT 1");
+                    if($param['id'] == "stream"){
+                        $sql = $dsql->SetQuery("SELECT `id` FROM `#@__advlist` WHERE `title` = '$title' AND `state` = 1 AND (`class` = 1 || `class` = 2) ORDER BY rand() LIMIT 1");
+                    }else{
+    					$sql = $dsql->SetQuery("SELECT `id` FROM `#@__advlist` WHERE `title` = '$title' ORDER BY `id` DESC LIMIT 1");
+                    }
 					$ret = $dsql->dsqlOper($sql, "results");
 					if(!$ret){
+                        if($param['id'] == "stream"){
+                            return "";
+                        }
 						$uid = $userLogin->getUserID();
 						if($uid == -1){
 							return array("state" => 200, "info" => '城市不存在！');
@@ -1252,6 +1264,7 @@ class siteConfig {
 			if($date < $start && !empty($start)) return array("state" => 200, "info" => '广告还未开始！');
 			if($date > $end && !empty($end)) return array("state" => 200, "info" => '广告已结束！');
 
+            $adlist['id'] = $id;
 			$adlist['class'] = $cla;
 			$adlist['advTitle'] = $title;
 			$body = explode("$$", $body);
@@ -1347,6 +1360,7 @@ class siteConfig {
 				if($ret){
 
 					$adlist = array();
+                    $adlist['id'] = $id;
 					$adlist['class'] = $cla;
 					$adlist['advTitle'] = $title;
 
@@ -2700,6 +2714,17 @@ class siteConfig {
 				);
 			}
 
+			//教育
+			if(in_array('education', $installModuleArr)){
+				$arr['education'] = array(
+					'refreshFreeTimes' => (int)$cfg_education_refreshFreeTimes,
+					'refreshNormalPrice' => (float)$cfg_education_refreshNormalPrice,
+					'refreshSmart' => $this->computeRefreshSmart((float)$cfg_education_refreshNormalPrice, $cfg_education_refreshSmart ? unserialize($cfg_education_refreshSmart) : array()),
+					'topNormal' => $this->computeTopNormal($cfg_education_topNormal ? unserialize($cfg_education_topNormal) : array()),
+					'topPlan' => $cfg_education_topPlan ? unserialize($cfg_education_topPlan) : array()
+				);
+			}
+
 			return $arr;
 
 		}else{
@@ -2912,6 +2937,21 @@ class siteConfig {
 					}
 				}
 
+				if($module == 'education'){
+					$uid_ = $uid;
+					$sql = $dsql->SetQuery("SELECT `id` FROM `#@__education_store` WHERE `userid` = $uid");
+					$ret = $dsql->dsqlOper($sql, "results");
+					if($ret){
+						$uid_ = $ret[0]['id'];
+					}
+
+					$sql = $dsql->SetQuery("SELECT SUM(`refreshFree`) total FROM `#@__education_courses` WHERE `userid` = $uid_ AND `refreshFree` > 0");
+					$ret = $dsql->dsqlOper($sql, "results");
+					if(is_array($ret)){
+						$count = $ret[0]['total'];
+					}
+				}
+
 				return array('config' => $moduleConfig, 'memberFreeCount' => (int)$count);
 
 			}else{
@@ -2987,6 +3027,11 @@ class siteConfig {
 
 				if($module == 'car'){
 					$sql = $dsql->SetQuery("UPDATE `#@__".$module."_list` SET `refreshFree` = `refreshFree`+1, `pubdate` = '$time' WHERE `id` = $aid");
+					$ret = $dsql->dsqlOper($sql, "update");
+				}
+
+				if($module == 'education'){
+					$sql = $dsql->SetQuery("UPDATE `#@__".$module."_courses` SET `refreshFree` = `refreshFree`+1, `pubdate` = '$time' WHERE `id` = $aid");
 					$ret = $dsql->dsqlOper($sql, "update");
 				}
 
@@ -3332,6 +3377,8 @@ class siteConfig {
 			$tab = $module . '_post';
 		}elseif($module == 'car'){
 			$tab = $module . '_list';
+		}elseif($module == 'education'){
+			$tab = $module . '_courses';
 		}
 
 		$archive = $dsql->SetQuery("SELECT `id`, `title` FROM `#@__".$tab."` WHERE `id` = $aid");
@@ -3439,6 +3486,8 @@ class siteConfig {
 				$tname = self::$langData['siteConfig'][34][6];//招聘职位
 			}elseif($module == 'car'){
 				$tname = self::$langData['siteConfig'][34][7];//汽车门户
+			}elseif($module == 'education'){
+				$tname = self::$langData['education'][7][18];//教育课程
 			}
 
 			if($check_zjuser){
@@ -3486,6 +3535,11 @@ class siteConfig {
 					$ret = $dsql->dsqlOper($sql, "update");
 				}
 
+				if($module == 'education'){
+					$sql = $dsql->SetQuery("UPDATE `#@__".$tab."` SET `pubdate` = '$time' WHERE `id` = $aid");
+					$ret = $dsql->dsqlOper($sql, "update");
+				}
+
 			//智能刷新
 			//先进行一次刷新，然后更新信息，并查询需要更新的总次数，刷新时长，刷新价格，开始刷新时间，下次刷新时间，刷新剩余次数
 			}elseif($class == 'smartRefresh'){
@@ -3515,6 +3569,11 @@ class siteConfig {
 					$ret = $dsql->dsqlOper($sql, "update");
 				}
 
+				if($module == 'education'){
+					$sql = $dsql->SetQuery("UPDATE `#@__".$tab."` SET `refreshSmart` = 1, `refreshCount` = '$sr_times', `refreshTimes` = '$sr_day', `refreshPrice` = '$sr_times', `refreshBegan` = '$time', `refreshNext` = '$nextRefreshTime', `refreshSurplus` = '$refreshSurplus', `pubdate` = '$time' WHERE `id` = $aid");
+					$ret = $dsql->dsqlOper($sql, "update");
+				}
+
 			//普通置顶
 			//这里使用了最开始的竞价字段
 			}elseif($class == 'topping'){
@@ -3538,6 +3597,11 @@ class siteConfig {
 				}
 
 				if($module == 'car'){
+					$sql = $dsql->SetQuery("UPDATE `#@__".$tab."` SET `isbid` = 1, `bid_type` = 'normal', `bid_price` = '$tp_price', `bid_start` = '$time', `bid_end` = '$bid_end' WHERE `id` = $aid");
+					$ret = $dsql->dsqlOper($sql, "update");
+				}
+
+				if($module == 'education'){
 					$sql = $dsql->SetQuery("UPDATE `#@__".$tab."` SET `isbid` = 1, `bid_type` = 'normal', `bid_price` = '$tp_price', `bid_start` = '$time', `bid_end` = '$bid_end' WHERE `id` = $aid");
 					$ret = $dsql->dsqlOper($sql, "update");
 				}
@@ -3571,6 +3635,11 @@ class siteConfig {
 				}
 
 				if($module == 'car'){
+					$sql = $dsql->SetQuery("UPDATE `#@__".$tab."` SET `isbid` = 1, `bid_type` = 'plan', `bid_price` = '$tp_amount', `bid_start` = '$tp_beganDate', `bid_end` = '$tp_endDate'".$tp_weekUpdate." WHERE `id` = $aid");
+					$ret = $dsql->dsqlOper($sql, "update");
+				}
+
+				if($module == 'education'){
 					$sql = $dsql->SetQuery("UPDATE `#@__".$tab."` SET `isbid` = 1, `bid_type` = 'plan', `bid_price` = '$tp_amount', `bid_start` = '$tp_beganDate', `bid_end` = '$tp_endDate'".$tp_weekUpdate." WHERE `id` = $aid");
 					$ret = $dsql->dsqlOper($sql, "update");
 				}
@@ -3632,8 +3701,8 @@ class siteConfig {
 	public function get114ConveniencePoiList(){
 		global $cfg_map;
 		global $site_map_key;
-		global $cfg_map_baidu;
-		global $cfg_map_amap;
+		global $cfg_map_baidu_server;
+		global $cfg_map_amap_server;
 		global $cfg_map_google;
 
 		$lat = $this->param['lat'];
@@ -3654,7 +3723,7 @@ class siteConfig {
 		//百度地图
 		if($cfg_map == 2) {
             $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, 'http://api.map.baidu.com/place/v2/search?query=' . $directory . '&scope=2&location=' . $lat . ',' . $lng . '&radius=' . $radius . '&page_num=' . $page . '&page_size=' . $pageSize . '&output=json&ak=' . $cfg_map_baidu);
+            curl_setopt($curl, CURLOPT_URL, 'http://api.map.baidu.com/place/v2/search?query=' . $directory . '&scope=2&location=' . $lat . ',' . $lng . '&radius=' . $radius . '&page_num=' . $page . '&page_size=' . $pageSize . '&output=json&ak=' . $cfg_map_baidu_server);
             curl_setopt($curl, CURLOPT_HEADER, 0);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -3695,7 +3764,7 @@ class siteConfig {
         //高德
         }elseif($cfg_map == 4){
             $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, 'https://restapi.amap.com/v3/place/around?key='. $cfg_map_amap .'&location=' . $lat . ',' . $lng . '&keywords=' . $directory . '&types=&radius=' . $radius . '&offset=' . $pageSize . '&page=' . $page . '&extensions=all');
+            curl_setopt($curl, CURLOPT_URL, 'https://restapi.amap.com/v3/place/around?key='. $cfg_map_amap_server .'&location=' . $lat . ',' . $lng . '&keywords=' . $directory . '&types=&radius=' . $radius . '&offset=' . $pageSize . '&page=' . $page . '&extensions=all');
             curl_setopt($curl, CURLOPT_HEADER, 0);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -4072,26 +4141,6 @@ class siteConfig {
 
         $menu = array();
 
-        // 网站首页
-        $menu[] = array(
-            'name' => $langData['siteConfig'][0][5],
-            'icon' => $url.'/static/images/admin/nav/index.png?v='.$cfg_staticVersion,
-            'url' => $url,
-            'color' => '',
-            'code' => 'index',
-            'bold' => 0
-        );
-
-        // 会员中心
-        $menu[] = array(
-            'name' => $langData['siteConfig'][0][7],
-            'icon' => $url.'/static/images/admin/nav/member.png?v='.$cfg_staticVersion,
-            'url' => $memberUrl,
-            'color' => '',
-            'code' => 'member',
-            'bold' => 0
-        );
-
         if(in_array("shop", $installModuleArr)){
             // 购物车
             $menu[] = array(
@@ -4116,7 +4165,11 @@ class siteConfig {
                 'url' => $value['url'],
                 'color' => $value['color'],
 	            'code' => $value['code'],
-                'bold' => $value['bold']
+                'bold' => $value['bold'],
+				'title' => $value['title'],
+				'title' => $value['title'],
+				'description' => $value['description'],
+				'logo' => $value['logo'],
             );
         }
 
@@ -4168,7 +4221,7 @@ class siteConfig {
 	   global $langData;
 
 		//用户ID
-		$userid = $userLogin->getMemberID();
+		$userid = $this->param['userid'] ? $this->param['userid'] : $userLogin->getMemberID();
 
 		if($userid < 1){
 			return array("state" => 200, "info" => $langData['siteConfig'][20][262]);   //登录超时，请重新登录！
@@ -4278,6 +4331,7 @@ class siteConfig {
 	   //会员通知
 	   $param = array(
 		   "service"  => "member",
+		   "type" => "user",
 		   "template" => "chat",
 		   "uid"   => $userid
 	   );
@@ -4286,8 +4340,9 @@ class siteConfig {
 	   $config = array(
 		   "title" => "好友通知",
 		   "content" => $tname . "请求加您好友",
+		   "date" => date("Y-m-d H:i:s", time())
 	   );
-	   updateMemberNotice($tid, "会员-消息提醒", $param, $config);
+	   updateMemberNotice($tid, "会员-消息提醒", $param, $config, "", array('type' => 'im', 'from' => $userid, 'to' => $tid));
 
 
 	   //正常申请流程
@@ -4367,7 +4422,7 @@ class siteConfig {
 		//用户信息
 		if($userid > 0){
 			$configHandels = new handlers('member', "detail");
-			$userinfo = $configHandels->getHandle(array("id" => $userid, "friend" => 1));
+			$userinfo = $configHandels->getHandle(array("id" => $userid, "friend" => 1, "from" => (int)$this->param['from']));
 
 			if($userinfo['state'] != 100){
 				return array("state" => 200, "info" => "用户信息错误");
@@ -4378,7 +4433,8 @@ class siteConfig {
 			    'uid' => $userid,
 			    'name' => $userinfo['info']['nickname'],
 			    'photo' => $userinfo['info']['photo'],
-			    'type' => 'member'
+			    'type' => 'member',
+				'getLastMessage' => 1
 			);
 		}else{
 			//获取Token
@@ -4459,26 +4515,28 @@ class siteConfig {
 	            $toUserid = $_fid == $userid ? $_tid : $_fid;
 	            $toUserinfo = $userLogin->getMemberInfo($toUserid);
 
-	            //获取Token
-	            $toParams = array (
-	                'uid' => $toUserid,
-	                'name' => $toUserinfo['nickname'],
-	                'photo' => $toUserinfo['photo'],
-	                'getLastMessage' => 1,
-	                'friend' => $userid,
-	                'type' => 'member'
-	            );
-	            $request = new SendRequest_($cfg_km_accesskey_id, $cfg_km_accesskey_secret);
-	            $token = $request->curl('/chat/getToken.php', $toParams, 'urlencoded', 'POST');
-	            $toTokenArr = json_decode($token, true);
+				if(is_array($toUserinfo) && $toUserinfo['nickname'] && $toUserinfo['photo']){
+		            //获取Token
+		            $toParams = array (
+		                'uid' => $toUserid,
+		                'name' => $toUserinfo['nickname'],
+		                'photo' => $toUserinfo['photo'],
+		                'getLastMessage' => 1,
+		                'friend' => $userid,
+		                'type' => 'member'
+		            );
+		            $request = new SendRequest_($cfg_km_accesskey_id, $cfg_km_accesskey_secret);
+		            $token = $request->curl('/chat/getToken.php', $toParams, 'urlencoded', 'POST');
+		            $toTokenArr = json_decode($token, true);
 
-	            array_push($friendList, array(
-	                'id' => $_id,
-	                'userinfo' => $toParams,
-	                'token' => $toTokenArr['info'],
-	                'online' => $toTokenArr['online'],
-	                'lastMessage' => $toTokenArr['lastMessage']
-	            ));
+		            array_push($friendList, array(
+		                'id' => $_id,
+		                'userinfo' => $toParams,
+		                'token' => $toTokenArr['info'],
+		                'online' => $toTokenArr['online'],
+		                'lastMessage' => $toTokenArr['lastMessage']
+		            ));
+				}
 	        }
 	    }
 
@@ -4549,7 +4607,7 @@ class siteConfig {
 	   global $cfg_km_accesskey_id;
 	   global $cfg_km_accesskey_secret;
 
-	   $userid = $userLogin->getMemberID();
+	   $userid = $this->param['userid'] ? $this->param['userid'] : $userLogin->getMemberID();
 
 	   $from = $this->param['from'];
 	   $to = $this->param['to'];
@@ -4593,6 +4651,7 @@ class siteConfig {
  	    global $cfg_km_accesskey_secret;
 
 		$userid = $userLogin->getMemberID();
+		$userid = $this->param['userid'] ? $this->param['userid'] : $userid;
 
 		if($userid < 1){
 			return array("state" => 200, "info" => $langData['siteConfig'][20][262]);   //登录超时，请重新登录！
@@ -4645,6 +4704,7 @@ class siteConfig {
 			if($ret['info']['unread']){
 		 	   $param = array(
 		 		   "service"  => "member",
+				   "type" => "user",
 		 		   "template" => "chat",
 		 		   "uid"   => $fid
 		 	   );
@@ -4655,19 +4715,30 @@ class siteConfig {
 
 			   $note = '';
 			   if($contentType == 'text'){
-				   $note = $content;
+				   $note = strstr($content, '△') ? '[表情]' : $content;
 			   }elseif($contentType == 'image'){
 				   $note = '[图片]';
 			   }elseif($contentType == 'video'){
 				   $note = '[视频]';
+			   }elseif($contentType == 'audio'){
+				   $note = '[语音]';
+			   }elseif($contentType == 'recfriend'){
+				   $note = '[好友推荐]';
+			   }elseif($contentType == 'mapshare'){
+				   $note = '[地图位置]';
+			   }elseif($contentType == 'apply'){
+				   $note = '[好友申请]';
+			   }elseif($contentType == 'link'){
+				   $note = '[链接]';
 			   }
 
 		 	   //自定义配置
 		 	   $config = array(
 		 		   "title" => "聊天消息",
 		 		   "content" => $name . "：" . $note,
+				   "date" => date("Y-m-d H:i:s", time())
 		 	   );
-		 	   updateMemberNotice($tid, "会员-消息提醒", $param, $config);
+		 	   updateMemberNotice($tid, "会员-消息提醒", $param, $config, "", array('type' => 'im', 'from' => $fid, 'to' => $tid));
 			}
 
 			return 'success';

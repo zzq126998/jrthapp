@@ -8,6 +8,8 @@
 <div class="main">
   <form name="fabuForm" id="fabuForm" method="post" action="/include/ajax.php?service=info&action={#if $do == "edit"#}edit&id={#$id#}{#else#}put{#/if#}" data-url="{#getUrlPath service='member' type='user' template='manage' action='info'#}">
     <input type="hidden" name="typeid" id="typeid" value="{#if $detail_typeid != ""#}{#$detail_typeid#}{#else#}{#$typeid#}{#/if#}" />
+    <input type="hidden" name="longitude" id="longitude" value="" />
+    <input type="hidden" name="latitude" id="latitude" value="" />
     <div class="img-box">
       <ul class="uploader-list fn-clear" id="fileList1">
         <li class="uploadbtn">

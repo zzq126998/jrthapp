@@ -144,6 +144,12 @@ var thumbSize = {#$thumbSize#}, thumbType = "{#$thumbType#}", action = "{#$actio
         <input class="input-mini" type="number" name="atlasMax" id="atlasMax" min="0" value="{#$atlasMax#}" /> 张
       </dd>
     </dl>
+    <dl class="clearfix">
+      <dt><label>评论审核：</label></dt>
+      <dd class="radio">
+        {#html_radios name="commentCheck" values=$commentCheck checked=$commentCheckChecked output=$commentCheckNames separator="&nbsp;&nbsp;"#}
+      </dd>
+    </dl>
   </div>
   <div class="item hide" id="tplList">
     <div class="tpl-list">

@@ -4,7 +4,7 @@ a:hover{text-decoration: none;}
 
 .info-section{background: #fffaeb; margin-bottom: .2rem; padding: .2rem; font-size: .28rem; color: #666; border-bottom: 1px solid #fff6db;}
 .info-section .info-text{color: #d00;}
-.info-section .last{font-size: .24rem; margin-top: .1rem;}
+.info-section .last{font-size: .24rem; margin-top: .1rem; line-height: 1.8em;}
 
 .info-block{background: #fff; margin-bottom: .2rem;}
 .info-block .info-title{font-size: .3rem; border-bottom: 1px solid #f4f4f4; padding: .1rem .2rem;}

@@ -214,6 +214,7 @@
 		<li class="curr"><a href="javascript:;">介绍</a></li>
 		<li><a href="javascript:;">相册</a></li>
 		<li><a href="{#getUrlPath service='business' template='video' id=$detail_id#}">视频</a></li>
+		<li><a href="javascript:;">动态</a></li>
 		{#business action='getStoreCustomMenu' id=$detail_id return='menu'#}
 		<li><a href="{#if $menu.jump#}{#$menu.url#}{#else#}javascript:;{#/if#}">{#$menu.title|mb_substr:0:4:'utf8'#}</a></li>
 		{#/business#}
@@ -232,7 +233,7 @@
 			           {#business action='albums_list' uid=$detail_id pageSize=100 return='list'#}
 			           <figure itemprop="associatedMedia" itemscope="" itemtype="" class="swiper-slide">
 			                <a href="{#$list.litpic#}" itemprop="contentUrl" data-size="800x800" class="picarr" id="pic0">
-			                  <img src="{#$list.litpic#}" itemprop="thumbnail" alt="Image description">
+			                  <div class="img-box"><img src="{#$list.litpic#}" itemprop="thumbnail" alt="Image description"></div>
 			                  <p>{#$list.typename#}</p>
 			                </a>
 			           </figure>
@@ -243,6 +244,17 @@
 	</div>
 	<div class="userCon introCon">
 		<div class="videobox"></div>
+	</div>
+	<div class="userCon trends">
+		<ul class="infoList">
+			{#business action='news_list' return='news' uid={#$detail_id#} pageSize='5'#}
+			<li class="fn-clear"><a href="{#$news.url#}"><em>[{#$news.typename#}]</em><p>{#$news.title#}</p><span>{#$news.pubdate|date_format:'%m.%d'#}</span></a></li>
+			{#/business#}
+		</ul>
+		{#if $pageInfo.totalCount >5#}
+		<p class="more"><a href="{#getUrlPath service='business' template='news' bid={#$detail_id#}#}">查看更多</a></p>
+		{#/if#}
+
 	</div>
 	{#business action='getStoreCustomMenu' id=$detail_id return='menu'#}
 	<div class="userCon customCon">{#if !$menu.jump#}{#$menu.body#}{#/if#}</div>
@@ -534,6 +546,9 @@
 </div>
 
 {#include file="_foot.html"#}
+
+<!-- 图片放大 -->
+{#include file="../../../siteConfig/bigimg_1.2.html"#}
 
 <script type="text/javascript">
 	var wxconfig = {

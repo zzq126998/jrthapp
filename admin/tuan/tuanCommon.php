@@ -15,28 +15,76 @@ $tpl = dirname(__FILE__)."/../templates/tuan";
 $huoniaoTag->template_dir = $tpl; //设置后台模板目录
 $templates = "tuanCommon.html";
 
+$pagetitle = "团购商品评论";
+
+//城市管理员，只能管理管辖城市的会员
+$adminAreaIDs = '';
+$ids = array();
+if($userType == 3){
+	//查询信息
+	$comSql = $dsql->SetQuery("SELECT `id` FROM `#@__tuan_store` WHERE `cityid` in ($adminCityIds) AND `state` = 1");
+	$comResult = $dsql->dsqlOper($comSql, "results");
+	if($comResult) {
+		$comid = array();
+		foreach ($comResult as $key => $com) {
+			array_push($comid, $com['id']);
+		}
+		if (!empty($comid)) {
+			$where1 .= " AND `sid` in (" . join(",", $comid) . ") ";
+		}
+		$sql = $dsql->SetQuery("SELECT `id` FROM `#@__tuanlist` WHERE `arcrank` = 1 $where1");
+	}else{
+		echo '{"state": 101, "info": '.json_encode("暂无相关信息").', "pageInfo": {"totalPage": 0, "totalCount": 0, "totalGray": 0, "totalAudit": 0, "totalRefuse": 0}}';die;
+	}
+	$ret = $dsql->dsqlOper($sql, "results");
+	if($ret){
+		foreach ($ret as $key => $value) {
+			array_push($ids, $value['id']);
+		}
+		if($ids){
+			$ids = join(',', $ids);
+		}
+	}
+}
+
+
 global $handler;
 $handler = true;
 
-$action = "tuan";
+$action = "public";
 
 if($dopost == "getDetail"){
 	if($id == "") die;
-	$archives = $dsql->SetQuery("SELECT `aid`, `userid`, `content`, `dtime`, `ip`, `ipaddr`, `good`, `bad`, `rating`, `score1`, `score2`, `score3`, `pics`, `ischeck` FROM `#@__".$action."common` WHERE `id` = ".$id);
-	$results = $dsql->dsqlOper($archives, "results");
 
+	$where = "";
+	if($userType == 3){
+		if($ids){
+			$where .= " AND `aid` in ($ids)";
+		}else{
+			$where .= " AND 1 = 2";
+		}
+	}
+
+	$archives = $dsql->SetQuery("SELECT `aid`, `userid`, `content`, `dtime`, `ip`, `ipaddr`, `rating`, `ischeck`, `sco1`, `sco2`, `sco3`, `pics` FROM `#@__".$action."_comment` WHERE `id` = ".$id.$where);
+	$results = $dsql->dsqlOper($archives, "results");
 	if(count($results) > 0){
 
-		$typeSql = $dsql->SetQuery("SELECT p.`id`, p.`title` FROM `#@__tuanlist` p LEFT JOIN `#@__tuan_order` o ON o.`proid` = p.`id` WHERE o.`id` = ". $results[0]["aid"]);
+		$results[0]["rating"] = $results[0]["rating"];
+		$results[0]["sco1"] = $results[0]["sco1"];
+		$results[0]["sco2"] = $results[0]["sco2"];
+		$results[0]["sco3"] = $results[0]["sco3"];
+
+		
+		$typeSql = $dsql->SetQuery("SELECT p.`title` FROM `#@__tuanlist` p WHERE p.`id` = ". $results[0]["aid"]);
 		$typename = $dsql->getTypeName($typeSql);
-		$results[0]["protitle"] = $typename[0]['title'];
+		$results[0]["storeTitle"] = $typename[0]['title'];
 
 		$param = array(
 			"service"  => "tuan",
 			"template" => "detail",
-			"id"       => $typename[0]['id']
+			"id"       => $results[0]['aid']
 		);
-		$results[0]["prourl"] = getUrlPath($param);
+		$results[0]["storeUrl"] = getUrlPath($param);
 
 		if($results[0]["userid"] == 0 || $results[0]["userid"] == -1){
 			$username = "游客";
@@ -69,21 +117,32 @@ if($dopost == "getDetail"){
 //更新评论信息
 }else if($dopost == "updateDetail"){
 	if($id == "") die;
-	$content = $_POST["commonContent"];
-	$dtime   = GetMkTime($_POST["commonTime"]);
-	$ip      = $_POST["commonIp"];
-	$good    = $_POST["commonGood"];
-	$bad     = $_POST["commonBad"];
+	$content = $_POST["content"];
+	$dtime   = GetMkTime($_POST["time"]);
+	$ip      = $_POST["ip"];
 	$rating  = $_POST["rating"];
-	$score1  = $_POST["score1"];
-	$score2  = $_POST["score2"];
-	$score3  = $_POST["score3"];
-	$pics    = $_POST["pics"];
-	$ischeck = $_POST["commonIsCheck"];
+	$reply   = $_POST["reply"];
+	$rtime   = GetMkTime($_POST["rtime"]);
+	$ischeck = $_POST["isCheck"];
+	$sco1 = $_POST["sco1"];
+	$sco2 = $_POST["sco2"];
+	$sco3 = $_POST["sco3"];
 	$ipAddr = getIpAddr($ip);
 
+	$where = "";
+	$where1 = "";
+	if($userType == 3){
+		if($ids){
+			$where .= " AND c.`aid` in ($ids)";
+			$where1 .= " AND `aid` in ($ids)";
+		}else{
+			$where .= " AND 1 = 2";
+			$where1 .= " AND 1 = 2";
+		}
+	}
+
 	//会员通知
-	$sql = $dsql->SetQuery("SELECT l.`id`, l.`title`, l.`pubdate`, s.`uid`, c.`userid`, c.`ischeck`, c.`dtime` FROM `#@__".$action."_order` o LEFT JOIN `#@__".$action."common` c ON c.`aid` = o.`id` LEFT JOIN `#@__".$action."list` l ON l.`id` = o.`proid` LEFT JOIN `#@__".$action."_store` s ON s.`id` = l.`sid` WHERE c.`id` = $id");
+	$sql = $dsql->SetQuery("SELECT l.`id`, l.`title`, l.`pubdate`, s.`uid`, c.`userid`, c.`ischeck`, c.`dtime` FROM `#@__".$action."_comment` c LEFT JOIN `#@__tuanlist` l ON l.`id` = c.`aid` LEFT JOIN `#@__tuan_store` s ON s.`id` = l.`sid` WHERE c.`id` = " . $id . $where);
 	$ret = $dsql->dsqlOper($sql, "results");
 	if($ret){
 		$aid     = $ret[0]['id'];
@@ -91,20 +150,20 @@ if($dopost == "getDetail"){
 		$pubdate = $ret[0]['pubdate'];
 		$uid     = $ret[0]['uid'];
 		$userid  = $ret[0]['userid'];
-		$ischeck = $ret[0]['ischeck'];
+		$ischeck_ = $ret[0]['ischeck'];
 		$dtime   = $ret[0]['dtime'];
 
 		//验证评论状态
-		if($ischeck != $commonIsCheck){
+		if($ischeck_ != $isCheck){
 
 			$param = array(
-				"service"  => $action,
+				"service"  => "tuan",
 				"template" => "detail",
 				"id"       => $aid
 			);
 
 			//只有审核通过的信息才发通知
-			if($commonIsCheck == 1){
+			if($isCheck == 1){
 
 				//获取会员名
 				$username = "";
@@ -155,12 +214,12 @@ if($dopost == "getDetail"){
 		}
 	}
 
-	$archives = $dsql->SetQuery("UPDATE `#@__tuancommon` SET `content` = '$commonContent', `dtime` = '".GetMkTime($commonTime)."', `ip` = '$commonIp', `good` = '$commonGood', `bad` = '$commonBad', `ischeck` = '$commonIsCheck', `rating` = '$rating', `score1` = '$score1', `score2` = '$score2', `score3` = '$score3', `pics` = '$pics' WHERE `id` = ".$id);
+	$archives = $dsql->SetQuery("UPDATE `#@__".$action."_comment` SET `content` = '$content', `dtime` = '$dtime', `ip` = '$ip', `ischeck` = '$isCheck', `sco1` = '$sco1', `sco2` = '$sco2', `sco3` = '$sco3', `rating` = '$rating', `pics`='$pics' WHERE `id` = ".$id.$where1);
 	$results = $dsql->dsqlOper($archives, "update");
 	if($results != "ok"){
 		echo $results;
 	}else{
-		adminLog("更新团购评论", $id);
+		adminLog("更新".$pagetitle, $id);
 		echo '{"state": 100, "info": '.json_encode("修改成功！").'}';
 	}
 	die;
@@ -172,9 +231,20 @@ if($dopost == "getDetail"){
 	$error = array();
 	foreach($each as $val){
 
+		$where = "";
+		$where1 = "";
+		if($userType == 3){
+			if($ids){
+				$where .= " AND c.`aid` in ($ids)";
+				$where1 .= " AND `aid` in ($ids)";
+			}else{
+				$where .= " AND 1 = 2";
+				$where1 .= " AND 1 = 2";
+			}
+		}
 
 		//会员通知
-		$sql = $dsql->SetQuery("SELECT l.`id`, l.`title`, l.`pubdate`, s.`uid`, c.`userid`, c.`ischeck`, c.`dtime` FROM `#@__".$action."_order` o LEFT JOIN `#@__".$action."common` c ON c.`aid` = o.`id` LEFT JOIN `#@__".$action."list` l ON l.`id` = o.`proid` LEFT JOIN `#@__".$action."_store` s ON s.`id` = l.`sid` WHERE c.`id` = $val");
+		$sql = $dsql->SetQuery("SELECT l.`id`, l.`title`, l.`pubdate`, s.`uid`, c.`userid`, c.`ischeck`, c.`dtime` FROM `#@__".$action."_comment` c LEFT JOIN `#@__tuanlist` l ON l.`id` = c.`aid` LEFT JOIN `#@__tuan_store` s ON s.`id` = l.`sid` WHERE c.`id` = " . $val.$where);
 		$ret = $dsql->dsqlOper($sql, "results");
 		if($ret){
 			$aid     = $ret[0]['id'];
@@ -189,7 +259,7 @@ if($dopost == "getDetail"){
 			if($ischeck != $arcrank){
 
 				$param = array(
-					"service"  => $action,
+					"service"  => "tuan",
 					"template" => "detail",
 					"id"       => $aid
 				);
@@ -248,7 +318,7 @@ if($dopost == "getDetail"){
 
 
 
-		$archives = $dsql->SetQuery("UPDATE `#@__".$action."common` SET `ischeck` = $arcrank WHERE `id` = ".$val);
+		$archives = $dsql->SetQuery("UPDATE `#@__".$action."_comment` SET `ischeck` = $arcrank WHERE `id` = ".$val.$where1);
 		$results = $dsql->dsqlOper($archives, "update");
 		if($results != "ok"){
 			$error[] = $val;
@@ -257,27 +327,46 @@ if($dopost == "getDetail"){
 	if(!empty($error)){
 		echo '{"state": 200, "info": '.json_encode($error).'}';
 	}else{
-		adminLog("更新团购评论状态", $id."=>".$arcrank);
+		adminLog("更新".$pagetitle."状态", $id."=>".$arcrank);
 		echo '{"state": 100, "info": '.json_encode("修改成功！").'}';
 	}
 	die;
 
 //删除评论
-}else if($dopost == "delCommon"){
+}else if($dopost == "delComment"){
 	if($id == "") die;
 	$each = explode(",", $id);
 	$error = array();
 	foreach($each as $val){
-		$archives = $dsql->SetQuery("DELETE FROM `#@__".$action."common` WHERE `id` = ".$val);
-		$results = $dsql->dsqlOper($archives, "update");
-		if($results != "ok"){
+
+		$where = "";
+		if($userType == 3){
+			if($ids){
+				$where .= " AND `aid` in ($ids)";
+			}else{
+				$where .= " AND 1 = 2";
+			}
+		}
+
+		$sql = $dsql->SetQuery("SELECT `id` FROM `#@__".$action."_comment` WHERE `id` = " . $val . $where);
+		$ret = $dsql->dsqlOper($sql, "results");
+		if($ret){
+			$sql = $dsql->SetQuery("DELETE FROM `#@__public_up` WHERE `type` = '1' and `tid` = '$val'");
+			$dsql->dsqlOper($sql, "update");
+			
+			$archives = $dsql->SetQuery("DELETE FROM `#@__".$action."_comment` WHERE `id` = ".$val);
+			$results = $dsql->dsqlOper($archives, "update");
+			if($results != "ok"){
+				$error[] = $val;
+			}
+		}else{
 			$error[] = $val;
 		}
 	}
 	if(!empty($error)){
 		echo '{"state": 200, "info": '.json_encode($error).'}';
 	}else{
-		adminLog("删除团购评论", $id);
+		adminLog("删除".$pagetitle, $id);
 		echo '{"state": 100, "info": '.json_encode("删除成功！").'}';
 	}
 	die;
@@ -287,25 +376,45 @@ if($dopost == "getDetail"){
 	$pagestep = $pagestep == "" ? 10 : $pagestep;
 	$page     = $page == "" ? 1 : $page;
 
-	$where = "";
+	$where = " AND `type` = 'tuan-order'";
 
-    $where2 = " `cityid` in ($adminCityIds)";
+	if ($adminCity){
+		$comSql = $dsql->SetQuery("SELECT `id` FROM `#@__tuan_store` WHERE `cityid` = '$adminCity' AND `state` = 1");
+		$comResult = $dsql->dsqlOper($comSql, "results");
+		if($comResult) {
+			$comid = array();
+			foreach ($comResult as $key => $com) {
+				array_push($comid, $com['id']);
+			}
+			if (!empty($comid)) {
+				$where2 .= " AND `sid` in (" . join(",", $comid) . ") ";
+			}
+			$sql = $dsql->SetQuery("SELECT `id` FROM `#@__tuanlist` WHERE `arcrank` = 1 $where2");
+		}else{
+			echo '{"state": 101, "info": '.json_encode("暂无相关信息").', "pageInfo": {"totalPage": 0, "totalCount": 0, "totalGray": 0, "totalAudit": 0, "totalRefuse": 0}}';die;
+		}
+		$ret = $dsql->dsqlOper($sql, "results");
+		if($ret){
+			foreach ($ret as $key => $value) {
+				array_push($ids, $value['id']);
+			}
+			if($ids){
+				$ids = join(',', $ids);
+			}
 
-    if ($adminCity){
-        $where2 = " `cityid` = $adminCity";
+			$where .= " AND `aid` in ($ids)";
+		}else{
+			echo '{"state": 101, "info": '.json_encode("暂无相关信息").', "pageInfo": {"totalPage": 0, "totalCount": 0, "totalGray": 0, "totalAudit": 0, "totalRefuse": 0}}';die;
+		}
     }
 
-    $sidArr = array();
-    $userSql = $dsql->SetQuery("SELECT `store`.id FROM `#@__tuan_store` store WHERE".$where2);
-    $results = $dsql->dsqlOper($userSql, "results");
-    foreach ($results as $key => $value) {
-        $sidArr[$key] = $value['id'];
-    }
-    if(!empty($sidArr)){
-        $where3 = " AND p.`sid` in (".join(",",$sidArr).")";
-    }else{
-        echo '{"state": 101, "info": '.json_encode("暂无相关信息").', "pageInfo": {"totalPage": 0, "totalCount": 0, "totalGray": 0, "totalAudit": 0, "totalRefuse": 0}}';die;
-    }
+	if($userType == 3){
+		if($ids){
+			$where .= " AND `aid` in ($ids)";
+		}else{
+			$where .= " AND 1 = 2";
+		}
+	}
 
 	if($sKeyword != ""){
 		//按评论内容搜索
@@ -314,7 +423,18 @@ if($dopost == "getDetail"){
 
 		//按信息标题搜索
 		}elseif($sType == "1"){
-            $where3 .= " AND p.`title` like '%$sKeyword%'";
+			$archives = $dsql->SetQuery("SELECT l.`id` FROM `#@__tuanlist` l WHERE l.`title` like '%$sKeyword%'");
+			$results = $dsql->dsqlOper($archives, "results");
+			if(count($results) > 0){
+				$list = array();
+				foreach ($results as $key=>$value) {
+					$list[] = $value["id"];
+				}
+				$idList = join(",", $list);
+				$where .= " AND `aid` in ($idList)";
+			}else{
+				echo '{"state": 101, "info": '.json_encode("暂无相关信息").', "pageInfo": {"totalPage": 0, "totalCount": 0, "totalGray": 0, "totalAudit": 0, "totalRefuse": 0}}';die;
+			}
 
 		//按评论人搜索
 		}elseif($sType == "2"){
@@ -344,22 +464,7 @@ if($dopost == "getDetail"){
 		}
 	}
 
-    $archives = $dsql->SetQuery("SELECT o.`id` FROM `#@__".$action."list` p LEFT JOIN `#@__tuan_order` o ON o.`proid` = p.`id` WHERE 1=1".$where3);
-    $results = $dsql->dsqlOper($archives, "results");
-    if(count($results) > 0){
-        $list = array();
-        foreach ($results as $key=>$value) {
-            if($value['id']!=null)
-            $list[] = $value["id"];
-        }
-        $idList = join(",", $list);
-        $where .= " AND `aid` in ($idList)";
-    }else {
-        echo '{"state": 101, "info": ' . json_encode("暂无相关信息") . ', "pageInfo": {"totalPage": 0, "totalCount": 0, "totalGray": 0, "totalAudit": 0, "totalRefuse": 0}}';
-        die;
-    }
-
-	$archives = $dsql->SetQuery("SELECT `id` FROM `#@__".$action."common`");
+	$archives = $dsql->SetQuery("SELECT `id` FROM `#@__".$action."_comment`");
 
 	//总条数
 	$totalCount = $dsql->dsqlOper($archives." WHERE 1 = 1".$where, "totalCount");
@@ -387,35 +492,37 @@ if($dopost == "getDetail"){
 
 	$atpage = $pagestep*($page-1);
 	$where .= " LIMIT $atpage, $pagestep";
-	$archives = $dsql->SetQuery("SELECT `id`, `aid`, `userid`, `content`, `dtime`, `ip`, `ipaddr`, `ischeck` FROM `#@__".$action."common` WHERE 1 = 1".$where);
+	$archives = $dsql->SetQuery("SELECT `id`, `aid`, `userid`, `content`, `dtime`, `ip`, `ipaddr`, `ischeck` FROM `#@__".$action."_comment` WHERE 1 = 1".$where);
 	$results = $dsql->dsqlOper($archives, "results");
 
 	if(count($results) > 0){
 		$list = array();
 		foreach ($results as $key=>$value) {
 			$list[$key]["id"] = $value["id"];
-			$list[$key]["articleId"] = $value["aid"];
+			$list[$key]["aid"] = $value["aid"];
 
-			$typeSql = $dsql->SetQuery("SELECT p.`id`, p.`title` FROM `#@__tuanlist` p LEFT JOIN `#@__tuan_order` o ON o.`proid` = p.`id` WHERE o.`id` = ". $value["aid"]);
+			$typeSql = $dsql->SetQuery("SELECT `title` FROM `#@__tuanlist` WHERE `id` = ". $value["aid"]);
 			$typename = $dsql->getTypeName($typeSql);
-			$list[$key]["protitle"] = $typename[0]['title'];
+			$list[$key]["storeTitle"] = $typename[0]['title'];
 
 			$param = array(
 				"service"  => "tuan",
 				"template" => "detail",
-				"id"       => $typename[0]['id']
+				"id"       => $value['aid']
 			);
-			$list[$key]["prourl"] = getUrlPath($param);
+			$list[$key]["storeUrl"] = getUrlPath($param);
 
-			$list[$key]["commonUserId"] = $value["userid"];
+			$list[$key]["userid"] = $value["userid"];
 			$member = $dsql->SetQuery("SELECT `username` FROM `#@__member` WHERE `id` = ".$value["userid"]);
 			$username = $dsql->dsqlOper($member, "results");
-			$list[$key]["commonUserName"]  = $username[0]["username"] == null ? "游客" : $username[0]["username"];
+			$list[$key]["username"]  = $username[0]["username"] == null ? "游客" : $username[0]["username"];
 
-			$list[$key]["commonContent"] = cn_substrR(strip_tags($value["content"]), 30)."...";
-			$list[$key]["commonTime"] = date('Y-m-d H:i:s', $value["dtime"]);
-			$list[$key]["commonIp"] = $value["ip"];
-			$list[$key]["commonIpAddr"] = $value["ipaddr"];
+			$list[$key]["content"] = cn_substrR(strip_tags($value["content"]), 30)."...";
+			$list[$key]["time"] = date('Y-m-d H:i:s', $value["dtime"]);
+			$list[$key]["rtime"] = date('Y-m-d H:i:s', $value["rtime"]);
+			$list[$key]["reply"] = $value["reply"];
+			$list[$key]["ip"] = $value["ip"];
+			$list[$key]["ipAddr"] = $value["ipaddr"];
 
 			$state = "";
 			switch($value["ischeck"]){
@@ -430,7 +537,7 @@ if($dopost == "getDetail"){
 					break;
 			}
 
-			$list[$key]["commonIsCheck"] = $state;
+			$list[$key]["isCheck"] = $state;
 		}
 		if(count($list) > 0){
 			echo '{"state": 100, "info": '.json_encode("获取成功").', "pageInfo": {"totalPage": '.$totalPage.', "totalCount": '.$totalCount.', "totalGray": '.$totalGray.', "totalAudit": '.$totalAudit.', "totalRefuse": '.$totalRefuse.'}, "commonList": '.json_encode($list).'}';
@@ -446,21 +553,23 @@ if($dopost == "getDetail"){
 
 //验证模板文件
 if(file_exists($tpl."/".$templates)){
-    //css
-    $cssFile = array(
-        'ui/jquery.chosen.css',
-        'admin/chosen.min.css'
-    );
-    $huoniaoTag->assign('cssFile', includeFile('css', $cssFile));
+	//css
+	$cssFile = array(
+		'ui/jquery.chosen.css',
+		'admin/chosen.min.css'
+	);
+	$huoniaoTag->assign('cssFile', includeFile('css', $cssFile));
+
 	//js
 	$jsFile = array(
 		'ui/bootstrap.min.js',
 		'ui/jquery-ui-selectable.js',
-        'ui/chosen.jquery.min.js',
+		'ui/chosen.jquery.min.js',
 		'admin/tuan/tuanCommon.js'
 	);
 	$huoniaoTag->assign('jsFile', includeFile('js', $jsFile));
-    $huoniaoTag->assign('cityList', json_encode($adminCityArr));
+	$huoniaoTag->assign('pagetitle', $pagetitle);
+	$huoniaoTag->assign('cityList', json_encode($adminCityArr));
 	$huoniaoTag->compile_dir = HUONIAOROOT."/templates_c/admin/tuan";  //设置编译目录
 	$huoniaoTag->display($templates);
 }else{

@@ -14,7 +14,7 @@ $(function(){
     wxconfig && (wxconfig.title = entityToString(wxconfig.title));
     wxconfig && (wxconfig.description = entityToString(wxconfig.description));
 
-    if(wxconfig && wxconfig.imgUrl.indexOf('logo') > -1 && shareAdvancedUrl){
+    if(wxconfig && wxconfig.imgUrl.indexOf('siteConfig/logo') > -1 && shareAdvancedUrl){
         wxconfig.imgUrl = shareAdvancedUrl;
     }
 
@@ -23,7 +23,7 @@ $(function(){
       if(userid){
         wxconfig.link = wxconfig.link.indexOf('?') > -1 ? (wxconfig.link + '&fromShear=' + userid) : (wxconfig.link + '?fromShear=' + userid)
       }
-    } 
+    }
 
     //小程序
     if(navigator.userAgent.toLowerCase().match(/micromessenger/)) {
@@ -179,7 +179,7 @@ $(function(){
 	});
 
 	$("body").delegate("#HN_PublicShare_cancelcode", "tap click", function(){
-		
+
 		hnShare.closeShearBox();
 		hnShare.closeQRBox();
 	});

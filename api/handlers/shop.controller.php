@@ -219,13 +219,13 @@ function shop($params, $content = "", &$smarty = array(), &$repeat = array()){
 			if($key!='price'){
 				$huoniaoTag->assign($key, htmlspecialchars(RemoveXSS($val)));
 			}else{
-				$huoniaoTag->assign($key, htmlspecialchars($val));
+				$huoniaoTag->assign($key, (float)htmlspecialchars($val));
 			}
 			if($key != "service" && $key != "template" && $key != "page"){
 				if($key!='price'){
 					$val = htmlspecialchars(RemoveXSS($val));
 				}else{
-					$val = htmlspecialchars($val);
+					$val = (float)htmlspecialchars($val);
 				}
 				array_push($pageParam, $key."=".$val);
 			}
@@ -317,7 +317,7 @@ function shop($params, $content = "", &$smarty = array(), &$repeat = array()){
 
 		//价格
 		$priceArr = array();
-		$price = $_GET['price'];
+		$price = (float)$_GET['price'];
 		if(!empty($price)){
 			$priceArr = explode(",", $price);
 		}
@@ -329,7 +329,7 @@ function shop($params, $content = "", &$smarty = array(), &$repeat = array()){
 		$newFlag = array();
 		foreach ($flagArr as $key => $value) {
 			if($value !== ""){
-				array_push($newFlag, $value);
+				array_push($newFlag, (int)$value);
 			}
 		}
 		$flag = join(",", $newFlag);

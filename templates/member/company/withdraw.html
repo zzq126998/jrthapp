@@ -1,7 +1,10 @@
 {#$pageTitle = $langData['siteConfig'][19][471]|cat:" - "|cat:$cfg_webname#}
 {#include file="head.html"#}
 <link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/withdraw.css?v={#$cfg_staticVersion#}" media="all" />
-<script>var money = {#$userinfo.money#}, withdrawLog = '{#getUrlPath service="member" template="withdraw_log_detail" id="%id%"#}';</script>
+<script>
+	var money = {#$userinfo.money#}, withdrawLog = '{#getUrlPath service="member" template="withdraw_log_detail" id="%id%"#}';
+	var minWithdraw = {#$minWithdraw#}, maxWithdraw = {#$maxWithdraw#}, withdrawFee = {#$withdrawFee#};
+</script>
 </head>
 
 {#$pageCurr = "withdraw"#}
@@ -22,60 +25,83 @@
 	</div>
 	<div class="container">
 		<div class="withdraw">
+
+			{#if $withdrawCycleState#}
 			<dl class="fn-clear">
 				<dt>{#$langData['siteConfig'][19][299]#}：</dt>
 				<dd class="price">{#$userinfo.money#}</dd>
 			</dl>
 			<dl class="fn-clear">
-				<dt>{#$langData['siteConfig'][19][300]#}：</dt>
+				<dt>{#$langData['siteConfig'][19][300]#}：</dt>{#* 提现到 *#}
 				<dd class="singel">
-					<input type="radio" name="type" id="t1" value="1" checked />
-					<label for="t1"><i></i> {#$langData['siteConfig'][19][301]#}</label>
-					<input type="radio" name="type" id="t2" value="2" />
-					<label for="t2"><i></i> {#$langData['siteConfig'][19][302]#}</label>
+					{#if $withdrawPlatform && in_array('weixin', $withdrawPlatform)#}
+					<input type="radio" name="type" id="t0" value="weixin"{#if $type == "weixin"#} checked{#/if#} />
+					<label for="t0"><i></i> {#$langData['siteConfig'][27][139]#}</label>{#* 微信 *#}
+					{#/if#}
+
+					{#if $withdrawPlatform && in_array('alipay', $withdrawPlatform)#}
+					<input type="radio" name="type" id="t1" value="alipay"{#if $type == "alipay"#} checked{#/if#} />
+					<label for="t1"><i></i> {#$langData['siteConfig'][19][302]#}</label>{#* 支付宝 *#}
+					{#/if#}
+
+					{#if $withdrawPlatform && in_array('bank', $withdrawPlatform)#}
+					<input type="radio" name="type" id="t2" value="bank"{#if $type == "bank"#} checked{#/if#} />
+					<label for="t2"><i></i> {#$langData['siteConfig'][19][301]#}</label>{#* 银行卡 *#}
+					{#/if#}
 				</dd>
 			</dl>
-			<div class="mitem" id="type1">
+
+			{#if $withdrawPlatform && in_array('weixin', $withdrawPlatform)#}
+
+			{#/if#}
+
+			{#if $withdrawPlatform && in_array('alipay', $withdrawPlatform)#}
+			<div class="mitem{#if $type == 'bank' || $type == 'weixin'#} fn-hide{#/if#}" id="i_alipay">
 				<dl class="fn-clear">
-					<dt>{#$langData['siteConfig'][19][36]#}：</dt>
-					<dd>
-						<input type="text" id="bank" name="bank" class="inp" maxlength="30" size="25" />
-						<a href="javascript:;" class="historyBank">{#$langData['siteConfig'][19][303]#}<i></i></a>
-						<span class="tip-inline"><s></s>{#$langData['siteConfig'][20][204]#}</span>
-					</dd>
-				</dl>
-				<dl class="fn-clear">
-					<dt>{#$langData['siteConfig'][19][37]#}：</dt>
-					<dd>
-						<input type="text" id="cardnum" name="cardnum" class="inp" maxlength="23" size="25" />
-						<span class="tip-inline"><s></s>{#$langData['siteConfig'][20][205]#}</span>
-					</dd>
-				</dl>
-				<dl class="fn-clear">
-					<dt>{#$langData['siteConfig'][19][38]#}：</dt>
-					<dd>
-						<input type="text" id="cardname" name="cardname" class="inp" maxlength="10" size="10" />
-						<span class="tip-inline"><s></s>{#$langData['siteConfig'][20][206]#}</span>
-					</dd>
-				</dl>
-			</div>
-			<div class="mitem fn-hide" id="type2">
-				<dl class="fn-clear">
-					<dt>{#$langData['siteConfig'][19][40]#}：</dt>
+					<dt>{#$langData['siteConfig'][19][40]#}：</dt>{#* 收款人帐号 *#}
 					<dd>
 						<input type="text" id="alipaynum" name="alipaynum" class="inp" maxlength="30" size="25" />
-						<a href="javascript:;" class="historyAlipay">{#$langData['siteConfig'][19][303]#}<i></i></a>
-						<span class="tip-inline"><s></s>{#$langData['siteConfig'][20][509]#}</span>
+						<a href="javascript:;" class="historyAlipay">{#$langData['siteConfig'][19][303]#}<i></i></a>{#* 历史记录 *#}
+						<span class="tip-inline"><s></s>{#$langData['siteConfig'][20][509]#}</span>{#* 请输入支付宝帐号 *#}
 					</dd>
 				</dl>
 				<dl class="fn-clear">
-					<dt>{#$langData['siteConfig'][19][41]#}：</dt>
+					<dt>{#$langData['siteConfig'][19][41]#}：</dt>{#* 收款人姓名 *#}
 					<dd>
 						<input type="text" id="alipayname" name="alipayname" class="inp" maxlength="10" size="10" />
-						<span class="tip-inline"><s></s>{#$langData['siteConfig'][20][209]#}</span>
+						<span class="tip-inline"><s></s>{#$langData['siteConfig'][20][209]#}</span>{#* 请输入收款人姓名 *#}
 					</dd>
 				</dl>
 			</div>
+			{#/if#}
+
+			{#if $withdrawPlatform && in_array('bank', $withdrawPlatform)#}
+			<div class="mitem{#if $type == 'alipay' || $type == 'weixin'#} fn-hide{#/if#}" id="i_bank">
+				<dl class="fn-clear">
+					<dt>{#$langData['siteConfig'][19][36]#}：</dt>{#* 开户行 *#}
+					<dd>
+						<input type="text" id="bank" name="bank" class="inp" maxlength="30" size="25" />
+						<a href="javascript:;" class="historyBank">{#$langData['siteConfig'][19][303]#}<i></i></a>{#* 历史记录 *#}
+						<span class="tip-inline"><s></s>{#$langData['siteConfig'][20][204]#}</span>{#* 请输入开户行信息 *#}
+					</dd>
+				</dl>
+				<dl class="fn-clear">
+					<dt>{#$langData['siteConfig'][19][37]#}：</dt>{#* 银行卡号 *#}
+					<dd>
+						<input type="text" id="cardnum" name="cardnum" class="inp" maxlength="23" size="25" />
+						<span class="tip-inline"><s></s>{#$langData['siteConfig'][20][205]#}</span>{#* 请输入银行卡号 *#}
+					</dd>
+				</dl>
+				<dl class="fn-clear">
+					<dt>{#$langData['siteConfig'][19][38]#}：</dt>{#* 开户人姓名 *#}
+					<dd>
+						<input type="text" id="cardname" name="cardname" class="inp" maxlength="10" size="10" />
+						<span class="tip-inline"><s></s>{#$langData['siteConfig'][20][206]#}</span>{#* 请输入开户人姓名 *#}
+					</dd>
+				</dl>
+			</div>
+			{#/if#}
+
 			<dl class="fn-clear">
 				<dt>{#$langData['siteConfig'][19][39]#}：</dt>
 				<dd>
@@ -94,9 +120,14 @@
 				<dd><input type="button" id="tj" value="{#$langData['siteConfig'][19][716]#}" /></dd>
 			</dl>
 
+			{#else#}
+			<div class="txtbox">
+				<div class="not"><p>{#$withdrawCycleNote#}</p></div>
+			</div>
+			{#/if#}
+
 			<div class="tips">
-				<p>1. {#$langData['siteConfig'][19][861]#}：<br />&nbsp;&nbsp;&nbsp;&nbsp;{#$langData['siteConfig'][20][393]#}<br />&nbsp;&nbsp;&nbsp;&nbsp;{#$langData['siteConfig'][20][392]#}</p>
-				<p>2. {#$langData['siteConfig'][27][76]#}：<br />&nbsp;&nbsp;&nbsp;&nbsp;{#$langData['siteConfig'][27][75]#}</p>
+				<p>{#$withdrawNote#}</p>
 			</div>
 		</div>
 

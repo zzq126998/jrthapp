@@ -126,3 +126,26 @@ a:hover, a:link{text-decoration: none;}
 .huodong .hInfo .btn.end{background: #e6e6e6;}
 
 .loading{line-height: 1rem; text-align: center; font-size: .3rem;}
+
+/*直播*/
+.live{margin-left: .24rem; margin-right: .24rem;}
+.video_box{ width: 100%; margin-top: .3rem; }
+.video_box>a{display: block; height: 4rem; overflow: hidden; position: relative;margin-bottom: .2rem;border-radius: .1rem;}
+.video_box>a .video_img{height: 4rem; position: relative;}
+.video_box>a img{width: 100%; height: 100%; object-fit: cover;  border-radius: .1rem;}
+.info_box{background-color: rgba(0,0,0,.57); position: relative; position: absolute; bottom: 0; left: 0; right: 0;padding-bottom: .24rem; padding-top: .24rem;}
+.info_box .video_info{margin-left: .28rem; margin-right: 1.5rem; }
+.info_box .video_info h3{color: #fff;font-size: .28rem;font-weight: normal;margin-bottom: .1rem;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;overflow: hidden;}
+
+.info_box .video_info p{font-size: .22rem; color: rgba(255,255,255,.5);}
+.info_box .look_num{float: right; color: #fff; font-size: .2rem; margin-right: .34rem; margin-top: .18rem;}
+.info_box .look_num:before{content: ''; display: inline-block; width: .28rem; height: .22rem; background: no-repeat url(../images/vlook.png); background-size: .28rem .22rem; vertical-align: middle; margin-right: .12rem;}
+.info_box .head{width: .72rem; height: .72rem; border-radius: 50%; position: absolute; top: -.24rem; left: .3rem; border:solid .01rem #f0f1f2;}
+.info_box .head img{width: 100%; height: 100%; object-fit: cover; border-radius: 50%;}
+.info_box .label{border-radius: .04rem; background-color: #87cc24; color: #fff; font-size: .22rem; line-height: .32rem; position: absolute; top: -.18rem; left: 1.22rem; padding:.02rem .1rem;}
+.video_state{position: absolute; top: .2rem; left: .2rem; color: #fff; font-size: .22rem;  display: block; border-radius: .04rem;}
+.video_state.live_before {background-color: rgba(0,0,0,.5);}
+.video_state.live_before em{padding-right: .14rem;}
+.video_state.live_before:before{content: '预告'; border-radius: .04rem; background-color: #ff853b; padding: .06rem .1rem; margin-right: .14rem; display: inline-block;}
+.video_state.living{width: .8rem; height: .32rem; background: url(../images/onfair2.gif) no-repeat center; background-size: contain;}
+.video_state.live_after:before{content: '精彩回放'; display: block;border-radius: .04rem; background-color: #87cc24; color: #fff; font-size: .22rem; line-height: .32rem; padding:.02rem .1rem;}

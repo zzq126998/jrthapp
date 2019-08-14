@@ -15,18 +15,25 @@
 <script src="{#$cfg_staticPath#}js/core/touchScale.js?v={#$cfg_staticVersion#}"></script>
 <script src="{#$cfg_staticPath#}js/core/jquery-1.8.3.min.js"></script>
 <script src="{#$templets_skin#}js/public.js?v={#$cfg_staticVersion#}"></script>
+{#if $module != 'education'#}
 <style media="screen">
 	body {opacity: 1;padding-bottom: 1.2rem; padding-bottom: calc(1rem + constant(safe-area-inset-bottom));}
 	.fabuBtn {background-color: #edeef2;position: fixed;left:0;right: 0;bottom: 0;padding:.25rem 0;}
 	.fabuBtn a{width:6rem; height: 0.8rem;margin: auto;border-radius: .8rem;background: -moz-linear-gradient( 0deg, rgb(96,118,246) 0%, rgb(142,194,255) 100%);background: -webkit-linear-gradient( 0deg, rgb(96,118,246) 0%, rgb(142,194,255) 100%);background: -ms-linear-gradient( 0deg, rgb(96,118,246) 0%, rgb(142,194,255) 100%);box-shadow: 0px 3px 7px 0px rgba(101, 126, 255, 0.47);border-radius: .4rem;display: block; line-height: .8rem;  text-align: center; font-size: .3rem; font-weight:bold;color: #fff;}
 	.fabuBtn a:active{background: -moz-linear-gradient( 0deg, rgb(96,118,246) 0%, rgb(142,194,255) 100%);background: -webkit-linear-gradient( 0deg, rgb(96,118,246) 0%, rgb(142,194,255) 100%);background: -ms-linear-gradient( 0deg, rgb(96,118,246) 0%, rgb(142,194,255) 100%);}
 </style>
+{#/if#}
 <script type="text/javascript">
 var masterDomain = '{#$cfg_basehost#}', staticPath = '{#$cfg_staticPath#}';
 var hideFileUrl = {#$cfg_hideUrl#}, cookiePre = '{#$cfg_cookiePre#}';
 var module = '{#$module#}', atpage = 1, totalCount = 0, pageSize = 10, state = '{#$state#}', type = '{#$type#}';
+{#if $module != 'education'#}
 var editUrl = '{#getUrlPath service="member" type="user" template="fabu" action="$module"#}';
+{#else#}
+var editUrl = "{#getUrlPath service='member' type='user' template='fabu-education-courses'#}";
+{#/if#}
 var cookiePre = '{#$cfg_cookiePre#}';
+var templets_skin = '{#$templets_skin#}';
 //竞价默认价格，此值可在后台分类信息设置中修改
 var bidDefault = 5;
 //竞价默认增加预算价格，此值可在后台分类信息设置中修改
@@ -123,6 +130,11 @@ var bidDefaultAdd = 2;
 		{#* 旅游 *#}   {#* 攻略/旅游管理 *#}
 		{#if in_array("travel", $installModuleArr) && {#verifyModuleAuth module='travel' type='userCenter'#}#}
         <li><a href="{#getUrlPath service='member' type='user' template='travel'#}"><div class="item"><i class="icon"><img src="{#$templets_skin#}images/travel.png" alt=""></i><p>{#$travel_channelName#}</p><span>{#$langData['travel'][12][10]#}/{#$langData['travel'][12][11]#}</span></div></a></li>
+		{#/if#}
+		
+		{#* 教育 *#}   {#* 教育管理 *#}
+		{#if in_array("education", $installModuleArr) && {#verifyModuleAuth module='education' type='userCenter'#}#}
+        <li><a href="{#getUrlPath service='member' type='user' template='education'#}"><div class="item"><i class="icon"><img src="{#$templets_skin#}images/education.png" alt=""></i><p>{#$education_channelName#}</p><span>{#$langData['education'][7][2]#}</span></div></a></li>
         {#/if#}
 		
 		
@@ -176,11 +188,16 @@ var bidDefaultAdd = 2;
 	{#elseif $module == 'car'#}
 		{#$pageTitle = $langData['car'][5][43]#}    	{#* 管理汽车 *#}
 		{#$pageUrl = "{#getUrlPath service='member' type="user" action="fabu" template='car'#}"#}
+	{#elseif $module == 'education'#}
+		{#$pageTitle = $langData['education'][4][8]#}    	{#* 管理汽车 *#}
+		{#$pageUrl = "{#getUrlPath service='member' type='user' template='fabu-education-courses'#}"#}
 	{#/if#}
 	{#include file="top.html"#}
 
 	{#if $module == 'car'#}
 		{#include file="manage-car.html"#}
+	{#elseif $module == 'education'#}
+		{#include file="manage-education.html"#}
 	{#else#}
 	<div class="tab">
 			{#$sx#}
@@ -310,7 +327,7 @@ var bidDefaultAdd = 2;
 	{#/if#}
 	{#* 发布 *#}   {#* 帖子 *#}   {#* 信息 *#}   {#* 资讯 *#}
 	{#if $pageUrl#}
-	<div class="fabuBtn"><a href="{#$pageUrl#}">{#$langData['siteConfig'][11][0]#}{#if $module == 'tieba'#}{#$langData['siteConfig'][16][131]#}{#else if $module == "info"#}{#$langData['siteConfig'][19][216]#}{#else if $module == "article"#}{#$langData['siteConfig'][18][91]#}{#/if#}</a></div>
+	<div class="fabuBtn"><a href="{#$pageUrl#}">{#$langData['siteConfig'][11][0]#}{#if $module == 'tieba'#}{#$langData['siteConfig'][16][131]#}{#else if $module == "info"#}{#$langData['siteConfig'][19][216]#}{#else if $module == "article"#}{#$langData['siteConfig'][18][91]#}{#else if $module == "education"#}{#$langData['education'][7][14]#}{#/if#}</a></div>
 	{#/if#}
 
 	{#include file="fabu-pay.html"#}

@@ -3,7 +3,7 @@
  * 添加旅游店铺
  *
  * @version        $Id: storeAdd.php 2019-03-14 下午13:18:13 $
- * @package        HuoNiao.marry
+ * @package        HuoNiao.travel
  * @copyright      Copyright (c) 2013 - 2019, HuoNiao, Inc.
  * @link           https://www.ihuoniao.cn/
  */
@@ -169,7 +169,7 @@ if($dopost == "save" && $submit == "提交"){
 			checkCache("travel_store_list", $id);
 			clearCache("travel_store_total", 'key');
 			clearCache("travel_store_detail", $id);
-			
+
 			$param = array(
 				"service"     => "travel",
 				"template"    => "store-detail",

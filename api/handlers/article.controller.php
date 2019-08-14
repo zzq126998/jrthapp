@@ -8,7 +8,6 @@
  */
 function article($params, $content = "", &$smarty = array(), &$repeat = array()){
     $service = "article";
-
     extract ($params);
     if(empty($action)) return '';
     global $huoniaoTag;
@@ -31,12 +30,8 @@ function article($params, $content = "", &$smarty = array(), &$repeat = array())
         }elseif($action == "short_video"){
             $mold = 3;
         }
-
         $huoniaoTag->assign('mold', $mold);
         $huoniaoTag->assign('pageCurr', $pageCurr);
-    }
-    if($action=="zhuanti"){
-        var_dump('你大爷');
     }
 
     if(empty($smarty)){//判断当前用户是否入驻自媒体
@@ -50,6 +45,7 @@ function article($params, $content = "", &$smarty = array(), &$repeat = array())
         }
         
     }
+
 
     //获取指定分类详细信息
     if($action == "list"){
@@ -156,7 +152,6 @@ function article($params, $content = "", &$smarty = array(), &$repeat = array())
 
         //获取指定ID的详细信息
     }elseif($action == "detail" || $action == "comment" || $action == "rewardlist"){
-
         $detailHandels = new handlers($service, "detail");
         $detailConfig  = $detailHandels->getHandle($id);
 
@@ -391,8 +386,12 @@ function article($params, $content = "", &$smarty = array(), &$repeat = array())
 
                 global $service;
                 if($service != "member" && ($detailConfig['type'] == 3 || $detailConfig['type'] == 4) && isMobile()){
+                    global $tpl;
                     global $templates;
                     $templates = "zq_center.html";
+                    if(!is_file(HUONIAOROOT.$tpl.$templates)){
+                        $templates = "mddetail.html";
+                    }
                 }
 
                 // detailCheckCity($service, $detailConfig['id'], $detailConfig['cityid'], $action);
@@ -412,7 +411,7 @@ function article($params, $content = "", &$smarty = array(), &$repeat = array())
     }elseif($action == "comdetail"){
         $id = (int)$id;
 
-        $detailHandels = new handlers($service, "commentDetail");
+        $detailHandels = new handlers("member", "commentDetail");
         $detail  = $detailHandels->getHandle(array("id" => $id));
         if(is_array($detail) && $detail['state'] == 100){
             $detail  = $detail['info'];
@@ -475,7 +474,6 @@ function article($params, $content = "", &$smarty = array(), &$repeat = array())
         $huoniaoTag->assign('typeid', $typeid);
         $huoniaoTag->assign('orderby', $orderby);
     }
-
 
     global $template;
     if(empty($smarty)) return;
@@ -589,7 +587,6 @@ function article($params, $content = "", &$smarty = array(), &$repeat = array())
         //print_r($smarty->block_data[$dataindex]);die;
     }
 
-
     //一条数据出栈，并把它指派给$return，重复执行开关置位1
     if(list($key, $item) = each($smarty->block_data[$dataindex])){
         if($action == "type"){
@@ -606,6 +603,5 @@ function article($params, $content = "", &$smarty = array(), &$repeat = array())
     }
 
     //打印内容
-
     print $content;
 }

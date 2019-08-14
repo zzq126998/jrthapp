@@ -10,7 +10,11 @@ $(function(){
         alert('只支持 Android 设备');
       }else {
         if (ua.match(/MicroMessenger/i) == 'MicroMessenger') {
-          $('.tipWarp').show();
+            if(t.attr('data-yyb')){
+                location.href = t.attr('data-yyb');
+            }else{
+              $('.tipWarp').show();
+            }
         }else {
           location.href = t.attr('data-href');
         }

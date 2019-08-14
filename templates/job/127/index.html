@@ -240,7 +240,7 @@
 				</div>
 				<div class="zpbot">
 					<span class="zpname"><i></i>{#$row.people#}</span>
-					<span class="zptel"><i></i>{#$row.contact#}</span>
+					<span class="zptel"><i></i>{#if $userinfo#}{#$row.contact#}{#else#}<a href="{#$cfg_basehost#}/login.html">登录后显示</a>{#/if#}</span>
 				</div>
 			</li>
 			{#/job#}
@@ -263,7 +263,7 @@
 				</div>
 				<div class="zpbot">
 					<span class="zpname"><i></i>{#$row.people#}</span>
-					<span class="zptel"><i></i>{#$row.contact#}</span>
+                    <span class="zptel"><i></i>{#if $userinfo#}{#$row.contact#}{#else#}<a href="{#$cfg_basehost#}/login.html">登录后显示</a>{#/if#}</span>
 				</div>
 			</li>
 			{#/job#}

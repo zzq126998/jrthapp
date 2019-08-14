@@ -248,7 +248,7 @@ class dating {
 			$return['withdrawMinAmount'] = (float)$withdrawMinAmount;
 			$return['voiceswitch']       = (int)$voiceswitch;
 			$return['videoswitch']       = (int)$videoswitch;
-			
+
 			$return['plat_title']        = $plat_title;
 			$return['plat_litpic']       = $plat_litpic ? getFilePath($plat_litpic) : "";
 			$return['plat_service']      = $plat_service;
@@ -492,7 +492,7 @@ class dating {
 			if($store == $uid2) $is_par = true;
 		}
 
-		
+
 		if(empty($company) && empty($store)){
 			$where .= $where2;
 		}else{
@@ -716,7 +716,7 @@ class dating {
 		$page     = empty($page) ? 1 : $page;
 
 
-		$archives_count = $dsql->SetQuery("SELECT COUNT(d.`id`) total FROM `#@__dating_member` d LEFT JOIN `#@__member` m ON m.`id` = d.`userid` WHERE m.`id` = d.`userid`".$where.$order);
+		$archives_count = $dsql->SetQuery("SELECT COUNT(d.`id`) total FROM `#@__dating_member` d LEFT JOIN `#@__member` m ON m.`id` = d.`userid` WHERE m.`id` = d.`userid`".$where);
 
 
 		//总条数
@@ -823,7 +823,7 @@ class dating {
 					}
 				}
 
-				
+
 
 				//地区
 				global $data;
@@ -1648,15 +1648,15 @@ class dating {
 
 			if($qq){
 				$qq = substr($qq, 0, 3)."*****".substr($qq, -2);
-				$detail['qq_enc'] = $qq; 
+				$detail['qq_enc'] = $qq;
 			}
 			if($wechat){
 				$wechat = substr($wechat, 0, 3)."*****".substr($wechat, -2);
-				$detail['wechat_enc'] = $wechat; 
+				$detail['wechat_enc'] = $wechat;
 			}
 			if($phone){
 				$phone = substr($phone, 0, 3)."****".substr($phone, -4);
-				$detail['phone_enc'] = $phone; 
+				$detail['phone_enc'] = $phone;
 			}
 
 			return $detail;
@@ -1931,7 +1931,7 @@ class dating {
 
 				$sql = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__dating_member` WHERE `company` = ".$value['id']." AND `type` = 1");
 				$res = $dsql->dsqlOper($sql, "results");
-				$list[$key]['team'] = $res[0]['total']; 
+				$list[$key]['team'] = $res[0]['total'];
 
 			}
 		}
@@ -2519,7 +2519,7 @@ class dating {
 					if(isset($userList[$value['to']])){
 						$user = $userList[$value['to']];
 					}else{
-						$sql = $dsql->SetQuery("SELECT `type` FROM `#@__dating_member` WHERE `id` = ".$value['to']);
+						$sql = $dsql->SetQuery("SELECT `type`, `userid` FROM `#@__dating_member` WHERE `id` = ".$value['to']);
 						$ret = $dsql->dsqlOper($sql, "results");
 						if($ret){
 							$this->param = $value['to'];
@@ -2528,6 +2528,7 @@ class dating {
 							}elseif($ret[0]['type'] == 1){
 								$user = $this->hnInfo(true);
 							}
+							$user['userid'] = $ret[0]['userid'];
 							$userList[$value['to']] = $user;
 						}else{
 							$userList[$value['to']] = "";
@@ -2538,7 +2539,7 @@ class dating {
 					if(isset($userList[$value['from']])){
 						$user = $userList[$value['from']];
 					}else{
-						$sql = $dsql->SetQuery("SELECT `type` FROM `#@__dating_member` WHERE `id` = ".$value['from']);
+						$sql = $dsql->SetQuery("SELECT `type`, `userid` FROM `#@__dating_member` WHERE `id` = ".$value['from']);
 						$ret = $dsql->dsqlOper($sql, "results");
 						if($ret){
 							$this->param = $value['from'];
@@ -2547,6 +2548,7 @@ class dating {
 							}elseif($ret[0]['type'] == 1){
 								$user = $this->hnInfo(true);
 							}
+							$user['userid'] = $ret[0]['userid'];
 							$userList[$value['from']] = $user;
 						}else{
 							$userList[$value['from']] = "";
@@ -4459,7 +4461,7 @@ class dating {
 		foreach ($fields as $key => $value) {
 			$str[] = "`$value` = '".$param[$value]."'";
 		}
-		
+
 		$archives = $dsql->SetQuery("UPDATE `#@__dating_member` SET ".join(",", $str)." WHERE `userid` = ".$userid." AND `type` = $type");
 		// echo $archives;die;
 		$return = $dsql->dsqlOper($archives, "update");
@@ -4522,7 +4524,7 @@ class dating {
 		if(empty($param['height'])) return array("state" => 200, "info" => '请填写身高');
 		if(empty($param['addrid'])) return array("state" => 200, "info" => '请填写居住地');
 
-		
+
 
 		$zodiac = $constellation = $birthday = "";
 		if($param['birthday']){
@@ -4562,7 +4564,7 @@ class dating {
 			`nickname` = '".$param['nickname']."', `sex` = '".(int)$param['sex']."', `zodiac` = '$zodiac', `constellation` = '$constellation', `birthday` = '$birthday',`height` = '".(int)$param['height']."', `education` = '".(int)$param['education']."', `income` = '".(int)$param['income']."', `addrid` = '".(int)$param['addrid']."', `cityid` = '".(int)$param['cityid']."', `marriage` = '".(int)$param['marriage']."', `child` = '".(int)$param['child']."', `housetag` = '".(int)$param['housetag']."', `cartag` = '".(int)$param['cartag']."' ".$lnglat."
 			, `hometown` = '".(int)$param['hometown']."', `household` = '".(int)$param['household']."', `nation` = '".(int)$param['nation']."', `bloodtype` = '".$param['bloodtype']."', `bodytype` = '".(int)$param['bodytype']."', `bodyweight` = '".(int)$param['bodyweight']."', `looks` = '".$looks."', `religion` = '".(int)$param['religion']."', `drink` = '".(int)$param['drink']."', `smoke` = '".(int)$param['smoke']."', `workandrest` = '".(int)$param['workandrest']."',
 			`school` = '".$param['school']."', `major` = '".(int)$param['major']."', `duties` = '".(int)$param['duties']."', `nature` = '".(int)$param['nature']."', `industry` = '".(int)$param['industry']."', `workstatus` = '".(int)$param['workstatus']."', `language` = '".$language."',
-			`familyrank` = '".(int)$param['familyrank']."', `parentstatus` = '".(int)$param['parentstatus']."', `fatherwork` = '".(int)$param['fatherwork']."', `motherwork` = '".(int)$param['motherwork']."', `parenteconomy` = '".(int)$param['parenteconomy']."', `parentstatus` = '".(int)$param['parentstatus']."', `parentinsurance` = '".(int)$param['parentinsurance']."', 
+			`familyrank` = '".(int)$param['familyrank']."', `parentstatus` = '".(int)$param['parentstatus']."', `fatherwork` = '".(int)$param['fatherwork']."', `motherwork` = '".(int)$param['motherwork']."', `parenteconomy` = '".(int)$param['parenteconomy']."', `parentstatus` = '".(int)$param['parentstatus']."', `parentinsurance` = '".(int)$param['parentinsurance']."',
 			`marriagetime` = '".(int)$param['marriagetime']."', `datetype` = '".(int)$param['datetype']."', `othervalue` = '".(int)$param['othervalue']."', `weddingtype` = '".(int)$param['weddingtype']."', `livetogeparent` = '".(int)$param['livetogeparent']."', `givebaby` = '".(int)$param['givebaby']."', `cooking` = '".(int)$param['cooking']."', `housework` = '".(int)$param['housework']."' WHERE `userid` = ".$userid." AND `type` = 0");
 
 		$res = $dsql->dsqlOper($sql, "update");
@@ -5073,6 +5075,7 @@ class dating {
 
 		$userid = $userLogin->getMemberID();
 		if($userid == -1) return array("state" => 200, "info" => '登录超时，请重新登录！');
+
 		if(empty($data) || !is_array($data)) return array("state" => 200, "info" => '提交失败');
 
 
@@ -5093,7 +5096,7 @@ class dating {
 		}
 
 		$archives = $dsql->SetQuery("INSERT INTO `#@__dating_member` (`cityid`, `type`, `entrust`, `userid`, `fromage`, `toage`, `tags`, `addrid`, `addrid_locktime`, `sign`, `marriage`, `child`, `height`, `height_locktime`, `bodytype`, `housetag`, `workstatus`, `income`, `income_locktime`, `education`, `education_locktime`, `smoke`, `drink`, `workandrest`, `cartag`, `dfheight`, `dtheight`, `daddr`, `dmarriage`, `dhousetag`, `deducation`, `dincome`, `jointime`, `numid`, `nickname`, `sex`, `sex_lock`, `birthday`, `birthday_lock`, `interests`, `hometown`, `household`, `nation`, `zodiac`, `constellation`, `bloodtype`, `bodyweight`, `looks`, `religion`, `school`, `major`, `duties`, `nature`, `industry`, `language`, `familyrank`, `parentstatus`, `fatherwork`, `motherwork`, `parenteconomy`, `parentinsurance`, `marriagetime`, `datetype`, `othervalue`, `weddingtype`, `livetogeparent`, `givebaby`, `cooking`, `housework`, `profile`, `lng`, `lat`, `phone`, `qq`, `wechat`, `dfeducation`, `dteducation`, `dfincome`, `dtincome`, `dchild`, `dateswitch`, `my_voice`, `my_video`, `my_video_state`, `photo`, `cover`, `level`, `expired`, `state`, `case`, `year`, `company`, `honor`, `advice`, `address`, `like`, `activedate`) VALUES ('$cityid', '$type', '$entrust', '$userid', '$fromage', '$toage', '$tags', '$addrid', '$addrid_locktime', '$sign', '$marriage', '$child', '$height', '$height_locktime', '$bodytype', '$housetag', '$workstatus', '$income', '$income_locktime', '$education', '$education_locktime', '$smoke', '$drink', '$workandrest', '$cartag', '$dfheight', '$dtheight', '$daddr', '$dmarriage', '$dhousetag', '$deducation', '$dincome', '$jointime', '$numid', '$nickname', '$sex', '$sex_lock', '$birthday', '$birthday_lock', '$interests', '$hometown', '$household', '$nation', '$zodiac', '$constellation', '$bloodtype', '$bodyweight', '$looks', '$religion', '$school', '$major', '$duties', '$nature', '$industry', '$language', '$familyrank', '$parentstatus', '$fatherwork', '$motherwork', '$parenteconomy', '$parentinsurance', '$marriagetime', '$datetype', '$othervalue', '$weddingtype', '$livetogeparent', '$givebaby', '$cooking', '$housework', '$profile', '$lng', '$lat', '$phone', '$qq', '$wechat', '$dfeducation', '$dteducation', '$dfincome', '$dtincome', '$dchild', '$dateswitch', '$my_voice', '$my_video', '$my_video_state', '$photo', '$cover', '$level', '$expired', '$state', '$case', '$year', '$company', '$honor', '$advice', '$address', '$like', '$activedate')");
-        $return = $dsql->dsqlOper($archives, "lastid");
+		$return = $dsql->dsqlOper($archives, "lastid");
 
 		if(is_numeric($return)){
 			return $return;
@@ -7070,7 +7073,7 @@ class dating {
 			}else{
 				$payprice = $totalPrice;
 			}
-			
+
 			if($payprice > 0 && $qr){
 				return	createPayForm("dating", $ordernum, $payprice, $paytype, '交友购买牵线');
 			}else{
@@ -8520,7 +8523,7 @@ class dating {
 		$ret = $dsql->dsqlOper($sql, "results");
 		$data['friend'] = $ret[0]['total'];
 
-		$res = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__dating_gift_put` WHERE `uto` = $did");
+		$sql = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__dating_gift_put` WHERE `uto` = $did");
 		$ret = $dsql->dsqlOper($sql, "results");
 		$data['gift'] = $ret[0]['total'];
 

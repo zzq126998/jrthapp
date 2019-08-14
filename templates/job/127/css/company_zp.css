@@ -108,6 +108,9 @@ html {background-color: #f4f4f4;}
 #jobDetail .do #sc:hover {background: #F1A149;}
 #jobDetail .do #yp:active {background: #0F9076;}
 #jobDetail .do #sc:active {background: #D48936;}
+#jobDetail .do #chat{width: 126px; height: 45px; line-height: 45px; border-radius: 3px; border: solid 1px #eee; display: inline-block; box-sizing: border-box; text-align: center; background-color: #f7f7f7; color: #565656;}
+#jobDetail .do #chat:before{content: ''; display: inline-block; width: 18px; height: 18px; background: url(../images/msg.png) no-repeat ; background-size: cover; vertical-align: middle; margin-right: 8px;}
+#jobDetail .do #chat:hover{background-color: #ededed;}
 #jobDetail .btn2 {height: 20px;line-height: 20px;float: right;margin:24px 0 0 15px;}
 #jobDetail .bdsharebuttonbox {}
 #jobDetail .bds_more {display: block;margin:0;padding:0;float: none;line-height: 20px;font-size: 14px;background: none;}

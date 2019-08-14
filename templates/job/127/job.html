@@ -10,7 +10,7 @@
 <link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/core/base.css?v={#$cfg_staticVersion#}" media="all" />
 <link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/public.css?v={#$cfg_staticVersion#}" media="all" />
 <link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/company_zp.css?v={#$cfg_staticVersion#}" media="all" />
-<script type="text/javascript" src="{#$cfg_staticPath#}js/core/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/core/jquery-1.8.3.min.js?v={#$cfg_staticVersion#}"></script>
 <script type="text/javascript">
 	var masterDomain = '{#$cfg_basehost#}', channelDomain = '{#$job_channelDomain#}', staticPath = '{#$cfg_staticPath#}';
 
@@ -21,6 +21,16 @@
 	var cookiePre = '{#$cfg_cookiePre#}';
 	var pageUrl = '{#$detail_domain#}';
 	var id = {#$job_id#};
+	var imconfig = {
+		'mod':'job',
+		'chatid':"{#$detail_userid#}",
+		"description": '{#$job_type#}',
+		'title':'{#$job_title#}',
+		"shoptitle": '{#$detail_title#}',
+		"imgUrl": '{#$detail_logo#}',
+		"link": '{#getUrlPath service='job' template='job' id={#$job_id#}#}',
+		'salary':'{#$job_salary#}',
+	}
 </script>
 </head>
 
@@ -77,12 +87,17 @@
 			</dl>
 		</div>
 		<div class="pt lxr">
+			{#if $userinfo#}
 			<p>联系电话：{#$job_tel#}</p>
 			<p>电子邮箱：{#$job_email#}</p>
+			{#else#}
+			<p><a href="{#$cfg_basehost#}/login.html">登录后显示联系方式</a></p>
+			{#/if#}
 		</div>
 		<div class="pt do">
 			<a href="javascript:;" id="yp" class="btn1">应聘</a>
 			<a href="javascript:;" id="sc" class="btn1">收藏</a>
+			{#if $detail_userid#}<a href="javascript:;" id="chat" class="chat_to-Link" data-type="detail">在线沟通</a>{#/if#}
 			<!-- <a href="javascript:;" id="jb" class="btn2"><i></i>举报</a> -->
 			<div id="fx" class="btn2 shear"><div class="bdsharebuttonbox bdshare-button-style1-16"><a href="#" class="bds_more" data-cmd="more"><i></i>分享</a></div></div>
 		</div>
@@ -90,8 +105,8 @@
 </div>
 
 {#include file="footer.html"#}
-<script type="text/javascript" src="{#$cfg_staticPath#}js/ui/jquery.qrcode.min.js"></script>
-<script type="text/javascript" src="{#$templets_skin#}js/companyh.js"></script>
-<script type="text/javascript" src="{#$templets_skin#}js/companzwd.js"></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/ui/jquery.qrcode.min.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$templets_skin#}js/companyh.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$templets_skin#}js/companzwd.js?v={#$cfg_staticVersion#}"></script>
 </body>
 </html>

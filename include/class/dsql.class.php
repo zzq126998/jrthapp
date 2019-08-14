@@ -393,6 +393,7 @@ class dsql extends db_connect{
                     $sql2 = $this->SetQuery("SELECT `id` FROM `#@__member` WHERE ".$strArr_[1]);
                     $stmt2 = $this->db->prepare($sql2);
                     $stmt2->execute();
+                    $res_2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
                     $stmt2->closeCursor();
                     if($res_2){
                         foreach ($res_2 as $k => $v) {

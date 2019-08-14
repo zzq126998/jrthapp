@@ -5,9 +5,9 @@ $(function(){
 
 	//选择支付方式
 	$("input[name=type]").bind("click", function(){
-		var t = $(this), val = Number(t.val());
+		var t = $(this), val = t.val();
 		$(".mitem").hide();
-		$("#type"+val).show();
+		$("#i_"+val).show();
 	});
 
 
@@ -38,7 +38,7 @@ $(function(){
 
 		//金额验证
 		if(id == "amount"){
-			tj = !re.test(val) || val > money || val == "" ? false : true;
+			tj = !re.test(val) || val > money || val == "" || (minWithdraw && val < minWithdraw) || (maxWithdraw && val > maxWithdraw) ? false : true;
 		}else{
 			tj = val == "" ? false : true;
 		}
@@ -51,10 +51,18 @@ $(function(){
 			t.addClass("error");
 
 			if(id == "amount"){
-				if(val > money){
-						inpErr("amount", langData['siteConfig'][19][720]+money);   //您最多可提现
+				if(minWithdraw && val < minWithdraw){
+		            inpErr("amount", (langData['siteConfig'][36][3]).replace(1, minWithdraw));  //起提金额：1元
+					return false;
+		        }else if(maxWithdraw && val > maxWithdraw){
+		            inpErr("amount", (langData['siteConfig'][36][4]).replace(1, maxWithdraw));  //单次最多提现：1元
+					return false;
+		        }else if(val > money){
+					inpErr("amount", langData['siteConfig'][19][720]+money);   //您最多可提现
+					return false;
 				}else{
 					inpErr("amount", langData['siteConfig'][20][63]);  //金额必须为整数或小数，小数点后不超过2位。
+					return false;
 				}
 			}
 		}
@@ -169,14 +177,14 @@ $(function(){
 	$("#tj").bind("click", function(event){
 		var t = $(this), data = [];
 
-		var type = Number($("input[name=type]:checked").val()),
-				amount = $("#amount").val();
+		var type = $("input[name=type]:checked").val(),
+			amount = $("#amount").val();
 
 		//银行卡
-		if(type == 1){
+		if(type == 'bank'){
 			var bank = $.trim($("#bank").val()),
-					cardnum = $.trim($("#cardnum").val()).replace(/\s/g, ""),
-					cardname = $.trim($("#cardname").val());
+				cardnum = $.trim($("#cardnum").val()).replace(/\s/g, ""),
+				cardname = $.trim($("#cardname").val());
 
 			if(bank == ""){
 				inpErr("bank");
@@ -198,9 +206,9 @@ $(function(){
 			data.push("cardname="+cardname);
 
 		//支付宝
-		}else if(type == 2){
+		}else if(type == 'alipay'){
 			var alipaynum = $("#alipaynum").val(),
-					alipayname = $("#alipayname").val();
+				alipayname = $("#alipayname").val();
 
 			if(alipaynum == ""){
 				inpErr("alipaynum");
@@ -216,12 +224,25 @@ $(function(){
 			data.push("cardnum="+alipaynum);
 			data.push("cardname="+alipayname);
 
+		//微信
+		}else if(type == 'weixin'){
+			data.push("bank=weixin");
 		}
 
 		if(!re.test(amount)){
 			inpErr("amount", langData['siteConfig'][20][63]);   //金额必须为整数或小数，小数点后不超过2位。
 			return false;
 		}
+
+		if(minWithdraw && amount < minWithdraw){
+            inpErr("amount", "起提金额：" + minWithdraw + "元");
+			return false;
+        }
+
+        if(maxWithdraw && amount > maxWithdraw){
+            inpErr("amount", "单次最多提现：" + maxWithdraw + "元");
+			return false;
+        }
 
 		if(amount > money){
 			inpErr("amount", langData['siteConfig'][19][720]+money);  //您最多可提现
@@ -231,12 +252,11 @@ $(function(){
 		data.push("amount="+amount);
 
 		if(!$("#agree").is(":checked")){
-			alert(langData['siteConfig'][23][105]);  //您必须同意并接受《充值服务协议》
+			alert(langData['siteConfig'][27][129]);  //您必须同意并接受《提现服务协议》
 			return false;
 		}
 
 		t.attr("disabled", true).val(langData['siteConfig'][6][35]+"...");  //提交中
-
 
 		$.ajax({
 			url: masterDomain+"/include/ajax.php?service=member&action=withdraw",

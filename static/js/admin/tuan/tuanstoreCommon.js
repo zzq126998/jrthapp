@@ -75,17 +75,19 @@ $(function(){
 							});
 
 							//填充信息
-							self.parent.$("#tuanTitle").html('<a href="'+data.prourl+'" target="_blank">'+data.protitle+'</a>');
-							self.parent.$("#commonUser").html(data.username);
-							self.parent.$("#commonContent").val(data.content);
-							self.parent.$("#commonTime").val(huoniao.transTimes(data.dtime, 1));
-							self.parent.$("#commonIp").val(data.ip);
-							self.parent.$("#commonGood").val(data.good);
-							self.parent.$("#commonBad").val(data.bad);
+							self.parent.$("#store").html('<a href="'+data.storeUrl+'" target="_blank">'+data.storeTitle+'</a>');
+							self.parent.$("#user").html(data.username);
+							self.parent.$("#content").val(data.content);
+							self.parent.$("#time").val(huoniao.transTimes(data.dtime, 1));
+							self.parent.$("#ip").val(data.ip);
 							self.parent.$("#rating").val(data.rating);
-							self.parent.$("#score1").val(data.score1);
-							self.parent.$("#score2").val(data.score2);
-							self.parent.$("#score3").val(data.score3);
+							self.parent.$("#reply").val(data.reply);
+							if(data.reply){
+								self.parent.$("#rtime").val(huoniao.transTimes(data.rtime, 1));
+							}
+							self.parent.$("#sco1").val(data.sco1);
+							self.parent.$("#sco2").val(data.sco2);
+							self.parent.$("#sco3").val(data.sco3);
 
 							if(data.pics != ""){
 								var picsObj = self.parent.$("#pics");
@@ -114,7 +116,7 @@ $(function(){
 								});
 							}
 
-							self.parent.$("#commonIsCheck").find("option").each(function(){
+							self.parent.$("#isCheck").find("option").each(function(){
 								if($(this).val() == data.ischeck){
 									$(this).attr("selected", true);
 								}
@@ -140,7 +142,7 @@ $(function(){
 						id.push($("#list tbody tr.selected:eq("+i+")").attr("data-id"));
 					}
 
-					huoniao.operaJson("tuanstoreCommon.php?dopost=delCommon", "id="+id, function(data){
+					huoniao.operaJson("tuanstoreCommon.php?dopost=delComment", "id="+id, function(data){
 						if(data.state == 100){
 							huoniao.showTip("success", data.info, "auto");
 							setTimeout(function() {
@@ -152,7 +154,7 @@ $(function(){
 								var tr = $("#list tbody tr:eq("+i+")");
 								for(var k = 0; k < data.info.length; k++){
 									if(data.info[k] == tr.attr("data-id")){
-										info.push("▪ "+tr.find(".row2 a").text());
+										info.push("▪ "+tr.find(".row35 a").text());
 									}
 								}
 							}
@@ -216,12 +218,12 @@ $(function(){
 
 		};
 
-    //填充分站列表
-    huoniao.buildAdminList($("#cityList"), cityList, '请选择分站');
-    $(".chosen-select").chosen();
-
 	//初始加载
 	getList();
+
+	//填充分站列表
+    huoniao.buildAdminList($("#cityList"), cityList, '请选择分站');
+    $(".chosen-select").chosen();
 
 	//搜索
 	$("#searchBtn").bind("click", function(){
@@ -232,20 +234,20 @@ $(function(){
 	});
 
 	//搜索回车提交
-    $("#keyword").keyup(function (e) {
-        if (!e) {
-            var e = window.event;
-        }
-        if (e.keyCode) {
-            code = e.keyCode;
-        }
-        else if (e.which) {
-            code = e.which;
-        }
-        if (code === 13) {
-            $("#searchBtn").click();
-        }
-    });
+  $("#keyword").keyup(function (e) {
+    if (!e) {
+      var e = window.event;
+    }
+    if (e.keyCode) {
+      code = e.keyCode;
+    }
+    else if (e.which) {
+      code = e.which;
+    }
+    if (code === 13) {
+      $("#searchBtn").click();
+    }
+  });
 
 	//搜索分类菜单点击事件
 	$("#typeBtn a").bind("click", function(){
@@ -305,12 +307,16 @@ $(function(){
 
 	//删除
 	$("#delBtn").bind("click", function(){
-		init.del("del");
+		$.dialog.confirm('此操作不可恢复，您确定要删除吗？', function(){
+			init.del("del");
+		});
 	});
 
 	//单条删除
 	$("#list").delegate(".del", "click", function(){
-		init.del("del");
+		$.dialog.confirm('此操作不可恢复，您确定要删除吗？', function(){
+			init.del("del");
+		});
 	});
 
 	//审核
@@ -436,8 +442,10 @@ function getList(){
 
 	var data = [];
 		data.push("sKeyword="+sKeyword);
-    	data.push("adminCity="+$("#cityList").val());
 		data.push("sType="+sType);
+		if($("#cityList").val()!='' && $("#cityList").val()!=null){
+			data.push("adminCity="+$("#cityList").val());
+		}
 		data.push("state="+state);
 		data.push("pagestep="+pagestep);
 		data.push("page="+page);
@@ -458,18 +466,29 @@ function getList(){
 			for(i; i < commonList.length; i++){
 				list.push('<tr data-id="'+commonList[i].id+'">');
 				list.push('  <td class="row3"><span class="check"></span></td>');
-				list.push('  <td class="row35 title left">商品：<a href="'+commonList[i].prourl+'" target="_blank">'+commonList[i].protitle+'</a><br />内容：'+commonList[i].commonContent+'</td>');
+				list.push('  <td class="row35 title left">标题：<a href="'+commonList[i].storeUrl+'" target="_blank">'+commonList[i].storeTitle+'</a><br />内容：'+commonList[i].content);
 
-				var user = '<a href="javascript:;" data-id="'+commonList[i].commonUserId+'" class="userinfo">'+commonList[i].commonUserName+'</a>';
-				if(commonList[i].commonUserId == 0){
-					user = commonList[i].commonUserName;
+				if(commonList[i].reply){
+					list.push('<br />回复：'+commonList[i].reply);
+				}
+				list.push('</td>');
+
+				var user = '<a href="javascript:;" data-id="'+commonList[i].userid+'" class="userinfo">'+commonList[i].username+'</a>';
+				if(commonList[i].userid == 0){
+					user = commonList[i].username;
 				}
 
 				list.push('  <td class="row12 left">'+user+'</td>');
-				list.push('  <td class="row17 left"><a href="javascript:;" data-id="'+commonList[i].commonIp+'" class="ip">'+commonList[i].commonIp+'</a>（'+commonList[i].commonIpAddr+'）</td>');
-				list.push('  <td class="row13 left">'+commonList[i].commonTime+'</td>');
+				list.push('  <td class="row17 left"><a href="javascript:;" data-id="'+commonList[i].ip+'" class="ip">'+commonList[i].ip+'</a>（'+commonList[i].ipAddr+'）</td>');
+				list.push('  <td class="row13 left">'+commonList[i].time);
+
+				if(commonList[i].reply){
+					list.push('<br />'+commonList[i].rtime);
+				}
+				list.push('</td>');
+
 				var state = "";
-				switch (commonList[i].commonIsCheck) {
+				switch (commonList[i].isCheck) {
 					case "等待审核":
 						state = '<span class="gray">待审核</span>';
 						break;
@@ -480,7 +499,7 @@ function getList(){
 						state = '<span class="refuse">审核拒绝</span>';
 						break;
 				}
-				list.push('  <td class="row9 state">'+state+'<span class="more"><s></s></span></td>');
+				list.push('  <td class="row10 state">'+state+'<span class="more"><s></s></span></td>');
 				list.push('  <td class="row10"><a href="javascript:;" data-id='+commonList[i].id+'" title="修改" class="edit">修改</a><a href="javascript:;" data-id='+commonList[i].id+'" title="删除" class="del">删除</a></td>');
 				list.push('</tr>');
 			}

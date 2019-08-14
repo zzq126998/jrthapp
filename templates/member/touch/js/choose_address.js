@@ -20,9 +20,9 @@ $(function(){
 
   function getLocation(addr){
     if(addr == ''){
-      if(isManager){
+      //if(isManager){
         setMap();
-      }
+      //}
       return;
     }
     if (site_map == "baidu") {
@@ -34,10 +34,10 @@ $(function(){
           lat = point.lat;
           setMap();
         }else{
-          if(isManager){
+          //if(isManager){
             setMap();
-            showMsg.alert('地址解析失败', 1000);
-          }
+            //showMsg.alert('地址解析失败', 1000);
+          //}
         }
       }, "");
     }
@@ -69,7 +69,7 @@ $(function(){
       });
       map.addEventListener("dragend", function(e){
         var t = new Date().getTime();
-        var center = map.getCenter();  
+        var center = map.getCenter();
         lng = center.lng;
         lat = center.lat;
       });
@@ -229,7 +229,7 @@ $(function(){
 
     // 腾讯地图
     }else if (site_map == "qq"){
-      
+
       function operation(){
         if(lng == '' || lat == ''){
           setTimeout(function(){
@@ -252,7 +252,7 @@ $(function(){
               //     }
               //   }
               // }
-            
+
               // if(idx < keywrodsArr.length - 1){
               //   idx++;
               //   searchService.searchNearBy(keywrodsArr[idx], new qq.maps.LatLng(lat, lng) , 1000);
@@ -310,7 +310,7 @@ $(function(){
               if(results.type == "POI_LIST"){
                 for(var i = 0; i < results.detail.pois.length; i++){
                   var d = results.detail.pois[i];
-                  data.push('<tr data-lng="'+d.latLng.lng+'" data-lat="'+d.latLng.lat+'"><td><i class="route-icon">'+d.name+'</td></tr>') 
+                  data.push('<tr data-lng="'+d.latLng.lng+'" data-lat="'+d.latLng.lat+'"><td><i class="route-icon">'+d.name+'</td></tr>')
                 }
               }
               if(data.length){

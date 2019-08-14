@@ -1,4 +1,9 @@
 $(function(){
+    //放大图片
+    $.fn.bigImage({
+        artMainCon:".main-list .introduce",  //图片所在的列表标签
+    });
+
 	var lng = '', lat = '';
 	HN_Location.init(function(data){
 		if (data == undefined || data.address == "" || data.name == "" || data.lat == "" || data.lng == "") {

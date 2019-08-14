@@ -418,7 +418,7 @@ class quanjing {
 			$pageinfo['refuse'] = $totalRefuse;
 		}
 
-		$archives = $dsql->SetQuery("SELECT `id`, `title`, `subtitle`, `typeid`, `flag`, `keywords`, `description`, `source`, `redirecturl`, `litpic`, `color`, `click`, l.`arcrank`, `pubdate`, `admin`, (SELECT COUNT(`id`)  FROM `#@__quanjingcommon` WHERE `aid` = l.`id` AND `ischeck` = 1) AS total FROM `#@__quanjinglist` l WHERE `del` = 0".$where);
+		$archives = $dsql->SetQuery("SELECT `id`, `title`, `subtitle`, `typeid`, `flag`, `keywords`, `description`, `source`, `redirecturl`, `litpic`, `color`, `click`, l.`arcrank`, `pubdate`, `admin`, (SELECT COUNT(`id`)  FROM `#@__public_comment` WHERE `type` = 'quanjing-detail' AND `pid` = 0 AND `aid` = l.`id` AND `ischeck` = 1) AS total FROM `#@__quanjinglist` l WHERE `del` = 0".$where);
 		// echo "<br>";
 		// echo $archives;
 		$atpage = $pageSize*($page-1);
@@ -474,7 +474,8 @@ class quanjing {
                 $list[$key]['is_zan']    = 0;
                 $list[$key]['is_follow'] = 0;
                 $user_id                = $userLogin->getMemberID();
-                $sql                    = $dsql->SetQuery("SELECT * FROM `#@__site_zanmap` WHERE `vid` = {$val['id']}  AND `userid` = $user_id  AND `temp` = 'quanjing' ");
+				// $sql                    = $dsql->SetQuery("SELECT * FROM `#@__site_zanmap` WHERE `vid` = {$val['id']}  AND `userid` = $user_id  AND `temp` = 'quanjing' ");
+				$sql                    = $dsql->SetQuery("SELECT * FROM `#@__public_up` WHERE `type` = '0' AND `ruid` = $user_id  AND `tid` = {$val['id']} AND `module` = 'quanjing' AND `action` = 'detail' ");
                 $ret                    = $dsql->dsqlOper($sql, 'totalCount');
                 if ($ret) {
                     $list[$key]['is_zan'] = 1;
@@ -486,7 +487,8 @@ class quanjing {
                     $list[$key]['is_follow'] = 1;
                 }
 
-                $sql                    = $dsql->SetQuery("SELECT * FROM `#@__site_zanmap` WHERE `vid` = {$val['id']} AND `temp` = 'quanjing' ");
+				// $sql                    = $dsql->SetQuery("SELECT * FROM `#@__site_zanmap` WHERE `vid` = {$val['id']} AND `temp` = 'quanjing' ");
+				$sql                    = $dsql->SetQuery("SELECT * FROM `#@__public_up` WHERE `type` = '0' AND `tid` = {$val['id']} AND `module` = 'quanjing' AND `action` = 'detail' ");
                 $ret                    = $dsql->dsqlOper($sql, 'totalCount');
                 $list[$key]['zanCount'] = $ret;
 
@@ -613,7 +615,8 @@ class quanjing {
 			);
 			$articleDetail['url'] = getUrlPath($param);
 
-			$sql = $dsql->SetQuery("SELECT `id` FROM `#@__quanjingcommon` WHERE `aid` = ".$results[0]['id']." AND `ischeck` = 1");
+			// $sql = $dsql->SetQuery("SELECT `id` FROM `#@__quanjingcommon` WHERE `aid` = ".$results[0]['id']." AND `ischeck` = 1");
+			$sql    = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'quanjing-detail' AND `aid` = {$results[0]['id']} AND `pid` = 0");
 			$common = $dsql->dsqlOper($sql, "totalCount");
 			$articleDetail["common"] = $common;
 

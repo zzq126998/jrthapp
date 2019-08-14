@@ -17,7 +17,7 @@ html, body, #video {width: 100%; height: 100%;}
 	var videoObject = {
 		container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
 		variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
-		autoplay: true,//自动播放
+		// autoplay: true,//自动播放
 		video:'<?php echo getRealFilePath($_GET['f']);?>'//视频地址
 	};
 	var player=new ckplayer(videoObject);

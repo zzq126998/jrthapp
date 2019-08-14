@@ -64,15 +64,26 @@
         <div class="tabBox show">
           {#*<div class="tabtitle"><h4>发布推荐</h4></div>*#}
           <div class="tabcon">
-            <ul class="fn-clear">
+            <ul class="fn-clear tab_ul1">
 
+                {#$house = ''#}
+                {#$job = ''#}
                 {#siteConfig action="siteModule" return="module"#}
+
+
+                {#if $module.code == 'house' && {#verifyModuleAuth module='house' type='userCenter'#}#}
+                  {#$house = 1#}
+                {#/if#}
+
+                {#if $module.code == 'job' && {#verifyModuleAuth module='job' type='userCenter'#}#}
+                  {#$job = 1#}
+                {#/if#}
 
                 {#if $module.code == 'article' && {#verifyModuleAuth module='article' type='userCenter'#}#}
                 <li>
                     <a href="{#getUrlPath service='member' type='user' template='fabu-article'#}" target="_parent">
                         <img src="{#$module.icon#}" alt="">
-                        <p>我要投稿</p>
+                        <p>投稿</p>
                     </a>
                 </li>
                 {#/if#}
@@ -81,7 +92,7 @@
                 <li>
                     <a href="{#getUrlPath service='member' type='user' template='info'#}#Stype" target="_parent">
                         <img src="{#$module.icon#}" alt="">
-                        <p>发布二手</p>
+                        <p>二手</p>
                     </a>
                 </li>
                 {#/if#}
@@ -90,40 +101,7 @@
                 <li>
                     <a href="{#getUrlPath service='member' template='fabu' action='tuan'#}" target="_parent">
                         <img src="{#$module.icon#}" alt="">
-                        <p>发布团购</p>
-                    </a>
-                </li>
-                {#/if#}
-
-                {#if $module.code == 'house' && {#verifyModuleAuth module='house' type='userCenter'#}#}
-                <li>
-                    <a href="{#getUrlPath service='member' type='user' template='fabu-house-sale'#}" target="_parent">
-                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/f-sell01.png" alt="">
-                        <p>发布二手房</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="{#getUrlPath service='member' type='user' template='fabu-house-zu'#}" target="_parent">
-                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/f-lease01.png" alt="">
-                        <p>发布出租房</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="{#getUrlPath service='member' type='user' template='fabu-house-xzl'#}" target="_parent">
-                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/f-lease03.png" alt="">
-                        <p>发布写字楼</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="{#getUrlPath service='member' type='user' template='fabu-house-sp'#}" target="_parent">
-                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/f-lease04.png" alt="">
-                        <p>发布商铺</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="{#getUrlPath service='member' type='user' template='fabu-house-xzl'#}" target="_parent">
-                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/f-lease05.png" alt="">
-                        <p>发布厂房仓库</p>
+                        <p>团购</p>
                     </a>
                 </li>
                 {#/if#}
@@ -132,37 +110,17 @@
                 <li>
                     <a href="{#getUrlPath service='tieba' template='fabu'#}" class="postTieba" target="_parent">
                         <img src="{#$module.icon#}" alt="">
-                        <p>发布帖子</p>
+                        <p>帖子</p>
                     </a>
                 </li>
                 {#/if#}
 
-                {#if $module.code == 'job' && {#verifyModuleAuth module='job' type='userCenter'#}#}
-                <li>
-                    <a href="{#getUrlPath service='member' type='user' template='job-resume'#}" target="_parent">
-                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/f-job02.png" alt="">
-                        <p>发布简历</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="{#getUrlPath service='job' template='sentence' param='type=0'#}#fabu" target="_parent">
-                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/f-job03.png" alt="">
-                        <p>发布一句话招聘</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="{#getUrlPath service='job' template='sentence' param='type=1'#}#fabu" target="_parent">
-                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/f-job04.png" alt="">
-                        <p>发布一句话求职</p>
-                    </a>
-                </li>
-                {#/if#}
 
                 {#if $module.code == 'huodong' && {#verifyModuleAuth module='huodong' type='userCenter'#}#}
                 <li>
                     <a href="{#getUrlPath service='huodong' template='fabu'#}" target="_parent">
                         <img src="{#$module.icon#}" alt="">
-                        <p>发布活动</p>
+                        <p>活动</p>
                     </a>
                 </li>
                 {#/if#}
@@ -171,7 +129,7 @@
                 <li>
                     <a href="{#getUrlPath service='member' type='user' template='fabu' action='live'#}" target="_parent">
                         <img src="{#$module.icon#}" alt="">
-                        <p>发布直播</p>
+                        <p>直播</p>
                     </a>
                 </li>
                 {#/if#}
@@ -189,7 +147,7 @@
                 <li>
                     <a href="{#getUrlPath service='member' type='user' template='fabu' action='car'#}" target="_parent">
                         <img src="{#$module.icon#}" alt="">
-                        <p>发布二手车</p>
+                        <p>二手车</p>
                     </a>
                 </li>
                 {#/if#}
@@ -198,6 +156,76 @@
 
 
             </ul>
+            <!--房产 s-->
+            {#if $house#}
+            <ul class="fn-clear tab_ul2">
+              <li>
+                    <a href="{#getUrlPath service='member' type='user' template='fabu-house-sale'#}" target="_parent">
+                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/f_icon1.png" alt="">
+                        <p>二手房</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="{#getUrlPath service='member' type='user' template='fabu-house-zu'#}" target="_parent">
+                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/f_icon2.png" alt="">
+                        <p>出租房</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="{#getUrlPath service='member' type='user' template='fabu-house-xzl'#}" target="_parent">
+                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/f_icon3.png" alt="">
+                        <p>写字楼</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="{#getUrlPath service='member' type='user' template='fabu-house-sp'#}" target="_parent">
+                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/f_icon4.png" alt="">
+                        <p>商铺</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="{#getUrlPath service='member' type='user' template='fabu-house-xzl'#}" target="_parent">
+                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/f_icon5.png" alt="">
+                        <p>厂房仓库</p>
+                    </a>
+                </li>
+            </ul>
+            {#/if#}
+            <!--房产 e-->
+
+            <!--招聘 s-->
+            {#if $job#}
+            <ul class="fn-clear tab_ul3">
+                <li>
+                    <a href="{#getUrlPath service='member' type='user' template='job-resume'#}" target="_parent">
+                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/j_icon1.png" alt="">
+                        <p>简历</p>
+                    </a>
+                </li>
+                {#if $userinfo.userType == 2#}
+                <li>
+                    <a href="{#getUrlPath service='member' template='post' param='do=add'#}" target="_parent">
+                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/j_icon4.png" alt="">
+                        <p>职位</p>
+                    </a>
+                </li>
+                {#/if#}
+                <li>
+                    <a href="{#getUrlPath service='job' template='sentence' param='type=0'#}#fabu" target="_parent">
+                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/j_icon2.png" alt="">
+                        <p>快速招聘</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="{#getUrlPath service='job' template='sentence' param='type=1'#}#fabu" target="_parent">
+                        <img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/j_icon3.png" alt="">
+                        <p>快速求职</p>
+                    </a>
+                </li>
+
+            </ul>
+            {#/if#}
+            <!--招聘 e-->
           </div>
         </div>
 
@@ -344,7 +372,7 @@
               <p class="tIntro"><span class="tit">{#$auth.title#}</span> <i class="baseIcon"></i></p>
               <p class="ttrial"> <span class="hasIcon"><img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/{#if $auth.type1#}hasIcon{#else#}noIcon{#/if#}.png" alt=""></span></p>
               <p class="tcompany"> <span class="hasIcon"><img src="{#$templets_skin#}images/fabuJoin_touch_popup_3.4/{#if $auth.type2#}hasIcon{#else#}noIcon{#/if#}.png" alt=""></span></p>
-              <div class="note fn-hide">{#$s_auth.note#}</div>
+              <div class="note fn-hide">{#$auth.note#}</div>
             </div>
           {#/if#}
           {#/foreach#}

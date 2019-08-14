@@ -10,13 +10,16 @@
 {#elseif $detail_type == 2#}
 {#$pageType = "转让"#}
 {#/if#}
-<title>车位详情</title>
+<title>{#$detail_title#}</title>
 <link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/core/touchBase.css?v={#$cfg_staticVersion#}" />
 <link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/cv-detail.css?v={#$cfg_staticVersion#}">
 <link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/common.css?v={#$cfg_staticVersion#}">
 <link rel="stylesheet" href="{#$templets_skin#}css/swiper.min.css">
 <link rel='stylesheet' href='{#$cfg_staticPath#}css/ui/photoswipe.css?v={#$cfg_staticVersion#}'>
 <link rel='stylesheet' href='{#$cfg_staticPath#}css/ui/photoswipe-default-skin.css?v={#$cfg_staticVersion#}'>
+	<style type="text/css">
+		.housing_txt img{width: 100%;max-height: 8rem;object-fit: cover;}
+	</style>
 <script type="text/javascript" src="{#$cfg_staticPath#}js/core/touchScale.js?v={#$cfg_staticVersion#}"></script>
 <script type="text/javascript" src="{#$cfg_staticPath#}js/core/zepto.min.js?v={#$cfg_staticVersion#}"></script>
 <script type="text/javascript">
@@ -40,6 +43,14 @@
 	};
 	var detail_video='{#$detail_video#}';
 	var cookiePre = '{#$cfg_cookiePre#}';
+	var imconfig = {
+		'mod':'house',
+		'chatid':"{#$detail_user.uid#}",
+		'title': '[车位{#$pageType#}]{#$detail_title#}',
+		"price": '{#$detail_price#}{#if $pageType=="出售"#}万元{#else#}元/月{#/if#}',
+		"imgUrl": '{#changeFileSize url={#$detail_litpic#} type='small'#}',
+		"link": '{#getUrlPath service="house" template="cw-detail" id=$detail_id#}',
+	}
 </script>
 </head>
 
@@ -181,16 +192,18 @@
                 <p>{#if $detail_user.zjcomId#}{#$detail_user.zjcomName#}{#else#}独立经纪人{#/if#}</p>
             </div>
             <div class="im_icon">
-                {#if $detail_user.qq#}<span class="im_qq"></span>{#/if#}
+            {#*    {#if $detail_user.qq#}<span class="im_qq"></span>{#/if#} *#}
           {#if $detail_usertype == 1#}
-            {#if $detail_contact == '' || $detail_contact == $detail_user.phone#}
+          {#*   {#if $detail_contact == '' || $detail_contact == $detail_user.phone#}
                 {#if $detail_user.wx || $detail_user.wxQr#}
                     <span class="im_wx"></span>
                 {#/if#}
             {#elseif $detail_contact && $detail_wx_tel#}
                     <span class="im_wx"></span>
             {#/if#}
-                <span class="im_iphone"></span>
+                <span class="im_iphone"></span>*#}
+
+                <span class="im_iphone phone_btn">电话咨询</span>
             </div>
             {#else#}
             <div class="im_name">
@@ -200,7 +213,7 @@
                 <p>{#$detail_contact#}</p>
             </div>
             <div class="im_icon">
-                <span class="im_iphone"></span>
+               <span class="im_iphone phone_btn">电话咨询</span>
             </div>
             {#/if#}
           {#else#}
@@ -211,8 +224,9 @@
                 <p>{#$detail_contact#}</p>
             </div>
             <div class="im_icon">
-                {#if $detail_wx_tel#}<span class="im_wx"></span>{#/if#}
-                <span class="im_iphone"></span>
+              {#*  {#if $detail_wx_tel#}<span class="im_wx"></span>{#/if#}
+                <span class="im_iphone"></span>*#}
+                 <span class="im_iphone phone_btn">电话咨询</span>
             </div>
           {#/if#}
         </div>
@@ -284,7 +298,7 @@
         </div>
         <div class="big-wrapper">
             <a href="{#getUrlPath service=house template=yuyue param="type=cw&id={#$detail_id#}"#}" class="button post_ulog"><i></i>预约看房</a>
-            <a href="tel:{#$detail_user.phone#}" class="button call_phone"><i></i>电话咨询</a>
+            {#if $detail_user.uid#}<a href="javascript:;" class="button call_phone chat_to-Link" data-type="detail"><i></i>在线咨询</a>{#/if#}
         </div>
 	</div>
 
@@ -358,7 +372,8 @@
     {#/if#}
     <i class="phone_cuo"></i>
 </div>
-
+<!-- 图片放大 -->
+{#include file="../../../siteConfig/bigimg_1.2.html"#}
 
 <script src="{#$templets_skin#}js/swiper.min.js"></script>
 <script src="{#$cfg_staticPath#}js/publicOpenMap.js?v={#$cfg_staticVersion#}"></script>
@@ -380,6 +395,12 @@
 		"link": '{#getUrlPath service='house'  template='cw-detail' id={#$detail_id#}#}',
 	};
 	document.write(unescape("%3Cscript src='{#$cfg_staticPath#}js/publicShare.js?v="+~(-new Date())+"'type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+    //放大图片
+    $.fn.bigImage({
+        artMainCon:".housing_txt",  //图片所在的列表标签
+    });
 </script>
 </body>
 </html>

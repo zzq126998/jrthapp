@@ -16,29 +16,62 @@
 	</div>
 </div>
 
-<div class="navBox" id="navBox">
-	<div class="navlist" id="navlist">
-		<ul class="clearfix fn-clear">
-			<li><a data-name="{#$langData['siteConfig'][0][5]#}" data-code="index" href="{#$cfg_basehost#}"><span class="imgbox"><img src="{#$cfg_basehost#}/static/images/admin/nav/index.png?v={#$cfg_staticVersion#}" class=""></span><span class="txtbox">{#$langData['siteConfig'][0][5]#}</span></a></li>
-			<li><a data-name="{#$langData['siteConfig'][0][7]#}" data-code="member" href="{#$member_userDomain#}"><span class="imgbox"><img src="{#$cfg_basehost#}/static/images/admin/nav/member.png?v={#$cfg_staticVersion#}" class=""></span><span class="txtbox">{#$langData['siteConfig'][0][7]#}</span></a></li>
-			{#if in_array("shop", $installModuleArr)#}<li><a data-name="{#$langData['siteConfig'][22][12]#}" data-code="cart" href="{#getUrlPath service='shop' template='cart'#}"><span class="imgbox"><img src="{#$cfg_basehost#}/static/images/admin/nav/shop_car.png?v={#$cfg_staticVersion#}" class=""></span><span class="txtbox">{#$langData['siteConfig'][22][12]#}</span></a></li>{#/if#}
-			{#siteConfig action="siteModule" return="module" type="1"#}
-			{#if $module.code != "special" && $module.code != "website"#}
-			<li>
-				<a data-name="{#$module.name#}" data-code="{#$module.code#}" href="{#$module.url#}"{#if $module.target#} target="_blank"{#/if#}>
-					<span class="imgbox"><img src="{#$module.icon#}"></span>
-					<span class="txtbox" style="{#if $module.color#} color: {#$module.color#};{#/if#}{#if $module.bold#} font-weight: 700;{#/if#}">{#$module.name#}</span>
-				</a>
-			</li>
-			{#/if#}
-			{#/siteConfig#}
-			<!-- 分享 s -->
-			<li class="HN_PublicShare"><a href="javascript:;"><span class="imgbox"><img src="{#$cfg_basehost#}/static/images/admin/nav/share.png?v={#$cfg_staticVersion#}" class="nav_23"></span><span class="txtbox">{#$langData['siteConfig'][6][166]#}</span></a></li>
-			<!-- 分享 e -->
-			<!-- 举报 s -->
-			<li class="HN_Jubao"><a href="javascript:;"><span class="imgbox"><img src="{#$cfg_basehost#}/static/images/admin/nav/jubao.png?v={#$cfg_staticVersion#}" class="nav_23"></span><span class="txtbox">{#$langData['siteConfig'][6][30]#}</span></a></li>
-			<!-- 举报 e -->
-		</ul>
+<div class="navBox_4" id="navBox_4">
+	<div class="boxall_nav">
+		<!--便捷导航s-->
+		<div class="pub-fast_nav" id="fast_nav">
+			<h2>全局导航<i class="close_btn"></i></h2>
+
+			<ul>
+				<li class="">
+					<a href="{#$cfg_basehost#}">
+						<i><img src="{#$cfg_staticPath#}/images/top_fast1.png"/></i>
+						<p>首页</p>
+					</a>
+				</li>
+				<li class="message_num">
+					<a href="{#$cfg_basehost#}/u/message.html">
+						<i><img src="{#$cfg_staticPath#}/images/top_fast2.png"/></i>
+						<p>消息</p>
+					</a>
+				</li>
+				<li class="">
+					<a href="{#$cfg_basehost#}/u">
+						<i><img src="{#$cfg_staticPath#}/images/top_fast3.png"/></i>
+						<p>会员中心</p>
+					</a>
+				</li>
+				<li class="">
+					<a href="{#if $userinfo.userid#}{#$cfg_basehost#}/user-{#$userinfo.userid#}.html{#else#}{#$cfg_basehost#}/login.html{#/if#}">
+						<i><img src="{#$cfg_staticPath#}/images/top_fast4.png"/></i>
+						<p>我的主页</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<!--便捷导航e-->
+		<div class="navlist_4" id="navlist_4">
+			<ul class="clearfix fn-clear">
+				{#if in_array("shop", $installModuleArr)#}<li><a href="{#getUrlPath service='shop' template='cart'#}"><span class="imgbox"><img src="{#$cfg_basehost#}/static/images/admin/nav/shop_car.png?v={#$cfg_staticVersion#}" class=""></span><span class="txtbox">{#$langData['siteConfig'][22][12]#}</span></a></li>{#/if#}
+				{#siteConfig action="siteModule" return="module" type="1"#}
+				{#if $module.code != "special" && $module.code != "website"#}
+				<li>
+					<a data-name="{#$module.name#}" data-code="{#$module.code#}" href="{#$module.url#}"{#if $module.target#} target="_blank"{#/if#}>
+						<span class="imgbox"><img src="{#$module.icon#}"></span>
+						<span class="txtbox" style="{#if $module.color#} color: {#$module.color#};{#/if#}{#if $module.bold#} font-weight: 700;{#/if#}">{#$module.name#}</span>
+					</a>
+				</li>
+				{#/if#}
+				{#/siteConfig#}
+				<!-- 分享 s -->
+				<li class="HN_PublicShare"><a href="javascript:;"><span class="imgbox"><img src="{#$cfg_basehost#}/static/images/admin/nav/share.png?v={#$cfg_staticVersion#}" class="nav_23"></span><span class="txtbox">{#$langData['siteConfig'][6][166]#}</span></a></li>
+				<!-- 分享 e -->
+				<!-- 举报 s -->
+				<li class="HN_Jubao"><a href="javascript:;"><span class="imgbox"><img src="{#$cfg_basehost#}/static/images/admin/nav/jubao.png?v={#$cfg_staticVersion#}" class="nav_23"></span><span class="txtbox">{#$langData['siteConfig'][6][30]#}</span></a></li>
+				<!-- 举报 e -->
+			</ul>
+		</div>
+		<i class="w_bg"></i>
 	</div>
 	<div class="bg" id="shearBg"></div>
 </div>
@@ -177,3 +210,87 @@
 <div class="JuMask"></div>
 
 <script src="{#$cfg_basehost#}/static/js/ui/iscroll.js" type="text/javascript"></script>
+
+<script>
+	var cookiePre = '{#$cfg_cookiePre#}';
+	$(function(){
+		var cookie = $.cookie("HN_float_hide");
+		if($("#navlist_4").size() > 0){
+		  var myscroll_nav = new iScroll("navlist_4", {vScrollbar: false});
+		  $('.header-search .dropnav').click(function(){
+		    var a = $(this), header = a.closest('.header');
+		    if(!header.hasClass('open')) {
+	          toggleDragRefresh('off');
+		      header.addClass('open');
+		      $('.btmMenu').hide();
+		      $('.fixFooter').hide();
+		      $('#navBox_4').css({'top':'0', 'bottom':'0'}).show();
+					var device = navigator.userAgent;
+		      if (device.indexOf('huoniao_iOS') > -1) {
+		        // $('#navBox').css({'top':'calc(0.9rem + 20px)', 'bottom':'0'});
+		        $('#navBox_4').css({'top':'0', 'bottom':'0'});
+		      }
+		      $('#navBox_4 .bg').css({'height':'100%','opacity':1});
+		      myscroll_nav.refresh();
+		    }else {
+	          toggleDragRefresh('on');
+		      header.removeClass('open');
+		      closeShearBox();
+		    }
+		  })
+
+	    }
+		$('#navBox_4 .close_btn,#shearBg').click(function(){
+			closeShearBox()
+		})
+		$('#navlist_4 li').click(function(){
+	        setTimeout(function(){
+	            closeShearBox();
+	        }, 500);
+	    })
+		function closeShearBox(){
+		    $('.fixFooter').show();
+		    $('.header').removeClass('open');
+		    $('#navBox_4').hide();
+		    $('#navBox_4 .bg').css({'height':'0','opacity':0});
+		  }
+		});
+		//获取消息数目
+		function getnum(){
+			$.ajax({
+		       url: '/include/ajax.php?service=member&action=message&type=tongji&im=1',
+		       type: "GET",
+		       dataType: "json",
+		       success: function (data) {
+
+			       var html = [];
+			       if(data.state == 100){
+			       	var info = data.info.pageInfo;
+			       	var count = info.im + info.unread + info.upunread + info.commentunread ;
+			       	$('.message_num').find('em').remove();
+			       	if(count<=99 && count>0){
+			       		$('.message_num').find('a i').prepend('<em>'+count+'</em>');
+			       		$('.dropnav').html('<em></em>')
+			       	}else if(count>99){
+			       		$('.message_num').find('a i').prepend('<em>99+</em>');
+			       		$('.dropnav').html('<em></em>')
+			       	}
+
+			       }
+		       },
+		       error: function(){
+		         $('.loading').html('<span>请求出错请刷新重试</span>');  //请求出错请刷新重试
+		       }
+		    });
+		}
+		var userid
+		if(cookiePre){
+			userid = $.cookie(cookiePre+"login_user");
+		}
+		if(userid == null || userid == ""){
+           console.log('登录之后可以查看新消息')
+		}else{
+			setInterval(getnum,5000)
+		}
+
+</script>

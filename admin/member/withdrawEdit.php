@@ -36,6 +36,8 @@ if($dopost == "edit"){
 			echo '{"state": 200, "info": "请选择更新到的状态"}';
 			exit();
 		}
+
+
 		if(trim($note) == ''){
 			echo '{"state": 200, "info": "请输入提现结果"}';
 			exit();
@@ -63,21 +65,6 @@ if($dopost == "edit"){
 				"template" => "withdraw_log_detail",
 				"id"       => $id
 			);
-
-			//查询会员信息
-			$username = "";
-			$sql = $dsql->SetQuery("SELECT `username`, `mtype` FROM `#@__member` WHERE `id` = $uid");
-			$results = $dsql->dsqlOper($sql, "results");
-			if($results){
-				$username = $results[0]['username'];
-				if($results[0]['mtype'] == 2){
-					$param = array(
-						"service"  => "member",
-						"template" => "withdraw_log_detail",
-						"id"       => $id
-					);
-				}
-			}
 
 			//自定义配置
 			$config = array(
@@ -161,6 +148,143 @@ if($dopost == "edit"){
 			ShowMsg('要修改的信息参数传递失败，请联系管理员！', "-1");
 			die;
 		}
+	}
+
+//付款
+}elseif($dopost == "transfers"){
+
+	if($id){
+		$ret = transfers($id);
+		echo $ret;
+
+	}else{
+		echo '{"state": 200, "info": "请选择要操作的信息！"}';
+	}
+	die;
+}
+
+
+//自动转账
+function transfers($id){
+
+	global $dsql;
+	global $cfg_withdrawFee;
+
+	$sql = $dsql->SetQuery("SELECT `uid`, `bank`, `cardnum`, `cardname`, `amount` FROM `#@__member_withdraw` WHERE `id` = $id AND `state` = 0");
+	$ret = $dsql->dsqlOper($sql, "results");
+	if($ret){
+
+		$uid = $ret[0]['uid'];
+		$bank = $ret[0]['bank'];
+		$cardnum = $ret[0]['cardnum'];
+		$cardname = $ret[0]['cardname'];
+		$amount = $ret[0]['amount'];
+
+		$ordernum = create_ordernum();
+
+		//验证类型
+        $realname = $wechat_openid = '';
+        $sql = $dsql->SetQuery("SELECT `realname`, `wechat_openid` FROM `#@__member` WHERE `id` = " . $uid);
+        $ret = $dsql->dsqlOper($sql, "results");
+        if($ret){
+            $realname = $ret[0]['realname'];
+            $wechat_openid = $ret[0]['wechat_openid'];
+
+            if($bank == 'weixin' && !$wechat_openid){
+				return '{"state": 200, "info": "提现会员需要先绑定微信账号"}';
+            }
+        }
+
+		if($bank != 'weixin' && $bank != 'alipay'){
+			return '{"state": 200, "info": "不支持银行卡在线转账！"}';
+		}else{
+
+			$amount_ = $cfg_withdrawFee ? $amount * (100 - $cfg_withdrawFee) / 100 : $amount;
+			$amount_ = sprintf("%.2f", $amount_);
+
+			//微信提现
+			if($bank == "weixin"){
+				$order = array(
+					'ordernum' => $ordernum,
+					'openid' => $wechat_openid,
+					'name' => $realname,
+					'amount' => $amount_
+				);
+
+				require_once(HUONIAOROOT."/api/payment/wxpay/wxpayTransfers.php");
+				$wxpayTransfers = new wxpayTransfers();
+				$return = $wxpayTransfers->transfers($order);
+
+				if($return['state'] != 100){
+					return json_encode($return);
+				}
+			}else{
+
+				if($realname != $cardname){
+					return '{"state": 200, "info": "申请失败，提现到的账户真实姓名与实名认证信息不一致！"}';
+				}
+				$order = array(
+					'ordernum' => $ordernum,
+					'account' => $cardnum,
+					'name' => $cardname,
+					'amount' => $amount_
+				);
+
+				require_once(HUONIAOROOT."/api/payment/alipay/alipayTransfers.php");
+				$alipayTransfers = new alipayTransfers();
+				$return = $alipayTransfers->transfers($order);
+
+				if($return['state'] != 100){
+					return json_encode($return);
+				}
+			}
+
+
+			$rdate = $return['date'];
+			$payment_no = $return['payment_no'];
+
+			$note = '提现成功，付款单号：'. $payment_no;
+
+			//扣除冻结金额
+			$archives = $dsql->SetQuery("UPDATE `#@__member` SET `freeze` = `freeze` - '$amount' WHERE `id` = '$uid'");
+			$dsql->dsqlOper($archives, "update");
+
+			//保存操作日志
+			$archives = $dsql->SetQuery("INSERT INTO `#@__member_money` (`userid`, `type`, `amount`, `info`, `date`) VALUES ('$uid', '0', '$amount', '余额提现：$payment_no', '$rdate')");
+			$dsql->dsqlOper($archives, "update");
+
+			//更新记录状态
+			$sql = $dsql->SetQuery("UPDATE `#@__member_withdraw` SET `state` = 1, `note` = '$note', `rdate` = '$rdate' WHERE `id` = $id");
+			$dsql->dsqlOper($sql, "update");
+
+			//自定义配置
+			$param = array(
+				"service"  => "member",
+				"type"     => "user",
+				"template" => "withdraw_log_detail",
+				"id"       => $id
+			);
+
+			$config = array(
+				"username" => $realname,
+				"amount" => $amount,
+				"date" => date("Y-m-d H:i:s", $rdate),
+				"info" => $note,
+				"fields" => array(
+					'keyword1' => '提现金额',
+					'keyword2' => '提现时间',
+					'keyword3' => '提现状态'
+				)
+			);
+
+			updateMemberNotice($uid, "会员-提现申请审核通过", $param, $config);
+
+			return '{"state": 100, "info": "操作成功！"}';
+
+		}
+
+	}else{
+		return '{"state": 200, "info": "信息不存在，或已经操作过！"}';
 	}
 }
 

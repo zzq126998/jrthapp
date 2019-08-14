@@ -105,7 +105,7 @@ $(function(){
 
 			for(var a = 0; a < data.length; a++){
 
-				content.push('<div class="sub-data" data-id="'+a+'" title="'+data[a].typename+'"><a href="javascript:;">'+data[a].typename+'</a><i></i></div>');
+				content.push('<div class="sub-data" data-id="'+a+'" data-addr="'+data[a]['id']+'" title="'+data[a].typename+'"><a href="javascript:;">'+data[a].typename+'</a><i></i></div>');
 				lower2 = data[a].lower;
 
 				subdata.push('<ul class="fn-clear area'+a+'">');
@@ -140,7 +140,7 @@ $(function(){
 
 	//选择工作地区
 	$(".area").delegate('.sub-data', 'click', function () {
-		var t = $(this), id = t.attr("data-id");
+		var t = $(this), id = t.attr("data-id"), addr = t.attr("data-addr");
 		if(t.hasClass("no")){
 			$("#addr1")
 				.attr("data-id", 0)
@@ -157,7 +157,11 @@ $(function(){
 				$(".area ul").stop().slideUp("fast");
 
 				t.addClass("curr");
-				t.parent().find(".area"+id).stop().slideDown("fast");
+				if(t.parent().find(".area"+id+" li").length){
+					t.parent().find(".area"+id).stop().slideDown("fast");
+				}else{
+					location.href = '?'+(location.href.indexOf('company') > 0 ? 'addrid' : 'addr')+'='+addr+'#J_crumbs';
+				}
 			}
 			return false;
 		}

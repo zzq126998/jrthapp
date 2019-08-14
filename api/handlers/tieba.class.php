@@ -208,6 +208,8 @@ class tieba {
 		global $dsql;
 		$type = $page = $pageSize = $where = "";
 
+		$cityid = getCityId();
+
 		if(!empty($this->param)){
 			if(!is_array($this->param)){
 				return array("state" => 200, "info" => '格式错误！');
@@ -219,7 +221,7 @@ class tieba {
 			}
 		}
 		// $results = $dsql->getTypeList($type, "tieba_type", $son, $page, $pageSize);
-        $results = getCache("tieba_type", function() use($dsql, $type, $son, $page, $pageSize){
+        $results = getCache("tieba_type_" . $cityid, function() use($dsql, $type, $son, $page, $pageSize){
             return $dsql->getTypeList($type, "tieba_type", $son, $page, $pageSize);
         }, 0, array("sign" => $type."_".(int)$son, "savekey" => 1));
 		if($results){
@@ -367,11 +369,12 @@ class tieba {
 		}elseif($orderby == "active"){//发帖最多的用户
 			$order = " GROUP BY uid order by count(id) desc";
 		}elseif($orderby == "lastreply"){//最新回复  去除重复的tid
-			$sql = $dsql->SetQuery("SELECT max(id) as mid, `tid`, `pubdate` FROM `#@__tieba_reply` WHERE `state` = 1  GROUP BY tid ORDER BY  mid DESC, pubdate DESC");
+			// $sql = $dsql->SetQuery("SELECT max(id) as mid, `tid`, `pubdate` FROM `#@__tieba_reply` WHERE `state` = 1  GROUP BY tid ORDER BY  mid DESC, pubdate DESC");
+			$sql = $dsql->SetQuery("SELECT max(id) as mid, `aid`, `dtime` FROM `#@__public_comment` WHERE `ischeck` = 1  AND `pid` = 0 AND `type` = 'tieba-detail' GROUP BY aid ORDER BY  mid DESC, dtime DESC");
 			$retReply = $dsql->dsqlOper($sql, "results");
 			if($retReply){
 				foreach ($retReply as $key => $value) {
-					$replyArr[] = $value['tid'];
+					$replyArr[] = $value['aid'];
 				}
 				$replyArr = join(',',$replyArr);
 				$where .= " AND `id` in ($replyArr)";
@@ -379,7 +382,7 @@ class tieba {
 			}
 		}
 
-		$archives = $dsql->SetQuery("SELECT l.`up`, l.`id`, l.`typeid`, l.`uid`, l.`title`, l.`pubdate`, l.`color`, l.`click`, l.`bold`, l.`jinghua`, l.`top`, l.`content`, l.`state`, l.`ip`, l.`ipaddr`, (SELECT COUNT(`id`)  FROM `#@__tieba_reply` WHERE `tid` = l.`id` AND `state` = 1) AS reply, l.`waitpay` FROM `#@__tieba_list` l WHERE 1 = 1".$where);
+		$archives = $dsql->SetQuery("SELECT l.`up`, l.`id`, l.`typeid`, l.`uid`, l.`title`, l.`pubdate`, l.`color`, l.`click`, l.`bold`, l.`jinghua`, l.`top`, l.`content`, l.`state`, l.`ip`, l.`ipaddr`, (SELECT COUNT(`id`)  FROM `#@__public_comment` WHERE `aid` = l.`id` AND `ischeck` = 1 AND `pid` = 0 AND `type` = 'tieba-detail') AS reply, l.`waitpay` FROM `#@__tieba_list` l WHERE 1 = 1".$where);
 		$archives_count = $dsql->SetQuery("SELECT count(`id`) total FROM `#@__tieba_list` l WHERE 1 = 1".$where);
 
 		//总条数
@@ -442,7 +445,10 @@ class tieba {
 				$list[$key]['top']     = $val['top'];
 				$list[$key]['ip']     = $val['ip'];
 				$list[$key]["ipAddress"] = $val['ipaddr'];
-				$list[$key]["up"]      = $val['up'];
+
+				$archives   = $dsql->SetQuery("SELECT `id` FROM `#@__public_up` WHERE `module` = 'tieba' AND `action` = 'detail' AND `type` = '0' AND `tid` = {$val['id']}");
+				$totalCount = $dsql->dsqlOper($archives, "totalCount");
+				$list[$key]["up"]      = $totalCount;
 
 				$content = $val['content'];
 				if(strpos($content,'video')){
@@ -523,7 +529,8 @@ class tieba {
 
 				//最新评论
 				$lastReply = array();
-				$sql = $dsql->SetQuery("SELECT `uid`, `content`, `pubdate` FROM `#@__tieba_reply` WHERE `state` = 1 AND `tid` = ".$val['id']);
+				// $sql = $dsql->SetQuery("SELECT `uid`, `content`, `pubdate` FROM `#@__tieba_reply` WHERE `state` = 1 AND `tid` = ".$val['id']);
+				$sql = $dsql->SetQuery("SELECT `userid` uid, `content`, `dtime` pubdate FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'tieba-detail' AND `aid` = '".$val['id']."' AND `pid` = 0");
 				$ret = $dsql->dsqlOper($sql, "results");
 				if($ret){
 
@@ -642,7 +649,8 @@ class tieba {
 			$detail["top"]      = $results[0]['top'];
 
 			//评论数量
-			$archives = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__tieba_reply` WHERE `tid` = ".$results[0]['id']." AND `state` = 1");
+			// $archives = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__tieba_reply` WHERE `tid` = ".$results[0]['id']." AND `state` = 1");
+			$archives = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'tieba-detail' AND `aid` = '".$results[0]['id']."' AND `pid` = 0");
 			$totalCount = $dsql->dsqlOper($archives, "results");
 			$detail['reply'] = $totalCount[0]['t'];
 

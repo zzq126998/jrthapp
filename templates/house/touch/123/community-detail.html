@@ -138,7 +138,7 @@
 	<div class="gaikuang">
 		<p class="classify_title">小区概况</p>
 		<div>
-			<p><span>建筑年代：</span><span>{#$detail_opendate|date_format:"%Y"#}年建成</span></p>
+			<p><span>建筑年代：</span><span>{#if $detail_opendate#}{#$detail_opendate|date_format:"%Y"#}年建成{#else#}暂无数据{#/if#}</span></p>
 			<p><span>物业类型：</span><span>{#$detail_protype#}</span></p>
 			<p><span>产权年限：</span><span>{#$detail_buildage#}年</span></p>
 			<p class="address fn-clear"><span>小区地址：</span><span class="address_name">{#$detail_address#}</span><a href="javascript:;" target="_blank" class="appMapBtn"><img src="{#$templets_skin#}images/map_icon_01.png"></a></p>

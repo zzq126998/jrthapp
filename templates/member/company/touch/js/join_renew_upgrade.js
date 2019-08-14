@@ -63,10 +63,25 @@ $(function(){
           var price = $('.m-ruzhu ul.active li.curr').attr("data-price");
           if(price > 0){
             top.location.href = data.info;
+
+            if(device.indexOf('huoniao') > -1) {
+                setupWebViewJavascriptBridge(function (bridge) {
+                    bridge.callHandler('pageClose', {}, function (responseData) {
+                    });
+                });
+            }
           }else{
             $(".m-ruzhu .close").click();
             $(".sucBox").removeClass("tipBox-hide");
             setTimeout(function(){
+
+                if(device.indexOf('huoniao') > -1) {
+                    setupWebViewJavascriptBridge(function (bridge) {
+                        bridge.callHandler('pageClose', {}, function (responseData) {
+                        });
+                    });
+                }
+
               top.location.href = data.info;
             }, 2000)
           }

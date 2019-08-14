@@ -11,6 +11,10 @@ if($service != "system" && $service != "member"){
 	require_once(HUONIAOINC."/config/".$service.".inc.php");
 }
 
+if(GetCookie('siteCityInfo')){
+	$siteCityInfo = checkSiteCity();
+}
+
 $dsql = new dsql($dbo);
 $userLogin = new userLogin($dbo);
 
@@ -198,7 +202,7 @@ if($callback){
 			return;
 		}
 	}
-	echo $callback."(".json_encode($return).")";
+	echo $callback."(".json_encode($return, JSON_UNESCAPED_UNICODE).")";
 }else{
 	if(isset($param['dataType'])){
 		if($param['dataType'] == 'html'){
@@ -206,5 +210,5 @@ if($callback){
 			return;
 		}
 	}
-	echo json_encode($return);
+	echo json_encode($return, JSON_UNESCAPED_UNICODE);
 }

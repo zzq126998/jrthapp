@@ -204,6 +204,11 @@ $(function() {
 
 					$("#scroll-third .scroll").html(list.join(""));
 					myscroll3.refresh();
+				}else{
+					var list = [];
+					list.push('<li data-area="'+id+'" data-business="0"><a href="javascript:;">全部</a></li>');
+					$("#scroll-third .scroll").html(list.join(""));
+					myscroll3.refresh();
 				}
 			}
 		});

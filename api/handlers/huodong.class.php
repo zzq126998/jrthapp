@@ -431,7 +431,7 @@ class huodong {
 			$order = " ORDER BY l.`click` DESC, `id` DESC";
 		}
 
-		$archives = $dsql->SetQuery("SELECT l.`id`, l.`typeid`, l.`uid`, l.`title`, l.`litpic`, l.`began`, l.`end`, l.`baoming`, l.`baomingend`, l.`addrid`, l.`address`, l.`click`, l.`feetype`, l.`state`, l.`pubdate`, (SELECT COUNT(`id`)  FROM `#@__huodong_reply` WHERE `hid` = l.`id` AND `state` = 1) AS reply, (SELECT COUNT(`id`)  FROM `#@__huodong_reg` WHERE `hid` = l.`id`) AS reg, l.`waitpay` FROM `#@__huodong_list` l WHERE 1 = 1".$where);
+		$archives = $dsql->SetQuery("SELECT l.`id`, l.`typeid`, l.`uid`, l.`title`, l.`litpic`, l.`began`, l.`end`, l.`baoming`, l.`baomingend`, l.`addrid`, l.`address`, l.`click`, l.`feetype`, l.`state`, l.`pubdate`, (SELECT COUNT(`id`)  FROM `#@__public_comment` WHERE `aid` = l.`id` AND `ischeck` = 1 AND `type` = 'huodong-detail' AND `pid` = 0) AS reply, (SELECT COUNT(`id`)  FROM `#@__huodong_reg` WHERE `hid` = l.`id`) AS reg, l.`waitpay` FROM `#@__huodong_list` l WHERE 1 = 1".$where);
 		$archives_count = $dsql->SetQuery("SELECT count(`id`) FROM `#@__huodong_list` l WHERE 1 = 1".$where);
 
 		//总条数
@@ -691,7 +691,8 @@ class huodong {
 
 			//评论人数
 			$reply = 0;
-			$sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__huodong_reply` WHERE `hid` = $id and `state` = 1");
+			// $sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__huodong_reply` WHERE `hid` = $id and `state` = 1");
+			$sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'huodong-detail' AND `aid` = '$id' AND `pid` = 0");
 			$ret = $dsql->dsqlOper($sql, "results");
 			if($ret){
 				$reply = $ret[0]['t'];
@@ -2123,7 +2124,7 @@ class huodong {
 				}else{
 
 					//删除评论
-					$archives = $dsql->SetQuery("DELETE FROM `#@__huodong_reply` WHERE `hid` = ".$id);
+					$archives = $dsql->SetQuery("DELETE FROM `#@__public_comment` WHERE `type` = 'huodong-detail' AND `aid` = ".$id);
 					$dsql->dsqlOper($archives, "update");
 
 					//删除缩略图

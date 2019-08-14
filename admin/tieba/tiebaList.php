@@ -120,7 +120,7 @@ if($dopost == "getList"){
 			$list[$key]["top"]     = $value["top"];
 
 			//回复数量
-			$sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__tieba_reply` WHERE `tid` = ".$value['id']);
+			$sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__public_comment` WHERE `type` = 'tieba-detail' AND `aid` = ".$value['id']);
 			$ret = $dsql->dsqlOper($sql, "results");
 			$replyCount = $ret[0]['t'];
 			$list[$key]['reply'] = $replyCount;
@@ -133,7 +133,7 @@ if($dopost == "getList"){
 			$list[$key]["url"] = getUrlPath($param);
 
 			// 打赏
-			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__member_reward` WHERE `aid` = ".$value["id"]." AND `state` = 1");
+			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__member_reward` WHERE `module` = 'tieba' AND `aid` = ".$value["id"]." AND `state` = 1");
 			//总条数
 			$totalCount_ = $dsql->dsqlOper($archives, "totalCount");
 			if($totalCount_){

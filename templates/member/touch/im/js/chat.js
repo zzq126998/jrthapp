@@ -3,7 +3,7 @@ var isload = false, page = 1, pageSize = 20, totalPage = 1, stop = 0, time = Mat
 var url = window.location.pathname;
 var userid = url.slice(url.indexOf("-")+1,url.indexOf("."));
 $(function(){
-
+	$('.huoniao_iOS .im-yuyin').removeClass('disabled')
 //初始化用户信息
 var kumanIMLib = function (wsHost) {
 
@@ -58,7 +58,6 @@ var kumanIMLib = function (wsHost) {
 			                     type: "person",
 			                     time: msg.info.time
                         	}
-                        	console.log(msg)
                             createEle(data, '', 1, lib);
                             if(msg.type=='apply'){
                             	if(msg.info.content!="你们已成功添加为好友"){
@@ -239,7 +238,7 @@ function getcur_record(type){
         //拼接对话
         if (from == userinfo['uid']) {
         	gest ='im-to_other';
-        	imghead = '<div class="im-m_head"><a href="javascript:;"><img src="'+userinfo['photo']+'"></a></div>';
+        	imghead = '<div class="im-m_head"><a href="'+masterDomain+'/user-'+userinfo['uid']+'.html"><img src="'+(userinfo['photo']?userinfo['photo']:staticPath+"images/noPhoto_60.jpg")+'"></a></div>';
             var fromUser = "<span style='color: red;'>你</span>";
             sf = true;
         } else {
@@ -248,7 +247,7 @@ function getcur_record(type){
 		
         if (to == userinfo['uid']) {
         	gest ='im-from_other';
-        	imghead = '<div class="im-m_head"><a href="'+userDomain+'acc_info-'+toUserinfo['uid']+'.html"><img src="'+toUserinfo['photo']+'"></a></div>';
+        	imghead = '<div class="im-m_head"><a href="'+userDomain+'acc_info-'+toUserinfo['uid']+'.html"><img src="'+(toUserinfo['photo']?toUserinfo['photo']:staticPath+"images/noPhoto_60.jpg")+'"></a></div>';
            
         } else {
             var toUser = toUserinfo['name'];
@@ -258,7 +257,7 @@ function getcur_record(type){
 		
         // 文本
         if(data.contentType == "text"){
-            text = '<div class="im-text_msg">'+data.content.replace(/\\/g,"")+'</div>';
+            text = '<div class="im-text_msg">'+data.content.replace(/△(.+?)△/g,'<img src="$1"/>')+'</div>';
             typemsg= '';
             style="";
             attrbuite=""
@@ -299,14 +298,16 @@ function getcur_record(type){
         }
         //语音消息
         if(data.contentType == 'audio'){
+        	console.log(data)
         	 typemsg= 'im-s_content';
-        	 text = '<div class="im-speak_msg"><em>23"</em></div>'
+        	 text = '<div class="im-speak_msg" style="width:'+(.5+.2*data.content.audioTime)+'rem; max-width:3rem;" data-id="'+data.content.voiceId+'" data-width="'+data.content.audioWidth+'"><audio class="chat_audio" src="'+data.content.audioUrl+'"></audio><em>'+data.content.audioTime+'"</em></div>'
+        	 
         }
         
         //好友推荐
         if(data.contentType == 'recfriend'){
         	typemsg = 'im-recf_content';
-        	text = '<a href="add_friend-'+data.content.f_id+'.html"><dl><dt>推荐好友</dt><dd class="fn-clear"><div class="im-recf_head"><img src="'+data.content.f_photo+'"/><i class="level"></i></div><div class="im-recf_info"><h2>'+data.content.f_name+'</h2><p>ID：'+data.content.f_id+'</p></div></dd></dl></a>'
+        	text = '<a href="add_friend-'+data.content.f_id+'.html"><dl><dt>推荐好友</dt><dd class="fn-clear"><div class="im-recf_head"><img src="'+(data.content.f_photo?data.content.f_photo:staticPath+"images/noPhoto_60.jpg")+'"/><i class="level"></i></div><div class="im-recf_info"><h2>'+data.content.f_name+'</h2><p>ID：'+data.content.f_id+'</p></div></dd></dl></a>'
 			console.log(data)
         }
         
@@ -339,7 +340,35 @@ function getcur_record(type){
         	}
         	text ='<div class="im-img_msg '+timemsg+'"><span>验证消息</span>-'+data.content+'</div>';
         }
-        var item = '<div class="'+gest+' im-chat_item fn-clear" data-time="'+data.time+'" data-size="'+attrbuite+'" >'+imghead+'<div style="'+style+'" class="im-m_content '+typemsg+'" data-lng="'+lng+'" data-lat="'+lat+'">'+text+'</div></div>';
+        
+        var item;
+        if(data.contentType == 'link'){
+        	var info = data.content;
+        	var cname = '',ctn_text='',title=info.title;
+        	
+        	var hide = (info.imgUrl==''?"fn-hide":"");
+        	var cname_txt = (info.imgUrl==''?"change_p":"");
+        	if(info.mod == 'job'){
+        		cname = "pro_description";
+        		ctn_text =  '<p class="'+ cname +'">'+info.description+'</p><p class="'+ cname +'">薪资范围：'+ info.salary +'</p>'	
+        		title = '[招聘]'+info.title;
+        	}else{
+        		cname = "pro_price";
+//      		if(info.mod=="house"){
+//      			title = info.title;
+//      			ctn_text = '<p class="'+cname+'">'+ (info.price==''?"面议":info.price) +'</p>';
+//      		}else{
+//      			ctn_text = '<p class="'+cname+'">'+(info.price==""?"面议":info.price)+'</p>';
+//      		}
+        		title = info.title;
+        		ctn_text = '<p class="'+cname+'">'+ (info.price==''?"面议":info.price) +'</p>';
+        		
+        	}
+        	item = '<a href="'+info.link+'" class="im-Linkbox fn-clear"><div class="im_left '+hide+'"><img onerror="nofind_c();" src="'+(info.imgUrl?info.imgUrl:"/static/images/404.jpg")+'" /></div><div class="im-pro_text '+cname_txt+'"><h3>'+title+'</h3>'+ctn_text+'</div></a>'
+        }else{
+        	item = '<div class="'+gest+' im-chat_item fn-clear" data-time="'+data.time+'" data-size="'+attrbuite+'" >'+imghead+'<div style="'+style+'" class="im-m_content '+typemsg+'" data-lng="'+lng+'" data-lat="'+lat+'">'+text+'</div></div>';
+        }
+        
        
         appendLog('mine', item, type, data.time);
 		if(newMessage&&(data.contentType == 'image')){
@@ -530,7 +559,7 @@ var userAgent = navigator.userAgent.toLowerCase();
 		       	var detail = data.info;
 		         console.log(data);
 		         $('.im-f_test_page').find('.im-right_info h2').text(detail.nickname);
-		         $('.im-f_test_page').find('.im-left_head>img').attr('src',detail.photo);
+		         $('.im-f_test_page').find('.im-left_head>img').attr('src',detail.photo?detail.photo:staticPath+"images/noPhoto_60.jpg");
 		         $('.im-f_test_page').find('.vip_level').html(detail.levelIcon?'<img src="'+detail.levelIcon+'"/>':'');
 		         if(detail.addrName!=''){
 		         	var addr = detail.addrName.split('>');
@@ -553,11 +582,7 @@ var userAgent = navigator.userAgent.toLowerCase();
 	    $('.im-f_test_page .im-back_btn').attr('href','javascript:;');
 		$('.im-f_test_page').animate({'bottom':'0'},150)
 	});
-	//播放语音
-	$('body').delegate('.im-s_content','click',function(){
-		$('.im-speak_msg').removeClass('im-voicePlay');
-		$(this).find('.im-speak_msg').addClass('im-voicePlay');
-	})
+
 	
 	//录音表情和菜单的切换
 	 var tabsSwiper = null;
@@ -607,11 +632,16 @@ var userAgent = navigator.userAgent.toLowerCase();
 			$(this).addClass('im-keyboard').siblings('a').removeClass('im-keyboard');
 		}else if($(this).hasClass('im-send_btn')){
 			//发送消息的方法
+			var html = $('.im-input').html();
+			for(var i=0;i<$('.im-input img').length; i++){
+				var t = $('.im-input img').eq(i)
+				t.after('△'+t.attr('src')+'△');
+			}
+			$('.im-input img').remove();
 			var con  = $('.im-input').html();
+			console.log(con)
 			msgto(con,'text')
-//			$('.im-chat_content').append('<div class="im-to_other fn-clear"><div class="im-m_head"><img src="'+templets_skin+'/upfile/img.png" /></div><div class="im-m_content"><div class="im-text_msg">'+con+'</div></div></div>');
-//			$('.im-chat_content_box').scrollTop($('.im-chat_content_box')[0].scrollHeight);
-			// 将输入的文本加入对话框内
+//			
 			$('.im-input').html(''); //清空输入框
 			$(this).removeClass('im-show').siblings('.im-upload').addClass('im-show');  
 		}else if($(this).hasClass('im-keyboard')){
@@ -685,17 +715,21 @@ var userAgent = navigator.userAgent.toLowerCase();
 
 //===========================================文本框相关操作===========================================================	
 	//光标定位在文本框内
-	$('body').delegate('.im-input','focus',function(){
-		setTimeout(function(){ 
-			$(window).scrollTop($(window).height());//失焦后强制让页面归位
-		}, 100);
-		$('.im-input_box a').removeClass('im-keyboard')
-		set_focus($('.im-input:last'));
-	});
+//	$('body').delegate('.im-input','focus',function(){
+//		setTimeout(function(){ 
+//			$(window).scrollTop($(window).height());//失焦后强制让页面归位
+//		}, 100);
+//		$('.im-input_box a').removeClass('im-keyboard')
+//		set_focus($('.im-input:last'));
+//	});
 	$('body').delegate('.im-input','click',function(){
 		$('.im-menu_box').removeClass('im-show');  //其他框
 		$('.im-gift_box').removeClass('im-show');  //礼物框
 		$('.im-chat_content').css('padding-bottom','1.3rem');
+		$('.im-input_box a').removeClass('im-keyboard')
+		setTimeout(function(){ 
+			$(window).scrollTop($(window).height());//失焦后强制让页面归位
+		}, 100);
 		
 	});
 	//文本框内容发生变化
@@ -711,7 +745,7 @@ var userAgent = navigator.userAgent.toLowerCase();
 	//点击表情，输入	
 	var memerySelection
 	$('body').delegate('.im-emoji-list li','click',function(e){
-		set_focus($('.im-input:last'))
+		
 		memerySelection = window.getSelection();
 		var t = $(this),emojsrc = t.find('img').attr('src');
 		$('.im-send_btn').addClass('im-show').siblings('.im-upload').removeClass('im-show');
@@ -720,8 +754,8 @@ var userAgent = navigator.userAgent.toLowerCase();
 	      return false;
 	      
 	   }else {
+	   	  set_focus($('.im-input:last'));
 	      pasteHtmlAtCaret('<img src="'+emojsrc+'" class="emotion-img" />');
-//	      console.log(memerySelection)
 	    }
 	   
 	    document.activeElement.blur();
@@ -973,7 +1007,7 @@ $('body').delegate('.im-f_test_page .im-send_btn,.im-f_test_page  .im-send_sure'
 		$(this).addClass('im-disabled');
 		var note ;
 		if($('.im-test_info').text()==''){
-			note = '好友验证'
+			note = '我是'+ userinfo['name'];
 		}else{
 			note = $('.im-test_info').text();
 		}
@@ -1023,9 +1057,16 @@ $('body').delegate('.im-f_test_page .im-send_btn,.im-f_test_page  .im-send_sure'
 //按键发送
 
 $('body').delegate('.placeholder','keydown',function(e){
-	var msg = $('.im-input').html()
+	
 	e = event || window.event;
 	if(e.keyCode == 13){
+		var html = $('.im-input').html();
+		for(var i=0;i<$('.im-input img').length; i++){
+			var t = $('.im-input img').eq(i)
+			t.after('△'+t.attr('src')+'△');
+		}
+		$('.im-input img').remove();
+		var msg = $('.im-input').html()
 		msgto(msg,'text');
 		$('.im-send_btn').removeClass('im-show').siblings('.im-upload').addClass('im-show'); 
 		
@@ -1108,7 +1149,393 @@ $('.im-close_video').click(function(){
 	$('.video_box').hide();
 	player.dispose();
 	
-})
+});
+
+
+
+	
+	wx.config({
+	    debug: false,
+	    appId: wxconfig.appId,
+	    timestamp: wxconfig.timestamp,
+	    nonceStr: wxconfig.nonceStr,
+	    signature: wxconfig.signature,
+	    jsApiList: ['chooseImage', 'previewImage', 'uploadImage', 'downloadImage','startRecord', 'stopRecord', 'onVoiceRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice', 'onVoicePlayEnd', 'uploadVoice', 'downloadVoice']
+	  });
+	var iswechat = false;
+	//微信分享
+	wx.ready(function() {
+//	     alert('aa');
+	    iswechat = true;
+	    $('.im-yuyin').removeClass('disabled');
+	    wx.error(function(res){
+	       console.log(res);
+	    });
+	    wx.onVoicePlayEnd({
+	      success: function (res) {
+	        $('.second').removeClass('pause');
+	        $('.nolock .audioBtn span').removeClass('pause');
+	        $('.nolock').removeClass('swiper-no-swiping');
+	        $('.nolock .tips').text('播放完成').show;
+	        $('.im-speak_msg').removeClass('im-voicePlay');
+	        stopWave();
+	      }
+	    });
+	});
+	
+	
+	 //计时器（开始时间、结束时间、显示容器）
+  var mtimer, audioTime;
+	function countDown(time, obj){
+		
+    var active = $('.swiper-slide-active');
+		obj.text(time);
+		
+		mtimer = setInterval(function(){
+			obj.text(++time);
+			if(time >= 60) {
+				clearInterval(mtimer);
+        audioTime = 60;
+		console.log('录音完成，点击播放')
+        if (active.hasClass('nolock')) {
+          var t = $('.nolock .audioBtn span'), btn = t.closest('.audioBtn'), tips = btn.siblings('.tips');
+          $('.second').removeClass('pause').addClass('stop');
+          t.removeClass('pause').addClass('stop');
+          clearTimeout(recordTimer1);
+          tips.text('录音完成，点击播放').show();
+          
+          $('.nolock').removeClass('swiper-no-swiping');
+        
+          wx.stopRecord({
+            success: function (res) {
+              voiceId = res.localId;
+              // alert(voiceId);
+
+            },
+            fail: function (res) {
+              //alert(JSON.stringify(res));
+            }
+          });
+        }else {
+          var t = $('.lock .audioBtn span'), timeObj = t.closest('.audioBtn').siblings('.second');
+          t.removeClass('pause');
+          $('.second').removeClass('pause');
+
+          timeObj.text('0');
+
+          event.preventDefault();
+          wx.stopRecord({
+            success: function (res) {
+              voiceId = res.localId;
+              uploadVoice(1);
+            },
+            fail: function (res) {
+              //alert(JSON.stringify(res));
+            }
+          });
+
+        }
+
+			}
+		}, 1000);
+	}
+	
+	var voiceId, recordTimer1;
+	 // 点击开始录音
+  $('.nolock .audioBtn span').click(function(){
+    var t = $(this), btn = t.closest('.audioBtn'), tips = btn.siblings('.tips'), timeObj = btn.siblings('.second');
+    if (!t.hasClass('stop')) {
+      if (!t.hasClass('pause')&&!t.hasClass('record_end')) {
+      		console.log('222')
+        START = new Date().getTime();
+        countDown(0, timeObj);
+        recordTimer1 = setTimeout(function(){
+//           alert(voiceId);
+          wx.startRecord({
+            success: function(){
+                // localStorage.rainAllowRecord = 'true';
+                $('.nolock').addClass('swiper-no-swiping');
+                $('.second').addClass('pause');
+                t.addClass('record_end');
+                tips.text('正在录音，点击停止录音').hide();
+            },
+            cancel: function () {
+                alert('用户拒绝授权录音');
+            }
+          });
+        },300);
+      }else {
+      		console.log('333')
+        END = new Date().getTime();
+        clearInterval(mtimer);
+        // alert(voiceId);
+        audioTime = timeObj.text();
+
+        $('.second').removeClass('pause').addClass('stop');
+        t.removeClass('record_end').addClass('stop');
+        clearTimeout(recordTimer1);
+        tips.text('录音完成，点击播放').show();
+        $('.im-btn_group').show();
+        $('.nolock').removeClass('swiper-no-swiping');
+
+        if((END - START) < 300){
+            END = 0;
+            START = 0;
+        }else{
+            wx.stopRecord({
+              success: function (res) {
+                voiceId = res.localId;
+              },
+              fail: function (res) {
+                //alert(JSON.stringify(res));
+              }
+            });
+        }
+      }
+    }else {
+    		console.log('444')
+      if (t.hasClass('pause')) {
+        t.removeClass('pause');
+        $('.second').removeClass('pause');
+        wx.stopVoice({
+            localId: voiceId, // 需要停止的音频的本地ID，由stopRecord接口获得
+            success: function(res){
+              $('.nolock').removeClass('swiper-no-swiping');
+              tips.text('停止播放');
+            },
+            fail: function(res){
+              //alert(JSON.stringify(res));
+            }
+        });
+      }else {
+        t.addClass('pause');
+        wx.playVoice({
+            localId: voiceId, // 需要播放的音频的本地ID，由stopRecord接口获得
+            success: function(res){
+              $('.nolock').addClass('swiper-no-swiping');
+              tips.text('正在播放');
+            },
+            fail: function(res){
+              //alert(JSON.stringify(res));
+            }
+        });
+      }
+    }
+  });
+  
+   var recordTimer;
+  // 按住录音
+  $('.lock .audioBtn span').on('touchstart', function(){
+    var t = $(this), timeObj = t.closest('.audioBtn').siblings('.second');
+    START = new Date().getTime();
+    if (iswechat) {
+      event.preventDefault();
+      recordTimer = setTimeout(function(){
+        wx.startRecord({
+          success: function(){
+            // localStorage.rainAllowRecord = 'true';
+            t.closest('.swiper-slide-active').find('.tips').text('正在录音，松手停止录音').hide();
+            $('.lock .audioBtn').removeClass('stop');
+            t.removeClass('stop').addClass('pause');
+            $('.second').removeClass('stop').addClass('pause');
+            countDown(0, timeObj);
+          },
+          cancel: function () {
+            alert('用户拒绝授权录音');
+          }
+        });
+      },300);
+    }
+  });
+
+  $('.lock .audioBtn span').on('touchend', function(event){
+    var t = $(this), timeObj = t.closest('.audioBtn').siblings('.second');
+    END = new Date().getTime();
+    clearInterval(mtimer);
+    t.closest('.swiper-slide-active').find('.tips').text('按住说话').show();
+    clearTimeout(recordTimer);
+    t.removeClass('pause');
+    $('.second').removeClass('pause');
+    audioTime = timeObj.text();
+    timeObj.text('0');
+
+    if (iswechat) {
+      event.preventDefault();
+      if((END - START) < 300){
+          END = 0;
+          START = 0;
+      }else{
+          wx.stopRecord({
+            success: function (res) {
+              voiceId = res.localId;
+              uploadVoice(1);
+            },
+            fail: function (res) {
+                 alert(JSON.stringify(res));
+            }
+          });
+      }
+    }
+  });
+
+// 重新录音
+  $('.im-audio_box .reset').click(function(){
+    $('.swiper-slide-active .second').text('0');
+//  $('.lock .tips').text('按住按钮开始录音').show();
+    $('.nolock .tips').text('点击开始录音').show();
+    $('.second').removeClass('pause');
+    $('.second').removeClass('stop');
+    $('.swiper-slide-active .audioBtn span').removeClass('start');
+    $('.swiper-slide-active .audioBtn span').removeClass('stop');
+    $('.swiper-slide-active .audioBtn span').removeClass('pause');
+    $('.swiper-slide-active .audioBtn span').removeClass('record_end');
+    $('.swiper-slide-active.swiper-no-swiping').removeClass('swiper-no-swiping');
+    $('body').unbind('touchmove');
+    clearInterval(mtimer);
+    clearTimeout(recordTimer);
+    clearTimeout(recordTimer1);
+
+    // 停止录音
+    wx.stopRecord({
+      success: function (res) {
+        voiceId = res.localId;
+      },
+      fail: function (res) {
+        // alert(JSON.stringify(res));
+      }
+    });
+
+  });
+  
+   // 录音完成
+
+  $('.im-audio_box .finish').click(function(){
+    var active = $('.swiper-slide-active'), btn = active.find('.audioBtn span');
+    if (!btn.hasClass('record_end')&&!btn.hasClass('pause')) {
+      	hideAudioBox();
+		$('.im-audio_box').find('audio').remove();  //删除之前的录音
+    }
+  });
+  
+
+
+  // 隐藏录音弹出层
+  function hideAudioBox(){
+    var active = $('.swiper-slide-active'), noSwiper = active.find('.audioBtn span');
+    if (active.hasClass('nolock') && noSwiper.hasClass('stop')) {
+      uploadVoice();
+    }
+    $('.second').text('0');
+    $('.audioBtn span').removeClass('pause');
+    $('.audioBtn span').removeClass('stop');
+    $('.second').removeClass('stop');
+    $('.lock .tips').text('按住按钮说话');
+    $('.unlock .tips').text('点击开始录音');
+//  $('mask').hide();
+	$('.im-yuyin').removeClass('im-keyboard');
+    $('.im-menu_box').removeClass('im-show');  //其他框
+	$('.im-gift_box').removeClass('im-show');  //礼物框
+	$('.im-chat_content').css('padding-bottom','1.3rem');
+	$('.im-btn_group').hide(); //发送按钮隐藏
+    $('body').unbind('touchmove');
+  }
+	
+	
+//上传录音
+  function uploadVoice(dom){
+      //调用微信的上传录音接口把本地录音先上传到微信的服务器
+      if (dom == "1") {
+        $('.lock .tips').text('按住按钮说话');
+      }else {
+        $('.nolock .tips').text('点击开始录音');
+      }
+
+      wx.uploadVoice({
+          localId: voiceId, // 需要上传的音频的本地ID，由stopRecord接口获得
+          isShowProgressTips: 1, // 默认为1，显示进度提示
+          success: function (res) {
+              //把录音在微信服务器上的id（res.serverId）发送到自己的服务器供下载。
+      			  // alert(res.serverId);
+
+                $.ajax({
+                  url: masterDomain+'/api/weixinAudioUpload.php',
+                  type: 'POST',
+                  data: {"service": "siteConfig", "action": "uploadWeixinAudio", "module": "tieba", "media_id": res.serverId},
+                  dataType: "json",
+                  success: function (data) {
+                    var audioWidth = (1 + (audioTime / 30)) + 'rem';
+                    var textIndent = (2.9 + (audioTime / 30)) + 'rem';
+                    if (data.info == '云端下载失败！') {
+                      alert('云端下载失败！');
+                    }else {
+                      if (dom == "1") {
+						var msg = {
+							voiceId:voiceId,
+							audioWidth:audioWidth,
+							audioTime:audioTime,
+							audioUrl:data.info,
+							textIndent:textIndent,
+						}
+						msgto(msg,'audio');
+                        hideAudioBox();
+                      }else {
+						var msg = {
+							voiceId:voiceId,
+							audioWidth:audioWidth,
+							audioTime:audioTime,
+							audioUrl:data.info,
+							textIndent:textIndent,
+						}
+						msgto(msg,'audio');
+						$('.im-audio_box').append('<audio class="msg_audio" data-indent="'+textIndent+'" data-id="'+voiceId+'" data-width="'+audioWidth+'" controls="" data-time="'+audioTime+'" src="'+data.info+'"></audio>');
+                        
+                      }
+                    }
+                  },
+                  error: function(XMLHttpRequest, textStatus, errorThrown){
+                    alert(XMLHttpRequest.status);
+                    alert(XMLHttpRequest.readyState);
+                    alert(textStatus);
+                  }
+                });
+
+            },
+            fail: function (res) {
+              alert(JSON.stringify(res));
+            }
+      });
+  }
+
+//播放语音
+$('body').delegate('.im-m_content.im-s_content', 'click', function(){
+    var t = $(this).children('.im-speak_msg'), id = t.attr('data-id');
+    var init = $('.im-speak_msg').find('audio.chat_audio');
+	for(var i=0; i<init.length; i++){
+	   	init[i].pause();
+	}
+    var myaudio = t.find('audio');
+    au = myaudio[0];
+    if (t.hasClass('im-voicePlay')) {
+      t.removeClass('im-voicePlay');
+      	console.log(222)
+      	au.pause();
+    }else {
+    	console.log(111)
+      $('.im-speak_msg').removeClass('im-voicePlay');
+      t.addClass('im-voicePlay');
+      au.play();
+      au.addEventListener('ended',function(){
+		console.log(333)
+		t.removeClass('im-voicePlay');
+	  })
+
+      
+    }
+    return false;
+  })
+	
+	
+
 
 });
 

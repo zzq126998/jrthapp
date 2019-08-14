@@ -56,8 +56,12 @@
 				<p><span class="t">场馆：</span>{#$detail_fairs['title']#}</p>
 				<p><span class="t">时间：</span><span class="red">{#$detail_date|date_format:"%Y-%m-%d"#} {#$detail_began#}-{#$detail_end#}</span></p>
 				<p><span class="t">地址：</span><span class="adr">{#$detail_fairs['addr'][0]#} {#$detail_fairs['addr'][1]#} {#$detail_fairs['address']#}</span> <a href="#xl" class="do">地图</a> <a href="#xl" class="do">公交线路</a></p>
+				{#if $userinfo#}
 				{#if $detail_fairs['tel'] != ""#}<p><span class="t">电话：</span>{#$detail_fairs['tel']#}</p>{#/if#}
 				<p>{#if $detail_fairs['fax'] != ""#}<span class="t">传真：</span><span class="v">{#$detail_fairs['fax']#}&nbsp;&nbsp;</span>{#/if#}{#if $detail_fairs['email'] != ""#}<span class="t">邮箱：</span><span class="v">{#$detail_fairs['email']#}</span>{#/if#}{#if $detail_fairs['qq'] != ""#}<span class="t">QQ：</span>{#$detail_fairs['qq']#}{#/if#}</p>
+				{#else#}
+				<p><span class="t">电话：</span><a href="{#$cfg_basehost#}/login.html">登录后显示联系方式</a></p>
+				{#/if#}
 			</div>
 		</div>
 		<div class="mkh">

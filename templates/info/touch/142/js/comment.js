@@ -7,23 +7,37 @@ $(function(){
           return false;
         }
         var t = $(this), id = t.attr("data-id");
-        if(t.hasClass("active")) return false;
+        // if(t.hasClass("active")) return false;
         var num = t.find("em").html();
         if( typeof(num) == 'object') {
             num = 0;
         }
-        num++;
-        var url = '/include/ajax.php?service=info&action=dingCommon&id=' + id;
-        if(type==1){
-            url = '/include/ajax.php?service=info&action=shopdingCommon&id=' + id;
+
+        var type = 'add';
+        if(t.hasClass("active")){
+            type = 'del';
+            num--;
+        }else{
+            num++;
         }
+
+        var url = '/include/ajax.php?service=member&action=dingComment&id=' + id + "&type=" + type;
         $.ajax({
             url: url,
             type: "GET",
-            dataType: "jsonp",
+            dataType: "json",
             success: function (data) {
-              t.addClass('active');
-              t.find('em').html(num);
+                if(data.state==100){
+                    if(t.hasClass("active")){
+                        t.removeClass('active');
+                    }else{
+                        t.addClass('active');
+                    }
+                    t.find('em').html(num);
+                }else{
+                    alert(data.info);
+                    t.removeClass('active');
+                }
             }
         });
     });
@@ -51,15 +65,16 @@ $(function(){
 
         t.addClass("loading").html('提交中...');
 
-        var url = '/include/ajax.php?service=info&action=sendCommon&aid=' + newsid + "&id=" + 0;
+        var typetemp = 'info-detail';
         if(type==1){
-            url = '/include/ajax.php?service=info&action=shopsendCommon&aid=' + newsid + "&id=" + 0;
+            typetemp = 'info-business';
         }
+        
+        var url = masterDomain + '/include/ajax.php?service=member&action=sendComment&type='+typetemp+'&aid='+newsid+"&content="+content;
 		$.ajax({
 			url: url,
-			data: "content="+content,
 			type: "POST",
-			dataType: "json",
+			dataType: "jsonp",
 			success: function (data) {
 				t.removeClass("loading").html('评论');
 				if(data && data.state == 100){
@@ -97,10 +112,12 @@ $(function(){
         $(".newList ul").append('<div class="loading"><img src="'+templets_skin+'images/loading.gif" alt=""><span>'+langData['siteConfig'][20][184]+'</span></div>');
         $(".newList ul .loading").remove();
 
-        var url = '/include/ajax.php?service=info&action=common&orderby=hot&infoid=' +newsid+'&page='+page+'&pageSize='+pageSize;
+        var typetemp = 'info-detail';
         if(type==1){
-            url = '/include/ajax.php?service=info&action=shopcommon&orderby=hot&infoid=' +newsid+'&page='+page+'&pageSize='+pageSize;
+            typetemp = 'info-business';
         }
+
+        var url = '/include/ajax.php?service=member&action=getComment&aid=' + newsid + "&type=" + typetemp +'&page=' + page + '&pageSize=' + pageSize + "&son=1";
   
         $.ajax({
           url: url,
@@ -116,21 +133,21 @@ $(function(){
                       var d = list[i];
                       if(i<2){
                         html.push('<li>');
-                        html.push('<div class="imgbox"><img src="'+(d.userinfo.photo ? d.userinfo.photo : (staticPath + 'images/noPhoto_60.jpg') )+'" alt=""></div>');
+                        html.push('<div class="imgbox"><img src="'+(d.user.photo ? d.user.photo : (staticPath + 'images/noPhoto_60.jpg') )+'" alt=""></div>');
                         html.push('<div class="rightInfo">');
-                        html.push('<h4>'+ d.userinfo.nickname +'</h4>');
+                        html.push('<h4>'+ d.user.nickname +'</h4>');
                         html.push('<p class="txtInfo">'+ d.content +'</p>');
-                        if(d.lower!=null && d.lower!=undefined){
+                        if(d.lower.list!=null && d.lower.list!=undefined){
                             html.push('<div class="replyCon">');
-                            for(var j =0; j <d.lower.length; j++){
-                                html.push('<dl><dt><span class="spColor">'+ d.lower[j].userinfo.nickname +'：</span></dt><dd>'+ d.lower[j].content +'</dd></dl>');
-                                if(d.lower[j].lower!=null && d.lower[j].lower!=undefined){
-                                    var comdUrl = comdetailUrl.replace("%id%", d.lower[j].id);
-                                    for(var k =0; k <d.lower[j].lower.length; k++){
-                                        html.push('<dl><dt><span class="spColor">'+ d.lower[j].lower[k].userinfo.nickname +'</span>回复 <span class="spColor">'+ d.lower[j].userinfo.nickname +'：</span></dt><dd>'+ d.lower[j].lower[k].content +'</dd></dl>');
+                            for(var j =0; j <d.lower.list.length; j++){
+                                html.push('<dl><dt><span class="spColor">'+ d.lower.list[j].user.nickname +'：</span></dt><dd>'+ d.lower.list[j].content +'</dd></dl>');
+                                if(d.lower.list[j].lower!=null && d.lower.list[j].lower!=undefined){
+                                    var comdUrl = comdetailUrl.replace("%id%", d.lower.list[j].id);
+                                    for(var k =0; k <d.lower.list[j].lower.length; k++){
+                                        html.push('<dl><dt><span class="spColor">'+ d.lower.list[j].lower[k].user.nickname +'</span>回复 <span class="spColor">'+ d.lower.list[j].user.nickname +'：</span></dt><dd>'+ d.lower.list[j].lower[k].content +'</dd></dl>');
                                     }
-                                    if(d.lower[j].lower.length>2){
-                                        html.push('<a href="'+ comdUrl +'" class="pmore">查看全部'+ d.lower[j].lower.length +'条回复 ></a>');
+                                    if(d.lower.list[j].lower.length>2){
+                                        html.push('<a href="'+ comdUrl +'" class="pmore">查看全部'+ d.lower.list[j].lower.length +'条回复 ></a>');
                                     }
                                 }
                             }
@@ -142,10 +159,10 @@ $(function(){
                         var comdReplayUrl = comdetailUrl.replace("%id%", d.id);
                         html.push('<a href="'+ comdReplayUrl +'" class="btnReply"> <s></s> 回复 </a>');
                         var praise = "";
-                        if(d.already == 1){
+                        if(d.zan_has == 1){
                             praise = " active";
                         }
-                        html.push('<a href="javascript:;" class="btnUp '+praise+'" data-id="'+d.id+'"> <s></s> <em>'+d.good+'</em> </a>');
+                        html.push('<a href="javascript:;" class="btnUp '+praise+'" data-id="'+d.id+'"> <s></s> <em>'+d.zan+'</em> </a>');
                         html.push('</div>');
                         html.push('</div>');
 
@@ -153,21 +170,21 @@ $(function(){
                         html.push('</li>');
                       }else{
                         html1.push('<li>');
-                        html1.push('<div class="imgbox"><img src="'+(d.userinfo.photo ? d.userinfo.photo : (staticPath + 'images/noPhoto_60.jpg') )+'" alt=""></div>');
+                        html1.push('<div class="imgbox"><img src="'+(d.user.photo ? d.user.photo : (staticPath + 'images/noPhoto_60.jpg') )+'" alt=""></div>');
                         html1.push('<div class="rightInfo">');
-                        html1.push('<h4>'+ d.userinfo.nickname +'</h4>');
+                        html1.push('<h4>'+ d.user.nickname +'</h4>');
                         html1.push('<p class="txtInfo">'+ d.content +'</p>');
-                        if(d.lower!=null && d.lower!=undefined){
+                        if(d.lower.list!=null && d.lower.list!=undefined){
                             html1.push('<div class="replyCon">');
-                            for(var j =0; j <d.lower.length; j++){
-                                html1.push('<dl><dt><span class="spColor">'+ d.lower[j].userinfo.nickname +'：</span></dt><dd>'+ d.lower[j].content +'</dd></dl>');
-                                if(d.lower[j].lower!=null && d.lower[j].lower!=undefined){
-                                    var comdUrl = comdetailUrl.replace("%id%", d.lower[j].id);
-                                    for(var k =0; k <d.lower[j].lower.length; k++){
-                                        html1.push('<dl><dt><span class="spColor">'+ d.lower[j].lower[k].userinfo.nickname +'</span>回复 <span class="spColor">'+ d.lower[j].userinfo.nickname +'：</span></dt><dd>'+ d.lower[j].lower[k].content +'</dd></dl>');
+                            for(var j =0; j <d.lower.list.length; j++){
+                                html1.push('<dl><dt><span class="spColor">'+ d.lower.list[j].user.nickname +'：</span></dt><dd>'+ d.lower.list[j].content +'</dd></dl>');
+                                if(d.lower.list[j].lower!=null && d.lower.list[j].lower!=undefined){
+                                    var comdUrl = comdetailUrl.replace("%id%", d.lower.list[j].id);
+                                    for(var k =0; k <d.lower.list[j].lower.length; k++){
+                                        html1.push('<dl><dt><span class="spColor">'+ d.lower.list[j].lower[k].user.nickname +'</span>回复 <span class="spColor">'+ d.lower.list[j].user.nickname +'：</span></dt><dd>'+ d.lower.list[j].lower[k].content +'</dd></dl>');
                                     }
-                                    if(d.lower[j].lower.length>2){
-                                        html1.push('<a href="'+ comdUrl +'" class="pmore">查看全部'+ d.lower[j].lower.length +'条回复 ></a>');
+                                    if(d.lower.list[j].lower.length>2){
+                                        html1.push('<a href="'+ comdUrl +'" class="pmore">查看全部'+ d.lower.list[j].lower.length +'条回复 ></a>');
                                     }
                                 }
                             }
@@ -179,10 +196,10 @@ $(function(){
                         var comdReplayUrl = comdetailUrl.replace("%id%", d.id);
                         html1.push('<a href="'+ comdReplayUrl +'" class="btnReply"> <s></s> 回复 </a>');
                         var praise = "";
-                        if(d.already == 1){
+                        if(d.zan_has == 1){
                             praise = " active";
                         }
-                        html1.push('<a href="javascript:;" class="btnUp '+praise+'" data-id="'+d.id+'"> <s></s> <em>'+d.good+'</em> </a>');
+                        html1.push('<a href="javascript:;" class="btnUp '+praise+'" data-id="'+d.id+'"> <s></s> <em>'+d.zan+'</em> </a>');
                         html1.push('</div>');
                         html1.push('</div>');
                         html1.push('</div>');

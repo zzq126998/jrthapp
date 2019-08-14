@@ -3001,7 +3001,7 @@ class job
         //遍历分类
         if (!empty($typeid)) {
             $arr = $dsql->getTypeList($typeid, "job_newstype");
-            
+
             if ($type) {
                 $lower = arr_foreach($type);
                 $lower = $typeid . "," . join(',', $lower);
@@ -3656,6 +3656,7 @@ class job
         if ($userid == -1) return array("state" => 200, "info" => '登录超时请刷新页面重试');
 
         //根据登录ID查询简历ID
+        $name = '';
         $sql = $dsql->SetQuery("SELECT `id`, `name` FROM `#@__job_resume` WHERE `userid` = " . $userid);
         $ret = $dsql->dsqlOper($sql, "results");
         if ($ret) {
@@ -3691,9 +3692,19 @@ class job
                     $sql = $dsql->SetQuery("INSERT INTO `#@__job_delivery` (`rid`, `cid`, `pid`, `state`, `date`) VALUES ('$rid', '$cid', '$value', 0, " . GetMkTime(time()) . ")");
                     $dsql->dsqlOper($sql, "update");
 
-                    $param = array("post"=>$title, "user"=>$name);
                     $urlParam = array("service"=>"member", "template"=>"resume-job");
-                    updateMemberNotice($cuid, "招聘-收到新简历提醒", $urlParam, $param);
+
+                    //自定义配置
+	        		$data = array(
+	        			"post" => $title,
+	        			"user" => $name,
+	        			"fields" => array(
+	        				'keyword1' => '职位名称',
+	        				'keyword2' => '求职者姓名'
+	        			)
+	        		);
+
+                    updateMemberNotice($cuid, "招聘-收到新简历提醒", $urlParam, $data);
                 }
             }
         }

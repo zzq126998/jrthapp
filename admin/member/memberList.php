@@ -956,6 +956,17 @@ if($dopost == "del"){
 
 //获取帐户日志
 }elseif($dopost == "amountList"){
+
+    if($type == "money"){
+        if(!testPurview("moneyMember")){
+            die('{"state": 200, "info": '.json_encode("对不起，您无权使用此功能！").'}');
+        };
+    }else{
+        if(!testPurview("jfMember")){
+            die('{"state": 200, "info": '.json_encode("对不起，您无权使用此功能！").'}');
+        };
+    }
+
 	$pagestep = $pagestep == "" ? 10 : $pagestep;
 	$page     = $page == "" ? 1 : $page;
 	$where = "";
@@ -1012,6 +1023,17 @@ if($dopost == "del"){
 
 //增加帐户操作记录
 }elseif($dopost == "operaAmount"){
+
+    if($action == 'money'){
+        if(!testPurview("editMoneyMember")){
+    		die('{"state": 200, "info": '.json_encode("对不起，您无权使用此功能！").'}');
+    	};
+    }else{
+        if(!testPurview("editjfMember")){
+    		die('{"state": 200, "info": '.json_encode("对不起，您无权使用此功能！").'}');
+    	};
+    }
+
 	if(empty($action) || empty($userid) || $type === "" || empty($amount) || empty($info)){
 		die('{"state": 200, "info": '.json_encode("请输入完整！").'}');
 	}
@@ -1066,6 +1088,7 @@ if($dopost == "del"){
 			if($mtype == 2){
 				$param = array(
 					"service"  => "member",
+					"type"     => "user",
 					"template" => "record"
 				);
 			}else{
@@ -1081,6 +1104,7 @@ if($dopost == "del"){
 			if($mtype == 2){
 				$param = array(
 					"service"  => "member",
+					"type"     => "user",
 					"template" => "point"
 				);
 			}else{
@@ -1099,7 +1123,7 @@ if($dopost == "del"){
             $config = array(
                 "username" => $username,
                 "amount" => $oper.$amount,
-                "money" => $amount,
+                "money" => $money,
                 "date" => date("Y-m-d H:i:s", $date),
                 "info" => $info,
                 "fields" => array(
@@ -1113,7 +1137,22 @@ if($dopost == "del"){
 
 		//积分
 		}else{
-			updateMemberNotice($userid, "会员-积分变动通知", $param, array("username" => $username, "amount" => $oper.$amount, "point" => $point, "date" => date("Y-m-d H:i:s", $date), "info" => $info));
+
+            //自定义配置
+            $config = array(
+                "username" => $username,
+                "amount" => $oper.$amount,
+                "point" => $point,
+                "date" => date("Y-m-d H:i:s", $date),
+                "info" => $info,
+                "fields" => array(
+                    'keyword1' => '变动时间',
+                    'keyword2' => '变动积分',
+                    'keyword3' => '积分余额'
+                )
+            );
+
+			updateMemberNotice($userid, "会员-积分变动通知", $param, $config);
 		}
 
 		adminLog("新增会员帐户".$title."操作记录", $type."=>".$amount."=>".$info);
@@ -1125,6 +1164,17 @@ if($dopost == "del"){
 
 //删除操作记录
 }elseif($dopost == "delAmount"){
+
+    if($action == 'money'){
+        if(!testPurview("delMoneyMember")){
+    		die('{"state": 200, "info": '.json_encode("对不起，您无权使用此功能！").'}');
+    	};
+    }else{
+        if(!testPurview("deljfMember")){
+    		die('{"state": 200, "info": '.json_encode("对不起，您无权使用此功能！").'}');
+    	};
+    }
+
 	$title = $type == "money" ? "余额" : "积分";
 
 	//验证权限

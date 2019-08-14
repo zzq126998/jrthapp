@@ -32,6 +32,15 @@
         cityName: '{#$siteCityInfo['name']#}',
         mapKey: '{#$site_map_key#}'
     };
+
+    var imconfig = {
+		'mod':'tuan',
+		'chatid':"{#$detail_store['member']['userid']#}",
+		'title': '{#$detail_title#}',
+		"price": '<em>￥</em>{#$detail_price#}',
+		"imgUrl": '{#changeFileSize url={#$detail_litpic#} type='small'#}',
+		"link": '{#getUrlPath service="tuan" template="detail" id=$detail_id#}',
+	}
 </script>
 </head>
 
@@ -241,14 +250,21 @@
   <div class="info_comment">用户评论 ({#$detail_totalCommon#})</div>
   <div>
     <ul class="commentlist">
-      {#tuan action="common" return="list" id=$detail_id  pageSize=3#}
+      {#member action='getComment' return='common' type='tuan-order' son='1' aid={#$detail_id#} orderby='hot' pageSize='3'#}
+      {#if is_array($common.user)#}
+      {#$nickname = $common.user.nickname#}
+      {#$photo = $common.user.photo|default: '/static/images/noPhoto_40.jpg'#}
+      {#else#}
+      {#$nickname = {#$langData['info'][2][33]#}#}
+      {#$photo = '/static/images/noPhoto_40.jpg'#}
+      {#/if#}
       <li class="fn-clear">
         <div class="left">
-          <a href="javascript:;"><img src="{#$list.user.photo#}" alt=""></a>
+          <a href="javascript:;"><img src="{#$photo#}" alt=""></a>
         </div>
         <div class="right">
-          <p class="name">{#$list.user.nickname#} <span>{#date("Y.m.d",$list.dtime)#}</span></p>
-          <p class="content">{#$list.content#}</p>
+          <p class="name">{#$nickname#} <span>{#date("Y.m.d",$common.dtime)#}</span></p>
+          <p class="content">{#$common.content#}</p>
         </div>
         <!--<ul class="children">
           <li class="fn-clear">
@@ -271,7 +287,7 @@
           </li>
         </ul>-->
       </li>
-       {#/tuan#}
+       {#/member#}
     </ul>
   </div>
   <div class="genduo"><a href="{#getUrlPath service='tuan' template='review' id={#$detail_id#}#}">查看全部评价</a></div>
@@ -300,22 +316,30 @@
 </div>
 {#if $detail_pin == 1 && $detail_secKill!=1#}
 <div class="tuan_bottom fn-clear pintuan">
-  {#if $detail_limit <= 0#}
-	<div class="btn_01"><a style="color: #fff;" href="javaScript:;"><span>{#echoCurrency type='symbol'#}<em class="btn_price">{#$detail_price#}</em><em>已售完</em></span></a></div>
-  <div class="btn_02"><a style="color:#fff;" href="javaScript:;"><span>{#echoCurrency type='symbol'#}<em class="btn_price">{#$detail_pinprice#}</em><em>拼团结束</em></span></a></div>
-  {#elseif time()>$detail_enddate#}
-	<div class="btn_01"><a style="color: #fff;" href="javaScript:;"><span>{#echoCurrency type='symbol'#}<em class="btn_price">{#$detail_price#}</em><em>已结束</em></span></a></div>
-    <div class="btn_02"><a style="color:#fff;" href="javaScript:;"><span>{#echoCurrency type='symbol'#}<em class="btn_price">{#$detail_pinprice#}</em><em>拼团结束</em></span></a></div>
-  {#elseif $detail_startdate>time()#}
-	<div class="btn_01"><a style="color: #fff;" href="javaScript:;"><span>{#echoCurrency type='symbol'#}<em class="btn_price">{#$detail_price#}</em><em>即将开始</em></span></a></div>
-    <div class="btn_02"><a style="color:#fff;" href="javaScript:;"><span>{#echoCurrency type='symbol'#}<em class="btn_price">{#$detail_pinprice#}</em><em>即将开始</em></span></a></div>
-  {#else#}
-	<div class="btn_01"><a style="color: #fff;" href="{#getUrlPath service="tuan" template="buy" id={#$detail_id#} count="1"#}"><span>{#echoCurrency type='symbol'#}<em class="btn_price">{#$detail_price#}</em><em>单独购买</em></span></a></div>
-    <div class="btn_02"><a style="color:#fff;" href="{#getUrlPath service="tuan" template="buy" id={#$detail_id#} count="1" param="type=pin"#}"><span>{#echoCurrency type='symbol'#}<em class="btn_price">{#$detail_pinprice#}</em><em>我要开团</em></span></a></div>
-  {#/if#}
+	<!--聊天按钮s-->
+	<a href="javascript:;" class="chat_to-Link" data-type="detail">
+		<img src="{#$templets_skin#}images/msg_to.png" />
+		<p>聊天</p>
+	</a>
+	<!--聊天按钮e-->
+	<div class="btn_group fn-clear">
+	  {#if $detail_limit <= 0#}
+		<div class="btn_01"><a style="color: #fff;" href="javaScript:;"><span>{#echoCurrency type='symbol'#}<em class="btn_price">{#$detail_price#}</em><em>已售完</em></span></a></div>
+	  <div class="btn_02"><a style="color:#fff;" href="javaScript:;"><span>{#echoCurrency type='symbol'#}<em class="btn_price">{#$detail_pinprice#}</em><em>拼团结束</em></span></a></div>
+	  {#elseif time()>$detail_enddate#}
+		<div class="btn_01"><a style="color: #fff;" href="javaScript:;"><span>{#echoCurrency type='symbol'#}<em class="btn_price">{#$detail_price#}</em><em>已结束</em></span></a></div>
+	    <div class="btn_02"><a style="color:#fff;" href="javaScript:;"><span>{#echoCurrency type='symbol'#}<em class="btn_price">{#$detail_pinprice#}</em><em>拼团结束</em></span></a></div>
+	  {#elseif $detail_startdate>time()#}
+		<div class="btn_01"><a style="color: #fff;" href="javaScript:;"><span>{#echoCurrency type='symbol'#}<em class="btn_price">{#$detail_price#}</em><em>即将开始</em></span></a></div>
+	    <div class="btn_02"><a style="color:#fff;" href="javaScript:;"><span>{#echoCurrency type='symbol'#}<em class="btn_price">{#$detail_pinprice#}</em><em>即将开始</em></span></a></div>
+	  {#else#}
+		<div class="btn_01"><a style="color: #fff;" href="{#getUrlPath service="tuan" template="buy" id={#$detail_id#} count="1"#}"><span>{#echoCurrency type='symbol'#}<em class="btn_price">{#$detail_price#}</em><em>单独购买</em></span></a></div>
+	    <div class="btn_02"><a style="color:#fff;" href="{#getUrlPath service="tuan" template="buy" id={#$detail_id#} count="1" param="type=pin"#}"><span>{#echoCurrency type='symbol'#}<em class="btn_price">{#$detail_pinprice#}</em><em>我要开团</em></span></a></div>
+	  {#/if#}
 
-  <div class="btn_03"><p>距离结束仅剩</p><p>14:25:49</p></div>
-  <div class="btn_04">邀请好友一起拼单</div>
+	  <div class="btn_03"><p>距离结束仅剩</p><p>14:25:49</p></div>
+	  <div class="btn_04">邀请好友一起拼单</div>
+	</div>
 </div>
 {#else#}
 <div class="tuan_bottom commontuan">

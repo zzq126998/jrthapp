@@ -26,7 +26,7 @@ if($dopost == "getList"){
     if ($adminCity) {
         $where = " AND `cityid` = $adminCity";
     }
-  
+
     $where .= "AND `waitpay` = 0";
 
     if($sKeyword != ""){
@@ -131,7 +131,7 @@ if($dopost == "getList"){
 			$list[$key]["state"]   = $value["state"];
 
 			//回复数量
-			$sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__huodong_reply` WHERE `hid` = ".$value['id']);
+			$sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__public_comment` WHERE `pid` =0 AND `type` = 'huodong-detail' AND `aid` = ".$value['id']);
 			$ret = $dsql->dsqlOper($sql, "results");
 			$replyCount = $ret[0]['t'];
 			$list[$key]['reply'] = $replyCount;

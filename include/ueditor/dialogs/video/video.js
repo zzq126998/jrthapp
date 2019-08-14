@@ -399,6 +399,7 @@
                 server: actionUrl,
                 fileVal: editor.getOpt('videoFieldName'),
                 duplicate: true,
+                chunked: true,//开启分片上传
                 fileSingleSizeLimit: fileMaxSize,
                 compress: false
             });

@@ -83,7 +83,8 @@
 		{#job action='sentence' type={#$type#} page={#$page#} pageSize='20'#}
 		<div class="item" data-id="{#$row.id#}">
 			<div class="r">
-				<span class="tel"><s></s>{#$row.contact#}</span>
+				<span class="tel">{#if $userinfo#}<s></s>{#$row.contact#}{#else#}<a style="color: #2aabff;" href="{#$masterDomain#}/login.html">登录后显示</a>{#/if#}</span>
+				<input type="hidden" id="tel" value="{#$row.contact#}" />
 				<p>（<em>{#$row.people#}</em> <small>{#$row.pubdate#}</small>）</p>
 			</div>
 			<div class="l">
@@ -102,7 +103,16 @@
 </div>
 
 <div class="popup-fabu">
+	
 	<div class="fabu-form">
+		<div class="passmask">
+			<div class="managepass">
+				<label>管理密码</label>
+				<input type="password" id="getpass" />
+				<span class="tip-pass">请输入管理密码</span>
+				<a href="javascript:;" class="pass_send">确认</a>
+			</div>
+		</div>
 		<div class="tit">快速发布一句话{#if $type#}求职{#else#}招聘{#/if#}<s></s></div>
 		<div class="con">
 			<dl class="fn-clear">
@@ -130,13 +140,30 @@
 					<div class="doubel">
 						<input type="text" id="password" maxlength="50" />
 					</div>
+				</dd>
+			</dl>
+			<dl class="fn-clear fn-hide edit">
+				<dt>管理</dt>
+				<dd class="fn-clear ">
+					<label class="lr ">
+						<label><input type="radio" name="manage" value='1' checked /> 修改</label>
+						<label><input type="radio" name="manage" value='2' /> 删除</label>
+					</label>
+				</dd>
+			</dl>
+			<!--<dl class="fn-clear">
+				<dt>管理密码</dt>
+				<dd class="fn-clear">
+					<div class="doubel">
+						<input type="text" id="password" maxlength="50" />
+					</div>
 					<label class="lr edit fn-hide">
 						<span>管理</span>
 						<label><input type="radio" name="manage" value='1' checked /> 修改</label>
 						<label><input type="radio" name="manage" value='2' /> 删除</label>
 					</label>
 				</dd>
-			</dl>
+			</dl>-->
 			<button id="tj">立即发布</button>
 		</div>
 	</div>

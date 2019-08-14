@@ -74,14 +74,16 @@ function getList(is){
 										break;
 								}
 
+                                var account = (bank == 'weixin' ? '微信' : (bank == 'alipay' ? '支付宝' : '银行卡')) + (bank != 'weixin' ? " | "+cardnum+" | "+cardname : '');
+
 								html.push('<tr><td class="fir"></td>');
 								html.push('<td>'+tdate+'</td>');
-								html.push('<td>'+cardnum+" | "+cardname+'</td>');
+								html.push('<td>'+account+'</td>');
 								html.push('<td>'+amount+'</td>');
 								html.push('<td>'+stateTxt+'</td>');
 								html.push('<td><a href="'+url+'" class="link" target="_blank">'+langData['waimai'][1][210]+'</a></td>');
 								html.push('</tr>');
-							
+
 							}else if(list[i].tab == "p"){
 								var item     = [],
 										type = list[i].type,

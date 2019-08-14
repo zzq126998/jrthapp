@@ -694,14 +694,14 @@ $(function(){
 		ul.html("");
 
 		var data = [];
-		data.push('id='+detailID);
+		data.push('aid='+detailID);
 		data.push('page='+atpage);
 		data.push('pageSize='+pageSize);
 		data.push('filter='+$(".review-list .filter .current").data("filter"));
 		data.push('orderby='+$(".review-list .filter select").val());
 
 		$.ajax({
-			url: masterDomain+"/include/ajax.php?service=tuan&action=common",
+			url: masterDomain+"/include/ajax.php?service=member&action=getComment&type=tuan-order",
 			data: data.join("&"),
 			type: "POST",
 			dataType: "jsonp",

@@ -18,7 +18,7 @@ body {background:#f4f4f4;margin-bottom:1.4rem!important;}
 .information .im_img img {width:.92rem;height:.92rem;}
 .information .im_name {margin-left:.34rem;float:left;}
 .information .im_name p:first-child {font-size:.3rem;font-weight:bold;margin-bottom:.1rem;}
-.information .im_name p:first-child span {vertical-align:middle;height:.4rem;line-height:.4rem;display:inline-block;max-width:3.5rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.information .im_name p:first-child span {vertical-align:middle;height:.4rem;line-height:.4rem;display:inline-block;max-width:1.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .information .im_name p:first-child i {display:inline-block;width:.4rem;height:.4rem;margin-left:.06rem;}
 .information .im_name p:first-child i.rz_01 {background:url(../images/rz_01.png) center no-repeat;background-size:auto .36rem;vertical-align:middle;}
 .information .im_name p:first-child i.rz_02 {background:url(../images/rz_02.png) center no-repeat;background-size:auto .36rem;vertical-align:middle;}
@@ -107,3 +107,14 @@ body {background:#f4f4f4;margin-bottom:1.4rem!important;}
 .information .im_name p:first-child .sex {font-size: .24rem;margin-left: .1rem;color: #666;}
 .wx_frame .ewm p:first-child {font-size: .4rem;padding:1rem 0;}
 .wx_frame .ewm p:nth-child(2n) {font-size: .28rem;color: #a0a0a0;}
+
+.housing_txt img{width: 100%;max-height: 8rem;object-fit: cover;}
+
+/*电话样式修改*/
+.information .im_icon .phone_btn.im_iphone{ width: 1.8rem; height: .6rem; border-radius: .3rem; font-size: .22rem; color: #fff; display: inline-block; line-height: .6rem; text-align: left; position: relative; padding-left: .72rem; box-sizing: border-box;
+background: -webkit-linear-gradient(left, #2458ff , #68acff); /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right, #2458ff, #68acff); /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right, #2458ff, #68acff); /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right, #2458ff , #68acff); /* 标准的语法 */
+}
+.information .im_icon .phone_btn.im_iphone:before{content: '';display: block; width: .6rem; height: .6rem; background-image: url(../images/iphone_icon.png) ; background-repeat: no-repeat; background-size: contain; position: absolute; left: 0; top: 0;}

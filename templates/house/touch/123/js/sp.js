@@ -95,8 +95,8 @@ $(function() {
 	//var myscroll_trade = new iScroll("scroll-trade", {vScrollbar: false,});
 	var myscroll_mj = new iScroll("scroll-area", {vScrollbar: false,});
 	var myscroll_ty = new iScroll("scroll-type", {vScrollbar: false,});
-	// var myscroll_area = new iScroll("area-box", {vScrollbar: false});
 	var myscroll_more = new iScroll("more-box", {vScrollbar: false});
+	var myscroll_area = null;
 	// 选择
 	$('.choose li').each(function(index) {
 		$(this).click(function() {
@@ -123,6 +123,10 @@ $(function() {
 				$('.mask').show();
 				$('body').scrollTop(chtop);
 				$('.white').show()
+
+
+				myscroll_area = new iScroll("area-box", {vScrollbar: false}) && index == 0 && myscroll_area == null;
+
 			} else {
 				$('.choose-local').eq(index).hide();
 				$('.choose li').removeClass('active');
@@ -162,7 +166,14 @@ $(function() {
 								vScrollbar: false
 							});
 						}else{
-
+							var html = [];
+							html.push('<li data-area="'+id+'" data-pname="'+name+'"><a href="javascript:;">全部</a></li>');
+							$("#scroll-third .scroll").html(html.join(""));
+							$('.sp .choose-local-second').css('width', '60.5%');
+							$('.area-third .choose-local-third').show();
+							myscroll = new iScroll("scroll-third", {
+								vScrollbar: false
+							});
 						}
 					}
 				},

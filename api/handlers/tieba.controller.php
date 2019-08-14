@@ -44,7 +44,7 @@ function tieba($params, $content = "", &$smarty = array(), &$repeat = array()){
 		$page = $page < 1 ? 1 : $page;
 		$huoniaoTag->assign('atpage', $page);
 
-		
+
 	}
 
 	//帖子详情
@@ -94,7 +94,8 @@ function tieba($params, $content = "", &$smarty = array(), &$repeat = array()){
 					}
 
 					//是否点赞
-					$sql = $dsql->SetQuery("SELECT `id` FROM `#@__tieba_up` WHERE `tid` = '$id' AND `ruid` = '$userid'");
+					// $sql = $dsql->SetQuery("SELECT `id` FROM `#@__tieba_up` WHERE `tid` = '$id' AND `ruid` = '$userid'");
+					$sql = $dsql->SetQuery("SELECT `id` FROM `#@__public_up` WHERE `type` = '0' AND `module` = 'tieba' AND `action` = 'detail' AND `tid` = '$id' AND `ruid` = '$userid'");
 					$ret = $dsql->dsqlOper($sql, "results");
 					if($ret && is_array($ret)){
 						$huoniaoTag->assign('isuplike', 1);
@@ -266,18 +267,20 @@ function tieba($params, $content = "", &$smarty = array(), &$repeat = array()){
 		}
 		//统计帖子数量
 		if($lower){
-			$sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__tieba_list` WHERE `typeid` in ($lower) and `state` = 1 AND `waitpay` = 0 ");
+			$sql = $dsql->SetQuery("SELECT sum(`click`) t FROM `#@__tieba_list` WHERE `typeid` in ($lower) AND `cityid` = $cityid and `state` = 1 AND `waitpay` = 0 ");
 			$ret = $dsql->dsqlOper($sql, "results");
 			$huoniaoTag->assign('typeTotal', $ret[0]['t']);
 		}
-		
+
+		//今日
+		$sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__tieba_list` WHERE `state` = 1 AND `waitpay` = 0 AND DATE_FORMAT(FROM_UNIXTIME(`pubdate`), '%Y-%m-%d') = curdate() AND `cityid` = $cityid AND `typeid` in ($lower)");
+		$count = getCache("tieba_total", $sql, 300, array("name" => "t", "sign" => "today"));
+		$huoniaoTag->assign('tiziTodayTotal', $count);
+
 		$huoniaoTag->assign('ispic', $ispic);
 		$huoniaoTag->assign('username', $username);
 		$huoniaoTag->assign('orderby', $orderby);
-		
-		$sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__tieba_list` WHERE `typeid` in ($lower) and `state` = 1");
-		$ret = $dsql->dsqlOper($sql, "results");
-		$huoniaoTag->assign('typeTotal', $ret[0]['t']);
+
 
 	}elseif($action == "pay"){
         $param = array("service" => "tieba");

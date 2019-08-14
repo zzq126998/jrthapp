@@ -127,7 +127,7 @@ function setupWebViewJavascriptBridge(callback){
 	}
 
 	var device = navigator.userAgent;
-	if (device.indexOf('huoniao_iOS') > -1 && device.indexOf('huoniao_Android') <= -1) {
+	// if (device.indexOf('huoniao_iOS') > -1 && device.indexOf('huoniao_Android') <= -1) {
         if(window.WVJBCallbacks){return window.WVJBCallbacks.push(callback);}
         window.WVJBCallbacks = [callback];
         var WVJBIframe = document.createElement("iframe");
@@ -136,7 +136,7 @@ function setupWebViewJavascriptBridge(callback){
 
 		document.documentElement.appendChild(WVJBIframe);
 		setTimeout(function(){document.documentElement.removeChild(WVJBIframe) }, 0);
-	}
+	// }
 }
 
 //获取客户端设备信息
@@ -258,7 +258,7 @@ window.onload = function(){
 
 
     //如果没有菜单内容，则隐藏APP端右上角菜单
-    if (device.indexOf('huoniao') > -1 && ($('.dropnav').size() == 0 || $('#navlist').size() == 0)) {
+    if (device.indexOf('huoniao') > -1 && ($('.dropnav').size() == 0 || $('#navlist_4').size() == 0)) {
         setTimeout(function(){
             setupWebViewJavascriptBridge(function(bridge) {
                 bridge.callHandler('hideAppMenu', {}, function(){});
@@ -283,7 +283,7 @@ window.onload = function(){
   })
 
   //模块链接跳原生
-  $('#navlist').delegate('a', 'click', function(e){
+  $('#navlist_4').delegate('a', 'click', function(e){
       var t = $(this), name = t.attr('data-name'), code = t.attr('data-code'), href = t.attr('href');
       if(href != 'javascript:;' && device.indexOf('huoniao') > -1){
           e.preventDefault();
@@ -303,7 +303,7 @@ window.onload = function(){
 
 
   // 清除列表cookie
-  $('#navlist li').click(function(){
+  $('#navlist_4 li').click(function(){
     var t = $(this);
     if (!t.hasClass('HN_PublicShare')) {
       window.sessionStorage.removeItem('house-list');
@@ -395,7 +395,176 @@ window.onload = function(){
       });
 
     }
-  })
+  });
+
+    //在线联系
+ var userinfo,toUserinfo,chatToken,toChatToken;
+ if(typeof(imconfig) != "undefined"){
+ 	getToken(imconfig.chatid);
+  	getToken();
+ }
+  $('.chat_to-Link').click(function(){
+  	var type = $(this).attr('data-type');
+  	var userid = $.cookie(cookiePre+"login_user");
+	if(userid == null || userid == ""){
+		window.location.href = masterDomain+'/login.html';
+		return false;
+	}
+
+	/*
+	 1.获取自己的token
+	 2.获取好友的token
+	 3.发送消息
+	 4.跳转链接
+	 * */
+	if(type == 'detail'){
+		msgto(imconfig,'link');
+		console.log(imconfig)
+	}
+	if(device.indexOf('huoniao_Android') > -1 && userinfo && toUserinfo){
+      var param = {
+        from: userinfo['uid'],
+        to: toUserinfo['uid'],
+      };
+      setupWebViewJavascriptBridge(function(bridge) {
+        bridge.callHandler('invokePrivateChat',  param, function(responseData){
+        	console.log(responseData)
+        });
+      });
+      return false;
+    }else{
+    	window.location.href = masterDomain+'/u/im/chat-'+toUserinfo['uid']+'.html'
+    }
+
+  });
+
+  //获取token
+  function getToken(id){
+  	if(!id){
+  		id = '';
+  	}
+  	 $.ajax({
+        url: '/include/ajax.php?service=siteConfig&action=getImToken&userid='+id,
+        type: 'post',
+        dataType: 'json',
+        success: function(data){
+            if(data.state == 100){
+                var info = data.info;
+				//创建连接
+				if(!id){
+				  userinfo = info;
+	              chatToken = info.token;
+	              chatServer = info.server;
+	              AccessKeyID = info.AccessKeyID;
+				  chatLib = new kumanIMLib(chatServer + "?AccessKeyID=" + AccessKeyID + "&token=" + chatToken + "&type=member");
+
+				}else{
+					toUserinfo = info;
+					toChatToken = info.token;
+					console.log(toUserinfo['uid'])
+				}
+           }else{
+                window.location.href = masterDomain+'/login.html';
+				return false;
+            }
+
+        },
+        error: function(){
+            console.log('网络错误，初始化失败！');
+        }
+    });
+  }
+
+ //创建websocket
+ var kumanIMLib = function (wsHost) {
+
+        var lib = this;
+
+        this.timeOut = 30000;  // 每30秒发送一次心跳
+        this.timeOutObj = null;
+
+        // 重置心跳
+        this.reset = function(){
+            clearTimeout(this.timeOutObj);
+            lib.start();
+        }
+
+        // 启动心跳
+        this.start = function(){
+            lib.timeOutObj = setInterval(function(){
+                lib.socket.send('HeartBeat');
+            }, lib.timeOut);
+        }
+
+        // 初始化连接
+        if (window['WebSocket']) {
+            this.socket = new WebSocket(wsHost);
+            //this.socket.onopen = this.evt.onopen;  // 连接成功
+
+            // 关闭
+            this.socket.onclose = function(){
+                lib.socket = new WebSocket(lib.socket.url);
+            };
+
+            // 异常
+            this.socket.onerror = function(){
+                this.close();
+            };
+
+            // 收到消息
+            this.socket.onmessage = function (evt) {
+                lib.reset();  //重置心跳
+                var msg = JSON.parse(evt.data);
+                switch (msg.type) {
+                    case "init":
+                        console.log(msg.info.content);
+                        break;
+                    default:
+                        if(userinfo['uid'] == msg.info.to && msg.info.type == 'member'){
+
+                        }
+                        break;
+                }
+
+            };
+
+        } else {
+            alert('您的浏览器不支持WebSockets.');
+            return false;
+        }
+
+        this.start();  //启动心跳检测
+
+    };
+
+ function msgto(msg,type){
+		var time = Math.round(new Date().getTime()/1000).toString();
+        var data = {
+            content: msg,
+            contentType: type,
+            from: chatToken,
+            fid: userinfo['uid'],
+            to: toChatToken,
+            tid: toUserinfo['uid'],
+            type: "person",
+            time: time
+        }
+        $.ajax({
+            url: '/include/ajax.php?service=siteConfig&action=sendImChat',
+            data: data,
+            type: 'post',
+            dataType: 'json',
+            success: function(data){
+                chatLib.reset();
+            },
+            error: function(){
+
+            }
+        });
+
+
+}
+
 
   // 显示举报
   function JubaoShow(){

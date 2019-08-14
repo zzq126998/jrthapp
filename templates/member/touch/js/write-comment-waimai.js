@@ -43,8 +43,8 @@ $(function(){
 		btn.addClass("disabeld").text(langData['siteConfig'][6][35]);
 
 		var data = [];
-		data.push('id='+id);
-		data.push('commonid='+commonid);
+		data.push('aid='+id);
+		// data.push('commonid='+commonid);
 		data.push('isanony='+isanony);
 		data.push('starps='+starps);
 		data.push('contentps='+contentps);
@@ -53,13 +53,17 @@ $(function(){
 		if(ordertype == 'waimai'){
 			data.push('star='+star);
 			data.push('content='+content);
+			data.push('type=waimai-order');
+		}else{
+			data.push('type=paotui-order');
 		}
 
-		data.push('ordertype='+ordertype);
+		// data.push('ordertype='+ordertype);
+
 
 
 		$.ajax({
-			url: masterDomain + '/include/ajax.php?service=waimai&action=sendCommon',
+			url: masterDomain + '/include/ajax.php?service=member&action=sendComment',
 			type: 'get',
 			data: data.join("&"),
 			dataType: 'jsonp',

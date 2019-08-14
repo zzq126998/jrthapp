@@ -61,7 +61,7 @@ $(function () {
 	var complain = null;
 	$(".jb").bind("click", function(){
 
-		var domainUrl = channelDomain.replace(masterDomain, "").indexOf("http") > -1 ? channelDomain : masterDomain;
+		var domainUrl = channelDomain.replace(masterDomain, "").indexOf("http") > -1 ? channelDomain.replace("/tuan", "") : masterDomain;
 		complain = $.dialog({
 			fixed: true,
 			title: "团购商家举报",
@@ -104,14 +104,14 @@ $(function () {
         ul.html("");
 
         var data = [];
-        data.push('id='+detailID);
+        data.push('aid='+detailID);
         data.push('page='+atpage);
         data.push('pageSize='+pageSize);
         data.push('filter='+$(".review-list .filter .current").data("filter"));
         data.push('orderby='+$(".review-list .filter select").val());
 
         $.ajax({
-            url: masterDomain+"/include/ajax.php?service=tuan&action=commonStore",
+            url: masterDomain+"/include/ajax.php?service=member&action=getComment&type=tuan-store",
             data: data.join("&"),
             type: "POST",
             dataType: "jsonp",

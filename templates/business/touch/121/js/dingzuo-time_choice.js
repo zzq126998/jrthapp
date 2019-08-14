@@ -84,7 +84,7 @@ $(function(){
 	// 底部确认
 	$(".sure_btn").click(function(){
 		//if(!$(this).hasClass("sure_bc")) return;
-		var obj = $(".time_lead li.tl_bc");
+		var obj = $(".Time_list li.tl_bc");
 		if(obj.length == 0) return;
 		var date = obj.attr("data-date");
 		location.href = onlineUrl.replace('%date%', date);

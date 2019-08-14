@@ -1,6 +1,6 @@
 // document.domain = masterDomain.replace("http://", "");
 var uploadErrorInfo = [],
-	huoniao = {
+	huoniao_ = {
 
 	//转换PHP时间戳
 	transTimes: function(timestamp, n){

@@ -7,25 +7,38 @@ $(function(){
           return false;
         }
         var t = $(this), id = t.attr("data-id");
-        if(t.hasClass("active")) return false;
+        // if(t.hasClass("active")) return false;
         var num = t.find("em").html();
         if( typeof(num) == 'object') {
             num = 0;
         }
-        num++;
-
-        var url = '/include/ajax.php?service=info&action=dingCommon&id=' + id;
-        if(type==1){
-            url = '/include/ajax.php?service=info&action=shopdingCommon&id=' + id;
+        var type = 'add';
+        if(t.hasClass("active")){
+            type = 'del';
+            num--;
+        }else{
+            num++;
         }
+
+        
+        var url = '/include/ajax.php?service=member&action=dingComment&id=' + id + "&type="+type;
 
         $.ajax({
             url: url,
             type: "GET",
             dataType: "json",
             success: function (data) {
-              t.addClass('active');
-              t.find('em').html(num);
+              if(data.state==100){
+                if(t.hasClass("active")){
+                    t.removeClass('active');
+                }else{
+                    t.addClass('active');
+                }
+                t.find('em').html(num);
+              }else{
+                  alert(data.info);
+                  t.removeClass('active');
+              }
             }
         });
     });
@@ -53,16 +66,12 @@ $(function(){
 
     t.addClass("loading").html('提交中...');
 
-    var url = '/include/ajax.php?service=info&action=sendCommon&aid=' + newsid + "&id=" + comdetailid;
-    if(type==1){
-        url = '/include/ajax.php?service=info&action=shopsendCommon&aid=' + newsid + "&id=" + comdetailid;
-    }
+    var url =  masterDomain + '/include/ajax.php?service=member&action=replyComment&id='+comdetailid+"&content="+content;
 
 		$.ajax({
 			url: url,
-			data: "content="+content,
 			type: "POST",
-			dataType: "json",
+			dataType: "jsonp",
 			success: function (data) {
 				t.removeClass("loading").html('评论');
 				if(data && data.state == 100){
@@ -99,15 +108,12 @@ $(function(){
         $(".commentList ul").append('<div class="loading"><img src="'+templets_skin+'images/loading.gif" alt=""><span>'+langData['siteConfig'][20][184]+'</span></div>');
         $(".commentList ul .loading").remove();
 
-      var url = '/include/ajax.php?service=info&action=getCommonList&fid=' +comdetailid+'&page='+page+'&pageSize='+pageSize;
-      if(type==1){
-        url = '/include/ajax.php?service=info&action=shopgetCommonList&fid=' +comdetailid+'&page='+page+'&pageSize='+pageSize;
-      }
+        var url = masterDomain + '/include/ajax.php?service=member&action=getChildComment&sid='+comdetailid+'&page='+page+'&pageSize='+pageSize;
   
         $.ajax({
           url: url,
           type: 'get',
-          dataType: 'json',
+          dataType: 'jsonp',
           success: function(data){
               if(data && data.state == 100){
                   $(".loading").remove();
@@ -117,19 +123,19 @@ $(function(){
                   for(var i = 0; i < list.length; i++){
                       var d = list[i];
                       html.push('<li>');
-                      html.push('<div class="imgbox"><img src="'+(d.userinfo.photo ? d.userinfo.photo : (staticPath + 'images/noPhoto_60.jpg') )+'" alt=""></div>');
+                      html.push('<div class="imgbox"><img src="'+(d.user.photo ? d.user.photo : (staticPath + 'images/noPhoto_60.jpg') )+'" alt=""></div>');
                       html.push('<div class="rightInfo">');
-                      html.push('<h4>'+ d.userinfo.nickname +'</h4>');
+                      html.push('<h4>'+ d.user.nickname +'</h4>');
                       html.push('<p class="txtInfo">'+ d.content +'</p>');
                       html.push('<div class="rbottom">');
                       html.push('<div class="rtime">'+ huoniao.transTimes(d.dtime, 2).replace(/-/g, '.') +'</div>');
                       html.push('<div class="rbInfo">');
                       var comdUrl = comdetailUrl.replace("%id%", d.id);
                       html.push('<a href="'+ comdUrl +'" class="btnReply"> <s></s> 回复 </a>');
-                      if(d.already==1){
-                        html.push('<a href="javascript:;" data-id="'+ d.id +'" class="btnUp active"> <s></s> <em>'+ d.good +'</em> </a>');
+                      if(d.zan_has==1){
+                        html.push('<a href="javascript:;" data-id="'+ d.id +'" class="btnUp active"> <s></s> <em>'+ d.zan +'</em> </a>');
                       }else{
-                        html.push('<a href="javascript:;" data-id="'+ d.id +'" class="btnUp"> <s></s> <em>'+ d.good +'</em> </a>');
+                        html.push('<a href="javascript:;" data-id="'+ d.id +'" class="btnUp"> <s></s> <em>'+ d.zan +'</em> </a>');
                       }
                       html.push('</div>');
                       html.push('</div>');

@@ -55,6 +55,7 @@ if ($type != "") {
         $customChannelSwitch = $channelswitch;
         $customCloseCause = $closecause;
         $customMemberRefundswitch = $memberRefundswitch;
+        $customCommentCheck    = (int)$commentCheck;
 
         //seo设置
         $customSeoTitle = $title;
@@ -279,6 +280,7 @@ if ($type != "") {
     $customInc .= "\$custom_firstOrderType = " . (int)$custom_firstOrderType . ";\r\n";
     $customInc .= "\$custom_autoDispatchJuli = " . (int)$custom_autoDispatchJuli . ";\r\n";
     $customInc .= "\$custom_autoDispatchCount = " . (int)$custom_autoDispatchCount . ";\r\n";
+    $customInc .= "\$customCommentCheck = " . (int)$customCommentCheck . ";\r\n";
     //模板风格
     $customInc .= "\$customTemplate = '" . $customTemplate . "';\r\n";
     $customInc .= "\$customTouchTemplate = '" . $customTouchTemplate . "';\r\n";
@@ -663,6 +665,11 @@ if (file_exists($tpl . "/" . $templates)) {
     $huoniaoTag->assign('acceptTypeed', $customAcceptType);
     $huoniaoTag->assign('partnerId', $customPartnerId);
     $huoniaoTag->assign('printKey', $customPrintKey);
+
+    //评论审核-单选
+    $huoniaoTag->assign('commentCheck', array('0', '1'));
+    $huoniaoTag->assign('commentCheckNames', array('需要审核', '不需要审核'));
+    $huoniaoTag->assign('commentCheckChecked', (int)$customCommentCheck);
 
     $huoniaoTag->assign('action', $action);
     $huoniaoTag->compile_dir = HUONIAOROOT . "/templates_c/admin/waimai";  //设置编译目录

@@ -1,12 +1,11 @@
 body, html{font-size: .3rem; -webkit-tap-highlight-color: rgba(255, 255, 255, 0); -webkit-user-select: none; -moz-user-focus: none; -moz-user-select: none;}
 a:hover{text-decoration: none;}
 input{-webkit-appearance: none; appearance: none;}
-.huoniao_iOS{padding-top: 20px;}
 
 /*头部*/
 .head{position: relative;}
 .head p{width: 3.6rem; margin: 0 auto; position: relative; height: 2rem;}
-.head img{width: 1rem; position: absolute; left: 0; top: 50%; margin-top: -0.5rem;}
+.head img{height: 1rem; position: absolute; left: 0; top: 50%; margin-top: -0.5rem;}
 .head span{display: block; line-height: 2rem; height: 2rem; padding-left: 1.2rem; overflow: hidden;}
 .head .close{position: absolute; width: .8rem; height: .8rem; display: block; background: url(../images/header_back.png) center center no-repeat; background-size: .4rem auto; top: 0;}
 

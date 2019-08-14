@@ -215,7 +215,8 @@ ul.serve-con li p{text-align: center;font-size: 14px;color:#333;}
 .classify .classify-title{background: #fff;border-top: 2px solid #fdbe44;height:50px;line-height: 50px;padding-left: 10px;}
 .classify .classify-title h3{font-size: 20px;color:#333;font-weight: 600;display: inline-block;float: left;}
 .classify .classify-title a{float: right;color:#a0a0a0;font-size: 12px;width:97px;text-align: right;}
-.classify .classify-con ul li img{margin:5px auto -5px 27px;}
+.classify .classify-con ul li img{width: 40px; margin: 5px auto 0 auto; display: block;
+}}
 .classify .classify-con ul li a{display: block;}
 .classify .classify-con ul li p{text-align: center;font-size: 14px;color:#333;padding-bottom: 5px;}
 .classify .classify-con ul li{width: 94px;float: left;border:1px solid #f4f4f4;margin-bottom: 5px;}
@@ -328,9 +329,10 @@ ul.serve-con li p{text-align: center;font-size: 14px;color:#333;}
 .activity-con{  overflow: hidden;height: 180px;}
 .activity-con .slideBox .bd ul li a{width:150px!important;padding:6px;float: left;}
 .activity-con .slideBox .bd ul li a:hover,.recommend-info .right-con ul li:hover,.job-box .job-con ul li:hover,.house-con ul li:hover,.house-info .right-con ul li:hover{background:#f8f8f8;-webkit-transition:0.5s all ease;-moz-transition:0.5s all ease;-ms-transition:0.5s all ease;-o-transition:0.5s all ease;transition:0.5s all ease;}
-.activity-con .slideBox .bd ul li .slide-img,.activity-con .slideBox .bd ul li .slide-img img{width:150px;height:120px;overflow: hidden;-webkit-transition: all .4s ease-in-out; -moz-transition: all .4s ease-in-out; -ms-transition: all .4s ease-in-out; -o-transition: all .4s ease-in-out; transition: all .4s ease-in-out; -webkit-transform: scale(1); -moz-transform: scale(1); -ms-transform: scale(1);}
+.activity-con .slideBox .bd ul li .slide-img,.activity-con .slideBox .bd ul li .slide-img img{overflow: hidden;-webkit-transition: all .4s ease-in-out; -moz-transition: all .4s ease-in-out; -ms-transition: all .4s ease-in-out; -o-transition: all .4s ease-in-out; transition: all .4s ease-in-out; -webkit-transform: scale(1); -moz-transform: scale(1); -ms-transform: scale(1);}
 .activity-con .slideBox .bd ul li .slide-img:hover img{-webkit-transform: scale(1.2); -moz-transform: scale(1.2); -ms-transform: scale(1.2);}
-.activity-con .slideBox .bd ul li .slide-img{margin-bottom: 15px;}
+.activity-con .slideBox .bd ul li .slide-img{width: 150px; height: 120px; margin-bottom: 15px; position: relative; background: #f8f8f8;}
+.activity-con .slideBox .bd ul li .slide-img img {max-width: 150px; max-height: 120px; position: absolute; left: 0; top: 0; right: 0; bottom: 0; margin: auto;}
 .activity-con .slideBox .bd ul li .slide-title,.tuan-box .main-tuan .slide-title{width:150px;font-size: 14px;color:#333;}
 .activity-con .slideBox .bd ul li .slide-title:hover{color:#447ff8;}
 .activity-con .slideBox .bd ul li .slide-time{font-size: 16px;color:#a0a0a0;margin-bottom:15px;}

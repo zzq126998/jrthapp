@@ -16,13 +16,13 @@ $huoniaoTag->template_dir = $tpl; //设置后台模板目录
 $pagetitle = "活动评论管理";
 
 if(empty($hid)) die('网站信息传递失败！');
-$tab = "huodong_reply";
+$tab = "public_comment";
 
 if($dopost == "getList"){
 	$pagestep = $pagestep == "" ? 10 : $pagestep;
 	$page     = $page == "" ? 1 : $page;
 
-	$where = " AND `hid` = $hid";
+	$where = " AND `type` = 'huodong-detail' AND `aid` = $hid";
 
 	if($sKeyword != ""){
 		$where .= " AND (`content` like '%$sKeyword%' OR `ip` like '%$sKeyword%')";
@@ -35,14 +35,14 @@ if($dopost == "getList"){
 	//总分页数
 	$totalPage = ceil($totalCount/$pagestep);
 	//待审核
-	$totalGray = $dsql->dsqlOper($archives." AND `state` = 0".$where, "totalCount");
+	$totalGray = $dsql->dsqlOper($archives." AND `ischeck` = 0".$where, "totalCount");
 	//已审核
-	$totalAudit = $dsql->dsqlOper($archives." AND `state` = 1".$where, "totalCount");
+	$totalAudit = $dsql->dsqlOper($archives." AND `ischeck` = 1".$where, "totalCount");
 	//拒绝审核
-	$totalRefuse = $dsql->dsqlOper($archives." AND `state` = 2".$where, "totalCount");
+	$totalRefuse = $dsql->dsqlOper($archives." AND `ischeck` = 2".$where, "totalCount");
 
 	if($state != ""){
-		$where .= " AND `state` = $state";
+		$where .= " AND `ischeck` = $state";
 
 		if($state == 0){
 			$totalPage = ceil($totalGray/$pagestep);
@@ -57,17 +57,17 @@ if($dopost == "getList"){
 
 	$atpage = $pagestep*($page-1);
 	$where .= " LIMIT $atpage, $pagestep";
-	$archives = $dsql->SetQuery("SELECT `id`, `hid`, `rid`, `uid`, `content`, `pubdate`, `ip`, `state` FROM `#@__".$tab."` WHERE 1 = 1".$where);
+	$archives = $dsql->SetQuery("SELECT `id`, `aid`, `rid`, `userid`, `content`, `dtime`, `ip`, `ischeck` FROM `#@__".$tab."` WHERE 1 = 1".$where);
 	$results = $dsql->dsqlOper($archives, "results");
 
 	if(count($results) > 0){
 		$list = array();
 		foreach ($results as $key=>$value) {
 			$list[$key]["id"] = $value["id"];
-			$list[$key]["hid"] = $value["hid"];
+			$list[$key]["hid"] = $value["aid"];
 
 			$title = "";
-			$sql = $dsql->SetQuery("SELECT `title` FROM `#@__huodong_list` WHERE `id` = ".$value['hid']);
+			$sql = $dsql->SetQuery("SELECT `title` FROM `#@__huodong_list` WHERE `id` = ".$value['aid']);
 			$ret = $dsql->dsqlOper($sql, "results");
 			if($ret){
 				$title = $ret[0]['title'];
@@ -77,24 +77,24 @@ if($dopost == "getList"){
 			$param = array(
 				"service"  => "huodong",
 				"template" => "detail",
-				"id"       => $value['hid']
+				"id"       => $value['aid']
 			);
 			$list[$key]["url"] = getUrlPath($param);
 			$list[$key]["rid"] = $value["rid"];
-			$list[$key]["uid"] = $value["uid"];
+			$list[$key]["uid"] = $value["userid"];
 
 			$username = "无";
-			if($value['uid'] != 0){
-				$userSql = $dsql->SetQuery("SELECT `username` FROM `#@__member` WHERE `id` = ". $value['uid']);
+			if($value['userid'] != 0){
+				$userSql = $dsql->SetQuery("SELECT `username` FROM `#@__member` WHERE `id` = ". $value['userid']);
 				$username = $dsql->getTypeName($userSql);
 				$username = $username[0]['username'];
 			}
 			$list[$key]["username"] = $username;
 
 			$list[$key]["content"]   = $value["content"];
-			$list[$key]["pubdate"] = date('Y-m-d H:i:s', $value["pubdate"]);
+			$list[$key]["pubdate"] = date('Y-m-d H:i:s', $value["dtime"]);
 			$list[$key]["ip"]      = $value["ip"];
-			$list[$key]["state"]   = $value["state"];
+			$list[$key]["state"]   = $value["ischeck"];
 
 		}
 
@@ -130,7 +130,7 @@ if($dopost == "getList"){
 	$error = array();
 	if($id != ""){
 		foreach($each as $val){
-			$archives = $dsql->SetQuery("UPDATE `#@__".$tab."` SET `state` = ".$state." WHERE `id` = ".$val);
+			$archives = $dsql->SetQuery("UPDATE `#@__".$tab."` SET `ischeck` = ".$state." WHERE `id` = ".$val);
 			$results = $dsql->dsqlOper($archives, "update");
 			if($results != "ok"){
 				$error[] = $val;

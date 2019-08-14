@@ -3,6 +3,8 @@
 // document.write(unescape("%3Cscript src='"+masterDomain+"/static/js/skin.js?v=2' id='skinObj' data-val='"+currentModule+"' type='text/javascript'%3E%3C/script%3E"));
 
 // document.domain = masterDomain.replace("http://", "").replace("https://", "");
+
+
 var uploadErrorInfo = [],
 	huoniao = {
 
@@ -344,7 +346,7 @@ var uploadErrorInfo = [],
 
 $(function(){
 	if(window.loadHuoniaoJs) return;
-  window.loadHuoniaoJs = 1;
+  	window.loadHuoniaoJs = 1;
 
 	//页面自适应设置
 	$(window).resize(function(){
@@ -491,6 +493,12 @@ $(function(){
 	});
 
 
+	//网站导航
+	if($('.webmap .submenu').find('a').length > 10){
+		$('.webmap .submenu').addClass('tonglan fn-clear');
+	}
+
+
 
 
 	// 搜索
@@ -597,6 +605,49 @@ $(function(){
 		}
 	}
 
+	//获取城市分站
+	if($('.changeCityList').size() > 0){
+		getfzCity()
+	}
+
+	//城市分站
+	var cityListData = [];
+	function getfzCity(){
+		$('.changeCityBtn').find('.content ul').html('加载中');
+		$.ajax({
+	        url: '/include/ajax.php?service=siteConfig&action=siteCity&module='+ cfg_module,
+	        type: "GET",
+	        dataType: "json", //指定服务器返回的数据类型
+	        crossDomain:true,
+	        success: function (data) {
+	         if(data && data.state == 100){
+	         	var datalist = data.info;
+	         	var html = [],cname='';
+	         	for(var i = 0; i<datalist.length; i++){
+	         		cityListData.push(datalist[i]);
+	         		if (cfg_cityInfo.domain == datalist[i].domain){
+		         		cname = 'curr';
+		         	}
+		         	html.push('<li><a href="'+datalist[i].url+'" title="'+datalist[i].name+'" class="" data-domain='+JSON.stringify(datalist[i])+'>'+datalist[i].name+'<s><img src="/static/images/changecity_curr.png" /></s></a></li>')
+	         	}
+
+	         	$('.changeCityBtn').find('.content ul').html(html.join(''));
+
+	         }else{
+	         	$('.changeCityBtn').find('.content ul').html(data.info);
+	         }
+
+	        },
+	        error:function(err){
+	        	console.log('network error');
+	        }
+	     });
+	}
+
+
+
+
+
 	// 切换城市弹出层
 	$(".changeCityBtn").hover(function(){
 		var t = $(this);
@@ -604,24 +655,19 @@ $(function(){
 		t.addClass("do");
 		var cityInfo = $.cookie(cookiePre+'siteCityInfo');
 		cityInfo = eval('('+cityInfo+')');
-
 		var con = $(".changeCityList"), listCon = con.find(".list");
-
-		var cityListData = [];
-    $('.changeCityList .content li').each(function(i){
-      var t = $(this).find("a"), domain = t.data('domain');
-      cityListData.push(domain);
-    });
-    if(cityListData.length < 10){
-    	$('.changeCityList .content').show();
-    	return;
-    }else{
-    	$('.changeCityList .content').remove();
-    }
+	    if(cityListData.length < 10){
+	    	console.log(cityListData.length)
+	    	$('.changeCityList .content').show();
+	    	return;
+	    }else{
+	    	$('.changeCityList .content').remove();
+	    }
 
     var cityArr = [];
     var hotCityHtml = [];
     for (var i = 0; i < cityListData.length; i++) {
+
       var pinyin = cityListData[i].pinyin.substr(0,1);
       if(cityArr[pinyin] == undefined){
         cityArr[pinyin] = [];
@@ -687,7 +733,7 @@ $(function(){
 	    $.cookie(cookiePre + 'siteCityInfo', JSON.stringify(domain), {expires: 7, path: '/', domain: '.' + cfg_clihost});
 	  });
 
-	})
+	});
 
     $(".changeCityList .content").delegate('a', 'click', function(){
         var t = $(this), domain = t.data('domain');

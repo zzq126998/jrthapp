@@ -18,62 +18,97 @@ function info($params, $content = "", &$smarty = array(), &$repeat = array())
 
     //获取指定分类详细信息
     if ($action == "list" || $action == "category") {
-//        $keywords = $_GET['keywords'];
-        $huoniaoTag->assign('keywords', $keywords);
-        $listHandels = new handlers($service, "typeDetail");
-        $listConfig  = $listHandels->getHandle($typeid);
-        if (is_array($listConfig) && $listConfig['state'] == 100) {
-            $listConfig = $listConfig['info'];
-            if (is_array($listConfig)) {
-                foreach ($listConfig[0] as $key => $value) {
-                    $huoniaoTag->assign('list_' . $key, $value);
+
+        if($typeid){
+            $listHandels = new handlers($service, "typeDetail");
+            $listConfig  = $listHandels->getHandle($typeid);
+            if (is_array($listConfig) && $listConfig['state'] == 100) {
+                $listConfig = $listConfig['info'];
+                if (is_array($listConfig)) {
+                    foreach ($listConfig[0] as $key => $value) {
+                        $huoniaoTag->assign('list_' . $key, $value);
+                    }
                 }
+            }
+
+            //面包屑
+            global $data;
+            $data    = "";
+            $typeArr = getParentArr("infotype", $typeid);
+            $typeArr = array_reverse(parent_foreach($typeArr, "typename"));
+
+            global $data;
+            $data    = "";
+            $typeIds = getParentArr("infotype", $typeid);
+            $typeIds = array_reverse(parent_foreach($typeIds, "id"));
+
+            $crumbs = array();
+            foreach ($typeArr as $key => $value) {
+                $param    = array(
+                    "service" => $service,
+                    "template" => "list",
+                    "typeid" => $typeIds[$key],
+                    "addrid" => (int)$addrid,
+                );
+                $url      = getUrlPath($param);
+                $crumbs[] = '<a href="' . $url . '">' . $value . '</a>';
+            }
+            $huoniaoTag->assign('list_crumbs', join("<s></s>", $crumbs));
+        }
+
+        if($addrid){
+            global $data;
+            $data   = "";
+            $addrArr = getParentArr("site_area", $addrid);
+            $addrArr = array_reverse(parent_foreach($addrArr, "typename"));
+            $addrname = !empty($addrArr[3]) ? $addrArr[3] : $addrArr[2];
+            $huoniaoTag->assign('addrname', $addrname);
+
+            global $data;
+            global $siteCityInfo;
+            $data    = "";
+            $addrIds = getParentArr("site_area", $addrid);
+            $addrIds = array_reverse(parent_foreach($addrIds, "id"));
+            $addrIds = array_slice($addrIds, array_search($siteCityInfo['cityid'], $addrIds) + 1);
+            $huoniaoTag->assign('addrIds', $addrIds);
+        }
+
+        $item = $_REQUEST['item'];
+        if($item){
+            $itemArr = array();
+            $itemList = json_decode($item, true);
+            if(is_array($itemList)){
+                foreach ($itemList as $key => $value) {
+                    $itemArr[$value['id']] = $value['value'];
+                }
+
+                $huoniaoTag->assign('item', $item);
+                $huoniaoTag->assign('itemArr', $itemArr);
+            }else{
+                $huoniaoTag->assign('item', '');
             }
         }
 
-        
-        global $data;
-        $data   = "";
-        $addrArr = getParentArr("site_area", $addrid);
-        $addrArr = array_reverse(parent_foreach($addrArr, "typename"));
-        $addrname = !empty($addrArr[3]) ? $addrArr[3] : $addrArr[2];
-        $huoniaoTag->assign('addrid', (int)$addrid);
-        $huoniaoTag->assign('addrname', $addrname);
-        
+
         $huoniaoTag->assign('nature', (int)$nature);
 
         $price_section = $_GET['price_section'];
         $price_sectionArr = explode(',', $price_section);
-        $min_price = $price_sectionArr[0];
-        $max_price = $price_sectionArr[1];
-        $huoniaoTag->assign('min_price', (int)$min_price);
-        $huoniaoTag->assign('max_price', (int)$max_price);
+        $min_price = (int)$price_sectionArr[0];
+        $max_price = (int)$price_sectionArr[1];
+        $huoniaoTag->assign('price_section', $min_price || $max_price ? ($min_price.','.$max_price) : '');
+        $huoniaoTag->assign('min_price', $min_price);
+        $huoniaoTag->assign('max_price', $max_price);
 
-        //面包屑
-        global $data;
-        $data    = "";
-        $typeArr = getParentArr("infotype", $typeid);
-        $typeArr = array_reverse(parent_foreach($typeArr, "typename"));
-
-        global $data;
-        $data    = "";
-        $typeIds = getParentArr("infotype", $typeid);
-        $typeIds = array_reverse(parent_foreach($typeIds, "id"));
-
-        $crumbs = array();
-        foreach ($typeArr as $key => $value) {
-            $param    = array(
-                "service" => $service,
-                "template" => "list",
-                "id" => $typeIds[$key]
-            );
-            $url      = getUrlPath($param);
-            $crumbs[] = '<a href="' . $url . '">' . $value . '</a>';
-        }
-        $huoniaoTag->assign('list_crumbs', join("<s></s>", $crumbs));
-
-        $huoniaoTag->assign('typeid', (int)$typeid);
         $huoniaoTag->assign('keywords', $keywords);
+        $huoniaoTag->assign('typeid', (int)$typeid);
+        $huoniaoTag->assign('addrid', (int)$addrid);
+        $huoniaoTag->assign('typeIds', $typeIds);
+        $huoniaoTag->assign('fire', (int)$fire);
+        $huoniaoTag->assign('rec', (int)$rec);
+        $huoniaoTag->assign('typename', $typeArr ? $typeArr[count($typeArr)-1] : '');
+        $huoniaoTag->assign('orderby', RemoveXSS($orderby));
+        $huoniaoTag->assign('page', (int)$page);
         return;
 
         //获取指定ID的详细信息
@@ -331,11 +366,6 @@ function info($params, $content = "", &$smarty = array(), &$repeat = array())
                     }
                 }
             }
-                
-
-            
-
-
         } else {
             header("location:" . $cfg_secureAccess . $cfg_basehost);
             die;
@@ -354,6 +384,11 @@ function info($params, $content = "", &$smarty = array(), &$repeat = array())
         $userinfo = getMemberDetail($id);
         $days     = FloorTime(time() - (strtotime($userinfo['regtime'])) , 3);
         $mons     = (int)($days / 30);
+
+        if($uid < 0){
+            $userinfo['phone'] = preg_replace('/(1[3456789]{1}[0-9])[0-9]{4}([0-9]{4})/is',"$1****$2", $userinfo['phone']);
+        }
+
         $huoniaoTag->assign('userInfo_', $userinfo);
         $huoniaoTag->assign('mons', $mons);
         $param  = array(
@@ -370,17 +405,19 @@ function info($params, $content = "", &$smarty = array(), &$repeat = array())
         if (is_array($listConfig) && $listConfig['state'] == 100) {
             $list = $listConfig['info'];
             $huoniaoTag->assign('list', $list);
-            $sql      = $dsql->SetQuery("SELECT `id` FROM `#@__infolist` WHERE `is_valid` =0 AND `arcrank` = 1 AND `userid` = $id");
-            $list_count     = $dsql->dsqlOper($sql, "totalCount");
-            $huoniaoTag->assign('list_count', $list_count);
+            $sql      = $dsql->SetQuery("SELECT count(`id`) total FROM `#@__infolist` WHERE `is_valid` = 0 AND `waitpay` = 0 AND `arcrank` = 1 AND `userid` = $id");
+            $list_count     = $dsql->dsqlOper($sql, "results");
+            $huoniaoTag->assign('list_count', $list_count[0]['total']);
             $clicks  = 0;
             $commons = 0;
-            $fensi              = $dsql->SetQuery("SELECT * FROM `#@__site_followmap` WHERE `userid_b` = " . $id . " AND `temp` = 'info'" );
-            $fensi              = $dsql->dsqlOper($fensi, "results");
-            $huoniaoTag->assign('fensi', count($fensi));
-            $guanzhu              = $dsql->SetQuery("SELECT * FROM `#@__site_followmap` WHERE `userid` = " . $id . " AND `temp` = 'info'" );
-            $guanzhu              = $dsql->dsqlOper($guanzhu, "results");
-            $huoniaoTag->assign('guanzhu', count($guanzhu));
+
+            $sql = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__member_follow` WHERE `fid` = " . $id);
+            $total = getCache("info", $sql, 300, array("name" => "total"));
+            $huoniaoTag->assign('fensi', $total);
+
+            $sql = $dsql->SetQuery("SELECT COUNT(`id`) total FROM `#@__member_follow` WHERE `tid` = " . $id);
+            $total = getCache("info", $sql, 300, array("name" => "total"));
+            $huoniaoTag->assign('guanzhu', $total);
 
             foreach ($list as $item) {
                 $clicks  += $item['click'];
@@ -389,11 +426,11 @@ function info($params, $content = "", &$smarty = array(), &$repeat = array())
             $huoniaoTag->assign('clicks', $clicks);
             $huoniaoTag->assign('commons', $commons);
 
-
             //是否关注
-            $sql = "SELECT `id` FROM `#@__site_followmap` WHERE `userid` = $uid AND `userid_b` = {$id}";
+            $userLoginid = $userLogin->getMemberID();
+            $sql = "SELECT `id` FROM `#@__member_follow` WHERE `tid` = $userLoginid AND `fid` = $id";
             $sql = $dsql->SetQuery($sql);
-            $is_foll = $dsql->dsqlOper($sql, "totalCount");
+            $is_foll = $dsql->dsqlOper($sql, "results");
             $huoniaoTag->assign('is_follow', $is_foll ? 1 : 0);
 
 
@@ -426,10 +463,8 @@ function info($params, $content = "", &$smarty = array(), &$repeat = array())
             $listHandels_ = new handlers('info', "ilist_v2");
             $listConfig_  = $listHandels_->getHandle(array('uid' => $info['uid']));
             if (is_array($listConfig_) && $listConfig_['state'] == 100) {
-                $huoniaoTag->assign('pinfos', $listConfig_['info']['list']);
-                $huoniaoTag->assign('pinfos_sum_count', count($listConfig_['info']['list']));
+                $huoniaoTag->assign('pinfos_sum_count', $listConfig_['info']['pageInfo']['totalCount']);
             }else{
-                $huoniaoTag->assign('pinfos', array());
                 $huoniaoTag->assign('pinfos_sum_count', 0);
             }
 
@@ -452,19 +487,7 @@ function info($params, $content = "", &$smarty = array(), &$repeat = array())
         $collect = checkIsCollect($params);
         $huoniaoTag->assign('collect', $collect == "has" ? 1 : 0);
 
-
-        //获取商家评论
-        $sql = "SELECT * FROM `#@__info_shopcommon` WHERE `pid` = $shopid";
-        $sql = $dsql->SetQuery($sql);
-        $comms = $dsql->dsqlOper($sql, "results");
-        if($comms){
-            foreach ($comms as &$comm){
-                $comm_userid = $comm['userid'];
-                $comm['userinfo'] = getMemberDetail($comm_userid);
-            }
-        }
-        $huoniaoTag->assign('commons', $comms);
-        $huoniaoTag->assign('commons_num', count($comms));
+        $huoniaoTag->assign('page', (int)$page);
 
     }elseif($action == 'confirm'){
         //够买页面
@@ -584,29 +607,82 @@ function info($params, $content = "", &$smarty = array(), &$repeat = array())
 
 
     }elseif ($action == "store_list"){
-//        $keywords = $_GET['keywords'];
 
-        global $data;
-        $data    = "";
-        $typeArr = getParentArr("infotype", $list_id);
-        $typeArr = array_reverse(parent_foreach($typeArr, "typename"));
+        if($list_id){
+            $listHandels = new handlers($service, "typeDetail");
+            $listConfig  = $listHandels->getHandle($list_id);
+            if (is_array($listConfig) && $listConfig['state'] == 100) {
+                $listConfig = $listConfig['info'];
+                if (is_array($listConfig)) {
+                    foreach ($listConfig[0] as $key => $value) {
+                        $huoniaoTag->assign('list_' . $key, $value);
+                    }
+                }
+            }
 
+            //面包屑
+            global $data;
+            $data    = "";
+            $typeArr = getParentArr("infotype", $list_id);
+            $typeArr = array_reverse(parent_foreach($typeArr, "typename"));
+
+            global $data;
+            $data    = "";
+            $typeIds = getParentArr("infotype", $list_id);
+            $typeIds = array_reverse(parent_foreach($typeIds, "id"));
+
+            $crumbs = array();
+            foreach ($typeArr as $key => $value) {
+                $param    = array(
+                    "service" => $service,
+                    "template" => "store_list",
+                    "list_id" => $typeIds[$key],
+                    "addr_id" => (int)$addr_id,
+                );
+                $url      = getUrlPath($param);
+                $crumbs[] = '<a href="' . $url . '">' . $value . '</a>';
+            }
+            $huoniaoTag->assign('list_crumbs', join("<s></s>", $crumbs));
+        }
+
+        if($addr_id){
+            global $data;
+            $data   = "";
+            $addrArr = getParentArr("site_area", $addr_id);
+            $addrArr = array_reverse(parent_foreach($addrArr, "typename"));
+            $addrname = !empty($addrArr[3]) ? $addrArr[3] : $addrArr[2];
+            $huoniaoTag->assign('addrname', $addrname);
+
+            global $data;
+            global $siteCityInfo;
+            $data    = "";
+            $addrIds = getParentArr("site_area", $addr_id);
+            $addrIds = array_reverse(parent_foreach($addrIds, "id"));
+            $addrIds = array_slice($addrIds, array_search($siteCityInfo['cityid'], $addrIds) + 1);
+            $huoniaoTag->assign('addrIds', $addrIds);
+        }
 
         $huoniaoTag->assign('keywords', $keywords);
-        $huoniaoTag->assign('list_id', $list_id);
-        $huoniaoTag->assign('typename', $typeArr ? $typeArr[0] : '');
+        $huoniaoTag->assign('list_id', (int)$list_id);
+        $huoniaoTag->assign('addrid', (int)$addr_id);
+        $huoniaoTag->assign('typeIds', $typeIds);
+        $huoniaoTag->assign('typename', $typeArr ? $typeArr[count($typeArr)-1] : '');
+        $huoniaoTag->assign('orderby', (int)$orderby);
+        $huoniaoTag->assign('page', (int)$page);
 
     }elseif($action == "comdetail"){
         $id   = (int)$id;
 		$type = $type ? (int)$type : 0;
         $huoniaoTag->assign('type', $type);
-        $act = 'commentDetail';
+        /* $act = 'commentDetail';
         if($type){
             $act = 'shopcommentDetail';
-            
-        }
 
-        $detailHandels = new handlers("info", $act);
+
+        } */
+        $act = 'commentDetail';
+
+        $detailHandels = new handlers("member", $act);
         $detail  = $detailHandels->getHandle(array("id" => $id));
         if(is_array($detail) && $detail['state'] == 100){
             $detail  = $detail['info'];
@@ -615,7 +691,7 @@ function info($params, $content = "", &$smarty = array(), &$repeat = array())
             }
             if($type){
                 $infoshopHandels = new handlers($service, "storeDetail");
-                $infoshopConfig  = $infoshopHandels->getHandle($detail['pid']);
+                $infoshopConfig  = $infoshopHandels->getHandle($detail['aid']);
                 if(is_array($infoshopConfig) && $infoshopConfig['state'] == 100){
                     $infodetail  = $infoshopConfig['info'];
                     $huoniaoTag->assign('detail_info', $infodetail);

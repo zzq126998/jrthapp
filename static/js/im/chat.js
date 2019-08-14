@@ -2,6 +2,8 @@ var chatLib, AccessKeyID, userinfo, chatToken, chatServer, toUserinfo, toChatTok
 var stop = 0, time = Math.round(new Date().getTime()/1000).toString();
 // isload = false, page = 1, pageSize = 20, totalPage = 1,
 //以上为新添加的
+var audio = new Audio();
+audio.src = staticPath+'audio/notice02.mp3';
 
 $(function(){
 	 //im sdk
@@ -50,6 +52,8 @@ $(function(){
                         break;
                     default:
                         if(userinfo['uid'] == msg.info.to && msg.info.type == 'member'){
+                        	audio.play();
+//                      	getnum();
                         	$('.im-cur_btn').click();
                         	var data ={
                         		content: msg.info.content,
@@ -102,10 +106,10 @@ $(function(){
                 chatServer = info.server;
                 AccessKeyID = info.AccessKeyID;
                 $('.im-user_info .im-_left').removeClass('im-no_login');
-				$('.im-tip_head img,.im-user_info .im-_left img').attr('src',info.photo);
+                $('.im-tip_head img').attr('src',(info.photo?info.photo:staticPath+"images/noPhoto_60.jpg"));
+				$('.im-user_info .im-_left img').attr('src',(info.photo?info.photo:staticPath+"images/noPhoto_60.jpg"));
                 $('.im-msg_tip').find('p').text(info.name);
                 $('.im-user_info .im-_left').find('span').text(info.name);
-
                 //创建连接
                 chatLib = new kumanIMLib(chatServer + "?AccessKeyID=" + AccessKeyID + "&token=" + chatToken + "&type=member");
 
@@ -113,8 +117,7 @@ $(function(){
                 getflist();
                 getcurlist();//获取最新聊天
                 gettiplist();//获取账户消息
-                setInterval(gettiplist, 5000);
-                setInterval(getflist, 5000);
+                
             }else{
                 console.log(data.info);
                 $('.im-msg_tip').hide();
@@ -126,7 +129,7 @@ $(function(){
         }
     });
 
-
+	
 	//点击最新会话列表，弹出对话框
 $('body').delegate('.im-cur_chat li','click',function(){
 	rec_page=1,recload=0; totalPage = 1;
@@ -174,13 +177,13 @@ $('body').delegate('.im-cur_chat li','click',function(){
 				html.push('</div>');
 				$('.im-panel_box').append(html.join(''));
 			    getrecord();
-				newTip(0);
+				getnum();
             }else{
-                alert(data.info);
+                console.log(data.info);
             }
         },
         error: function(){
-            alert('网络错误，初始化失败！');
+            console.log('网络错误，初始化失败！');
         }
     });
 
@@ -211,6 +214,8 @@ $('body').delegate('.im-cur_chat li','click',function(){
 $('body').delegate('.im-hide_btn','click',function(){
 	$('.im-panel_box').animate({'bottom':'-550px'},150)
 	$('.im-msg_tip').show();
+	clearInterval(refreshTimeout);
+	
 });
 
 //点击切换面板
@@ -227,7 +232,7 @@ $('body').delegate('.im-cur_chat .im-delbox a','click',function(){
 	//删除最新聊天
 	delfriend(id,'temp',parent);
 	if(len==1){
-		$('.im-listBox .im-cur_chat').append('<div class="im-no_list" ><img src="'+templets_skin+'image/no_img.png" /><p>没有任何会话~</p></div>')
+		$('.im-listBox .im-cur_chat').append('<div class="im-no_list" ><img src="'+staticPath+'images/im/no_img.png" /><p>没有任何会话~</p></div>')
 	}
 	return false;
 
@@ -344,7 +349,7 @@ $('body').delegate('.im-sure_del','click',function(){
 	var len_li = $('.im-f_list>li').length;
 
 	if(len_li==1){
-		$('.im-listBox .im-f_list').append('<div class="im-no_list" ><img src="'+templets_skin+'image/no_img.png" /><p>还没有好友哦~</p></div>')
+		$('.im-listBox .im-f_list').append('<div class="im-no_list" ><img src="'+staticPath+'images/im/no_img.png" /><p>还没有好友哦~</p></div>')
 	}
 	var id=$(this).parents('.im-f_del').attr('data-id');
 	var li = $('.im-f_list li[data-id='+id+']');
@@ -381,12 +386,38 @@ $('body').delegate('.im-op_tip li','click',function(){
 		if($('.im-act_box .im-commt li').length==0){
 			getcommt();
 		}
+		$.ajax({
+	       url: '/include/ajax.php?service=member&action=updateRead&type=commt',
+	       type: "GET",
+	       dataType: "json",
+	       success: function (data) {
+		     console.log('更新完成');
+		     $('.im-btn_comm span').html('评论');
+		     getnum();
+	       },
+	       error: function(){
+	         console.log('请求出错请刷新重试');  //请求出错请刷新重试
+	       }
+		});
 	}else {
 		$('.im-act_box .im-zan').addClass('im-show').siblings('.im-commt').removeClass('im-show');
 		$('.im-li_zan').addClass('im-on_panel').siblings('li').removeClass('im-on_panel');
 		if($('.im-act_box .im-zan li').length==0){
 			getzan()
 		}
+		$.ajax({
+	       url: '/include/ajax.php?service=member&action=updateRead&type=zan',
+	       type: "GET",
+	       dataType: "json",
+	       success: function (data) {
+	       	 $('.im-btn_comm span').html('赞');
+		     console.log('更新完成');
+		     getnum();
+	       },
+	       error: function(){
+	         console.log('请求出错请刷新重试');  //请求出错请刷新重试
+	       }
+		});
 	}
 	$('.im-op_tip').hide();
 });
@@ -398,10 +429,32 @@ $('body').delegate('.im-bottom_btn .im-msg_btn','mouseleave',function(){
 });
 //点击删除按钮， 删除最新消息
 $('body').delegate('.im-msg_list .im-delbox','click',function(){
-	var t = $(this),p=t.parents('li'),len = p.parents('ul.im-msg_list').find('li').length;
+	var t = $(this),p=t.parents('li'),id = p.attr('data-id');len = p.parents('ul.im-msg_list').find('li').length;
+		 $.ajax({
+	          url: "/include/ajax.php?service=member&action=delMessage&id="+id,
+	          type: "GET",
+	          dataType: "jsonp",
+	          success: function (data) {
+	            if(data && data.state == 100){
+	              gettiplist()
+				  showMsg('已删除')
+	            }else{
+	              alert(data.info);
+	              t.siblings("a").show();
+	              t.removeClass("load");
+	            }
+	          },
+	          error: function(){
+	            alert(langData['siteConfig'][20][183]);
+	            t.siblings("a").show();
+	            t.removeClass("load");
+	          }
+	        });
+	     
+	     return false;
 	p.remove();
 	if(len==1){
-		$('.im-listBox .im-msg_list').append('<div class="im-no_list" ><img src="image/no_img.png" /><p>暂时没有新消息~</p></div>')
+		$('.im-listBox .im-msg_list').append('<div class="im-no_list" ><img src="images/no_img.png" /><p>暂时没有新消息~</p></div>')
 	}
 
 });
@@ -426,14 +479,14 @@ $('body').delegate('.im-f_search a','click',function(){
                var data = data.info;
                var isfriend = data[0].isfriend?'fn-hide':'';
                var addr = data[0].addrName?data[0].addrName.split('>'):'';
-               $('.im-s_list ul').html('<li class="fn-clear" data-id="'+data[0].userid+'" data-f="0"><a href="javascript:;" class="im-right_addbtn '+isfriend+'">加为好友</a><div class="im-left_info" title="点击查看资料"><span class="im-s_head"><img src="'+data[0].photo+'" /></span><div class="im-_info"><h3>'+data[0].nickname+'</h3><p>'+(data[0].addrName?(addr[0]+addr[1]):"未填写")+'</p></div></div></li>')
+               $('.im-s_list ul').html('<li class="fn-clear" data-id="'+data[0].userid+'" data-f="0"><a href="javascript:;" class="im-right_addbtn '+isfriend+'">加为好友</a><div class="im-left_info" title="点击查看资料"><span class="im-s_head"><img onerror="nofind();" src="'+(data[0].photo?data[0].photo:staticPath+"images/noPhoto_60.jpg")+'" /></span><div class="im-_info"><h3>'+data[0].nickname+'</h3><p>'+(data[0].addrName?(addr[0]+addr[1]):"未填写")+'</p></div></div></li>')
             }else{
                //没有找到
                $('.im-s_list ul').html('<div class="im-no_list" ><img src="'+staticPath+'images/im/no_img.png" /><p>没有符合条件的用户~</p></div>')
             }
         },
         error: function(){
-            alert('网络错误，初始化失败！');
+            console.log('网络错误，初始化失败！');
         }
     });
 
@@ -472,7 +525,7 @@ $('body').delegate('.im-right_addbtn','click',function(e){
         	}
         },
         error: function(){
-            alert('网络错误，初始化失败！');
+            console.log('网络错误，初始化失败！');
             return false;
         }
     });
@@ -533,7 +586,7 @@ $('body').delegate('.im-info_btn .im-chat_with','click',function(){
         	}
         },
         error: function(){
-            alert('网络错误，初始化失败！');
+            console.log('网络错误，初始化失败！');
             return false;
         }
     });
@@ -647,7 +700,6 @@ $('body').delegate('.im-emoj_btn','click',function(e){
 });
 
 $('body').delegate('.im-emoji-list li','click',function(e){
-    set_focus($('.im-input:last'));
 	memerySelection = window.getSelection();
 	$('.im-big_panel.im-show .im-textarea').focus();
 	var t = $(this),emojsrc = t.find('img').attr('src');
@@ -661,14 +713,33 @@ $('body').delegate('.im-emoji-list li','click',function(e){
 
 });
 
-//查看语音消息
-$("body").delegate('.im-m_content','click',function(){
-	if($('.im-speak_msg').length>0){
-		//	获取时间
-		$(this).find('.im-speak_msg').addClass('im-voicePlay');
-		setTimeout(function(){ $('.im-speak_msg').removeClass('im-voicePlay'); }, 3000);  //获取的时间替换3000
-	}
 
+
+//查看语音消息
+$("body").delegate('.im-m_content.im-s_content','click',function(){
+	var init = $('.im-speak_msg').find('audio.chat_audio');
+	for(var i=0; i<init.length; i++){
+	   	init[i].pause();
+	}
+	var t = $(this).find('.im-speak_msg');
+	var myaudio = t.find('audio.chat_audio');
+	var au = myaudio[0];
+	$('.im-speak_msg').removeClass('im-voicePlay');
+
+	if(t.hasClass('im-voicePlay')){
+		console.log(111)
+		t.removeClass('im-voicePlay');
+		au.pause();
+	}else{
+		console.log(222)
+		t.addClass('im-voicePlay');
+		au.play();
+	}
+	au.addEventListener('ended',function(){
+		console.log(333)
+		t.removeClass('im-voicePlay');
+	})
+	
 })
 
 //发送消息相关操作
@@ -689,7 +760,13 @@ $('body').delegate('.im-send_way li','click',function(e){
 
 $('body').delegate('.im-msg_sendbox ','click',function(e){
 	var id = $('.im-chat_panel h2').attr('data-id');
-
+	var html = $('.im-textarea').html();
+	for(var i=0;i<$('.im-textarea img').length; i++){
+		var t = $('.im-textarea img').eq(i)
+		t.after('△'+t.attr('src')+'△');
+	}
+	$('.im-textarea img').remove();
+	
 	var msg = $('.im-textarea').html();
 	msgto(msg,'text');
 	$('.im-textarea').html('');
@@ -700,14 +777,27 @@ $('body').delegate('.im-msg_sendbox ','click',function(e){
 
 $('body').delegate('.im-chat_box .im-textarea','keydown',function(e){
 	var keydo = $('.im-send_way li.im-active').attr('data-value');
-	var msg = $('.im-textarea').html();
+	var html = $('.im-textarea').html();
+	
 	e = event || window.event;
 	if(keydo=='enter'&&e.keyCode == 13&&!e.ctrlKey){
+		for(var i=0;i<$('.im-textarea img').length; i++){
+			var t = $('.im-textarea img').eq(i)
+			t.after('△'+t.attr('src')+'△');
+		}
+		$('.im-textarea img').remove()
+		var msg = $('.im-textarea').html();
 		msgto(msg,'text');
 		$('.im-textarea').html('');
    		e.returnValue = false;
 		return false;
 	}else if(keydo=='center'&&e.ctrlKey && e.keyCode == 13) {
+		for(var i=0;i<$('.im-textarea img').length; i++){
+			var t = $('.im-textarea img').eq(i)
+			t.after('△'+t.attr('src')+'△');
+		}
+		$('.im-textarea img').remove()
+		var msg = $('.im-textarea').html();
 		msgto(msg,'text');
 		$('.im-textarea').html('');
     	e.returnValue = false;
@@ -792,17 +882,20 @@ function msgto(msg,type){
 
             }
         });
-        //更新好友列表最新消息
-        $('.im-cur_chat .friend' + toUserinfo['uid']).find('.im-f_name i').html(transTimes(time, 4) );
-        if(data.contentType=='text'){
-        	$('.im-cur_chat .friend' + toUserinfo['uid']).find('.im-f_msg span').html(msg);
-        }else{
-        	$('.im-cur_chat .friend' + toUserinfo['uid']).find('.im-f_msg span').html('[图片]');
+        if(type!="link"){
+        	//更新好友列表最新消息
+	        $('.im-cur_chat .friend' + toUserinfo['uid']).find('.im-f_name i').html(transTimes(time, 4) );
+	        if(data.contentType=='text'){
+	        	$('.im-cur_chat .friend' + toUserinfo['uid']).find('.im-f_msg span').html(msg);
+	        }else{
+	        	$('.im-cur_chat .friend' + toUserinfo['uid']).find('.im-f_msg span').html('[图片]');
+	        }
+	
+			 data.from = userinfo['uid'];
+	         data.to = toUserinfo['uid'];
+	         createEle(data);
         }
-
-		 data.from = userinfo['uid'];
-         data.to = toUserinfo['uid'];
-         createEle(data);
+        
 
 	}
 }
@@ -813,6 +906,7 @@ $('body').delegate('.im-record_btn,.im-notes_panel .im-close_btn','click',functi
 	if(!r_show){
 		$('.im-notes_panel').animate({'right':0},150);
 		$('.im-panel_box').animate({'right':'172px'},150);
+		$('.im-notebox.im-notes_panel h2').find('span').text($('.im-to_fdetail').text())
 		r_show=1;
 		getrecord_1(1);
 	}else{
@@ -894,6 +988,7 @@ $('body').delegate('.im-act_panel h2 li','click',function(e){
 //回复
 $('body').delegate('.im-zan_con span.im-btn_reply','click',function(e){
 	var t = $(this), p=t.parents('li'),nic = p.find('h3 span.im-nicname').text();
+	$('.im-replyto_box .im-comt_send').attr('data-id',$(this).attr('data-id'));
 	$('.im-replyto_box').find('.im-area_box').attr('placeholder','回复  '+nic+'：')
 	$('.im-replyto_box').animate({'height':'150px'},150);
 	set_focus($('.im-area_box'));
@@ -901,14 +996,35 @@ $('body').delegate('.im-zan_con span.im-btn_reply','click',function(e){
 		$('.im-replyto_box').animate({'height':'0'},150);
 	});
 	 e.stopPropagation();  //停止事件传播
+	 return false;
 });
 
 //发送回复
 
 $('body').delegate('.im-replyto_box .im-comt_send','click',function(){
 	var re_con = $(".im-area_box").html();
-
-    $('.im-replyto_box').animate({'height':'0'},150);
+	var id = $(this).attr('data-id');
+	if(re_con==''){
+		showMsg('请输入评论内容');
+		return false;
+	}
+	$.ajax({
+		url: '/include/ajax.php?service=member&action=replyComment&id='+id+'&content='+re_con,
+		type: 'post',
+		dataType: 'json',
+		success: function(data){
+			if(data.state == 100){
+			    showMsg('已发送');
+			    $('.im-replyto_box').animate({'height':'0'},150);
+			}else{
+			    alert(data.info);
+			}
+		},
+		error: function(){
+			alert('网络错误，初始化失败！');
+		}
+	});
+    
 	showMsg('已发送')
 });
 
@@ -921,8 +1037,15 @@ $('body').delegate('.im-replyto_box','click',function(e){
 
 
 //点击消息提示，出现面板
+var refreshTimeout;
 $('body').delegate('.im-msg_tip','click',function(){
 	$(this).hide();
+	refreshTimeout = setInterval(function(){
+		gettiplist();
+		getflist();
+	},5000)
+//	setInterval(gettiplist, 5000);
+//  setInterval(getflist, 5000);
 	$('.im-panel_box').animate({'bottom':'0'},150)
 
 });
@@ -1039,7 +1162,7 @@ $('body').delegate('.im-act_box','mousewheel',function(e){
         	}
         },
         error: function(){
-            alert('网络错误，初始化失败！');
+            console.log('网络错误，初始化失败！');
             return false;
         }
     });
@@ -1055,8 +1178,9 @@ function getf_info(id){
         success: function(data){
         	if(data.state == 100){
         		var detail = data.info;
-
-        		var addr = detail.addrName.split('>');
+				if(detail.addrName){
+					var addr = detail.addrName.split('>');
+				}
         		var isfriend = '';
         		if(detail.isfriend){
         			isfriend='<a href="javascript:;" class="im-del_f">删除好友</a>'
@@ -1066,7 +1190,7 @@ function getf_info(id){
 
         		var infohtml = [];
 				infohtml.push('<div class="im-big_panel im-info_box im-show "><h2 data-f="'+detail.isfriend+'" data-id="'+detail.userid+'"><span>'+detail.nickname+'</span>的基本资料<i title="关闭窗口" class="im-close_btn"></i></h2>');
-				infohtml.push('<div class="im-f_box im-show" ><div class="im-info_list"><ul><li><label>昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</label><span>'+detail.nickname+'</span></li><li><label>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别</label><span>'+(detail.sex?"女":"男")+'</span></li><li><label>Q&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Q</label><span>'+detail.qq+'</span></li><li><label>生&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</label><span>'+transTimes(detail.birthday,2)+'</span></li><li><label>所在区域</label><span>'+(detail.addrName?(addr[0]+addr[1]):"")+'</span></li><li><label>注册时间</label><span>'+detail.regtime+'</span></li></ul><div class="im-btn_group im-info_btn"><a href="javascript:;" class="im-chat_with">和TA聊天</a>'+isfriend+'</div></div><div class="im-f_test"><div class="im-text-box"><textarea placeholder="请输入验证消息"></textarea></div><a href="javascript:;" class="im-send_btn">发送</a></div>');
+				infohtml.push('<div class="im-f_box im-show" ><div class="im-info_list"><ul><li><label>昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</label><span>'+detail.nickname+'</span></li><li><label>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别</label><span>'+(detail.sex=='0'?"女":"男")+'</span></li><li><label>Q&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Q</label><span>'+detail.qq+'</span></li><li><label>生&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</label><span>'+transTimes(detail.birthday,2)+'</span></li><li><label>所在区域</label><span>'+(detail.addrName?(addr[0]+addr[1]):"")+'</span></li><li><label>注册时间</label><span>'+detail.regtime+'</span></li></ul><div class="im-btn_group im-info_btn"><a href="javascript:;" class="im-chat_with">和TA聊天</a>'+isfriend+'</div></div><div class="im-f_test"><div class="im-text-box"><textarea placeholder="请输入验证消息"></textarea></div><a href="javascript:;" class="im-send_btn">发送</a></div>');
 				var shop =[];
         		if(detail.shopList){
         			var slist = detail.shopList
@@ -1096,7 +1220,7 @@ function getf_info(id){
         	}
         },
         error: function(){
-            alert('网络错误，初始化失败！');
+            console.log('网络错误，初始化失败！');
             return false;
         }
     });
@@ -1141,7 +1265,7 @@ function getf_info(id){
         	}
         },
         error: function(){
-            alert('网络错误，初始化失败！');
+            console.log('网络错误，初始化失败！');
             return false;
         }
    });
@@ -1232,7 +1356,118 @@ $('body').on('dblclick','.im-f_list li',function(){
 		$('.im-panel_box').append(html.join(''));
 		$('.im-cur_chat li[data-id='+uid+']').click();
 	}
-})
+});
+
+
+
+$('.chat_to-Link').click(function(){
+	/*
+	 * 1.打开对话窗口
+	 * 2.需要判断是否为详情页
+	 * 3.获取对方的token,信息
+	 * 4.发送链接消息
+	 * 
+	 */
+	rec_page = 1;
+	var type = $(this).attr('data-type');
+	var html = [],linkHtml = [];
+	var b_id = imconfig['chatid'];
+	//获取聊天对象的id、token
+	$.ajax({
+        url: '/include/ajax.php?service=siteConfig&action=getImToken&userid='+b_id,
+        type: 'post',
+        dataType: 'json',
+        success: function(data){
+        	if(data.state == 100){
+        		toUserinfo  = {
+        			'uid':data.info.uid,
+        			'name':data.info.name,
+        			'photo':data.info.photo,
+        		}
+        		toChatToken = data.info.token;
+        		$('.im-msg_tip').click(); //打开聊天列表窗口
+        		if_f = data.info.isfriend;
+            	add_f = if_f=='1'?'':'im-show';
+            	$('.im-panel_box').find('.im-big_panel').remove();
+            	//创建聊天窗口
+				html.push('<div class="im-big_panel im-chat_panel im-show">');
+				html.push('<h2 data-id="'+toUserinfo['uid']+'"><span class="im-to_fdetail">'+toUserinfo['name']+'</span><div class="im-btn_group '+add_f+'"><p class="im-to_f"><a href="javascript:;" class="im-btn_add">加为好友</a></p></div><i title="关闭聊天窗口" class="im-close_btn"></i></h2>');
+				html.push('<div class="im-record_box"></div>');
+				html.push('<div class="im-msgto_box im-chat_box"><div class="im-btn_group fn-clear"><div class="im-left_icon"><a href="javascript:;" class="im-emoj_btn"></a><a href="javascript:;" class="im-img_btn"></a></div><a href="javascript:;" class="im-record_btn">消息记录</a></div><div class="im-textarea" contenteditable></div><div class="im-msg_sendbox"><a href="javascript:;" class="im-msg_send">发送</a><span ><i title="按Enter键发送或者按Ctrl+Enter键发送"></i></span><ul class="im-send_way"><li class="im-active" data-value="enter">按Enter键发送</li><li data-value="center">按Ctrl+Enter键发送</li></ul></div></div>');
+				html.push('</div>');
+				$('.im-panel_box').append(html.join(''));
+				if(type=='detail'){
+					msgto(imconfig,'link');
+				}
+				setTimeout(function(){
+					time = Math.round(new Date().getTime()/1000).toString() ; //重置获取聊天记录的时间
+					getnum();
+					getrecord();
+				},500)
+				
+			
+        	}
+        },
+        error: function(){
+            console.log('网络错误，初始化失败！');
+            return false;
+        }
+    });
+	
+	
+	
+	
+});
+
+
+
+function sendLink(type){
+	rec_page = 1;
+	var html = [],linkHtml = [];
+	//获取聊天对象的id、token
+	$.ajax({
+        url: '/include/ajax.php?service=siteConfig&action=getImToken&userid='+imconfig['chatid'],
+        type: 'post',
+        dataType: 'json',
+        success: function(data){
+        	if(data.state == 100){
+        		toUserinfo  = {
+        			'uid':data.info.uid,
+        			'name':data.info.name,
+        			'photo':data.info.photo,
+        		}
+        		toChatToken = data.info.token;
+        		$('.im-msg_tip').click(); //打开聊天列表窗口
+        		if_f = data.info.isfriend;
+            	add_f = if_f=='1'?'':'im-show';
+            	$('.im-panel_box').find('.im-big_panel').remove();
+            	//创建聊天窗口
+				html.push('<div class="im-big_panel im-chat_panel im-show">');
+				html.push('<h2 data-id="'+toUserinfo['uid']+'"><span class="im-to_fdetail">'+toUserinfo['name']+'</span><div class="im-btn_group '+add_f+'"><p class="im-to_f"><a href="javascript:;" class="im-btn_add">加为好友</a></p></div><i title="关闭聊天窗口" class="im-close_btn"></i></h2>');
+				html.push('<div class="im-record_box"></div>');
+				html.push('<div class="im-msgto_box im-chat_box"><div class="im-btn_group fn-clear"><div class="im-left_icon"><a href="javascript:;" class="im-emoj_btn"></a><a href="javascript:;" class="im-img_btn"></a></div><a href="javascript:;" class="im-record_btn">消息记录</a></div><div class="im-textarea" contenteditable></div><div class="im-msg_sendbox"><a href="javascript:;" class="im-msg_send">发送</a><span ><i title="按Enter键发送或者按Ctrl+Enter键发送"></i></span><ul class="im-send_way"><li class="im-active" data-value="enter">按Enter键发送</li><li data-value="center">按Ctrl+Enter键发送</li></ul></div></div>');
+				html.push('</div>');
+				$('.im-panel_box').append(html.join(''));
+				if(type=='detail'){
+					msgto(imconfig,'link');
+					console.log(imconfig)
+				}
+				setTimeout(function(){
+					time = Math.round(new Date().getTime()/1000).toString() ; //重置获取聊天记录的时间
+					getnum();
+					getrecord();
+				},500)
+				
+			
+        	}
+        },
+        error: function(){
+            console.log('网络错误，初始化失败！');
+            return false;
+        }
+    });
+}
+
 
 
 

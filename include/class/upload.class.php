@@ -56,9 +56,9 @@ class upload{
      */
     private function upFile( $base64 ){
         //处理base64上传
-        if ( "base64" == $base64 ) {
+        if ( strstr($base64, "base64") ){
             $content = $_POST[ $this->fileField ];
-            $this->base64ToImage( $content );
+            $this->base64ToImage( $content , $base64 );
             return;
         }
 
@@ -208,11 +208,18 @@ class upload{
      * @param $base64Data
      * @return mixed
      */
-    private function base64ToImage( $base64Data )
+    private function base64ToImage( $base64Data, $base64 )
     {
         $img = base64_decode( $base64Data );
-        $this->fileName = time() . rand( 1 , 10000 ) . ".png";
-        $this->fullName = $this->getFolder() . '/' . $this->fileName;
+        if(strstr($base64, "|")){
+            global $cfg_uploadDir;
+            $arr = explode("|", $base64);
+            $this->fullName = ".." . $cfg_uploadDir . $arr[1];
+            $this->oriName = $arr[1];
+        }else{
+            $this->fileName = time() . rand( 1 , 10000 ) . ".png";
+            $this->fullName = $this->getFolder() . '/' . $this->fileName;
+        }
         if ( !file_put_contents( $this->fullName , $img ) ) {
             $this->stateInfo = $this->getStateInfo( "IO" );
             return;

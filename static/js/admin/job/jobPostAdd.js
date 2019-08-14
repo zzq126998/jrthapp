@@ -219,6 +219,7 @@ $(function(){
 	}
 
 	$("#valid").datetimepicker({format: 'yyyy-mm-dd', autoclose: true, minView: 2, language: 'ch'});
+	$("#pubdate").datetimepicker({format: 'yyyy-mm-dd hh:ii:ss', autoclose: true, todayBtn: true, minuteStep: 5, language: 'ch'});
 
 	//搜索回车提交
     $("#editform input").keyup(function (e) {

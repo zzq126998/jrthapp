@@ -31,6 +31,7 @@ if(empty($weight)) $weight = 1;
 if(empty($state)) $state = 0;
 if(empty($click)) $click = 1;
 if(!empty($property)) $property = join(",", $property);
+$pubdate = $pubdate ? GetMkTime($pubdate) : time();
 $bole = (int)$bole;
 
 if($_POST['submit'] == "提交"){
@@ -112,7 +113,7 @@ if($_POST['submit'] == "提交"){
 
 if($dopost == "save" && $submit == "提交"){
 	//保存到表
-	$archives = $dsql->SetQuery("INSERT INTO `#@__".$tab."` (`cityid`, `title`, `type`, `company`, `bole`, `sex`, `nature`, `valid`, `number`, `addr`, `experience`, `educational`, `language`, `salary`, `note`, `claim`, `tel`, `email`, `weight`, `click`, `state`, `property`, `pubdate`) VALUES ('$cityid', '$title', '$type', '$comid', '$bole', '$sex', '$nature', '".GetMkTime($valid)."', '$number', '$addr', '$experience', '$educational', '$language', '$salary', '$note', '$claim', '$tel', '$email', '$weight', '$click', '$state', '$property', '".GetMkTime(time())."')");
+	$archives = $dsql->SetQuery("INSERT INTO `#@__".$tab."` (`cityid`, `title`, `type`, `company`, `bole`, `sex`, `nature`, `valid`, `number`, `addr`, `experience`, `educational`, `language`, `salary`, `note`, `claim`, `tel`, `email`, `weight`, `click`, `state`, `property`, `pubdate`) VALUES ('$cityid', '$title', '$type', '$comid', '$bole', '$sex', '$nature', '".GetMkTime($valid)."', '$number', '$addr', '$experience', '$educational', '$language', '$salary', '$note', '$claim', '$tel', '$email', '$weight', '$click', '$state', '$property', '$pubdate')");
 	$aid = $dsql->dsqlOper($archives, "lastid");
 
 	if($aid){
@@ -145,7 +146,7 @@ if($dopost == "save" && $submit == "提交"){
 		$state_ = $res[0]['state'];
 
 		//保存到表
-		$archives = $dsql->SetQuery("UPDATE `#@__".$tab."` SET `cityid` = '$cityid', `title` = '$title', `type` = '$type', `company` = '$comid', `bole` = '$bole', `sex` = '$sex', `nature` = '$nature', `valid` = '".GetMkTime($valid)."', `number` = '$number', `addr` = '$addr', `experience` = '$experience', `educational` = '$educational', `language` = '$language', `salary` = '$salary', `note` = '$note', `claim` = '$claim', `tel` = '$tel', `email` = '$email', `weight` = '$weight', `click` = '$click', `state` = '$state', `property` = '$property' WHERE `id` = ".$id);
+		$archives = $dsql->SetQuery("UPDATE `#@__".$tab."` SET `cityid` = '$cityid', `title` = '$title', `type` = '$type', `company` = '$comid', `bole` = '$bole', `sex` = '$sex', `nature` = '$nature', `valid` = '".GetMkTime($valid)."', `number` = '$number', `addr` = '$addr', `experience` = '$experience', `educational` = '$educational', `language` = '$language', `salary` = '$salary', `note` = '$note', `claim` = '$claim', `tel` = '$tel', `email` = '$email', `weight` = '$weight', `click` = '$click', `state` = '$state', `property` = '$property', `pubdate` = '$pubdate' WHERE `id` = ".$id);
 		$results = $dsql->dsqlOper($archives, "update");
 
 		if($results == "ok"){
@@ -201,7 +202,8 @@ if($dopost == "save" && $submit == "提交"){
 			$click       = $results[0]['click'];
 			$state       = $results[0]['state'];
 			$property    = $results[0]['property'];
-            $cityid       = $results[0]['cityid'];
+            $cityid      = $results[0]['cityid'];
+            $pubdate     = $results[0]['pubdate'];
 
 			if($addr){
 				$data = "";
@@ -321,6 +323,7 @@ if(file_exists($tpl."/".$templates)){
 	$huoniaoTag->assign('propertyList',array('热门','紧急','推荐'));
 
 	$huoniaoTag->assign('weight', $weight);
+	$huoniaoTag->assign('pubdate', date("Y-m-d H:i:s", ($pubdate ? $pubdate : time())));
 	$huoniaoTag->assign('click', $click);
 	$huoniaoTag->compile_dir = HUONIAOROOT."/templates_c/admin/job";  //设置编译目录
 	$huoniaoTag->display($templates);

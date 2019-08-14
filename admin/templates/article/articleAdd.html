@@ -350,10 +350,12 @@ var typeMediaListArr = {#$typeMediaListArr#};
         </select>
       </dd>
     </dl>
+    {#*
     <dl class="clearfix">
       <dt>发布时间</dt>
       <dd><input type="text" class="input-medium" name="pubdate" id="pubdate" value="{#$pubdate#}"></dd>
     </dl>
+    *#}
     {#if $admin_edit#}
     <dl class="clearfix formbtn">
       <dt>&nbsp;</dt>
@@ -464,7 +466,7 @@ var typeMediaListArr = {#$typeMediaListArr#};
 <dl class="fn-clear hide">
   <dt>音频：</dt>
   <dd class="thumb fn-clear listImgBox">
-    <div class="uploadinp filePicker thumbtn" id="filePicker_audio" data-type-real="audio" data-type="filenail" data-mime="{#$audioType|replace:";":","#}" data-accept="{#$audioType#}" data-count="20" data-size="" data-imglist=""><div></div><span></span></div>
+    <div class="uploadinp filePicker thumbtn" id="filePicker_audio" data-type-real="audio" data-type="filenail" data-mime="{#$audioType|replace:";":","#}" data-accept="{#$audioType#}" data-count="20" data-size="{#$audioSize#}" data-imglist=""><div></div><span></span></div>
     <ul id="listSection_audio" class="listSection thumblist fn-clear"></ul>
     <input type="hidden" name="" value="" class="imglist-hidden">
   </dd>

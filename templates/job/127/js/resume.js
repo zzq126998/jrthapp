@@ -15,7 +15,16 @@ $(function(){
     })
   
   //验证提示弹出层
-  function showMsg(msg){
+  function showMsg(msg, type){
+    if(type == 1){
+      $('.popup-box.msg').remove();
+      $('body').append('<div class="popup-box msg" style="display:block;"><p class="ptip">'+msg+'</p></div>');
+      setTimeout(function(){
+        $('.popup-box.msg').remove();
+      },2000);
+      return;
+    }
+
     $('.popup-box').append('<p class="ptip">'+msg+'</p>')
     setTimeout(function(){
     $('.ptip').remove();
@@ -77,6 +86,16 @@ $(function(){
 			return false;
 		}
 
+    var winh = $(window).height(),
+        boxh = 780,
+        conh = 660,
+        offset = parseInt(winh * 0.84 - boxh);
+    if(offset < 0){
+      $('.popup-yqms .con').css({'height': (conh + offset), 'overflow-y': 'auto'});
+    }else{
+      $('.popup-yqms .con').css({'height': conh, 'overflow': 'hidden'});
+    }
+
     t.addClass("disabled");
     
     $.ajax({
@@ -90,13 +109,20 @@ $(function(){
           if(data.info.pageInfo.totalCount == 0){
             showMsg('您还未发布职位，无法邀请！');
           }else{
+            var post = [];
+            var list = data.info.list;
+            for(var i = 0; i < list.length; i++){
+              post.push('<option value="'+list[i].id+'">'+list[i].title+'</option>');
+            }
 
             $('html').addClass('nos');
+            $('#zhiwei option:eq(0)').nextAll().remove();
+            $('#zhiwei').append(post.join(''));
             $('.popup-yqms').show();
           }
 
         }else{
-          showMsg('您还未发布职位，无法邀请！');
+          showMsg('您还未发布职位，无法邀请！', 1);
         }
       },
       error: function(){
@@ -168,8 +194,7 @@ $(function(){
                 phone: mphone,
                 rid: id,
                 pid: mzhiwei,
-                remark1: remark,
-                remark2: remark2
+                remark: remark.join("、")+(remark2 ? "、"+remark2 : ""),
             },
             type: "GET",
             dataType: "jsonp",

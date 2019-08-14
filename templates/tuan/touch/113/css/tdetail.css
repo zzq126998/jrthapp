@@ -134,7 +134,7 @@ to {transform:rotate(0deg)}
 .tuan_comment .genduo {border-top:solid .02rem #eee;padding:.24rem 0;}
 .tuan_comment .genduo a {font-size:.28rem;color:#a0a0a0;display:inline-block;width:100%;text-align:center;background:url(../images/jiao_h_right.png) 4.8rem center no-repeat;background-size:.16rem;}
 /*其他团购*/
-.tuan_other {background:#fff;}
+.tuan_other {background:#fff; margin-bottom: .6rem;}
 /*最新商家*/
 .tuan_other .info {padding:0 .24rem;}
 .tuan_other .info ul li {padding:.4rem 0;border-bottom:1px solid #e5e5e5;}
@@ -158,10 +158,10 @@ to {transform:rotate(0deg)}
 .tuan_other .tuangou_price .discounted em {font-size:.32rem;font-weight:bold;}
 .tuan_other .tuangou_price .or_price {font-size:.26rem;text-decoration:line-through;color:#a0a0a0;margin-left:.1rem;margin-top:.24rem!important;}
 /*底部*/
-.tuan_bottom {position:fixed;bottom:0;background:#fff;padding-bottom:constant(safe-area-inset-bottom);padding-bottom:env(safe-area-inset-bottom);}
+.tuan_bottom {position: relative;position:fixed;bottom:0;background:#fff; box-sizing: border-box;  padding: .2rem .4rem;padding-bottom:constant(safe-area-inset-bottom);padding-bottom:env(safe-area-inset-bottom); right: 0;}
 
 /*普通团购*/
-.commontuan{width:94%;padding:0 .24rem;box-shadow:0 -2px 8px rgba(232,232,232,0.62);}
+.commontuan{padding:0 .24rem;box-shadow:0 -2px 8px rgba(232,232,232,0.62); left: 0; right: 0;}
 .tuan_bottom .price {height:.56rem;line-height:.56rem;margin:.24rem 0;}
 .tuan_bottom .price .zhehoujia {color:#fa4a3d;font-size:.25rem;}
 .tuan_bottom .price span {float:left;}
@@ -170,18 +170,18 @@ to {transform:rotate(0deg)}
 .tuan_bottom .price a {float:right;width:1.4rem;height:.56rem;background:#ff4930;border-radius:.06rem;line-height:.56rem;text-align:center;color:#fff;font-size:.26rem;}
 
 /*拼团底部*/
-.pintuan{width:100%;height:.9rem;z-index:100;}
+.pintuan{width:100%;height:1.5rem;z-index:100;}
 .tuan_bottom .btn_03,.tuan_bottom .btn_04 {display:none!important;}
-.tuan_bottom .btn_01,.tuan_bottom .btn_02,.tuan_bottom .btn_04 {width:50%;display:inline-block;float:left;height:.9rem;line-height:.9rem;text-align:center;}
-.tuan_bottom .btn_03 {width:50%;display:inline-block;float:left;height:.9rem;padding-top:.1rem;background:#fff;box-shadow:0 -2px 8px rgba(232,232,232,0.62);}
-.tuan_bottom .btn_01 {background:#fec323;font-size:.24rem;color:#fff;}
-.tuan_bottom .btn_01 em,.tuan_bottom .btn_02 em {font-size:.32rem;}
-.tuan_bottom .btn_01 em.btn_price,.tuan_bottom .btn_02 em.btn_price {margin-right:.1rem;}
+.tuan_bottom .btn_01,.tuan_bottom .btn_02,.tuan_bottom .btn_04 {width:2.6rem;display:inline-block; height:1.1rem;/*line-height:1.1rem;*/text-align:center; border-radius: .1rem; }
+.tuan_bottom .btn_03 {width:50%;float:left;height:.9rem;padding-top:.1rem;background:#fff;box-shadow:0 -2px 8px rgba(232,232,232,0.62);}
+.tuan_bottom .btn_01 {background:#fec323;font-size:.24rem;color:#fff; margin-right: .16rem;}
+.tuan_bottom .btn_01 em,.tuan_bottom .btn_02 em {font-size:.22rem; display: block;}
+.tuan_bottom .btn_01 em.btn_price,.tuan_bottom .btn_02 em.btn_price {font-size: .32rem; display: inline; font-weight: bold;}
 .tuan_bottom .btn_02 {background:#fe482d;font-size:.24rem;color:#fff;}
 .tuan_bottom .btn_03 p:first-child {font-size:.26rem;color:#a0a0a0;padding-left:.2rem;}
 .tuan_bottom .btn_03 p:last-child {font-size:.28rem;padding-left:.2rem;padding-left:.2rem;}
 .tuan_bottom .btn_04 {background:#fe482d;font-size:.32rem;color:#fff;}
-
+.tuan_bottom .btn_group a{display: block; margin-top: .22rem;}
 /*团购秒杀倒计时*/
 .count_down .daojishi {float:right;font-size:.24rem;color:#fff;}
 .count_down .daojishi span {padding:0 .05rem;height:.38rem;display:inline-block;background:#fff;text-align:center;line-height:.38rem;color:#ff323f;font-size:.24rem;border-radius:.05rem;margin:0 .1rem;}
@@ -248,3 +248,7 @@ to {transform:rotate(0deg)}
 .uknow-con .item-con{margin-bottom: .08rem;line-height: .5rem;}
 .uknow-con img {display: block; width: 100%; max-width: 100%; height: auto;}
 .uknow-con table {width: 100%;}
+
+.btn_group{margin-left: 1rem; height: 1.5rem; text-align: right;}
+.chat_to-Link{position: absolute; font-size: .22rem; color: #808080; left: .4rem; margin-left: .2rem; margin-top: .2rem;}
+.chat_to-Link img{width: .5rem;}

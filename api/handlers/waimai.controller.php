@@ -260,7 +260,8 @@ function waimai($params, $content = "", &$smarty = array(), &$repeat = array()){
 
 			}
 
-			$arc = $dsql->SetQuery("SELECT avg(`starps`) r FROM `#@__waimai_common` WHERE `peisongid` = $userid");
+			// $arc = $dsql->SetQuery("SELECT avg(`starps`) r FROM `#@__waimai_common` WHERE `peisongid` = $userid");
+			$arc = $dsql->SetQuery("SELECT avg(`starps`) r FROM `#@__public_comment` WHERE `peisongid` = '$userid'");
 			$ret = $dsql->dsqlOper($arc, "results");
 			if($ret){
 				$rating = $ret[0]['r'];		//总评分

@@ -92,6 +92,13 @@
       <td data-id="{#$list['id']#}" data-module="car"><div class="input-append"><input class="span1" type="text" value="{#$list['privilege']['car']#}"><span class="add-on">条</span></div></td>
       {#/foreach#}
     </tr>
+    <tr>
+        <td>教育培训</td>
+        <td data-id="0" data-module="education"><div class="input-append"><input class="span1" type="text" value="{#$fabuAmount['education']#}"><span class="add-on">{#echoCurrency type="short"#}/条</span></div></td>
+        {#foreach from=$levelList item=list#}
+        <td data-id="{#$list['id']#}" data-module="education"><div class="input-append"><input class="span1" type="text" value="{#$list['privilege']['education']#}"><span class="add-on">条</span></div></td>
+        {#/foreach#}
+      </tr>
   </tbody>
   <tbody>
     <tr>

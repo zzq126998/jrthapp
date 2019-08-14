@@ -2,7 +2,7 @@ $(function(){
 
   $('.appMapBtn').attr('href', OpenMap_URL);
   // 电话咨询
-  $('.building_phone,.call_phone').click(function(){
+  $('.building_phone').click(function(){
       $('.phone_frame').show();
       $('.desk').show();
   });
@@ -117,7 +117,7 @@ $(function(){
 
     var swiper = new Swiper('.shapanSwiper .swiper-container', {
       slidesPerView: 'auto',
-      spaceBetween: 17,
+      // spaceBetween: 17,
       pagination: {
         el: '.shapanSwiper .swiper-pagination',
         clickable: true,

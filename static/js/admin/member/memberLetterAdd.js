@@ -8,6 +8,11 @@ $(function(){
 		}else{
 			$("#userIds").hide();
 		}
+		if(val == 5){
+			$('.mtype').hide();
+		}else{
+			$('.mtype').show();
+		}
 	});
 
 
@@ -49,7 +54,7 @@ $(function(){
 						},
 						cancel: false
 					});
-					
+
 			}else{
 				$.dialog.alert(data.info);
 				t.attr("disabled", false).html("重新发送");

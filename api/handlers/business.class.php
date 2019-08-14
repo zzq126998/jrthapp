@@ -5197,7 +5197,14 @@ class business {
 					"date" => date("Y-m-d H:i", $time),
 					'people' => $people,
 					'note' => $note,
-					'body' => str_replace('1', $store, str_replace('2', $contact, str_replace('3', $date, $langData['siteConfig'][21][197])))
+					// 'body' => str_replace('1', $store, str_replace('2', $contact, str_replace('3', $date, $langData['siteConfig'][21][197]))),
+					'fields' => array(
+		                'keyword1' => '预留手机',
+		                'keyword2' => '订座门店',
+		                'keyword3' => '到店时间',
+		                'keyword4' => '人数',
+		                'keyword5' => '备注'
+		            )
 				));
 
 				// 通知商家
@@ -5213,7 +5220,14 @@ class business {
 					"date" => date("Y-m-d H:i", $time),
 					'people' => $people,
 					'note' => $note,
-					'body' => $langData['siteConfig'][21][198]  //您有新的订座订单
+					// 'body' => $langData['siteConfig'][21][198],  //您有新的订座订单
+					'fields' => array(
+		                'keyword1' => '预留手机',
+		                'keyword2' => '订座门店',
+		                'keyword3' => '到店时间',
+		                'keyword4' => '人数',
+		                'keyword5' => '备注'
+		            )
 				));
 			}
 
@@ -5305,7 +5319,13 @@ class business {
 				);
 
 				// 通知用户
-				updateMemberNotice($to, "会员-订座成功", $param, array("contact" => $contact, 'store' => $store, "date" => date("Y-m-d H:i", $time), 'people' => $people, 'note' => $note));
+				updateMemberNotice($to, "会员-订座成功", $param, array("contact" => $contact, 'store' => $store, "date" => date("Y-m-d H:i", $time), 'people' => $people, 'note' => $note, 'fields' => array(
+					'keyword1' => '预留手机',
+					'keyword2' => '订座门店',
+					'keyword3' => '到店时间',
+					'keyword4' => '人数',
+					'keyword5' => '备注'
+				)));
 
 			}
 

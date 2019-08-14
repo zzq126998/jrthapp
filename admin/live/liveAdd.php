@@ -31,7 +31,6 @@ else{
 $pagetitle     = "发布信息";
 
 if($submit == "提交"){
-	$flags = isset($flags) ? join(',',$flags) : '';         //自定义属性
 	$pubdate = GetMkTime($pubdate);       //发布时间
 
 	//对字符进行处理
@@ -44,14 +43,22 @@ if($submit == "提交"){
 	$description = cn_substrR($description,150);
 	$color       = cn_substrR($color,6);
 	$pulltype    = (int)$pulltype;
+    if($lnglat){
+        $a = explode(",", $lnglat);
+        $lng = $a[0];
+        $lat = $a[1];
+    }else{
+        $lng = $lat = "";
+    }
 
-	if(!empty($litpic)){
-		if(!empty($flags)){
-			$flags .= ",p";
-		}else{
-			$flags .= "p";
-		}
-	}
+    $flags = isset($flags) ? join(",", $flags) : '';         //自定义属性
+    if($flags){
+        $flags_ = explode(',', $flags);
+        $flag_h = in_array('h', $flags_) ? 1 : 0;
+        $flag_r = in_array('r', $flags_) ? 1 : 0;
+    }else{
+        $flag_h = $flag_r = 0;
+    }
 
 	//获取当前管理员
 	$adminid = $userLogin->getUserID();
@@ -177,7 +184,7 @@ if($dopost == "edit"){
         }
 
 		//保存到主表
-		$archives = $dsql->SetQuery("UPDATE `#@__".$action."list` SET  `title` = '$title',`typeid`='$typeid',`litpic`='$litpic',`click`='$click',`starttime`='$pubdate',`way`='$way',`catid`='$livetype',`password`='$password',`startmoney`='$startmoney',`endmoney`='$endmoney',`flow`='$flow', `note` = '$note', `menu` = '$menuData', `adv` = '$adv' $pullurl_ $livetime_  WHERE `id` = ".$id);
+		$archives = $dsql->SetQuery("UPDATE `#@__".$action."list` SET  `title` = '$title',`typeid`='$typeid',`litpic`='$litpic',`click`='$click',`starttime`='$pubdate',`way`='$way',`catid`='$livetype',`password`='$password',`startmoney`='$startmoney',`endmoney`='$endmoney',`flow`='$flow', `note` = '$note', `menu` = '$menuData', `adv` = '$adv' $pullurl_ $livetime_ , `flag_h` = $flag_h, `flag_r` = $flag_r, `lng` = '$lng', `lat` = '$lat' WHERE `id` = ".$id);
 		$results = $dsql->dsqlOper($archives, "update");
 
 		if($results != "ok"){
@@ -224,6 +231,19 @@ if($dopost == "edit"){
                 $pullurl_touch   = $results[0]['pullurl_touch'];
 				$livetime	 = $results[0]['livetime'];
                 $adv         = $results[0]['adv'];
+                $flag_h         = $results[0]['flag_h'];
+                $flag_r         = $results[0]['flag_r'];
+                $lnglat         = $results[0]['lng'] && $results[0]['lat'] ? $results[0]['lng'].','.$results[0]['lat'] : '';
+
+                $flagArr = [];
+                if($results[0]['flag_h']){
+                    $flagArr[] = 'h';
+                }
+                if($results[0]['flag_r']){
+                    $flagArr[] = 'r';
+                }
+                $flags = join(",", $flagArr);
+                $flagitem    = $flagArr;
 
                 if($livetime){
                     $minute = (int)($livetime / 1000 / 60);
@@ -441,6 +461,14 @@ if(file_exists($tpl."/".$templates)){
     $huoniaoTag->assign('pullurl_touch', $pullurl_touch);
 
 	$huoniaoTag->assign('typeListArr', json_encode($dsql->getTypeList(0, $action."type")));
+
+
+    //自定义属性-多选
+    $huoniaoTag->assign('flag',array('h','r'));
+    $huoniaoTag->assign('flagList',array('热门[h]','推荐[r]'));
+    $huoniaoTag->assign('flagitem', $flagitem);
+    $huoniaoTag->assign('lnglat', $lnglat);
+
 	$huoniaoTag->compile_dir = HUONIAOROOT."/templates_c/admin/video";  //设置编译目录
 	$huoniaoTag->display($templates);
 }else{

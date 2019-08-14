@@ -5,6 +5,7 @@
 <title>{#$detail.title#}-{#$langData['siteConfig'][16][5]#}-{#$food_title#}</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
 <meta name="apple-mobile-web-app-capable" content="yes" />
+<link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/core/touchBase.css?v={#$cfg_staticVersion#}">
 <link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/base.css?v={#$cfg_staticVersion#}">
 <link rel="stylesheet" href="{#$cfg_staticPath#}css/ui/swiper.min.css">
 <link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/diancan-detail.css?v={#$cfg_staticVersion#}">
@@ -13,15 +14,8 @@
 </head>
 <body>
 <!-- 头部 -->
-<div class="header">
-  <div class="header-l">
-    <a href="javascript:history.go(-1)" class="goBack"><img src="{#$templets_skin#}images/left_white.png" alt=""></a>
-  </div>
-  <div class="header-address">
-    <span>{#$detail.title#}</span>
-  </div>
-  <div class="header-search"><a></a></div>
-</div>
+
+{#include file="../../../siteConfig/touch_top.html" pageTitle={#$detail.title#}#}
 <!-- 头部 end -->
 <div class="wrapper">
 	<div class="swiper-container">
@@ -29,7 +23,7 @@
       {#if $food_pics#}
       {#foreach from=$food_pics item=pic#}
 			<div class="swiper-slide">
-        <a href="#"><img src="{#$pic#}"></a>
+        <a href="javascript:;"><img src="/include/attachment.php?f={#$pic#}"></a>
       </div>
       {#/foreach#}
       {#else#}
@@ -93,7 +87,7 @@
 </div>
 
 <div class="store-tit">
-  <a href="{#getUrlPath service='business' template='detail' id=$detail.id#}" class="fn-clear"><i class="store_icon"></i><span>{#$detail.title#}</span><em>{#$langData['siteConfig'][22][17]#}</em></a>
+  <a href="{#getUrlPath service='business' template='detail' id=$detail.id#}" class="fn-clear"><i class="store_icon"><img src="{#$detail.logo#}" /></i><span>{#$detail.title#}</span><em>{#$langData['siteConfig'][22][17]#}</em></a>
 </div>
 {#*
 <div class="food-desc">

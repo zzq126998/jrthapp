@@ -24,9 +24,9 @@
 	var typeUrl = '{#getUrlPath service='business' template='list' param="typeid=%id"#}';
 </script>
 {#* 微信分享 *#}
-{#$Share_description = {#$cfg_description#}#}
-{#$Share_title = {#$cfg_webname#}#}
-{#$Share_img = {#$cfg_weblogo#}#}
+{#$Share_description = {#$business_description#}#}
+{#$Share_title = {#$business_title#}#}
+{#$Share_img = {#$business_logoUrl#}#}
 {#$Share_url = {#$business_channelDomain#}#}
 {#include file="{#$HUONIAOROOT#}/templates/siteConfig/public_share.html"#}
 </head>
@@ -72,7 +72,7 @@
 
 <!-- 最新入驻 s -->
 <div class="pubBox tcNews fn-clear">
-	<div class="lBox"><img src="{#$templets_skin#}images/bruzhu.png" alt=""></div>
+	<div class="lBox"><img src="{#$templets_skin#}images/bruzhu.png?v={#$cfg_staticVersion#}" alt=""></div>
 	<div class="mBox">
 		<div class="swiper-container">
 		    <div class="swiper-wrapper">
@@ -99,7 +99,7 @@
 		</a>
 		{#/if#}
 	</div>
-	
+
 </div>
 <!-- 最新入驻 e -->
 
@@ -138,7 +138,7 @@
 	<div class="adBox">
 		{#myad title="商家_模板二_移动端_广告四"#}
 	</div>
-	
+
 </div>
 
 <!-- 广告位 e -->
@@ -189,13 +189,13 @@
 	<div class="moreBox">
 		<a href="javascript:;" class="btnMore">查看更多</a>
 	</div>
-	
+
 </div>
 <!-- 推荐商家 e -->
 
 <div class="gotop"><img src="{#$templets_skin#}images/go-top.png" alt=""></div>
 
-{#include file="../../../siteConfig/touch_bottom_3.4.html" active="business"#}
+{#include file="../../../siteConfig/touch_bottom_4.3.html" active="business"#}
 
 {#include file="{#$HUONIAOROOT#}/templates/siteConfig/public_location.html"#}
 <script type="text/javascript" src="{#$cfg_staticPath#}js/ui/swiper.min.js?v={#$cfg_staticVersion#}"></script>

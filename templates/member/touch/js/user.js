@@ -20,6 +20,10 @@ function transTimes(timestamp, n){
 	}
 }
 
+var URL = location.href;
+var URLArrary = URL.split('#');
+var iname_start = URLArrary[1]  ? URLArrary[1] : '';
+
 $(function(){
 
 	var device = navigator.userAgent;
@@ -87,6 +91,8 @@ $(function(){
 			loadMoreLock = false;
       $(".navbar .active").removeClass('active');
       $(".navbar li").eq(tabsSwiper.activeIndex).addClass('active');
+       var iname = $(".navbar li").eq(tabsSwiper.activeIndex).attr('data-action');
+       window.location.href = URLArrary[0] + '#' + (iname?iname:listid);
       if (navbar.hasClass('fixed')) {
         $(window).scrollTop(navHeight + 2);
       }
@@ -106,6 +112,13 @@ $(function(){
       // isload = false;
     }
   })
+  if(iname_start != ''){
+  	var index = $('.navbar li[data-action="'+iname_start+'"]').index();
+  	console.log(index)
+  	tabsSwiper.slideTo( index );
+  }else{
+  	getList();
+  }
   $(".navbar li").on('touchstart mousedown',function(e){
     e.preventDefault();
     $(".navbar .active").removeClass('active');
@@ -153,7 +166,7 @@ $(function(){
 		getList();
 	})
 
-  getList();
+//getList();
 
   // 异步获取列表
   function getList(){
@@ -177,6 +190,9 @@ $(function(){
 			curr = $('.htab .active').attr('data-action');
 			url = masterDomain + "/include/ajax.php?service=house&action="+curr+"&uid="+uid+"&page=" + page + "&pageSize="+pageSize;
 			objId = 'house';
+		}else if(action == "live"){
+			url = "/include/ajax.php?service=live&action=alive&uid="+uid+"&page=" + page + "&pageSize="+pageSize;
+			objId = 'live';
 		}
 
 		$('.loading').remove();
@@ -195,7 +211,7 @@ $(function(){
 						$('.'+objId).after('<div class="loading">'+langData['siteConfig'][20][126]+'</div>');
             // panel.children('.content').append("<p class='error'>"+data.info+"</p>");
           }else {
-            var list = data.info.list, articleHtml = [], huodongHtml = [], tiebaHtml = [], videoHtml = [], houseHtml = [], infoHtml = [];
+            var list = data.info.list, articleHtml = [], huodongHtml = [], tiebaHtml = [], videoHtml = [], houseHtml = [], infoHtml = [], liveHtml=[];
             var totalPage = data.info.pageInfo.totalPage;
 						active.attr('data-totalPage', totalPage);
             for (var i = 0; i < list.length; i++) {
@@ -409,7 +425,7 @@ $(function(){
 								}
 
               // 二手
-              }else {
+              }else if(action == "info"){
                 infoHtml.push('<div class="item">');
                 infoHtml.push('<a href="' + list[i].url + '">');
 
@@ -425,6 +441,32 @@ $(function(){
                 infoHtml.push('</a>');
                 infoHtml.push('</div>');
 
+              }else{
+              	var datalist = list;
+              	var className = '', ftime='' ,care='',txt="";
+         		if(datalist[i].state==1){
+         			className = 'living';
+         		}else if(datalist[i].state==2){
+         			className = 'live_after';
+         		}else{
+         			className = 'live_before';
+         			ftime='<em>'+datalist[i].ftime+'</em>'
+         		}
+         		liveHtml.push('<li class="video_box libox">');
+					liveHtml.push('<a href="'+datalist[i].url+'">');
+						liveHtml.push('<div class="video_img">');
+							liveHtml.push('<span class="video_state '+className+'">'+ftime+'</span>');
+							liveHtml.push('<img src="'+datalist[i].litpic+'" />');
+						liveHtml.push('</div>');
+						liveHtml.push('<div class="info_box">');
+							liveHtml.push('<div class="look_num">'+datalist[i].click+'</div>');
+							liveHtml.push('<div class="video_info">');
+								liveHtml.push('<h3>'+datalist[i].title+'</h3>');
+								liveHtml.push('<p>#'+(datalist[i].typename?datalist[i].typename:"其他")+'</p>');
+							liveHtml.push('</div>	');
+						liveHtml.push('</div>');
+					liveHtml.push('</a>');
+				liveHtml.push('</li>');	
               }
             }
 						$('.loading').remove();
@@ -433,7 +475,7 @@ $(function(){
             $('.tieba').append(tiebaHtml.join(""));
             $('.house').append(houseHtml.join(""));
             $('.info').append(infoHtml.join(""));
-
+			$('.live').append(liveHtml.join(""));
 
           }
         }

@@ -12,6 +12,7 @@ $customSeoDescription = '团购频道';
 $hotline_config = 0;
 $customHotline = '4004-444-444';
 $customAtlasMax = 10;
+$customCommentCheck = 0;
 $recMoney = 10;
 $singelnum = 500;
 $custom_map = 0;

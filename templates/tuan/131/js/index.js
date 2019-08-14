@@ -148,7 +148,7 @@ $(function () {
                                             html.push('<img src="'+list[i].litpic+'">');
                                             html.push('  <div class="info">');
                                             html.push('     <p class="name">蜕变美甲美睫工作室蜕变美甲美睫工作室</p>');
-                                            html.push('<p class="price"><i>¥</i><span>'+list[i].price+'</span><s><i>¥</i>'+list[i].market+'</s></p>');
+                                            html.push('<p class="price"><i>'+echoCurrency('symbol')+'</i><span>'+list[i].price+'</span><s><i>'+ echoCurrency('symbol') +'</i>'+list[i].market+'</s></p>');
                                             var state = '';
                                             if(list[i].state==1){
                                                 state = '<p><span data-url="'+list[i].url+'" class="btn_03 btn">已结束</span></p>';

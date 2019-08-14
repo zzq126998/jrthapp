@@ -29,7 +29,7 @@
 
   .priceWrap .table th, .table td {vertical-align: middle;}
 
-  #travelFlag, #marryTag {width: 530px;height: 200px;}
+  #travelFlag, #travelTag {width: 530px;height: 200px;}
   /*.priceWrap .table .group .del {cursor: default; background-image: none; opacity: .65; filter: alpha(opacity=65); -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none;}*/
 </style>
 <script>
@@ -96,7 +96,7 @@ var thumbSize = {#$thumbSize#}, thumbType = "{#$thumbType#}", action = "{#$actio
         </dd>
     </dl>
     <dl class="clearfix">
-      <dt><label class="sl">访问方式：</label><small><i>{</i><i>#$</i>marry_channelDomain<i>#}</i></small></dt>
+      <dt><label class="sl">访问方式：</label><small><i>{</i><i>#$</i>travel_channelDomain<i>#}</i></small></dt>
       <dd class="radio">
         {#html_radios name="subdomain" values=$subdomain checked=$subdomainChecked output=$subdomainNames separator="&nbsp;&nbsp;"#}
       </dd>
@@ -158,7 +158,7 @@ var thumbSize = {#$thumbSize#}, thumbType = "{#$thumbType#}", action = "{#$actio
       </dd>
     </dl>
     <dl class="clearfix">
-      <dt><label class="sl">咨询热线：</label><small><i>{</i><i>#$</i>marry_hotline<i>#}</i></small></dt>
+      <dt><label class="sl">咨询热线：</label><small><i>{</i><i>#$</i>travel_hotline<i>#}</i></small></dt>
       <dd class="radio">
         {#html_radios name="hotline_rad" values=$hotlineVal checked=$hotlineChecked output=$hotlineNames separator="&nbsp;&nbsp;"#}
         <input class="input-large"{#if $hotlineChecked == 0#} style="display:none;"{#/if#} type="text" name="hotline" id="hotline" value="{#$hotline#}" placeholder="请输入频道咨询热线" />
@@ -243,7 +243,7 @@ var thumbSize = {#$thumbSize#}, thumbType = "{#$thumbType#}", action = "{#$actio
         </div>
       </dd>
     </dl>
-    
+
     <dl class="clearfix">
       <dt><label>旅游酒店：</label></dt>
       <dd class="radio">

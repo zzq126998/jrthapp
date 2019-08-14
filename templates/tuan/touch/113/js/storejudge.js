@@ -65,16 +65,16 @@ $(function(){
 		$("#common").append('<div class="loading">加载中...</div>');
 
 		var data = [];
-		data.push('id='+detailID);
+		data.push('aid='+detailID);
 		data.push('filter='+filter);
 		data.push('page='+atPage);
 		data.push('pageSize=10');
 
 		$.ajax({
-			url: "/include/ajax.php?service=tuan&action=commonStore",
+			url: "/include/ajax.php?service=member&action=getComment&type=tuan-store",
 			data: data.join("&"),
 			type: "GET",
-			dataType: "jsonp",
+			dataType: "json",
 			success: function (data) {
 				if(data && data.state == 100){
 

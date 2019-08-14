@@ -329,6 +329,9 @@ if($dopost == "getDetail"){
 		$sql = $dsql->SetQuery("SELECT `id` FROM `#@__".$action."_comment` WHERE `id` = " . $val . $where);
 		$ret = $dsql->dsqlOper($sql, "results");
 		if($ret){
+			$sql = $dsql->SetQuery("DELETE FROM `#@__public_up` WHERE `type` = '1' and `tid` = '$val'");
+			$dsql->dsqlOper($sql, "update");
+			
 			$archives = $dsql->SetQuery("DELETE FROM `#@__".$action."_comment` WHERE `id` = ".$val);
 			$results = $dsql->dsqlOper($archives, "update");
 			if($results != "ok"){

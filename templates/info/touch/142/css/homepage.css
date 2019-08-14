@@ -83,7 +83,14 @@
 .foot_bottom .f_left .share s{display: inline-block;width: .36rem;height: .31rem;background: url("../images/fx_01.png") no-repeat;background-size: contain;}
 .foot_bottom .f_right{ -webkit-box-flex: 19;display: -webkit-box;font-size: .32rem;font-weight: bold;}
 .foot_bottom .f_right .r-item{-webkit-box-flex: 1;}
-.foot_bottom .f_right .ftel{background:rgba(255,181,86,1);border-radius:.06rem 0 0 .06rem;color: #fff;line-height: .88rem;text-align: center;}
+.foot_bottom .f_right .ftel,.foot_bottom .f_right .f_chat{background:rgba(255,181,86,1);border-radius:.06rem 0 0 .06rem;color: #fff;line-height: .88rem;text-align: center;}
+.foot_bottom .f_right .ftel{
+	border-radius: 0 .06rem .06rem 0;
+	background: -webkit-linear-gradient(left, #fb735d , #fb5845); /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right, #fb735d , #fb5845); /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right, #fb735d , #fb5845); /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right, #fb735d , #fb5845); /* 标准的语法 */
+}
 .foot_bottom .f_right a{color: #fff;}
 
 /*全屏*/

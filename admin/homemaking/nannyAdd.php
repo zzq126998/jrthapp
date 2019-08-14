@@ -29,6 +29,7 @@ if(empty($post)) $post = 0;
 if(empty($userid)) $userid = 0;
 if(empty($weight)) $weight = 1;
 if(empty($state)) $state = 0;
+if(empty($bond)) $bond = 0;
 if(empty($click)) $click = mt_rand(50, 200);
 
 if(!empty($nature)) $nature = join(",", $nature);

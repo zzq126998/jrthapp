@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /bin/
+Disallow: /admin/
+Disallow: /upload/
+Disallow: /uploads/
+Disallow: /include/
+Disallow: /templates_c/
+Disallow: /pic/

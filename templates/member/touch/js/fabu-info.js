@@ -1,6 +1,10 @@
 $(function(){
 
-
+    //获取经度 纬度值
+    HN_Location.init(function(data){
+        $('#longitude').val(data.lng);
+        $('#latitude').val(data.lat);
+    });
 
   //年月日
   $('.demo-test-date').scroller(

@@ -4,7 +4,7 @@
 <meta charset="{#$cfg_soft_lang#}">
 <meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1.0,maximum-scale=1.0, user-scalable=0">
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<title>经纪人详情</title>
+<title>{#$detail_nickname#}</title>
 <meta name="keywords" content="{#$detail_nickname#},{#$detail_nickname#}网上店铺,{#$detail_phone#}" />
 <meta name="description" content="{#$detail_nickname#}经纪人店铺提供经纪人发布的二手房房源、租房房源信息，另外提供经纪人详细的信息，如个人介绍、电话号码：{#$detail_phone#}、服务档案、提问过的问答等信息，让您全面了解经纪人情况。" />
 <link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/core/touchBase.css?v={#$cfg_staticVersion#}" />
@@ -24,6 +24,9 @@
 		cityName: '{#$siteCityInfo['name']#}',
 		mapKey: '{#$site_map_key#}'
 	};
+	var imconfig = {
+		'chatid':'{#$detail_userid#}'
+	}
 	var zjuid = {#$detail_id#};
 </script>
 
@@ -174,7 +177,7 @@
 <div class="bottom-fixed-container">
 	<div class="big-wrapper">
 		  <a href="{#getUrlPath service='house' template='weituo' param="type=broker&id={#$detail_id#}"#}" class="button post_ulog"><i></i>房源委托</a>
-        <a href="tel:{#$detail_phone#}" class="button call_phone"><i></i>电话咨询</a>
+        <a href="javascript:;" class="button call_phone chat_to-Link" data-type="user"><i></i>在线咨询</a>
     </div>
 </div>
 

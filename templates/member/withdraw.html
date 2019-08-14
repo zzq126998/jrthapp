@@ -18,6 +18,7 @@
 
 	var hideFileUrl = {#$cfg_hideUrl#};
 	var money = {#$userinfo.money#}, withdrawLog = '{#getUrlPath service="member" type="user" template="withdraw_log_detail" id="%id%"#}';
+	var minWithdraw = {#$minWithdraw#}, maxWithdraw = {#$maxWithdraw#}, withdrawFee = {#$withdrawFee#};
 </script>
 </head>
 
@@ -39,6 +40,8 @@
 			</ul>
 
 			<div class="withdraw">
+
+				{#if $withdrawCycleState#}
 				<dl class="fn-clear">
 					<dt>{#$langData['siteConfig'][19][299]#}：</dt>{#* 可提现金额 *#}
 					<dd class="price">{#$userinfo.money#}</dd>
@@ -46,13 +49,49 @@
 				<dl class="fn-clear">
 					<dt>{#$langData['siteConfig'][19][300]#}：</dt>{#* 提现到 *#}
 					<dd class="singel">
-						<input type="radio" name="type" id="t1" value="1" checked />
-						<label for="t1"><i></i> {#$langData['siteConfig'][19][301]#}</label>{#* 银行卡 *#}
-						<input type="radio" name="type" id="t2" value="2" />
-						<label for="t2"><i></i> {#$langData['siteConfig'][19][302]#}</label>{#* 支付宝 *#}
+						{#if $withdrawPlatform && in_array('weixin', $withdrawPlatform)#}
+						<input type="radio" name="type" id="t0" value="weixin"{#if $type == "weixin"#} checked{#/if#} />
+						<label for="t0"><i></i> {#$langData['siteConfig'][27][139]#}</label>{#* 微信 *#}
+						{#/if#}
+
+						{#if $withdrawPlatform && in_array('alipay', $withdrawPlatform)#}
+						<input type="radio" name="type" id="t1" value="alipay"{#if $type == "alipay"#} checked{#/if#} />
+						<label for="t1"><i></i> {#$langData['siteConfig'][19][302]#}</label>{#* 支付宝 *#}
+						{#/if#}
+
+						{#if $withdrawPlatform && in_array('bank', $withdrawPlatform)#}
+						<input type="radio" name="type" id="t2" value="bank"{#if $type == "bank"#} checked{#/if#} />
+						<label for="t2"><i></i> {#$langData['siteConfig'][19][301]#}</label>{#* 银行卡 *#}
+						{#/if#}
 					</dd>
 				</dl>
-				<div class="mitem" id="type1">
+
+				{#if $withdrawPlatform && in_array('weixin', $withdrawPlatform)#}
+
+				{#/if#}
+
+				{#if $withdrawPlatform && in_array('alipay', $withdrawPlatform)#}
+				<div class="mitem{#if $type == 'bank' || $type == 'weixin'#} fn-hide{#/if#}" id="i_alipay">
+					<dl class="fn-clear">
+						<dt>{#$langData['siteConfig'][19][40]#}：</dt>{#* 收款人帐号 *#}
+						<dd>
+							<input type="text" id="alipaynum" name="alipaynum" class="inp" maxlength="30" size="25" />
+							<a href="javascript:;" class="historyAlipay">{#$langData['siteConfig'][19][303]#}<i></i></a>{#* 历史记录 *#}
+							<span class="tip-inline"><s></s>{#$langData['siteConfig'][20][509]#}</span>{#* 请输入支付宝帐号 *#}
+						</dd>
+					</dl>
+					<dl class="fn-clear">
+						<dt>{#$langData['siteConfig'][19][41]#}：</dt>{#* 收款人姓名 *#}
+						<dd>
+							<input type="text" id="alipayname" name="alipayname" class="inp" maxlength="10" size="10" />
+							<span class="tip-inline"><s></s>{#$langData['siteConfig'][20][209]#}</span>{#* 请输入收款人姓名 *#}
+						</dd>
+					</dl>
+				</div>
+				{#/if#}
+
+				{#if $withdrawPlatform && in_array('bank', $withdrawPlatform)#}
+				<div class="mitem{#if $type == 'alipay' || $type == 'weixin'#} fn-hide{#/if#}" id="i_bank">
 					<dl class="fn-clear">
 						<dt>{#$langData['siteConfig'][19][36]#}：</dt>{#* 开户行 *#}
 						<dd>
@@ -76,23 +115,8 @@
 						</dd>
 					</dl>
 				</div>
-				<div class="mitem fn-hide" id="type2">
-					<dl class="fn-clear">
-						<dt>{#$langData['siteConfig'][19][40]#}：</dt>{#* 收款人帐号 *#}
-						<dd>
-							<input type="text" id="alipaynum" name="alipaynum" class="inp" maxlength="30" size="25" />
-							<a href="javascript:;" class="historyAlipay">{#$langData['siteConfig'][19][303]#}<i></i></a>{#* 历史记录 *#}
-							<span class="tip-inline"><s></s>{#$langData['siteConfig'][20][509]#}</span>{#* 请输入支付宝帐号 *#}
-						</dd>
-					</dl>
-					<dl class="fn-clear">
-						<dt>{#$langData['siteConfig'][19][41]#}：</dt>{#* 收款人姓名 *#}
-						<dd>
-							<input type="text" id="alipayname" name="alipayname" class="inp" maxlength="10" size="10" />
-							<span class="tip-inline"><s></s>{#$langData['siteConfig'][20][209]#}</span>{#* 请输入收款人姓名 *#}
-						</dd>
-					</dl>
-				</div>
+				{#/if#}
+
 				<dl class="fn-clear">
 					<dt>{#$langData['siteConfig'][19][39]#}：</dt>{#* 提现金额 *#}
 					<dd>
@@ -112,8 +136,14 @@
 					<dd><input type="button" id="tj" value="{#$langData['siteConfig'][19][716]#}" /></dd>{#* 申请提现 *#}
 				</dl>
 
+				{#else#}
+				<div class="txtbox">
+					<div class="not"><p>{#$withdrawCycleNote#}</p></div>
+				</div>
+				{#/if#}
+
 				<div class="tips">
-					<p>{#$langData['siteConfig'][20][149]#}</p>{#* 1. 到账时间：<br />    银行卡提现3-5个工作日内到账；<br />    支付宝提现2个工作日内到账；<br />2. 承诺及确认：<br />    款项付至上述收款人及收款账号的责任完全由本人或本公司承担，且自贵司付款之日起本人就上述服务协议及相关服务再无任何争议。 *#}
+					<p>{#$withdrawNote#}</p>
 				</div>
 			</div>
 

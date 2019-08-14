@@ -138,6 +138,12 @@ var thumbSize = {#$thumbSize#}, thumbType = "{#$thumbType#}", action = "{#$actio
       </dd>
     </dl>
     <dl class="clearfix">
+      <dt><label>发布审核：</label></dt>
+      <dd class="radio">
+        {#html_radios name="fabuCheck" values=$fabuCheck checked=$fabuCheckChecked output=$fabuCheckNames separator="&nbsp;&nbsp;"#}
+      </dd>
+    </dl>
+    <dl class="clearfix">
       <dt><label>能否删除：</label></dt>
       <dd class="radio">
         {#html_radios name="commentCheck" values=$commentCheck checked=$commentCheckChecked output=$commentCheckNames separator="&nbsp;&nbsp;"#}
@@ -405,7 +411,7 @@ var thumbSize = {#$thumbSize#}, thumbType = "{#$thumbType#}", action = "{#$actio
           <dt><label for="OSSUrl">服务器地址：</label></dt>
           <dd>
             <input class="input-large" type="text" name="OSSUrl" id="OSSUrl" value="{#$server#}" data-regex=".*" />
-            <span class="input-tips" style="display:inline-block;"><s></s>&nbsp;完整的Http地址。如果没有绑定域名地址为：（Bucket name）.oss.aliyuncs.com</span>
+            <span class="input-tips" style="display:inline-block;"><s></s>&nbsp;完整的Http地址，如：https://live.ihuoniao.cn/，http开头，/结尾</span>
           </dd>
         </dl>
         <dl class="clearfix">

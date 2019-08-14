@@ -213,3 +213,23 @@ body,html{ background: #f9f9f9;}
 .house_detail.zu .house_pic .geren{ position: absolute; right: -10px; top: -11px; width: 100px; height: 100px; background: url(../images/house_2.png) no-repeat center;}
 
 .loading{text-align: center; font-size: 16px; margin-top: 40px;}
+
+/*直播*/
+
+.live_detail{ padding: 20px 40px; background: #fff; margin-bottom: 15px;}
+.live_detail a{display: block;}
+.live_detail a h2{font-size: 18px; font-weight: bold; line-height: 22px; color: #3b3b3b; display: -webkit-box; -webkit-box-orient: vertical;-webkit-line-clamp: 2; overflow: hidden;}
+.live_detail  .imgbox{width: 288px; height: 164px; border-radius: 6px; overflow: hidden; margin: 20px 0; position: relative;}
+.live_detail .imgbox i{display: block; position: absolute; top: 10px; left: 10px; background: no-repeat ; font-style: normal;}
+.live_detail.living .imgbox i{width: 58px; height: 20px; background-image: url(../images/onfair2.gif); background-size: contain;}
+.live_detail.lived .imgbox i{background-color: #87cc24; color: #fff; width: 62px; height: 20px; line-height: 20px; text-align: center; font-size: 12px;border-radius: 2px;}
+.live_detail.wlive .imgbox i{border-radius: 2px; background-color: rgba(0,0,0,.57); height: 20px; padding-right: 12px; color: #fff;}
+.live_detail.wlive .imgbox i:before{content: '预告'; display: inline-block; width: 40px; height: 20px; font-size: 12px; text-align: center; color: #fff; border-radius: 2px; background-color: #ff853b; margin-right: 12px;}
+.live_detail .imgbox img{width: 100%;}
+.live_info{color: #a2a5ab; overflow: hidden; font-size: 12px;}
+.live_info .ftime{float: left;}
+.live_info p{float: right;}
+.live_info p em{margin-left: 52px; vertical-align: middle;}
+.live_info p em:before{content: ''; display: inline-block; width: 15px; height: 14px; background-repeat: no-repeat; background-size: contain; margin-right: 5px;}
+.live_info p em.comm_num:before{background-image: url(../images/commt.png); vertical-align: middle;}
+.live_info p em.click_num:before{background-image: url(../images/click_.png); vertical-align: middle;}

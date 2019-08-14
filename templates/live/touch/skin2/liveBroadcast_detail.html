@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="{#$cfg_soft_lang#}">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no,viewport-fit=cover" />
+<title>{#$dating_title#}</title>
+<link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/core/touchBase.css?v={#$cfg_staticVersion#}" />
+<!-- <link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/ui/swiper.min.css?v={#$cfg_staticVersion#}"> -->
+<link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/swiper.min.css?v={#$cfg_staticVersion#}">
+<link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/liveBroadcast_detail.css?v={#$cfg_staticVersion#}">
+<script type="text/javascript" src="{#$cfg_staticPath#}js/core/touchScale.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/core/zepto.min.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript">
+	var masterDomain = '{#$cfg_basehost#}', channelDomain = '{#$dating_channelDomain#}', staticPath = '{#$cfg_staticPath#}',templets_skin = '{#$templets_skin#}';
+
+	var hideFileUrl = {#$cfg_hideUrl#};
+	var cookiePre = '{#$cfg_cookiePre#}';
+</script>
+</head>
+
+<body>
+{#include file="../../../siteConfig/touch_top.html" pageTitle="直播"#}
+
+ 
+<div class="video-box">
+	  <video width="100%" height="100%" preload="meta" x5-video-player-type="h5" x5-playsinline playsinline webkit-playsinline  src="http://www.weaver.com.cn/mobile/About/Audio/profileld2017.mp4" id="video" poster="{#$templets_skin#}upfile/usBanner.png"></video>
+	  <div class="video-btn">
+	      <div class="play-box video-icon-box" id="vbplay">
+	          <i class="play-icon video-icon"></i>
+	      </div>
+	      <div class="load-box video-icon-box" style="display: none;">
+	          <i class="load-icon video-icon"></i>
+	      </div>
+	      <div class="reload-box video-icon-box" style="display: none;">
+	          <i class="reload-icon"></i>
+	          <p>重新播放</p>
+	      </div>
+	      <div class="error-box video-icon-box" style="display: none;">
+	          <p class="err-info">视频出错了，请检查网络状况</p> 
+	          <div class="reload-box">
+	              <i class="reload-icon"></i>
+	              <p>重新加载</p>
+	          </div>
+	      </div>
+	  </div>
+	  <div id="video-control" style="display: none;">
+	  <div class="btn-control">
+	    <div id="play" class="play"> </div>
+	  </div>
+	  <div id="time" class="time"> 00:00 </div>
+	  <div id="progress"> <span id="bar"></span>
+	    <div id="control"> </div>
+	  </div>
+	  <div class="btn-control">
+	    <div id="sound" class="soundon"> </div>
+	  </div>
+	  <div id="full" class="full"> </div>
+	</div>
+</div>
+
+
+<div class="navigation_list">
+	<ul class="fn-clear">
+		<li class="active">互动<i></i></li>
+		<li>介绍<i></i></li>
+		<li>邀请榜<i></i></li>
+		<li>合作<i></i></li>
+	</ul>
+	<span>关注</span>
+</div>
+
+<!-- 互动 -->
+<div class="hudong">
+	<div class="interact">
+		<div class="interact_list">
+			<p class="hour">07-14  12:03:22</p>
+			<ul>
+				<li class="fn-clear">
+					<div class="head_portrait"><img src="{#$templets_skin#}upfile/dt1.jpg"></div>
+					<div class="text">
+						<p class="name">韩夕阳</p>
+						<div class="content"><p class="huifu">┌ 鹏鹏你在现场直播吗 ┘</p><p>回复：是的呀</p></div>
+					</div>
+				</li>
+				<li class="fn-clear">
+					<div class="head_portrait"><img src="{#$templets_skin#}upfile/dt1.jpg"></div>
+					<div class="text">
+						<p class="name">韩夕阳</p>
+						<div class="content"><p>鹏鹏，你在现场直播吗</p></div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="interact_list">
+			<p class="hour">07-14  12:03:22</p>
+			<ul>
+				<li class="fn-clear">
+					<div class="head_portrait"><img src="{#$templets_skin#}upfile/dt1.jpg"></div>
+					<div class="text">
+						<p class="name">韩夕阳</p>
+						<div class="content"><p>老铁双击666</p></div>
+					</div>
+				</li>
+				<li class="fn-clear">
+					<div class="head_portrait"><img src="{#$templets_skin#}upfile/dt1.jpg"></div>
+					<div class="text">
+						<p class="name">韩夕阳</p>
+						<div class="content"><p>主播搞个开箱视频吧</p></div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="fixed_icon">
+		<div class="fi_01"><img src="{#$templets_skin#}images/ic_05.png"></div>
+		<div class="fi_02"><img src="{#$templets_skin#}images/ic_06.png"></div>
+		<div class="fi_03"><img src="{#$templets_skin#}images/ic_07.png"></div>
+		<div class="fi_04"><img src="{#$templets_skin#}images/ic_08.png"><p>1903</p></div>
+	</div>
+
+	<div class="search_bar fn-clear">
+		<span class="biaoqin"></span>
+		<!-- <input type="text" id="search_keyword" class="txt_search" value="" autocomplete="off" placeholder="请输入您要搜索的企业关键词"> -->
+		<span class="search_keyword">请输入您要搜索的企业关键词</span>
+		<span class="liwu"></span>
+		<span class="jia"></span>
+	</div>
+
+	<div class="ios-input-box">
+        <div class="ios-input-con">
+            <p>发表评论</p>
+            <textarea placeholder="请输入评论内容" class="ios-comment-area"></textarea>
+            <div class="btn-group">
+                <div class="ios-input-close">取消</div>
+                <div class="ios-input-submit">发送</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 礼物 -->
+    <div class="mask"></div>
+    <div class="layui-m-anim-scale" id="c-gift">
+    	<ul class="mlbn-present fn-clear">
+    		<li>
+    			<a href="javaScript:;">
+    				<span><img src="//i.vzan.cc/image/liveImage/jpeg/2017/2/13/185048c3391b8222eb4aa6a33ed435b996a610.jpeg"></span>
+    				<p class="mlbn-present-zan-name">鲜花</p>
+    				<p class="mlbn-present-zan-money">0.50元</p>
+    			</a>
+    		</li>
+    		<li>
+    			<a href="javaScript:;">
+    				<span><img src="//i.vzan.cc/image/liveImage/jpeg/2017/2/13/185048c3391b8222eb4aa6a33ed435b996a610.jpeg"></span>
+    				<p class="mlbn-present-zan-name">鲜花</p>
+    				<p class="mlbn-present-zan-money">0.50元</p>
+    			</a>
+    		</li>
+    		<li>
+    			<a href="javaScript:;">
+    				<span><img src="//i.vzan.cc/image/liveImage/jpeg/2017/2/13/185048c3391b8222eb4aa6a33ed435b996a610.jpeg"></span>
+    				<p class="mlbn-present-zan-name">鲜花</p>
+    				<p class="mlbn-present-zan-money">0.50元</p>
+    			</a>
+    		</li>
+    		<li>
+    			<a href="javaScript:;">
+    				<span><img src="//i.vzan.cc/image/liveImage/jpeg/2017/2/13/185048c3391b8222eb4aa6a33ed435b996a610.jpeg"></span>
+    				<p class="mlbn-present-zan-name">鲜花</p>
+    				<p class="mlbn-present-zan-money">0.50元</p>
+    			</a>
+    		</li>
+    		<li>
+    			<a href="javaScript:;">
+    				<span><img src="//i.vzan.cc/image/liveImage/jpeg/2017/2/13/185048c3391b8222eb4aa6a33ed435b996a610.jpeg"></span>
+    				<p class="mlbn-present-zan-name">鲜花</p>
+    				<p class="mlbn-present-zan-money">0.50元</p>
+    			</a>
+    		</li>
+    		<li>
+    			<a href="javaScript:;">
+    				<span><img src="//i.vzan.cc/image/liveImage/jpeg/2017/2/13/185048c3391b8222eb4aa6a33ed435b996a610.jpeg"></span>
+    				<p class="mlbn-present-zan-name">鲜花</p>
+    				<p class="mlbn-present-zan-money">0.50元</p>
+    			</a>
+    		</li>
+    		<li>
+    			<a href="javaScript:;">
+    				<span><img src="//i.vzan.cc/image/liveImage/jpeg/2017/2/13/185048c3391b8222eb4aa6a33ed435b996a610.jpeg"></span>
+    				<p class="mlbn-present-zan-name">鲜花</p>
+    				<p class="mlbn-present-zan-money">0.50元</p>
+    			</a>
+    		</li>
+    		<li>
+    			<a href="javaScript:;">
+    				<span><img src="//i.vzan.cc/image/liveImage/jpeg/2017/2/13/185048c3391b8222eb4aa6a33ed435b996a610.jpeg"></span>
+    				<p class="mlbn-present-zan-name">鲜花</p>
+    				<p class="mlbn-present-zan-money">0.50元</p>
+    			</a>
+    		</li>
+    	</ul>
+    	<ul class="d-flex" id="fs-gift-number">
+            <li class="f-12rem">数量</li>
+            <li class="clearfix fsl-shuliang">
+                <a><span class="fsl-shuliang-reduce">－</span></a>
+                <input type="text" class="fsl-shuliang-number" id="fs-gift-amount" value="1">
+                <a><span class="fsl-shuliang-plus">＋</span></a>
+            </li>
+            <li class="flex f-12rem fsl-present-price">合计：<var id="fs-gift-total">2.00</var>元</li>
+            <li class="fsl-fasong-bt">
+                <a id="fs-gift-send" class="enable">赠送</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- 互动 e-->
+
+<!-- 介绍 -->
+<div class="jieshao" style="display: none;">
+	<div class="jieshao_info fn-clear">
+		<div class="info_img"><img src="{#$templets_skin#}upfile/huoniao.png"></div>
+		<div class="info_text">
+			<p>火鸟直播</p>
+			<p>直击峰会现场</p>
+		</div>
+		<i></i>
+	</div>
+	<div class="introduce">
+		<div class="introduce_txt">直播介绍</div>
+		<div class="introduce_title">
+			<p>2018网络科普反邪教宣讲直播走进云栖小镇</p>
+			<p>第一时间带你直击现场，观看了解最新最全宣讲要点</p>
+		</div>
+	</div>
+</div>
+<!-- 介绍 e-->
+
+
+<!-- 邀请榜 -->
+<div class="yaoqinbang" style="display: none;">
+	<div class="switch_list">
+		<p>
+			<span class="active">邀请榜</span><span>打赏榜</span>
+		</p>
+	</div>
+	<div class="request_list">
+		<ul>
+			<li class="fn-clear">
+				<span class="ranking ranking_01"></span>
+				<div class="ranking_info fn-clear">
+					<div class="user_img"><img src="{#$templets_skin#}upfile/dt1.jpg"></div>
+					<p class="user_name">鹏鹏</p>
+					<p class="user_data">邀请<em>78</em>人</p>
+				</div>
+			</li>
+			<li class="fn-clear">
+				<span class="ranking ranking_02"></span>
+				<div class="ranking_info fn-clear">
+					<div class="user_img"><img src="{#$templets_skin#}upfile/dt1.jpg"></div>
+					<p class="user_name">朝夕阳</p>
+					<p class="user_data">邀请<em>78</em>人</p>
+				</div>
+			</li>
+			<li class="fn-clear">
+				<span class="ranking ranking_03"></span>
+				<div class="ranking_info fn-clear">
+					<div class="user_img"><img src="{#$templets_skin#}upfile/dt1.jpg"></div>
+					<p class="user_name">SIMMO</p>
+					<p class="user_data">邀请<em>78</em>人</p>
+				</div>
+			</li>
+			<li class="fn-clear">
+				<div class="ranking_info fn-clear">
+					<div class="user_img"><img src="{#$templets_skin#}upfile/dt1.jpg"></div>
+					<p class="user_name">浮生家</p>
+					<p class="user_data">邀请<em>78</em>人</p>
+				</div>
+			</li>
+			<li class="fn-clear">
+				<div class="ranking_info fn-clear">
+					<div class="user_img"><img src="{#$templets_skin#}upfile/dt1.jpg"></div>
+					<p class="user_name">李天薇</p>
+					<p class="user_data">邀请<em>78</em>人</p>
+				</div>
+			</li>
+			<li class="fn-clear">
+				<div class="ranking_info fn-clear">
+					<div class="user_img"><img src="{#$templets_skin#}upfile/dt1.jpg"></div>
+					<p class="user_name">鹏鹏</p>
+					<p class="user_data">邀请<em>78</em>人</p>
+				</div>
+			</li>
+		</ul>
+		<button class="btn_request">我要邀请</button>
+	</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+	var wxconfig = {
+		"appId": '{#$wxjssdk_appId#}',
+		"timestamp": '{#$wxjssdk_timestamp#}',
+		"nonceStr": '{#$wxjssdk_nonceStr#}',
+		"signature": '{#$wxjssdk_signature#}',
+		"description": '{#$dating_description#}',
+		"title": '{#$dating_title#}',
+		"imgUrl": '{#$dating_logoUrl#}',
+		"link": '{#$dating_channelDomain#}',
+	};
+
+	document.write(unescape("%3Cscript src='{#$cfg_staticPath#}js/publicShare.js?v="+~(-new Date())+"'type='text/javascript'%3E%3C/script%3E"));
+</script>
+<!-- <script src="{#$cfg_staticPath#}js/ui/swiper.min.js" type="text/javascript"></script> -->
+<script src="{#$templets_skin#}js/swiper.min.js" type="text/javascript"></script>
+<script src="{#$templets_skin#}js/liveBroadcast_detail.js?v={#$cfg_staticVersion#}"></script>
+</body>
+</html>
+
+  
+

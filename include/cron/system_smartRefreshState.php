@@ -32,6 +32,10 @@ if(in_array('car', $installModuleArr)){
   array_push($smartRefresh_tab, 'car_list');
 }
 
+if(in_array('education', $installModuleArr)){
+  array_push($smartRefresh_tab, 'education_courses');
+}
+
 if($smartRefresh_tab){
   foreach ($smartRefresh_tab as $key => $value) {
     $sql = $dsql->SetQuery("SELECT `id`, `refreshCount`, `refreshTimes`, `refreshNext`, `refreshSurplus` FROM `#@__".$value."` WHERE `refreshSmart` = 1 AND `refreshNext` <= '$smartRefresh_time' AND `refreshSurplus` > 0");

@@ -724,13 +724,14 @@ $(function () {
             });
         }
     });
-    
+
     function checkFenbiao(){
         var cookiePre = window.cookiePre ? window.cookiePre : top.cookiePre;
         var cookieDomain = $.cookie(cookiePre+'cookieDomain');
         var syncCheck = $.cookie(cookiePre+'syncFenbiao');
         if(syncCheck){
             var file = syncCheck+'_syncFenbiao.php';
+            $.cookie(cookiePre+'syncFenbiao', '');
             top.open('/include/cron/'+file);
         }
     }

@@ -37,7 +37,8 @@
       {#siteConfig action="siteModule" return="module"#}
       {#if $module.code != "special" && $module.code != "paper" && $module.code != "website" && $module.code != "live" && $module.code != "quanjing" && $module.code != "integral"#}
       <a href="javascript:;" data-action="{#$module.code#}" class="{#$module.code#}">{#$module.name#}</a>
-			{#/if#}
+      {#/if#}
+      {#$n=$n+1#}
       {#/siteConfig#}
       <em class="inset"></em>
     </div>

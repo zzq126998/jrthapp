@@ -36,10 +36,10 @@
 				<li><a href="{#getUrlPath service='member' type='user' template='withdraw'#}">{#$langData['siteConfig'][19][293]#}</a></li>{#* 我要提现 *#}
 				<li class="curr"><a href="{#getUrlPath service='member' type='user' template='withdraw_log'#}">{#$langData['siteConfig'][19][294]#}</a></li>{#* 提现记录 *#}
 			</ul>
-			
+
 			<!-- put_forward -->
 			{#if $tab == 'p'#}
-				
+
 				<!-- 银行 -->
 				{#if $type == 'bank'#}
 
@@ -76,10 +76,10 @@
 					</ul>
 				</dd>
 			</dl>
-				
+
 				<!-- 支付宝微信 -->
 				{#else#}
-			
+
 			<dl class="info-section">
 				<dt><span class="info-title">{#$langData['siteConfig'][19][863]#}：</span><em class="info-text">{#$langData['siteConfig'][32][71]#}</em></dt>{#* 提现状态-提现申请已提交  *#}
 				<dd class="last"><p>{#$stateNote#}</p>{#$langData['siteConfig'][32][70]#}</dd>{#* 资金到账可能有延迟，请耐心等待  *#}
@@ -108,12 +108,7 @@
 
 			<dl class="info-section">
 				{#if $state == 0#}
-					{#$stateTxt = $langData['siteConfig'][9][14]#}{#* 审核中  *#}
-					{#if $bank == "alipay"#}
-						{#$stateNote = $langData['siteConfig'][19][392]#}{#* 已审核  *#}
-					{#else#}
-						{#$stateNote = $langData['siteConfig'][19][393]#}{#* 分类  *#}
-					{#/if#}
+					{#$stateTxt = $langData['siteConfig'][9][14]#}{#* 审核中  *#}					
 				{#elseif $state == 1#}
 					{#$stateTxt = $langData['siteConfig'][9][5]#}
 					{#$stateNote = $note#}
@@ -131,7 +126,10 @@
 				<dt>{#$langData['siteConfig'][19][864]#}</dt>{#* 提现信息  *#}
 				<dd>
 					<ul>
-						{#if $bank == "alipay"#}
+						{#if $bank == "weixin"#}
+						<li>{#$langData['siteConfig'][32][72]#}：微信</li>
+						{#elseif $bank == "alipay"#}
+						<li>{#$langData['siteConfig'][32][72]#}：支付宝</li>
 						<li>{#$langData['siteConfig'][19][40]#}：{#$cardnum#}</li>{#* 收款人帐号 *#}
 						<li>{#$langData['siteConfig'][19][41]#}：{#$cardname#}</li>{#* 收款人姓名 *#}
 						{#else#}

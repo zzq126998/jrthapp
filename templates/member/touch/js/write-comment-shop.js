@@ -68,20 +68,20 @@ $(function(){
       }
 
       ratingArr.push("rating["+pid+"_"+speid+"]="+rating);
-      score1Arr.push("score1["+pid+"_"+speid+"]="+score1);
-      score2Arr.push("score2["+pid+"_"+speid+"]="+score2);
-      score3Arr.push("score3["+pid+"_"+speid+"]="+score3);
-      noteArr.push("note["+pid+"_"+speid+"]="+note);
-      imgArr.push("img["+pid+"_"+speid+"]="+img.join(","));
+      score1Arr.push("sco1["+pid+"_"+speid+"]="+score1);
+      score2Arr.push("sco2["+pid+"_"+speid+"]="+score2);
+      score3Arr.push("sco3["+pid+"_"+speid+"]="+score3);
+      noteArr.push("content["+pid+"_"+speid+"]="+note);
+      imgArr.push("pics["+pid+"_"+speid+"]="+img.join(","));
     });
 
     if(tj){
-      var data = "orderid=" + id + "&" + ratingArr.join("&") + "&" + score1Arr.join("&") + "&" + score2Arr.join("&") + "&" + score3Arr.join("&") + "&" + noteArr.join("&") + "&" + imgArr.join("&");
+      var data = "aid=" + id + "&" + ratingArr.join("&") + "&" + score1Arr.join("&") + "&" + score2Arr.join("&") + "&" + score3Arr.join("&") + "&" + noteArr.join("&") + "&" + imgArr.join("&") + "&type=shop-order";
 
       t.addClass("disabled").html(langData['siteConfig'][6][35]+"...");
-
+      
   		$.ajax({
-  			url: masterDomain+"/include/ajax.php?service=shop&action=sendCommon",
+  			url: masterDomain+"/include/ajax.php?service=member&action=sendComment",
   			data: data,
   			type: "POST",
   			dataType: "jsonp",

@@ -98,7 +98,8 @@ if($cfg_wechatAppid && $cfg_wechatAppsecret){
         $bucketMgr = new BucketManager($auth);
 
         //为节省空间,删除amr格式文件
-        $bucketMgr->delete($bucket, $key);
+        //不要删除，删除会影响七牛云转码，因为在转码过程中，如果将此文件删除，会导致转码失败
+        // $bucketMgr->delete($bucket, $key);
 
         //删除服务器上的amr文件
         @unlink(HUONIAOROOT . $dir . $name);

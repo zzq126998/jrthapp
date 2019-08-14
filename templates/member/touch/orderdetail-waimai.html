@@ -316,7 +316,7 @@ label.BMapLabel {max-width: inherit;}
       <div class="com_list">
         <div class="com_txt">
           <p>{#$detail_comment.content#}</p>
-          <span class="fn-clear"><em>{#$detail_comment.pubdate|date_format: "%Y-%m-%d %H:%M%S"#}</em></span>
+          <span class="fn-clear"><em>{#$detail_comment.dtime|date_format: "%Y-%m-%d %H:%M%S"#}</em></span>
           <div class="pingjia star{#$detail_comment.star#}"><i></i></div>
         </div>
         {#if $detail_comment.replydate != 0#}

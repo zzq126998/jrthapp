@@ -39,7 +39,11 @@ function checkWaimaiShopManager($id, $type = "shop"){
 		return checkManagePromise($id);
 
 	}else{
-		$sql = $dsql->SetQuery("SELECT `sid` FROM `#@__waimai_$type` WHERE `id` in ($id)");
+		if($type == "common"){
+			$sql = $dsql->SetQuery("SELECT `aid` sid FROM `#@__public_comment` WHERE `id` in ($id)");
+		}else{
+			$sql = $dsql->SetQuery("SELECT `sid` FROM `#@__waimai_$type` WHERE `id` in ($id)");
+		}
 		$sid = $dsql->dsqlOper($sql, "results");
 		if($sid){
 			return checkManagePromise($sid);

@@ -14,17 +14,6 @@
         var hideFileUrl = '{#$cfg_hideUrl#}';
         var cookiePre = '{#$cfg_cookiePre#}', cfg_clihost = '{#$cfg_clihost#}';
 	</script>
-   <!-- <script>
-var Background_Url = "https://rc.0735up.com/201810.png"; //节日广告图片
-var Background_Href = "https://rc.0735up.com"; //节日广告链接
-var FestivalAD_hdeight = "125";//节日广告头部高度
-var Skin_Num = "";//节日广告变量
-</script>
-  <script type="text/javascript" src="https://rc.0735up.com/static/js/festival_ad.js?v=1"></script>
-  <style>
-    .FestivalAD_header {width: 1200px; height: auto; margin: 0 auto;}
-    .module-con {width: 1220px; margin: 0 auto;}
-  </style>-->
 </head>
 
 <body class="w1200">
@@ -294,7 +283,7 @@ var Skin_Num = "";//节日广告变量
 				</a>
 			</div>
 			<ul class="fn-clear">
-				{#$article_pagesize = 53#}
+				{#$article_pagesize = 5#}
 				{#if in_array("image", $installModuleArr)#}
 				{#$article_pagesize = $article_pagesize - 1#}
 				{#/if#}
@@ -398,7 +387,70 @@ var Skin_Num = "";//节日广告变量
 <div class="ad-con">
 	{#myad title="首页_模板十一_电脑端_广告一"#}
 </div>
+<!-- 热销、生活、活动 -->
+<div class="life-wrap fn-clear">
+	<div class="left-tab">
+		<p><a href="javascipt:;" class="tab-line">热销</a></p>
+		<p><a href="javascipt:;" class="tab-line">生活</a><i class="line"></i></p>
+		<p><a href="javascipt:;">活动</a><i class="line"></i></p>
+	</div>
+	<div class="life-content show">
+		<ul class="life-con-l fn-clear">
+			<li><a href="javascipt:;">看小南为你分享提分技</a></li>
+			<li><a href="javascipt:;" class="bold-12">新东方秋季报名入口！</a></li>
+			<li><a href="javascipt:;" class="bold-13">海外院校招生面试会</a></li>
+			<li><a href="javascipt:;">洋高考首选爱迪学校</a></li>
+			<li><a href="javascipt:;">人民大学在职研修班招</a></li>
+		</ul>
+		<div class="life-m-wrap fn-clear">
+			<ul class="life-con-m fn-clear">
+				<li><a href="javascipt:;">网购小调研参与拿奖！</a></li>
+				<li><a href="javascipt:;">津城公园地产大搜罗</a></li>
+				<li><a href="javascipt:;">蚁人：小身材大力量</a></li>
+				<li><a href="javascipt:;">秋上新！全场尖货一折</a></li>
+				<li><a href="javascipt:;">车险狂欢送2500元现金</a></li>
+				<li><a href="javascipt:;" class="yellow">海外院校招生面试会</a></li>
+			</ul>
+			<div class="slideBox slideBox6">
+				<div class="bd">
+					<ul class="fn-clear">
+						{#myad title="首页_模板十一_电脑端_广告二"#}
+					</ul>
+				</div>
+				<div class="hd"><ul></ul></div>
+			</div>
+			<ul class="life-con-m fn-clear">
+				<li><a href="javascipt:;">这个国际学校有点牛</a></li>
+				<li><a href="javascipt:;">看小南为你分享提分技</a></li>
+				<li><a href="javascipt:;">留学白皮书有奖大调查</a></li>
+				<li><a href="javascipt:;" class="bold-13">智慧课堂，探索新知</a></li>
+				<li><a href="javascipt:;">花田，好姑娘在等你</a></li>
+				<li><a href="javascipt:;">慰安妇内容将被列入美</a></li>
+			</ul>
+		</div>
+		<ul class="life-con-r">
+			<li><a href="javascipt:;">百万精英首选的VIP邮</a></li>
+			<li><a href="javascipt:;" class="bold-13">洋高考首选爱迪学校</a></li>
+			<li><a href="javascipt:;">全面学习资料与你同享</a></li>
+			<li><a href="javascipt:;">人民大学在职研修班招</a></li>
+			<li><a href="javascipt:;">楼市新政能否助推银十</a></li>
+		</ul>
+	</div>
 
+
+
+
+	<div class="left-tab right-tab">
+		<p><a href="javascipt:;" class="tab-line">商务</a></p>
+		<p><a href="javascipt:;" class="tab-line">教育</a><i class="line"></i></p>
+		<p><a href="javascipt:;">招商</a><i class="line"></i></p>
+	</div>
+</div>
+<!-- 广告位 -->
+<div class="ad-con">
+	{#myad title="首页_模板十一_电脑端_广告三"#}
+</div>
+<!-- 本地生活服务 -->
 <div class="serve-wrap">
 	<div class="serve">
 		<div class="serve-title">
@@ -675,6 +727,8 @@ var Skin_Num = "";//节日广告变量
 		{#/article#}
 
 	</div>
+
+    {#if in_array("huodong", $installModuleArr)#}
 	<div class="city-wrap">
 		<div class="city-title">
 			<h3>同城活动</h3>
@@ -682,11 +736,13 @@ var Skin_Num = "";//节日广告变量
 			<span><a href="{#$huodong_channelDomain#}">查看更多>></a></span>
 		</div>
 		<div class="city-con">
-			<div class="slideBox">
+			<div class="slideBox slideBox2">
 				<div class="bd">
 					<ul class="fn-clear">
 						<!-- 同城活动-s -->
+
 						<li>
+
 							{#huodong action='hlist' return='list' page='1' pageSize='4'#}
 							<div class="city-item fn-clear">
 								<div class="city-left">
@@ -704,7 +760,59 @@ var Skin_Num = "";//节日广告变量
 						</li>
 
 						<!-- 同城活动-e -->
-						
+						<!-- 同城活动-s -->
+						<li>
+							{#huodong action='hlist' return='list' page='2' pageSize='4'#}
+							<div class="city-item fn-clear">
+								<div class="city-left">
+									<a href="{#$list.url#}"><img src="{#$list.litpic#}" alt=""></a>
+								</div>
+								<div class="city-right">
+									<p class="city-name"><a href="{#$list.url#}">{#$list.title|mb_substr:0:11#}..</a></p>
+									<p class="deadline"><a href="{#$list.url#}">截止时间：{#$list.end|date_format:"%Y-%m-%d"#}</a></p>
+									<p class="join"><a href="{#$list.url#}">已报名 <span>{#$list.reg#}</span> 人</a></p>
+									<a href="{#$list.url#}" class="sign">我要报名</a>
+								</div>
+							</div>
+							{#/huodong#}
+						</li>
+						<!-- 同城活动-e -->
+						<!-- 同城活动-s -->
+
+						<li>
+							{#huodong action='hlist' return='list' page='3' pageSize='4'#}
+							<div class="city-item fn-clear">
+								<div class="city-left">
+									<a href="{#$list.url#}"><img src="{#$list.litpic#}" alt=""></a>
+								</div>
+								<div class="city-right">
+									<p class="city-name"><a href="{#$list.url#}">{#$list.title|mb_substr:0:11#}..</a></p>
+									<p class="deadline"><a href="{#$list.url#}">截止时间：{#$list.end|date_format:"%Y-%m-%d"#}</a></p>
+									<p class="join"><a href="{#$list.url#}">已报名 <span>{#$list.reg#}</span> 人</a></p>
+									<a href="{#$list.url#}" class="sign">我要报名</a>
+								</div>
+							</div>
+							{#/huodong#}
+						</li>
+
+						<!-- 同城活动-e -->
+						<!-- 同城活动-s -->
+						<li>
+							{#huodong action='hlist' return='list' page='4' pageSize='4'#}
+							<div class="city-item fn-clear">
+								<div class="city-left">
+									<a href="{#$list.url#}"><img src="{#$list.litpic#}" alt=""></a>
+								</div>
+								<div class="city-right">
+									<p class="city-name"><a href="{#$list.url#}">{#$list.title|mb_substr:0:11#}..</a></p>
+									<p class="deadline"><a href="{#$list.url#}">截止时间：{#$list.end|date_format:"%Y-%m-%d"#}</a></p>
+									<p class="join"><a href="{#$list.url#}">已报名 <span>{#$list.reg#}</span> 人</a></p>
+									<a href="{#$list.url#}" class="sign">我要报名</a>
+								</div>
+							</div>
+							{#/huodong#}
+						</li>
+						<!-- 同城活动-e -->
 					</ul>
 				</div>
 				<div class="hd">
@@ -714,6 +822,8 @@ var Skin_Num = "";//节日广告变量
 			</div>
 		</div>
 	</div>
+    {#/if#}
+
 </div>
 {#/if#}
 <!-- 头条推荐e -->
@@ -733,7 +843,7 @@ var Skin_Num = "";//节日广告变量
 				{#business action="type" return="atype" pageSize="18"#}
 				<li>
 					<a href="{#getUrlPath service='business' template='list' param="typeid={#$atype.id#}"#}">
-						<img src="{#$templets_skin#}images/shop-{#$i#}.png" alt="">
+						<img src="{#$atype.icon#}" alt="">
 						<p>{#$atype.typename#}</p>
 					</a>
 				</li>
@@ -743,7 +853,7 @@ var Skin_Num = "";//节日广告变量
 			</ul>
 		</div>
 		<div class="shop-join">
-			<a href="{#$cfg_basehost#}/b">
+			<a href="{#getUrlPath service='member'#}">
 				入驻商家
 			</a>
 		</div>
@@ -758,7 +868,7 @@ var Skin_Num = "";//节日广告变量
 			<a href="{#$business_channelDomain#}" class="more">查看更多&gt;&gt;</a>
 		</ul>
 		<div class="rec-con fn-clear">
-			{#business action='blist' return='list' pageSize="8"#}
+			{#business action='blist' return='list' store='2' pageSize="8"#}
 			<div class="rec-item">
 				<div class="item-top">
 					<a href="{#$list.url#}"><img src="{#$list.logo#}" alt=""></a>
@@ -1082,8 +1192,8 @@ var Skin_Num = "";//节日广告变量
 			<li class="active">房产经纪人</li>
 			<li>中介公司</li>
 		</ul>
-		<div class="apply apply1"><a href="{#$cfg_basehost#}/u/config-house.html">申请为经纪人</a></div>
-		<div class="apply"><a href="{#$cfg_basehost#}/b/config-house.html">入驻中介公司</a></div>
+		<div class="apply apply1"><a href="{#getUrlPath service='member' type='user' template='config-house'#}">申请为经纪人</a></div>
+		<div class="apply"><a href="{#getUrlPath service='member' template='config-house'#}">入驻中介公司</a></div>
 	</div>
 	<div class="room-con fn-clear show">
 		{#house action="zjUserList" return="broker" pageSize="9"#}
@@ -1237,7 +1347,7 @@ var Skin_Num = "";//节日广告变量
 	      <ul>
 			{#job action="sentence" return="jobs" pageSize="7" page="1" type="0"#}
 	        <li class="fn-clear">
-	          <a href="javascipt:;" target="_blank">
+	          <a href="javascipt:;">
 	            <div class="li-left"><img src="{#$templets_skin#}images/top1.png" alt=""></div>
 	            <div class="li-right">
 	              <h4><span class="span-1">{#$jobs['note']#}</span><span class="span-2">{#$jobs['people']#}</span></h4>
@@ -1266,13 +1376,16 @@ var Skin_Num = "";//节日广告变量
 
 	      </ul>
 	    </div>
-
-		<div class="buy">
-			<a href="{#$cfg_basehost#}/sz/job/sentence.html?type=1">发布一句话</a>
+	  <div class="fn-clear"></div>
+		<div class="fn-clear">
+			<div class="buy">
+				<a href="{#$cfg_basehost#}/sz/job/sentence.html?type=1">发布一句话</a>
+				<a href="{#$cfg_basehost#}/sz/job/sentence.html?type=0">发布一句话</a>
 	    </div>
 	    <div class="room">
 	    	<a href="{#getUrlPath service='member' template='post' param='do=add'#}">发布职位</a>
 	    </div>
+   	</div>
 	</div>
 	<div class="job-wrap fn-clear">
 		<div class="job-title">
@@ -1289,7 +1402,7 @@ var Skin_Num = "";//节日广告变量
 				{#job action="post" return="post" pageSize="12" _flag="1"#}
 				<li>
 					<a href="{#$post.url#}" target="_blank">
-					<p class="p1">{#$post.title#}<span class="month">{#$post.salary#}K/<span class="num">月</span></span></p>
+                    <p class="p1">{#$post.title#}<span class="month"> {#if $post.salary eq '面议'#}{#$post.salary#}{#else#}{#$post.salary#}K/<span class="num">月</span>{#/if#} </span></p>
 					<p class="p2">{#$post.addr[$post.addr|@count-1]#} | {#$post.experience#} | {#$post.educational#}</p>
 					<a href="{#$post.companyUrl#}">{#$post.company.title#}&gt;&gt;</a>
 					<img src="{#$templets_skin#}images/top-02.png" alt="">
@@ -1366,83 +1479,13 @@ var Skin_Num = "";//节日广告变量
 </div>
 {#/if#}
 
-<!-- 广告位 -->
-<div class="ad-con">
-	{#myad title="首页_模板十一_电脑端_广告十二"#}
-</div>
-<!-- 最新入驻 -->
-{#if in_array("huangye", $installModuleArr)#}
-<div class="most-wrap wrap fn-clear">
-	<div class="most-left">
-		<div class="most-title">
-			<h3>最新入驻</h3>
-			<a href="{#$huangye_channelDomain#}">查看更多&gt;&gt;</a>
-		</div>
-		<div class="slideBox slideBox5">
-			<div class="bd">
-				<ul class="fn-clear">
-					{#huangye return="list" action="ilist" orderby="1" pageSize="4"#}
-					<li>
-						<div class="most-con">
-							<a href="{#$list.url#}"><img class="img-1" src="{#$list.litpic#}" alt=""></a>
-							<a href="{#$list.url#}"><span><img class="img-2" src="{#$cfg_basehost#}/include/qrcode.php?data={#$list.url#}" alt="" width="74" height="74"></span></a>
-						</div>
-						<div class="text">
-							<a href="javascript:;"><p class="brj">{#$list.title#}</p></a>
-							<a href="javascript:;"><p class="tel">联系电话：{#$list.tel#}</p></a>
-							<a href="javascript:;"><p class="common">电子邮箱：{#$list.email#}</p></a>
-							<a href="javascript:;"><p class="common">企业地址：{#$list.addressdet#}</p></a>
-							<a href="javascript:;"><p class="common">行业分类：{#$list.typeLevel.0#} » {#$list.typeLevel.1#}</p></a>
-						</div>
-					</li>
-					{#/huangye#}
-				</ul>
-			</div>
-			<div class="hd">
-		        <ul class="fn-clear"><li class=""></li><li class="on"></li><li></li></ul>
-		    </div>
-		</div>
-	</div>
-	<div class="most-right recommend fn-clear">
-		<div class="right-title">
-			<ul class="rec-title fn-clear">
-				<li class="on"><a href="javascipt:;">推荐黄页</a><i></i></li>
-				{#huangye action="type" return="type" pageSize="5"#}
-				<li><a href="{#$huangye_channelDomain#}">{#$type.typename#}</a><i></i></li>
-				{#/huangye#}
-
-				<div class="a-right">
-					<a href="{#getUrlPath service='member' template='module'#}" class="publish">入驻黄页</a>
-					<a href="{#$huangye_channelDomain#}" class="more">查看更多&gt;&gt;</a>
-				</div>
-			</ul>
-		</div>
-		<div class="right-con fn-clear">
-			<ul class="fn-clear">
-				{#huangye return="list" action="ilist" rec="1" pageSize="9"#}
-				<li>
-					<div class="li-left">
-						<a href="{#$list.url#}"><img src="{#$list.litpic#}" alt=""></a>
-					</div>
-					<div class="most-li-right">
-						<p class="p1"><a href="{#$list.url#}">{#$list.title#}</a></p>
-						<p class="p2"><a href="{#$list.url#}"><img src="{#$templets_skin#}images/info-01.png" alt="">{#$list.tel#}</a></p>
-						{#if $list.addressdet#}<p class="p3"><a href="javascipt:;"><img src="{#$templets_skin#}images/rec-02.png" alt="">{#$list.addressdet#}</a></p>{#/if#}
-					</div>
-				</li>
-				{#/huangye#}
-			</ul>
-		</div>
-	</div>
-</div>
-{#/if#}
-
 <!-- 底部 -->
 {#include file="../../siteConfig/public_foot_v3.html" module='siteConfig' theme='gray'#}
 
 <div class="job-company-popup">
 
 </div>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/common.js?v={#$cfg_staticVersion#}"></script>
 <script type="text/javascript" src="{#$cfg_staticPath#}js/ui/jquery.SuperSlide.2.1.1.js?v={#$cfg_staticVersion#}"></script>
 <script type='text/javascript' src='{#$cfg_basehost#}/include/json.php?action=lang'></script>
 <script type="text/javascript" src="{#$templets_skin#}js/login.js?v={#$cfg_staticVersion#}"></script>

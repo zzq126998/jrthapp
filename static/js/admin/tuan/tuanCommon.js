@@ -1,9 +1,9 @@
 $(function(){
-	
+
 	var defaultBtn = $("#delBtn, #batchAudit"),
 		checkedBtn = $("#stateBtn"),
 		init = {
-		
+
 			//选中样式切换
 			funTrStyle: function(){
 				var trLength = $("#list tbody tr").length, checkLength = $("#list tbody tr.selected").length;
@@ -12,7 +12,7 @@ $(function(){
 				}else{
 					$("#selectBtn .check").removeClass("checked");
 				}
-				
+
 				if(checkLength > 0){
 					defaultBtn.css('display', 'inline-block');
 					checkedBtn.hide();
@@ -21,7 +21,7 @@ $(function(){
 					checkedBtn.css('display', 'inline-block');
 				}
 			}
-			
+
 			//快速编辑
 			,quickEdit: function(){
 				var checked = $("#list tbody tr.selected");
@@ -30,7 +30,7 @@ $(function(){
 				}else{
 					id = checked.attr("data-id");
 					huoniao.showTip("loading", "正在获取信息，请稍候...");
-					
+
 					huoniao.operaJson("tuanCommon.php?dopost=getDetail", "id="+id, function(data){
 						if(data != null && data.length > 0){
 							data = data[0];
@@ -54,11 +54,11 @@ $(function(){
 										}
 									}
 									serialize = serialize+"&pics="+imglist.join(",");
-									
+
 									huoniao.operaJson("tuanCommon.php?dopost=updateDetail", "id="+id+"&"+serialize, function(data){
 										if(data.state == 100){
 											huoniao.showTip("success", data.info, "auto");
-											setTimeout(function() { 
+											setTimeout(function() {
 												getList();
 											}, 800);
 										}else if(data.state == 101){
@@ -69,23 +69,25 @@ $(function(){
 											//getList();
 										}
 									});
-									
+
 								},
 								cancel: true
 							});
-							
+
 							//填充信息
-							self.parent.$("#tuanTitle").html('<a href="'+data.prourl+'" target="_blank">'+data.protitle+'</a>');
-							self.parent.$("#commonUser").html(data.username);
-							self.parent.$("#commonContent").val(data.content);
-							self.parent.$("#commonTime").val(huoniao.transTimes(data.dtime, 1));
-							self.parent.$("#commonIp").val(data.ip);
-							self.parent.$("#commonGood").val(data.good);
-							self.parent.$("#commonBad").val(data.bad);
+							self.parent.$("#store").html('<a href="'+data.storeUrl+'" target="_blank">'+data.storeTitle+'</a>');
+							self.parent.$("#user").html(data.username);
+							self.parent.$("#content").val(data.content);
+							self.parent.$("#time").val(huoniao.transTimes(data.dtime, 1));
+							self.parent.$("#ip").val(data.ip);
 							self.parent.$("#rating").val(data.rating);
-							self.parent.$("#score1").val(data.score1);
-							self.parent.$("#score2").val(data.score2);
-							self.parent.$("#score3").val(data.score3);
+							self.parent.$("#reply").val(data.reply);
+							if(data.reply){
+								self.parent.$("#rtime").val(huoniao.transTimes(data.rtime, 1));
+							}
+							self.parent.$("#sco1").val(data.sco1);
+							self.parent.$("#sco2").val(data.sco2);
+							self.parent.$("#sco3").val(data.sco3);
 
 							if(data.pics != ""){
 								var picsObj = self.parent.$("#pics");
@@ -93,7 +95,7 @@ $(function(){
 								var picList = [];
 								for(var i = 0; i < imglist.length; i++){
 									picList.push('<li class="clearfix" style="cursor: default;">');
-									picList.push('  <a class="li-rm" href="javascript:;">×</a>');	
+									picList.push('  <a class="li-rm" href="javascript:;">×</a>');
 									picList.push('  <div class="li-thumb" style="display:block;">');
 									picList.push('    <span class="ibtn">');
 									picList.push('      <a href="'+cfg_attachment+imglist[i].val+'&type=large" target="_blank" class="enlarge" title="放大"></a>');
@@ -113,21 +115,21 @@ $(function(){
 									}
 								});
 							}
-							
-							self.parent.$("#commonIsCheck").find("option").each(function(){
+
+							self.parent.$("#isCheck").find("option").each(function(){
 								if($(this).val() == data.ischeck){
 									$(this).attr("selected", true);
 								}
 							});
-							
+
 						}else{
 							huoniao.showTip("error", "信息获取失败！", "auto");
 						}
 					});
 				}
-				
+
 			}
-			
+
 			//删除
 			,del: function(){
 				var checked = $("#list tbody tr.selected");
@@ -139,11 +141,11 @@ $(function(){
 					for(var i = 0; i < checked.length; i++){
 						id.push($("#list tbody tr.selected:eq("+i+")").attr("data-id"));
 					}
-					
-					huoniao.operaJson("tuanCommon.php?dopost=delCommon", "id="+id, function(data){
+
+					huoniao.operaJson("tuanCommon.php?dopost=delComment", "id="+id, function(data){
 						if(data.state == 100){
 							huoniao.showTip("success", data.info, "auto");
-							setTimeout(function() { 
+							setTimeout(function() {
 								getList();
 							}, 800);
 						}else{
@@ -152,7 +154,7 @@ $(function(){
 								var tr = $("#list tbody tr:eq("+i+")");
 								for(var k = 0; k < data.info.length; k++){
 									if(data.info[k] == tr.attr("data-id")){
-										info.push("▪ "+tr.find(".row2 a").text());
+										info.push("▪ "+tr.find(".row35 a").text());
 									}
 								}
 							}
@@ -164,13 +166,13 @@ $(function(){
 					$("#selectBtn a:eq(1)").click();
 				}
 			}
-			
-			
+
+
 			//更新信息状态
 			,updateState: function(type){
 				huoniao.showTip("loading", "正在操作，请稍候...");
 				$("#smartMenu_state").remove();
-				
+
 				var checked = $("#list tbody tr.selected");
 				if(checked.length < 1){
 					huoniao.showTip("warning", "未选中任何信息！", "auto");
@@ -183,7 +185,7 @@ $(function(){
 					}else if(type == "拒绝审核"){
 						arcrank = 2;
 					}
-					
+
 					huoniao.showTip("loading", "正在操作，请稍候...");
 					var id = [];
 					for(var i = 0; i < checked.length; i++){
@@ -192,7 +194,7 @@ $(function(){
 					huoniao.operaJson("tuanCommon.php?dopost=updateState", "id="+id+"&arcrank="+arcrank, function(data){
 						if(data.state == 100){
 							huoniao.showTip("success", data.info, "auto");
-							setTimeout(function() { 
+							setTimeout(function() {
 								getList();
 							}, 800);
 						}else{
@@ -213,16 +215,16 @@ $(function(){
 					$("#selectBtn a:eq(1)").click();
 				}
 			}
-			
+
 		};
 
-    //填充分站列表
-    huoniao.buildAdminList($("#cityList"), cityList, '请选择分站');
-    $(".chosen-select").chosen();
-	
 	//初始加载
 	getList();
-		
+
+	//填充分站列表
+    huoniao.buildAdminList($("#cityList"), cityList, '请选择分站');
+    $(".chosen-select").chosen();
+
 	//搜索
 	$("#searchBtn").bind("click", function(){
 		$("#sKeyword").html($("#keyword").val());
@@ -230,30 +232,30 @@ $(function(){
 		$("#list").attr("data-atpage", 1);
 		getList();
 	});
-	
+
 	//搜索回车提交
-    $("#keyword").keyup(function (e) {
-        if (!e) {
-            var e = window.event;
-        }
-        if (e.keyCode) {
-            code = e.keyCode;
-        }
-        else if (e.which) {
-            code = e.which;
-        }
-        if (code === 13) {
-            $("#searchBtn").click();
-        }
-    });
-	
+  $("#keyword").keyup(function (e) {
+    if (!e) {
+      var e = window.event;
+    }
+    if (e.keyCode) {
+      code = e.keyCode;
+    }
+    else if (e.which) {
+      code = e.which;
+    }
+    if (code === 13) {
+      $("#searchBtn").click();
+    }
+  });
+
 	//搜索分类菜单点击事件
 	$("#typeBtn a").bind("click", function(){
 		var id = $(this).attr("data-id"), title = $(this).text();
 		$("#typeBtn").attr("data-id", id);
 		$("#typeBtn button").html(title+'<span class="caret"></span>');
 	});
-	
+
 	$("#stateBtn, #pageBtn, #paginationBtn").delegate("a", "click", function(){
 		var id = $(this).attr("data-id"), title = $(this).html(), obj = $(this).parent().parent().parent();
 		obj.attr("data-id", id);
@@ -263,7 +265,7 @@ $(function(){
 			obj.find("button").html(id+"/"+totalPage+'页<span class="caret"></span>');
 			$("#list").attr("data-atpage", id);
 		}else{
-			
+
 			if(obj.attr("id") != "propertyBtn"){
 				obj.find("button").html(title+'<span class="caret"></span>');
 			}
@@ -279,45 +281,49 @@ $(function(){
 			$(this).next(".dropdown-menu").css({"max-height": height, "overflow-y": "auto"});
 		}
 	});
-	
+
 	//全选、不选
 	$("#selectBtn a").bind("click", function(){
 		var id = $(this).attr("data-id");
 		if(id == 1){
 			$("#selectBtn .check").addClass("checked");
 			$("#list tr").removeClass("selected").addClass("selected");
-			
+
 			defaultBtn.css('display', 'inline-block');
 			checkedBtn.hide();
 		}else{
 			$("#selectBtn .check").removeClass("checked");
 			$("#list tr").removeClass("selected");
-			
+
 			defaultBtn.hide();
 			checkedBtn.css('display', 'inline-block');
 		}
 	});
-	
+
 	//详情、修改
 	$("#list").delegate(".edit", "click", function(){
 		init.quickEdit();
 	});
-	
+
 	//删除
 	$("#delBtn").bind("click", function(){
-		init.del("del");
+		$.dialog.confirm('此操作不可恢复，您确定要删除吗？', function(){
+			init.del("del");
+		});
 	});
-	
+
 	//单条删除
 	$("#list").delegate(".del", "click", function(){
-		init.del("del");
+		$.dialog.confirm('此操作不可恢复，您确定要删除吗？', function(){
+			init.del("del");
+		});
 	});
-	
+
 	//审核
 	$("#batchAudit a").bind("click", function(){
 		init.updateState($(this).text());
 	});
-	
+
 	//单选
 	$("#list tbody").delegate("tr", "click", function(event){
 		var isCheck = $(this), checkLength = $("#list tbody tr.selected").length;
@@ -343,10 +349,10 @@ $(function(){
 				}
 			}
 		}
-		
+
 		init.funTrStyle();
 	});
-	
+
 	//拖选功能
 	$("#list tbody").selectable({
 		distance: 3,
@@ -358,18 +364,18 @@ $(function(){
 			init.funTrStyle();
 		}
 	});
-	
+
 	//审核状态更新
 	$("#list").delegate(".more", "click", function(event){
 		event.preventDefault();
-				
+
 		var t = $(this), top = t.offset().top - 5, left = t.offset().left + 15, obj = "smartMenu_state";
 		if($("#"+obj).html() != undefined){
 			$("#"+obj).remove();
 		}
-		
+
 		t.parent().parent().removeClass("selected").addClass("selected");
-			
+
 		var htmlCreateStateMenu = function(){
 			var htmlMenu = [];
 			htmlMenu.push('<div id="'+obj+'" class="smart_menu_box">');
@@ -396,10 +402,10 @@ $(function(){
 			top: top,
 			left: left - $("#"+obj).width()/2
 		}).show();
-		
+
 		return false;
 	});
-	
+
 	$(document).click(function (e) {
 		var s = e.target;
 		if ($("#smartMenu_state").html() != undefined) {
@@ -410,7 +416,7 @@ $(function(){
 			}
 		}
 	});
-		
+
 	//点击IP查找此IP的所有评论
 	$("#list").delegate(".ip", "click", function(){
 		var txt = $(this).text();
@@ -433,15 +439,17 @@ function getList(){
 		state    = $("#stateBtn").attr("data-id") ? $("#stateBtn").attr("data-id") : "",
 		pagestep = $("#pageBtn").attr("data-id") ? $("#pageBtn").attr("data-id") : "10",
 		page     = $("#list").attr("data-atpage") ? $("#list").attr("data-atpage") : "1";
-		
+
 	var data = [];
 		data.push("sKeyword="+sKeyword);
-    	data.push("adminCity="+$("#cityList").val());
 		data.push("sType="+sType);
+		if($("#cityList").val()!='' && $("#cityList").val()!=null){
+			data.push("adminCity="+$("#cityList").val());
+		}
 		data.push("state="+state);
 		data.push("pagestep="+pagestep);
 		data.push("page="+page);
-	
+
 	huoniao.operaJson("tuanCommon.php?dopost=getList", data.join("&"), function(val){
 		var obj = $("#list"), list = [], i = 0, commonList = val.commonList;
 		obj.attr("data-totalpage", val.pageInfo.totalPage);
@@ -450,26 +458,37 @@ function getList(){
 		$(".totalGray").html(val.pageInfo.totalGray);
 		$(".totalAudit").html(val.pageInfo.totalAudit);
 		$(".totalRefuse").html(val.pageInfo.totalRefuse);
-			
+
 		if(val.state == "100"){
 			huoniao.hideTip();
 			//huoniao.showTip("success", "获取成功！", "auto");
-			
+
 			for(i; i < commonList.length; i++){
 				list.push('<tr data-id="'+commonList[i].id+'">');
 				list.push('  <td class="row3"><span class="check"></span></td>');
-				list.push('  <td class="row35 title left">商品：<a href="'+commonList[i].prourl+'" target="_blank">'+commonList[i].protitle+'</a><br />内容：'+commonList[i].commonContent+'</td>');
-				
-				var user = '<a href="javascript:;" data-id="'+commonList[i].commonUserId+'" class="userinfo">'+commonList[i].commonUserName+'</a>';
-				if(commonList[i].commonUserId == 0){
-					user = commonList[i].commonUserName;
+				list.push('  <td class="row35 title left">标题：<a href="'+commonList[i].storeUrl+'" target="_blank">'+commonList[i].storeTitle+'</a><br />内容：'+commonList[i].content);
+
+				if(commonList[i].reply){
+					list.push('<br />回复：'+commonList[i].reply);
 				}
-				
+				list.push('</td>');
+
+				var user = '<a href="javascript:;" data-id="'+commonList[i].userid+'" class="userinfo">'+commonList[i].username+'</a>';
+				if(commonList[i].userid == 0){
+					user = commonList[i].username;
+				}
+
 				list.push('  <td class="row12 left">'+user+'</td>');
-				list.push('  <td class="row17 left"><a href="javascript:;" data-id="'+commonList[i].commonIp+'" class="ip">'+commonList[i].commonIp+'</a>（'+commonList[i].commonIpAddr+'）</td>');
-				list.push('  <td class="row13 left">'+commonList[i].commonTime+'</td>');
+				list.push('  <td class="row17 left"><a href="javascript:;" data-id="'+commonList[i].ip+'" class="ip">'+commonList[i].ip+'</a>（'+commonList[i].ipAddr+'）</td>');
+				list.push('  <td class="row13 left">'+commonList[i].time);
+
+				if(commonList[i].reply){
+					list.push('<br />'+commonList[i].rtime);
+				}
+				list.push('</td>');
+
 				var state = "";
-				switch (commonList[i].commonIsCheck) {
+				switch (commonList[i].isCheck) {
 					case "等待审核":
 						state = '<span class="gray">待审核</span>';
 						break;
@@ -480,22 +499,22 @@ function getList(){
 						state = '<span class="refuse">审核拒绝</span>';
 						break;
 				}
-				list.push('  <td class="row9 state">'+state+'<span class="more"><s></s></span></td>');
+				list.push('  <td class="row10 state">'+state+'<span class="more"><s></s></span></td>');
 				list.push('  <td class="row10"><a href="javascript:;" data-id='+commonList[i].id+'" title="修改" class="edit">修改</a><a href="javascript:;" data-id='+commonList[i].id+'" title="删除" class="del">删除</a></td>');
 				list.push('</tr>');
 			}
-			
+
 			obj.find("tbody").html(list.join(""));
 			$("#loading").hide();
 			$("#list table").show();
 			huoniao.showPageInfo();
-			
+
 		}else{
-			
+
 			obj.find("tbody").html("");
 			huoniao.showTip("warning", val.info, "auto");
 			$("#loading").html(val.info).show();
 		}
 	});
-	
+
 };

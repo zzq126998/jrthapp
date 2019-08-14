@@ -9,7 +9,7 @@ window.webUploadSuccess = function(file, response, picker){
     html.push('您的浏览器不支持 audio');
     html.push('</audio>&nbsp;');
     html.push('</p>');
-    ActiveEditor && ActiveEditor.setContent(html.join(""), true);
+    ActiveEditor && ActiveEditor.execCommand('insertHtml', html.join(""));
 }
 UE.registerUI('音频',function(editor,uiName){
     ActiveEditor = editor;

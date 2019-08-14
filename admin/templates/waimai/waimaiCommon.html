@@ -56,11 +56,11 @@ td.center {text-align: center;}
                         <tbody>
                             {#foreach $list as $key => $value#}
                             <tr class="{#if $key%2 == 0#}odd{#else#}even{#/if#}" data-oid={#$value['oid']#}>
-                                <td width="70">{#$value['uid']#}</td>
+                                <td width="70">{#$value['userid']#}</td>
                                 <td width="140">{#$value['shopname']#}</td>
                                 <td>{#$value['content']#}</td>
                                 <td width="80">{#$value['star']#}</td>
-                                <td width="150">{#$value['pubdate']|date_format: "%Y-%m-%d %H:%M:%S"#}</td>
+                                <td width="150">{#$value['dtime']|date_format: "%Y-%m-%d %H:%M:%S"#}</td>
                                 <td width="80"><a href="javascript:;" class="label label-sm label-success orderdetail" title="订单详情">{#$value['ordernumstore']#}</a></td>
                                 {#if $value['replydate'] != 0#}
                                 <td width="80">已回复</td>

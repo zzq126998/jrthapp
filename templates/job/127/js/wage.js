@@ -220,10 +220,10 @@ $(function(){
 
 			for(var a = 0; a < data.length; a++){
 
-				content.push('<div class="sub-data" data-id="'+a+'" title="'+data[a].typename+'"><a href="javascript:;">'+data[a].typename+'</a><i></i></div>');
+				content.push('<div class="sub-data" data-id="'+data[a]['id']+'" title="'+data[a].typename+'"><a href="javascript:;">'+data[a].typename+'</a><i></i></div>');
 				lower2 = data[a].lower;
 
-				subdata.push('<ul class="fn-clear area'+a+'">');
+				subdata.push('<ul class="fn-clear area'+data[a]['id']+'">');
 				for(var c = 0; c < lower2.length; c++){
 					subdata.push('<li><a href="javascript:;" data-id="'+lower2[c].id+'" data-name="'+lower2[c].typename+'" title="'+lower2[c].typename+'">'+lower2[c].typename+'</a></li>');
 				}
@@ -245,17 +245,27 @@ $(function(){
 
 	//选择工作地区
 	$(".area").delegate('.sub-data', 'click', function () {
-		var t = $(this), id = t.attr("data-id");
-		if(t.hasClass("curr")){
-			t.removeClass("curr");
-			$(".area .sub-data").removeClass("curr");
-			$(".area ul").stop().slideUp("fast");
-		}else{
-			$(".area .sub-data").removeClass("curr");
-			$(".area ul").stop().slideUp("fast");
+		var t = $(this), id = t.attr("data-id"), name = t.attr("title");
+		if(t.parent().find(".area"+id+" li").length){
 
-			t.addClass("curr");
-			t.parent().find(".area"+id).stop().slideDown("fast");
+			if(t.hasClass("curr")){
+				t.removeClass("curr");
+				$(".area .sub-data").removeClass("curr");
+				$(".area ul").stop().slideUp("fast");
+			}else{
+				$(".area .sub-data").removeClass("curr");
+				$(".area ul").stop().slideUp("fast");
+
+				t.addClass("curr");
+				t.parent().find(".area"+id).stop().slideDown("fast");
+			}
+		}else{
+			$("#addrid").val(id);
+          $("#areaList").hide();
+			$("#addr")
+				.attr("data-id", id)
+				.attr("title", name)
+				.html(name);
 		}
 		return false;
 	});

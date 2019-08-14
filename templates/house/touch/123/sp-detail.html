@@ -10,7 +10,7 @@
 {#elseif $detail_type == 2#}
 {#$pageType = "转让"#}
 {#/if#}
-<title>{#$detail_title#}-{#$siteCityInfo['name']#}商铺{#$pageType#}网-{#$house_title#}</title>
+<title>{#$detail_title#}</title>
 <meta name="keywords" content="{#$siteCityInfo['name']#}商铺{#$pageType#},{#$detail_loupan#}商铺{#$pageType#}" />
 <meta name="description" content="{#$detail_loupan#}商铺{#$pageType#}信息，{#$siteCityInfo['name']#}{#$detail_addr[0]#}{#$detail_addr[1]#}{#$detail_address#}，{#$detail_loupan#}商铺{#$pageType#}，找更多{#$siteCityInfo['name']#}{#$detail_loupan#}商铺信息就到{#$siteCityInfo['name']#}{#$cfg_shortname#}。" />
 <link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/core/touchBase.css?v={#$cfg_staticVersion#}" />
@@ -19,6 +19,9 @@
 <link rel="stylesheet" href="{#$templets_skin#}css/swiper.min.css">
 <link rel='stylesheet' href='{#$cfg_staticPath#}css/ui/photoswipe.css?v={#$cfg_staticVersion#}'>
 <link rel='stylesheet' href='{#$cfg_staticPath#}css/ui/photoswipe-default-skin.css?v={#$cfg_staticVersion#}'>
+<style type="text/css">
+	.housing_txt img{width: 100%;max-height: 8rem;object-fit: cover;}
+</style>
 <script type="text/javascript" src="{#$cfg_staticPath#}js/core/touchScale.js?v={#$cfg_staticVersion#}"></script>
 <script type="text/javascript" src="{#$cfg_staticPath#}js/core/zepto.min.js?v={#$cfg_staticVersion#}"></script>
 <script type="text/javascript">
@@ -42,6 +45,15 @@
 		"id" : '{#$detail_id#}'
 	};
 	var cookiePre = '{#$cfg_cookiePre#}';
+
+	var imconfig = {
+		'mod':'house',
+		'chatid':"{#$detail_user.uid#}",
+		'title': '[商铺{#$pageType#}]{#$detail_title#}',
+		"price": '{#$detail_price#}{#if $pageType=="出售"#}万元{#else#}元/月{#/if#}',
+		"imgUrl": '{#changeFileSize url={#$detail_litpic#} type='small'#}',
+		"link": '{#getUrlPath service="house" template="sp-detail" id=$detail_id#}',
+	}
 </script>
 </head>
 
@@ -166,16 +178,18 @@
             <p>{#if $detail_user.zjcomId#}{#$detail_user.zjcomName#}{#else#}独立经纪人{#/if#}</p>
         </div>
         <div class="im_icon">
-            {#if $detail_user.qq#}<span class="im_qq"></span>{#/if#}
+ {#*      {#if $detail_user.qq#}<span class="im_qq"></span>{#/if#} *#}
       {#if $detail_usertype == 1#}
-        {#if $detail_contact == '' || $detail_contact == $detail_user.phone#}
+  {#*      {#if $detail_contact == '' || $detail_contact == $detail_user.phone#}
             {#if $detail_user.wx || $detail_user.wxQr#}
                 <span class="im_wx"></span>
             {#/if#}
         {#elseif $detail_contact && $detail_wx_tel#}
                 <span class="im_wx"></span>
         {#/if#}
-            <span class="im_iphone"></span>
+            <span class="im_iphone"></span>*#}
+
+            <span class="im_iphone phone_btn">电话咨询</span>
         </div>
         {#else#}
         <div class="im_name">
@@ -185,8 +199,7 @@
             <p>{#$detail_contact#}</p>
         </div>
         <div class="im_icon">
-            <span class="im_iphone"></span>
-        </div>
+            <span class="im_iphone phone_btn">电话咨询</span>
         {#/if#}
       {#else#}
         <div class="im_name">
@@ -196,8 +209,9 @@
             <p>{#$detail_contact#}</p>
         </div>
         <div class="im_icon">
-            {#if $detail_wx_tel#}<span class="im_wx"></span>{#/if#}
-            <span class="im_iphone"></span>
+           {#* {#if $detail_wx_tel#}<span class="im_wx"></span>{#/if#}
+            <span class="im_iphone"></span>*#}
+            *#}
         </div>
       {#/if#}
     </div>
@@ -228,7 +242,7 @@
 
 	<!-- 设施配套 -->
 	<div class="peitao">
-		<p class="classify_title">房源信息</p>
+		<p class="classify_title">配套设施</p>
 		<div class="facilities">
 			<ul class="fn-clear">
 				{#foreach from=$detail_config_py item=cfg#}
@@ -319,7 +333,7 @@
         </div>
         <div class="big-wrapper">
             <a href="{#getUrlPath service=house template=yuyue param="type=sp&id={#$detail_id#}"#}" class="button post_ulog"><i></i>预约看房</a>
-            <a href="tel:{#if $detail_usertype == 1#}{#$detail_user.phone#}{#else#}{#$detail_contact#}{#/if#}" class="button call_phone"><i></i>电话咨询</a>
+            {#if $detail_user.uid#}<a href="javascript:;" class="button call_phone chat_to-Link" data-type="detail"><i></i>在线咨询</a>{#/if#}
         </div>
 	</div>
 
@@ -394,6 +408,9 @@
     <i class="phone_cuo"></i>
 </div>
 
+<!-- 图片放大 -->
+{#include file="../../../siteConfig/bigimg_1.2.html"#}
+
 <script type="text/javascript">
 	var cenicon = "{#$templets_skin#}images/mark_ditu.png";
     var iconimg = "{#$templets_skin#}images/map_icon.png";
@@ -414,5 +431,11 @@
 <script src="{#$cfg_staticPath#}js/publicOpenMap.js?v={#$cfg_staticVersion#}"></script>
 {#include file="{#$HUONIAOROOT#}/templates/siteConfig/public_location.html"#}
 <script type="text/javascript" src="{#$templets_skin#}js/map-detail-{#$site_map#}.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript">
+    //放大图片
+    $.fn.bigImage({
+        artMainCon:".housing_txt",  //图片所在的列表标签
+    });
+</script>
 </body>
 </html>

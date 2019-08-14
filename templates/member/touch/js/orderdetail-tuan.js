@@ -24,6 +24,7 @@ $(function(){
   //  评价
    $('#suggestion').click(function(){
      $('.common').show();
+     $(window).scrollTop($(window).height())
    })
 
   // 退款
@@ -124,19 +125,20 @@ $(function(){
 		});
 
 		var data = {
-			id: id,
+			aid: id,
 			rating: rating,
-			score1: score1,
-			score2: score2,
-			score3: score3,
+			sco1: score1,
+			sco2: score2,
+			sco3: score3,
 			pics: pics.join(","),
-			content: commentText
+			content: commentText,
+			type: 'tuan-order'
 		}
 
 		t.addClass("disabled").html(langData['siteConfig'][6][35]+"...");
 
 		$.ajax({
-			url: masterDomain+"/include/ajax.php?service=tuan&action=sendCommon",
+			url: masterDomain+"/include/ajax.php?service=member&action=sendComment",
 			data: data,
 			type: "POST",
 			dataType: "jsonp",

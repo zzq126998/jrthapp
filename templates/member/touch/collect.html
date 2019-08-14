@@ -60,6 +60,7 @@
 	  {#if in_array("homemaking", $installModuleArr)#}<div class="swiper-slide"><a href="javascript:;">{#$langData['homemaking'][10][31]#}</a></div>{#/if#}
 	  {#if in_array("marry", $installModuleArr)#}<div class="swiper-slide"><a href="javascript:;">{#$langData['marry'][0][0]#}</a></div>{#/if#}
 	  {#if in_array("travel", $installModuleArr)#}<div class="swiper-slide"><a href="javascript:;">{#$langData['travel'][12][9]#}</a></div>{#/if#}
+	  {#if in_array("education", $installModuleArr)#}<div class="swiper-slide"><a href="javascript:;">{#$langData['education'][7][50]#}</a></div>{#/if#}
     </div>
   </div>
 </div>
@@ -827,6 +828,44 @@
 				</div>
 				{#else#}
 				<div class="item" data-id="{#$travelList.id#}">
+          <div class="radio"></div>
+          <a href="" class="item-a">
+            <div class="itembox fn-clear">
+              <div class="txtbox">
+                <p class="title">{#$langData['siteConfig'][20][282]#}</p>
+              </div>
+            </div>
+          </a>
+        </div>
+				{#/if#}
+				{#/member#}
+      </div>
+    </div>
+		{#/if#}
+
+		{#if ($module == "" || $module == "education") && in_array("education", $installModuleArr)#}
+    <div class="swiper-slide">
+			<div class="content">
+				{#member action="collectList" module="education" return="educationList" pageSize="9999"#}
+				{#if $educationList.detail#}
+        <div class="item" data-id="{#$educationList.id#}">
+          <div class="radio"></div>
+          <a href="{#$educationList.detail.url#}" class="item-a">
+            <div class="itembox fn-clear">
+							{#if $educationList.detail.photoSource#}
+							<div class="imgbox"><img src="{#$educationList.detail.photoSource#}" alt=""></div>
+							{#elseif $educationList.detail.pics[0]['path']#}
+							<div class="imgbox"><img src="{#$educationList.detail.pics[0]['path']#}" alt=""></div>
+							{#/if#}
+              <div class="txtbox">
+                <p class="title">{#if $educationList.detail.title#}{#$educationList.detail.title#}{#else#}{#$educationList.detail.classname#}{#/if#}</p>
+                {#if $educationList.detail.price#}<p class="price">{#echoCurrency type='symbol'#}{#$educationList.detail.price#}</p>{#/if#}
+              </div>
+            </div>
+          </a>
+				</div>
+				{#else#}
+				<div class="item" data-id="{#$educationList.id#}">
           <div class="radio"></div>
           <a href="" class="item-a">
             <div class="itembox fn-clear">

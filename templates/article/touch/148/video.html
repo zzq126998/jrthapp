@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+	<html>
+	<head>
+	<title>视频列表</title>
+	<meta charset="{#$cfg_soft_lang#}">
+	<meta name="keywords" content="{#$cfg_keywords#}">
+	<meta name="description" content="{#$cfg_description#}">
+	<meta name="wap-font-scale" content="no">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no,viewport-fit=cover">
+	<link rel="shortcut icon" href="{#$cfg_basehost#}/favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/core/touchBase.css?v={#$cfg_staticVersion#}">
+	<link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/index.css?v={#$cfg_staticVersion#}">
+	<script type="text/javascript" src="{#$cfg_staticPath#}js/core/touchScale.js?v={#$cfg_staticVersion#}"></script>
+	<script type="text/javascript" src="{#$cfg_staticPath#}js/core/zepto.min.js?v={#$cfg_staticVersion#}"></script>
+	<script>
+		var masterDomain = '{#$cfg_basehost#}', userDomain = '{#$member_userDomain#}', staticPath = '{#$cfg_staticPath#}',templets_skin='{#$templets_skin#}';
+		var hideFileUrl = {#$cfg_hideUrl#}, redirectUrl = '{#$redirectUrl#}', site = '{#$site#}';
+		var cookiePre = '{#$cfg_cookiePre#}';
+		var templets = '{#$templets_skin#}';
+		var v_type = "vdetail";
+		if(device.indexOf('huoniao') > -1){
+	        setTimeout(function(){
+	            setupWebViewJavascriptBridge(function(bridge) {
+	                bridge.callHandler('goToIndex', {}, function(){});
+	            });
+	        }, 500);
+	    }
+	</script>
+{#* 微信分享 *#}
+{#$Share_description = {#$cfg_description#}#}
+{#$Share_title = {#$cfg_webname#}#}
+{#$Share_img = {#$cfg_weblogo#}#}
+{#$Share_url = {#$cfg_basehost#}#}
+{#include file="{#$HUONIAOROOT#}/templates/siteConfig/public_share.html"#}
+</head>
+
+<body>
+	<!--顶部搜索和logo s-->	
+	<div class="top_box">
+		<div class="top_head">
+			<div class="logobox"><img src="{#$templets_skin#}images/wn_logo.png"></div>
+			<div class="scan"><a href="javascript:;"></a></div>
+			<a href="searchnew.html" class="search_box">
+				<input type="text" placeholder="请输入关键字" disabled="disabled"/>
+				<i></i>
+			</a>
+		</div>
+		<!--广告位s-->
+		<div class="bg_banner fn-hide"><img src="{#$templets_skin#}upfile/bg.png"></div>
+		<!--广告位e-->
+	</div>
+	<!--顶部搜索和logo e-->	
+	<!--导航s-->
+	<div class="nav_box fn-clear">
+		<a href="javascript:;" class="more_nav"></a>
+		<ul class="fn-clear f_nav">
+			<li><a href="javascript:;">头条</a></li>
+			<li class="active"><a href="javascript:;">视频</a></li>
+			<li ><a href="javascript:;">直播</a></li>
+			<li><a href="javascript:;">专题</a></li>
+			<li><a href="javascript:;">视听</a></li>
+			<li><a href="javascript:;">热线</a></li>
+			<li><a href="javascript:;">活动</a></li>
+			<li><a href="javascript:;">头条</a></li>
+		</ul>
+	</div>
+	<!--导航e-->
+	
+	
+	
+	<!--新闻资讯s-->
+	<div class="news_box">
+	
+	
+	
+	
+	<!--视频s-->
+		<ul class="ulbox">
+		<!--大图s-->
+	    	
+	    <!--大图e-->
+		</ul>
+	<!--视频e-->
+		<!--<div class="loading">
+			<img src="{#$templets_skin#}images/loading.gif">
+			<span>加载中</span>
+		</div>-->
+	</div>
+	<!--新闻资讯e-->
+	
+	<!--所有导航s-->
+	<div class="nav_all">
+		<h2><span>所有频道</span><a href="javascript:;" class="close_btn"></a></h2>
+		<ul class="fn-clear">
+		</ul>
+	</div>
+	<!--所有导航e-->
+
+
+<script type='text/javascript' src='{#$cfg_basehost#}/include/json.php?action=lang'></script>
+<script type="text/javascript" src="{#$templets_skin#}js/common.js?v={#$cfg_staticVersion#}"></script>
+<script src="{#$templets_skin#}js/video.js?v={#$cfg_staticVersion#}"></script>
+</body>
+</html>

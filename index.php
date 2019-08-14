@@ -564,20 +564,33 @@ if(file_exists($contorllerFile)){
 
 //自助建站独立域名选项
 //需要将php.ini中的allow_url_include开启
-if($module == "website" && !empty($domainPart) && !empty($domainIid) && !isMobile()){
+if($module == "website" && !empty($domainPart) && !empty($domainIid)){
 
-	//获取URL参数
-	$urlParam = array();
-	foreach(Array('_GET','_POST') as $_request){
-		foreach($$_request as $_k => $_v){
-			if($_k != 'template'){
-				array_push($urlParam, $_k . "=" . RemoveXSS($_v));
+	//电脑端
+	if(!isMobile()){
+		//获取URL参数
+		$urlParam = array();
+		foreach(Array('_GET','_POST') as $_request){
+			foreach($$_request as $_k => $_v){
+				if($_k != 'template'){
+					array_push($urlParam, $_k . "=" . RemoveXSS($_v));
+				}
 			}
 		}
-	}
 
-	include($cfg_secureAccess.$cfg_basehost."/website.php?id={$domainIid}&alias={$template}" . ($urlParam ? "&" . join("&", $urlParam) : ""));
-	die;
+		include($cfg_secureAccess.$cfg_basehost."/website.php?id={$domainIid}&alias={$template}" . ($urlParam ? "&" . join("&", $urlParam) : ""));
+		die;
+
+	//移动端跳转
+	}else{
+		$param = array(
+			"service"      => "website",
+			"template"     => "site".$domainIid
+		);
+		$url = getUrlPath($param);
+		header("location:".$url);
+		die;
+	}
 }
 
 checkModuleState(array("visitState" => $cfg_visitState, "visitMessage" => $cfg_visitMessage));
@@ -1070,12 +1083,25 @@ if(file_exists($tplDir.$templates)){
 	$huoniaoTag->assign("cfg_server_wx",      $cfg_server_wx);
 	$huoniaoTag->assign("cfg_server_wxQr",    empty($cfg_server_wxQr) ? "" : getFilePath($cfg_server_wxQr));
 
+	//是否APP端
 	$useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
 	$is_app = preg_match("/huoniao/", $useragent) ? 1 : 0;
 	$huoniaoTag->assign('is_app', $is_app);
 
+	//是否苹果APP端
 	$is_ios_app = preg_match("/huoniao_ios/", $useragent) ? 1 : 0;
 	$huoniaoTag->assign('is_ios_app', $is_ios_app);
+
+	//是否安卓APP端
+	$is_android_app = preg_match("/huoniao_android/", $useragent) ? 1 : 0;
+	$huoniaoTag->assign('is_android_app', $is_android_app);
+
+	//是否微信端
+	$huoniaoTag->assign('isWeixin', isWeixin());
+
+	//是否小程序端
+	$isWxMiniprogram = GetCookie('isWxMiniprogram');
+	$huoniaoTag->assign('isWxMiniprogram', $isWxMiniprogram);
 
 	$huoniaoTag->compile_dir = HUONIAOROOT."/templates_c/compiled/".$service."/".(isMobile() ? "touch/" : "").$template;  //设置编译目录
 

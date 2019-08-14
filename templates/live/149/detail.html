@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="{#$cfg_soft_lang#}">
+<title>{#$livedetail_title#}-直播详情</title>
+<meta name="keywords" content="{#$live_keywords#}" />
+<meta name="description" content="{#$live_description#}" />
+<link rel="shortcut icon" href="{#$cfg_basehost#}/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/core/base.css?v={#$cfg_staticVersion#}" media="all" />
+<link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/public.css?v={#$cfg_staticVersion#}" />
+<link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/detail.css?v={#$cfg_staticVersion#}" />
+<link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/abigimage.jquery.css?v={#$cfg_staticVersion#}" />
+<link rel="stylesheet" href="//g.alicdn.com/de/prismplayer/2.6.0/skins/default/aliplayer-min.css?v={#$cfg_staticVersion#}" />
+<script type="text/javascript" src="//g.alicdn.com/de/prismplayer/2.6.0/aliplayer-min.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/core/jquery-1.8.3.min.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript">
+    var masterDomain = '{#$cfg_basehost#}', channelDomain = '{#$live_channelDomain#}', staticPath = '{#$cfg_staticPath#}';
+    var id = "{#$livedetail_id#}", livemoney = '{#$livemoney#}', room = '{#$livedetail_id#}';
+    var hideFileUrl = {#$cfg_hideUrl#};
+	var cookiePre = '{#$cfg_cookiePre#}', templets_skin = '{#$cfg_staticPath#}';
+	
+	//页面自适应设置
+	$(window).load(function(){
+		var screenwidth = window.innerWidth || document.body.clientWidth;
+		var criticalPoint = criticalPoint != undefined ? criticalPoint : 1600;
+		var criticalClass = criticalClass != undefined ? criticalClass : "newsize";
+		if(screenwidth > criticalPoint){
+			$(".w1600").removeClass(criticalClass);
+		}else{
+			$(".w1600").addClass(criticalClass);
+		}
+	});
+	
+</script>
+</head>
+<body class="w1200">
+<!--导航 s-->
+{#include file="_top.html"#}
+<!--导航 e-->
+<div class="top_bg">
+	<div class="w1600">
+		<div class="wrap mainBox">
+    <div class="bread"><p><a href="{#$live_channelDomain#}">首页</a> > <a href="{#getUrlPath service='live' template='livelist' typeid={#$livedetail_typeid#}#}">{#$livedetail_typename#}</a> > <a href="{#getUrlPath service="live" template="detail" id={#$livedetail_id#}#}">{#$livedetail_title#}</a></p></div>
+    <div class="part_play fn-clear">
+        <div class="play_l fn-left">
+            <div class="p_l_top fn-clear">
+                <div class="img_box fn-left">
+                    <img class="user-img" src="{#$livedetail_photo#}" alt="">
+                    <div class="mask"></div>
+                    <div class="masageBox">
+                        <div class="m-top fn-clear">
+                            <div class="img-box"><div class="img"><img src="{#$livedetail_photo#}" alt=""></div><i></i></div>
+                            <p><span class="name">{#$livedetail_nickname#}</span> <span class="num">发布的直播({#$livedetail_livenum#})</span></p>
+                        </div>
+                        <ul class="m-list">
+                            {#live action="alive" return="row" uid="{#$livedetail_user#}" pageSize="3"#}
+                            <li class="fn-clear"><a href="{#$row.url#}">
+                                <div class="img-box fn-left"><img src="{#changeFileSize url="{#$row.litpic#}" type="small"#}" alt=""></div>
+                                <div class="info fn-left">
+                                    <p class="tit">{#$row.title#}</p>
+                                    <p class="look-num"><i></i><span>{#$row.click#}</span></p>
+                                </div>
+                            </a></li>
+                            {#/live#}
+                        </ul>
+                    </div>
+                </div>
+                <div class="info">
+                    <p class="title">{#$livedetail_title#}</p>
+                    <p class="type"> <span class="tp01">{#$livedetail_typename#}</span> <!--span class="tp02">数码</span-->
+                        {#if $livedetail_state==1#}
+                        <i class="live"></i>
+                        {#elseif $livedetail_state==2#}
+                        <i class="hui"></i>
+                        {#/if#}
+                        <!--<i class="yu"></i>-->
+                    </p>
+                    <p class="user"><span class="name">{#$livedetail_nickname#} <i></i></span>  <span class="ID"><i></i>{#$livedetail_id#}</span> <span class="look"><i></i>{#$livedetail_click#}</span></p>
+                </div>
+                {#if $livedetail_user != $userid#}
+                <div class="gz">
+                        {#if $userid && $livedetail_isMfollow#}
+                        <div data-id="{#$fid#}" class="follow curr" id="follow"><em></em><span class="txt">已关注</span><span class="num">{#$livedetail_totalFans#}</span></div>
+                        {#else#}
+                        <div data-id="{#$fid#}" class="follow" id="follow"><em></em><span class="txt">关注</span><span class="num">{#$livedetail_totalFans#}</span></div>
+                        {#/if#}
+                    <div class="appo_sec">
+                        <p><i></i>关注成功！</p>
+                        <span>第一时间收到Ta最新动态提醒  <br>开播不错过~！</span>
+                    </div>
+                    <div class="appo_cancel">
+                        <p><i></i>确定要取消关注吗？</p>
+                        <div class="btn"><span class="sure" id="gz_sure">确定</span> <span class="cancel" id="gz_cancel">取消</span></div>
+                    </div>
+                </div>
+                {#else#}
+                {#/if#}
+            </div>
+            <div class="videoBox">
+
+                <div class="video content_main">
+                    {#if $liveUserAuth eq 1#}
+                        {#if $livedetail_state == 2 && $detail_mp4url == ''#}
+                        <div class="empty"> <div class="img"><img src="{#$livedetail_litpic#}"></div><span>视频回放正在制作中，请稍后访问...</span></div>
+                        {#/if#}
+                    {#/if#}
+                    <div id="J_prismPlayer"></div>
+                </div>
+
+
+
+                <div class="playToolbar fn-clear">
+                    <div class="code_btn fn-left">
+                        <i></i>手机扫码观看
+                    <div class="codeBox"> <div class="code"><img src="{#$cfg_basehost#}/include/qrcode.php?data={#getUrlPath service="live" template="h_detail" id={#$livedetail_id#}#}" alt=""></div></div>
+                    </div>
+                    <div class="share-box fn-clear">
+                        <em class="fn-left">分享到：</em>
+
+                        <p class="bdsharebuttonbox bdshare-button-style1-16"  data-bd-bind="1560496887632">
+                            <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+                            <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+                            <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+                        </p>
+
+                    </div>
+                    <div class="report fn-right"><img src="{#$templets_skin#}images/report.png"> <span>举报</span></div>
+                </div>
+                <!--未开播-->
+               <!--  <div class="stayBox">
+                    <i></i>
+                    <span>5-17 15:30开播</span>
+                </div> -->
+
+            </div>
+        </div>
+        <!--聊天室-->
+        <div class="play_r fn-right">
+            <div class="room">
+                <!--头部排序-->
+                <div class="room-hd">
+                    <ul class="rank-tab fn-clear">
+                        <li class="invite">邀请榜</li>
+                        <li class="spare">打赏榜</li>
+                    </ul>
+                    <div class="collapsing">
+                        <div class="anchorBox" id="anchorBox">
+                            <i class="jian"></i>
+                            <!-- <div class="img_box"><div class="img"><img src="{#$templets_skin#}upfile/eg08.png" alt=""></div><i></i></div>
+                            <p class="name"></p>
+                            <p class="num"><span class="z_num">直播 21</span><span>粉丝 5451</span></p>
+                            <p class="ID"><i></i></p>
+                            <p class="btn"><a href="">前往Ta的主页 ></a></p> -->
+                        </div>
+                        <div class="rank-list invite-list">
+                            <div class="top-three fn-clear">
+                                {#$m=1#}
+                                {#live action=getShareList return=lists liveid=$livedetail_id#}
+                                {#if $m>4#}
+                                {#else#}
+                                <div class="th-item" data-id="{#$lists['user']['userid']#}">
+                                    <div class="img_box">
+                                        <div class="img"><img src="{#$lists['user']['photo']#}" alt=""></div>
+                                        <i class="no"></i>
+                                    </div>
+                                    <div class="info" >
+                                        <p class="name">{#$lists['user']['nickname']#}</p>
+                                        <p class="num"><i></i>{#$lists['scount']#}</p>
+                                    </div>
+                                </div>
+
+                                {#/if#}
+                                {#$m=$m+1#}
+                                {#/live#}
+                            </div>
+                            <ul class="list">
+                                {#$n=1#}
+                                {#live action=getShareList return=list liveid=$livedetail_id#}
+                                {#if $n>=4#}
+                                <li data-id="{#$list['user']['userid']#}"><p class="fn-clear"><span class="name fn-left"> <i>{#$n#}</i>{#$list['user']['nickname']#}-</span>  <span class="num fn-right"><i></i>{#$list['scount']#}</span></p></li>
+                                {#/if#}
+                                {#$n=$n+1#}
+                                {#/live#}
+                            </ul>
+                        </div>
+                        <div class="rank-list reward-list">
+                            <div class="top-three fn-clear">
+                                {#$a=1#}
+                                {#live action=getRewardList return=list liveid=$livedetail_id#}
+                                {#if $a<4#}
+                                <div class="th-item" data-id="{#$list['user']['userid']#}">
+                                    <div class="img_box">
+                                        <div class="img"><img src="{#$list['user']['photo']#}" alt=""></div>
+                                        <i class="no"></i>
+                                    </div>
+                                    <div class="info">
+                                        <p class="name">{#$list['user']['nickname']#}</p>
+                                        <p class="num"><i></i>{#$list['sumamount']#}</p>
+                                    </div>
+                                </div>
+                                {#/if#}
+                                {#$a=$a+1#}
+                                {#/live#}
+                            </div>
+                            <ul class="list">
+                                {#$m=1#}
+                                {#live action=getRewardList return=list liveid=$livedetail_id#}
+                                {#if $m>4#}
+                                <li data-id="{#$list['user']['userid']#}"><p class="fn-clear"><span class="name fn-left"> <i>{#$m#}</i>{#$list['user']['nickname']#}</span>  <span class="num fn-right"><i></i>{#$list['sumamount']#}</span></p></li>
+                                {#/if#}
+                                {#$m=$m+1#}
+                                {#/live#}
+                                {#$m=null#}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bottom_bar"></div>
+                    <div class="room-hd-bg"></div>
+                </div>
+
+                <div class="chat">
+                    <div id="chat" class="clearfix">
+                        <div class="chatmain clearfix">
+                            <!--<div class="log-title" id="welcome"></div>-->
+                            <div id="mine" class="log"></div>
+                            <div class="tipsOrchat">
+                              {#if $userinfo#}
+                                <div class="btn_after">
+                                    <div class="fun"><a href="javascript:;" class="emo live-emoj_btn"></a> <a href="javascript:;" class="pic live-img_btn"></a></div>
+                                    <div class="form ">
+                                        <div id="msg" class="msg live-textarea" contenteditable></div>
+                                        <!--<input id="msg" type="text" class="msg im-textarea" placeholder="请输入聊天内容!"/>-->
+                                        <button id="send" class="send live-btn_reply" >发送</button>
+                                    </div>
+                                </div>
+							{#else#}
+                                <div class="btn_before" id="btn_before">
+									<div class="fun"><a  class="emo_before"></a> <a  class="pic_before"></a></div>
+                                  <div class="form ">
+                                    <div  class="msg"><a href="{#$cfg_basehost#}/login.html">登陆</a>后，才可以互动哦！</div>
+                                    <button class="send im-btn_reply"  disabled="disabled">发送</button>
+                                  </div>
+                                </div>
+                              {#/if#}
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="live-emoji-hide">
+                    <h2>选择表情</h2>
+                    <ul class="live-emoji-list">
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f01.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f02.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f03.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f04.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f05.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f06.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f07.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f08.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f09.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f10.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f11.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f12.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f13.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f14.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f15.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f16.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f17.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f18.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f19.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f20.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f21.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f22.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f23.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f24.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f25.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f26.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f27.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f28.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f29.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f30.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f31.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f32.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f33.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f34.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f35.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f36.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f37.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f38.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f39.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f40.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f41.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f42.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f43.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f44.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f45.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f46.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f47.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f48.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f49.png" alt="" /></a></li>
+                        <li><a href="javascript:;"><img src="{#$templets_skin#}images/emot/baidu/i_f50.png" alt="" /></a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="live-photo"><input type="file" name="Filedata" class="Filedata" id="image"></div>
+
+        </div>
+    </div>
+    <div class="intro">
+        <div class="tap">
+            <span class="curr">直播介绍</span> <span>直播图文</span>
+            {#foreach from=$livedetail_menu item='menu' key='k'#}
+            {#if $k>=3#}
+            <span><a style="color: #ffffff;" target="_blank" href="{#$menu.url|default:'javascript:;'#}">{#$menu.name#}</a></span>
+            {#/if#}
+            {#/foreach#}
+        </div>
+        <div class="filter">
+            <div class="container in_info show">
+                <div class="con">
+                    {#$livedetail_note#}
+                </div>
+            </div>
+            <div class="container tw_info">
+                {#live action=imgTextList return=list chatid=$livedetail_id pageSize=100#}
+                <div class="item">
+                    <div class="user fn-clear">
+                        <div class="user_img fn-left"><div class="img"><img src="{#changeFileSize url="{#$list.photo#}" type="small"#}" alt=""></div><i></i></div>
+                        <div class="info fn-left">
+                            <p class="name">{#$list.nickname#}</p>
+                            <p class="time">{#$list.pubdate|date_format:'%H:%M:%S'#}</p>
+                        </div>
+                    </div>
+                    <div class="con">
+                        <p>{#$list.text#}</p>
+                        <ul class="img_box fn-clear">
+                            {#foreach from=$list.img item=val#}
+                            <li><a href="{#$val#}"><img src="{#$val#}" alt=""></a></li>
+                            {#/foreach#}
+                        </ul>
+                    </div>
+                </div>
+                {#/live#}
+                {#if $pageInfo.totalCount == 0#}
+                <div class="empty">抱歉！ 暂无直播图文</div>
+                {#/if#}
+            </div>
+        </div>
+    </div>
+
+
+</div>
+	</div>
+</div>
+<div class="w1600"> 
+<div class="hot_bg">
+    <div class="wrap">
+        <h2>热门直播</h2>
+        <div class="conBox">
+            <ul class="conList fn-clear">
+                {#live action="alive" return="row" type="1" orderby="click" pageSize="10"#}
+                <li><a href="{#$row.url#}">
+                    <div class="img_box">
+                        <img src="{#$row.litpic#}" alt="">
+                        {#if $row.state==1#}
+                        <i class="live"></i>
+                        {#elseif $row.state==2#}
+                        <i class="hui"></i>
+                        {#/if#}
+                            <!-- <i class="yu"></i> -->
+                        <div class="code_bg"><div class="code"><img src="{#$cfg_basehost#}/include/qrcode.php?data={#$row.url#}" alt=""></div></div>
+                    </div>
+                    <div class="info">
+                        <p class="tit sliceFont3" data-num="18">{#$row.title#}</p>
+                        <div class="user fn-clear"><div class="u_logo"><img src="{#changeFileSize url="{#$row.photo#}" type="small"#}" alt=""></div><span class="name">{#$row.nickname#}</span> <span class="num fn-right"><i></i>{#$row.click#}</span></div>
+                    </div>
+                </a></li>
+                {#/live#}
+            </ul>
+        </div>
+    </div>
+</div>
+</div>
+<!--pop-show-->
+{#if $userinfo#}
+<div class="dalogo {#if ($liveUserAuth!=1 && $liveType==1) || ($liveUserAuth!=1 && $liveType==2)#}pop-show{#/if#}"></div>
+<!--邀请码-->
+<div class="invite-box tip-box {#if $liveUserAuth!=1 && $liveType==1#}pop-show{#/if#}">
+    <div class="img"><img src="{#$templets_skin#}images/ic_bg.png" alt=""></div>
+    <div class="info">
+        <p class="con">当前直播需要邀请码才能继续观看哦~</p>
+        <form action="{#$check_pass_url#}" method="post" id="pForm">
+        <input class="invite" id="invite" name="password" type="text" placeholder="输入邀请码">
+        <div class="btn">
+            <a class="goBack" href="{#$live_channelDomain#}">返回首页</a>
+            <a class="sure" href="javascript:;">确认</a>
+        </div>
+        </form>
+        <p class="msg" id="inv-msg"></p>
+    </div>
+</div>
+
+<!--支付-->
+<div class="tip-box play-box {#if $liveUserAuth!=1 && $liveType==2#}pop-show{#/if#}">
+    <div class="img"><img src="{#$templets_skin#}images/ic_bg.png" alt=""></div>
+    <div class="info">
+        <p class="con">当前直播付费后即可继续观看~</p>
+        <p class="price"> <span><em>{#echoCurrency type='symbol'#}</em>{#$livemoney#}</span></p>
+        <div class="btn">
+            <a class="goBack" href="{#$live_channelDomain#}">返回首页</a>
+            <a class="sure" href="javascript:;" target="_blank">去支付</a>
+        </div>
+    </div>
+</div>
+
+<!--支付成功-->
+<div class="play-success">
+    <div class="icon"> <i></i></div>
+    <p>付费成功！欢迎观看直播！</p>
+</div>
+{#/if#}
+<!--去支付-->
+<div class="tip-box play-money">
+    <div class="img"><img src="{#$templets_skin#}images/ic_bg.png" alt=""></div>
+    <div class="info fn-clear">
+        <div class="code fn-left"><img src="" alt=""></div>
+        <div class="money fn-left">
+            <p class="price"> <span><em>{#echoCurrency type='symbol'#}</em>{#$livemoney#}</span></p>
+            <p class="con">支持支付宝、微信扫码支付</p>
+            <p class="icon"><i class="zhi"></i> <i class="wx"></i></p>
+        </div>
+        <div class="back"><a href="{#$live_channelDomain#}"> < 返回首页 </a></div>
+    </div>
+</div>
+
+<!--底部 s-->
+{#include file="footer.html"#}
+<!--底部 e-->
+<script type="text/javascript">
+    var isfalse ={#if $livedetail_state==2#}false{#else#}true{#/if#};
+    var source = {#if $livedetail_state==2#}'{#$detail_mp4url#}'{#else#}'{#$detail_url#}'{#/if#};
+    var player = new Aliplayer({
+            id: "J_prismPlayer",
+            autoplay: true,
+            isLive: isfalse,
+            playsinline: true,
+            width:"100%",
+            height:"540px",
+            useH5Prism:true,
+            useFlashPrism:false,
+            source:source,
+            cover:"{#$livedetail_litpic#}"
+        }
+    );
+    var h_detail = '{#getUrlPath service="live" template="h_detail" id={#$livedetail_id#}#}';
+</script>
+<script type="text/javascript" src="{#$templets_skin#}js/abigimage.jquery.js?v={#$cfg_staticVersion#}"></script>
+<script type='text/javascript' src='{#$cfg_basehost#}/include/json.php?action=lang'></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/common.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/ui/jquery.dragsort-0.5.1.min.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/ui/jquery.ajaxFileUpload.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$templets_skin#}js/public.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$templets_skin#}js/getlist.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$templets_skin#}js/chatroom.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$templets_skin#}js/detail.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/ui/jquery.qrcode.min.js?v={#$cfg_staticVersion#}"></script>
+<script type="text/javascript" src="{#$cfg_staticPath#}js/ui/jquery.dialog-4.2.0.js?v={#$cfg_staticVersion#}"></script>
+</body>
+</html>

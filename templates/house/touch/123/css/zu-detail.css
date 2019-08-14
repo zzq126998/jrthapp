@@ -115,3 +115,15 @@ body {background:#f4f4f4;margin-bottom:1.4rem!important;}
 
 .housing .mode div.tl {width:100%;}
 .housing .mode div.tl span:last-child {max-width: 5rem;white-space: normal;vertical-align: text-top;}
+
+.housing_txt img{width: 100%;max-height: 8rem;object-fit: cover;}
+
+/*电话样式修改*/
+.information .im_icon .phone_btn.im_iphone{ width: 1.8rem; height: .6rem; border-radius: .3rem; font-size: .22rem; color: #fff; display: inline-block; line-height: .6rem; text-align: left; position: relative; padding-left: .72rem; box-sizing: border-box;
+background: -webkit-linear-gradient(left, #2458ff , #68acff); /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right, #2458ff, #68acff); /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right, #2458ff, #68acff); /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right, #2458ff , #68acff); /* 标准的语法 */
+}
+.information .im_icon .phone_btn.im_iphone:before{content: '';display: block; width: .6rem; height: .6rem; background-image: url(../images/iphone_icon.png) ; background-repeat: no-repeat; background-size: contain; position: absolute; left: 0; top: 0;}
+.information .im_icon .im_qq{display: none;}

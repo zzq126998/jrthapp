@@ -1380,6 +1380,98 @@ if(file_exists($tpl."/".$templates)){
 					}
 
 
+				}elseif($name == "education"){//教育
+					//教育公司
+					if(testPurview('educationstoreEdit')){
+						$sql = $dsql->SetQuery("SELECT count(`id`) as c FROM `#@__education_store` WHERE `state` = 0  AND `cityid` in ($adminCityIds)");
+						$ret = $dsql->dsqlOper($sql, "results");
+						$count = $ret[0]['c'];
+						if(is_numeric($count) && $count > 0){
+							array_push($noticeArr, array(
+								"module" => $name,
+								"name"   => "教育公司",
+								"id"     => "educationstoreListphp",
+								"url"    => "education/educationstoreList.php",
+								"count"  => $count
+							));
+						}
+					}
+
+					//教育家教
+					if(testPurview('educationfamilyEdit')){
+						$sql = $dsql->SetQuery("SELECT count(`id`) as c FROM `#@__education_tutor` WHERE `state` = 0  AND `cityid` in ($adminCityIds)");
+						$ret = $dsql->dsqlOper($sql, "results");
+						$count = $ret[0]['c'];
+						if(is_numeric($count) && $count > 0){
+							array_push($noticeArr, array(
+								"module" => $name,
+								"name"   => "教育公司",
+								"id"     => "educationfamilyListphp",
+								"url"    => "education/educationfamilyList.php",
+								"count"  => $count
+							));
+						}
+					}
+
+					//教育留言
+					if(testPurview('educationWord')){
+						$sql = $dsql->SetQuery("SELECT count(`id`) as c FROM `#@__education_word` WHERE `state` = 0  AND `cityid` in ($adminCityIds)");
+						$ret = $dsql->dsqlOper($sql, "results");
+						$count = $ret[0]['c'];
+						if(is_numeric($count) && $count > 0){
+							array_push($noticeArr, array(
+								"module" => $name,
+								"name"   => "教育留言",
+								"id"     => "educationWordphp",
+								"url"    => "education/educationWord.php",
+								"count"  => $count
+							));
+						}
+					}
+
+					//教育课程
+					if(testPurview('educationcoursesEdit')){
+						$sql = $dsql->SetQuery("SELECT count(`id`) as c FROM `#@__education_courses` WHERE `state` = 0 ");
+						$ret = $dsql->dsqlOper($sql, "results");
+						$count = $ret[0]['c'];
+						if(is_numeric($count) && $count > 0){
+							array_push($noticeArr, array(
+								"module" => $name,
+								"name"   => "教育课程",
+								"id"     => "educationcoursesListphp",
+								"url"    => "education/educationcoursesList.php",
+								"count"  => $count
+							));
+						}
+					}
+
+					//教育教师
+					if(testPurview('educationteacherEdit')){
+						$sql = $dsql->SetQuery("SELECT `id` FROM `#@__education_store` WHERE  `cityid` in ($adminCityIds)");
+						$res = $dsql->dsqlOper($sql, "results");
+						$ids = '';
+						if(!empty($res)){
+							foreach($res as $row){
+								$ids .= $row['id'] . ',';
+							}
+						}
+						$ids = rtrim($ids, ',');
+						if($ids){
+							$sql = $dsql->SetQuery("SELECT count(`id`) as c FROM `#@__education_teacher` WHERE `state` = 0  AND `company` in ($ids)");
+							$ret = $dsql->dsqlOper($sql, "results");
+							$count = $ret[0]['c'];
+							if(is_numeric($count) && $count > 0){
+								array_push($noticeArr, array(
+									"module" => $name,
+									"name"   => "教育教师",
+									"id"     => "educationteacherListphp",
+									"url"    => "education/educationteacherList.php",
+									"count"  => $count
+								));
+							}
+						}
+					}
+
 				}
 
 			}

@@ -9,7 +9,7 @@ var thumbSize = {#$thumbSize#}, thumbType = "{#$thumbType#}",  //缩略图配置
 	atlasSize = {#$atlasSize#}, atlasType = "{#$atlasType#}", atlasMax = 0;  //图集配置
 	//imglist = {#$imglist#},
    var typeListArr = {#$typeListArr#}, action = '{#$action#}', modelType = '{#$action#}',
-	cfg_term = "pc", adminPath = "{#$adminPath#}", staticPath = '{#$cfg_staticPath#}';
+	cfg_term = "pc", adminPath = "{#$adminPath#}", staticPath = '{#$cfg_staticPath#}', mapCity = "{#$mapCity#}";
 //var cityid = {#$cityid#}, cityList = {#$cityList#};
 var pulltype = {#$pulltype#};
 var pullurl_pc = '{#$pullurl_pc#}';
@@ -234,6 +234,18 @@ var pullurl_touch = '{#$pullurl_touch#}';
     <dd>
       <script id="note" name="note" type="text/plain" style="width:85%;height:500px">{#$note#}</script>
     </dd>
+  </dl>
+  <dl class="clearfix">
+    <dt><label for="lnglat">坐标：</label></dt>
+    <dd>
+      <input class="input-xlarge" type="text" name="lnglat" id="lnglat" value="{#$lnglat#}" data-regex=".{2,100}" />
+      <img src="{#$adminPath#}../static/images/admin/markditu.jpg" id="mark" style="cursor:pointer;" title="标注地图位置" />
+      <span class="input-tips"><s></s>请输入坐标信息</span>
+    </dd>
+  </dl>
+  <dl class="clearfix">
+    <dt>自定义属性：</dt>
+    <dd class="radio">{#html_checkboxes name='flags' values=$flag output=$flagList selected=$flagitem separator="&nbsp;&nbsp;"#}</dd>
   </dl>
   <dl class="clearfix formbtn">
     <dt>&nbsp;</dt>

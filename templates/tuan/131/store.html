@@ -30,8 +30,12 @@
         var date        = [{#$smarty.now#}, {#$detail_startdate#}, {#$detail_enddate#}];
         var site_map    = '{#$site_map#}';
         var id = {#$detail_id#}, lnglat = '{#$detail_lnglat#}', detailTitle = '{#$detail_member['nickname']#}', detailAddr = '{#$detail_addrname[0]#} {#$detail_addrname[1]#} {#$detail_address#}';
+        var imconfig = {
+        	'chatid':"{#$detail_member['userid']#}"
+        }
     </script>
 </head>
+
 <body class="w1200">
 {#include file="{#$HUONIAOROOT#}/templates/siteConfig/top1.html"#}
 <!--头部 s-->
@@ -70,7 +74,10 @@
             {#/if#}
         </p>
         <p class="opentime"><span>营业时间</span>{#$detail_openStart#} - {#$detail_openEnd#}</p>
-        <p class="contact">{#if $detail_qq#}<i class="qq"></i><span class="sq">{#$detail_qq#}</span>{#/if#}{#if $detail_wechatcode#}<i class="wx"></i><span class="swx">{#$detail_wechatcode#}</span></p>{#/if#}
+        <p class="contact">
+        	{#if $detail_qq#}<i class="qq"></i><span class="sq">{#$detail_qq#}</span>{#/if#}{#if $detail_wechatcode#}<i class="wx"></i><span class="swx">{#$detail_wechatcode#}</span>{#/if#}
+        	<a href="javascript:;" data-type="user" class="chat_to-Link">联系商家</a>
+        </p>
         <div class="info_bottom">
             <p>
             <a class="pl" href="#"><i></i>{#$detail_totalCommon#}</a>

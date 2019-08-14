@@ -119,7 +119,7 @@ $(function(){
 				extensions: accept_extensions,
 				mimeTypes: accept_mimeTypes
 			},
-            // chunked: true,//开启分片上传
+            chunked: true,//开启分片上传
             // threads: 1,//上传并发数
 			fileNumLimit: count,
 			fileSingleSizeLimit: size
@@ -338,6 +338,22 @@ $(function(){
 					.find('span');
 			}
 			$percent.css('width', percentage * 100 + '%');
+
+			//音频文件浏览器右下角增加上传进度
+			if(file.ext == 'mp3'){
+				var progressFixed = $('#progressFixed_' + file.id);
+				if(!progressFixed.length){
+					var $i = $("<b id='progressFixed_"+file.id+"'>");
+			        $i.css({bottom: 0, left: 0, position: "fixed", "z-index": "10000", background: "#a5a5a5", padding: "0 5px", color: "#fff", "font-weight": "500", "font-size": "12px"});
+					$("body").append($i);
+					progressFixed = $('#progressFixed_' + file.id);
+				}
+				progressFixed.text("上传进度："+parseInt(percentage * 100) + '%');
+				if(percentage == 1){
+					progressFixed.remove();
+				}
+			}
+
 		});
 
 		// 文件上传成功，给pubitem添加成功class, 用样式标记上传成功。

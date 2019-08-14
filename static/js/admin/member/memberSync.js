@@ -96,7 +96,7 @@ $(function(){
 	$("#syncAll").bind("click", function(event){
 		event.preventDefault();
 		$.dialog.confirm('确定要同步所有会员到论坛吗？', function(){
-			location.href = "member/memberSync.php?action=syncAll";
+			location.href = "memberSync.php?action=syncAll";
 		});
 	});
 
@@ -113,7 +113,7 @@ $(function(){
 				for(var i = 0; i < checked.length; i++){
 					id.push($("#list tbody tr.selected:eq("+i+")").attr("data-id"));
 				}
-				location.href = "member/memberSync.php?action=syncSelect&id="+id.join(",");
+				location.href = "memberSync.php?action=syncSelect&id="+id.join(",");
 			}
 		});
 	});
@@ -137,7 +137,7 @@ $(function(){
 			data.push("pend=");
 			data.push("state="+state);
 
-			location.href = "member/memberSync.php?action=syncFilter&"+data.join("&");
+			location.href = "memberSync.php?action=syncFilter&"+data.join("&");
 		});
 	});
 

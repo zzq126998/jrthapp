@@ -22,14 +22,14 @@ class imgdata{
 	}
 	public function img2data(){
 		$this->_imgfrom($this->imgsrc);
-		return $this->imgdata=fread(fopen($this->imgsrc,'rb'),filesize($this->imgsrc));
+		return $this->imgdata=@fread(@fopen($this->imgsrc,'rb'),@filesize($this->imgsrc));
 	}
 	public function data2img(){
 		header("content-type:$this->imgform");
 		echo $this->imgdata;
 	}
 	public function _imgfrom($imgsrc){
-		$info = getimagesize($imgsrc);
+		$info = @getimagesize($imgsrc);
 		return $this->imgform = $info['mime'];
 	}
 }
@@ -62,7 +62,21 @@ function GrabImage($url) {
 
 if(!empty($f)){
 
+	//远程链接直接跳转
 	if(strstr($f, "http") || strstr($f, "//") || strstr($f, ".swf")){
+		$f_ = strtolower($f);
+		if(
+			!strstr($f_, '.png') &&
+			!strstr($f_, '.jpg') &&
+			!strstr($f_, '.jpeg') &&
+			!strstr($f_, '.gif') &&
+			!strstr($f_, '.bmp') &&
+			!strstr($f_, '.swf') &&
+			!strstr($f_, 'attachment.php') &&
+			!strstr($f_, '.mp4')
+		){
+			die('非法跳转！');
+		}
 		header("location:".$f);
 		die;
 	}

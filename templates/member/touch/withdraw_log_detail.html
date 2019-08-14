@@ -23,7 +23,7 @@
 <body>
 
     {#include file="_top.html"#}
-  
+
 
     <!-- put_forward -->
     {#if $tab == 'p'#}
@@ -63,7 +63,7 @@
         <dl><dt>{#$langData['siteConfig'][19][39]#}：</dt><dd>{#$amount#}</dd></dl>
       </div>
     </div>
-  
+
       <!-- 支付宝微信 -->
       {#else#}
 
@@ -89,18 +89,13 @@
     </div>
 
       {#/if#}
-  
+
     <!-- withdraw -->
     {#else#}
 
   	<dl class="info-section">
   		{#if $state == 0#}
   			{#$stateTxt = $langData['siteConfig'][9][14]#}
-  			{#if $bank == "alipay"#}
-  				{#$stateNote = $langData['siteConfig'][20][392]#}
-  			{#else#}
-  				{#$stateNote = $langData['siteConfig'][20][393]#}
-  			{#/if#}
   		{#elseif $state == 1#}
   			{#$stateTxt = $langData['siteConfig'][9][5]#}
   			{#$stateNote = $note#}
@@ -118,16 +113,19 @@
     <div class="info-block">
   		<div class="info-title">{#$langData['siteConfig'][19][864]#}</div>
   		<div class="info-content">
-        {#if $bank == "alipay"#}
+        {#if $bank == "weixin"#}
+        <dl><dt>{#$langData['siteConfig'][32][72]#}：</dt><dd>微信</dd></dl>
+        {#elseif $bank == "alipay"#}
+        <dl><dt>{#$langData['siteConfig'][32][72]#}：</dt><dd>支付宝</dd></dl>
         <dl><dt>{#$langData['siteConfig'][19][40]#}：</dt><dd>{#$cardnum#}</dd></dl>
         <dl><dt>{#$langData['siteConfig'][19][41]#}：</dt><dd>{#$cardname#}</dd></dl>
         {#else#}
-        <dl><dt>{#$langData['siteConfig'][19][39]#}：</dt><dd>{#$bank#}</dd></dl>
+        <dl><dt>{#$langData['siteConfig'][23][96]#}：</dt><dd>{#$bank#}</dd></dl>
         <dl><dt>{#$langData['siteConfig'][19][865]#}：</dt><dd>{#$cardnum#}</dd></dl>
         <dl><dt>{#$langData['siteConfig'][19][866]#}：</dt><dd>{#$cardname#}</dd></dl>
         {#/if#}
-  			<dl><dt>{#$langData['siteConfig'][19][46]#}：</dt><dd>{#$tdate#}</dd></dl>
-  			<dl><dt>{#$langData['siteConfig'][19][39]#}：</dt><dd>{#$amount#}</dd></dl>
+		<dl><dt>{#$langData['siteConfig'][19][46]#}：</dt><dd>{#$tdate#}</dd></dl>
+		<dl><dt>{#$langData['siteConfig'][19][39]#}：</dt><dd>{#$amount#}</dd></dl>
   		</div>
   	</div>
 

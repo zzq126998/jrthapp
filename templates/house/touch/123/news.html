@@ -24,22 +24,22 @@
 	<div class="container">
 		{#$tit = "房产资讯"#}
 		{#include file="_header.html"#}
-		
-		
-		
+
+
+
 		<nav class="nav">
 			<div class="navfixbox fix">
 				<div class="navbox clearfix">
 					<div id="nav">
 						<div class="clearfix" id="nav_list">
-							<div class="item curr" id="nav_item_0" data-id="0"><a href="javascript:;">全部</a><s></s></div>
+							<div class="item item0 curr" id="nav_item_0" data-id="0"><a href="javascript:;">全部</a><s></s></div>
 							{#house action="newsType" return="type"#}
-							<div class="item{#if $typeid == $type.id#} curr{#/if#} " id="nav_item_{#$type.id#}" data-id="{#$type.id#}" data-type=0><a href="javascript:;">{#$type.typename#}</a><s></s></div>
+							<div class="item item{#$type.id#} {#if $typeid == $type.id#} curr{#/if#} " id="nav_item_{#$type.id#}" data-id="{#$type.id#}" data-type=0><a href="javascript:;">{#$type.typename#}</a><s></s></div>
 							{#/house#}
 						</div>
 					</div>
 				</div>
-				
+
 			</div>
 		</nav>
 		<div class="searchbox">
@@ -50,15 +50,15 @@
 				</a>
 			</div>
 		</div>
-		
+
 		<div class="clearfix swiper-container" id="maincontent">
 			<div class="swrip-panel swiper-wrapper" >
 			</div>
 		</div>
-		
-		
-		
-			
+
+
+
+
 		<!-- 底部 -->
 	{#include file="_footer.html"#}
 
@@ -89,7 +89,7 @@
 	document.write(unescape("%3Cscript src='{#$cfg_staticPath#}js/publicShare.js?v="+~(-new Date())+"'type='text/javascript'%3E%3C/script%3E"));
 </script>
 <script>
-	
+
 </script>
 </body>
 </html>

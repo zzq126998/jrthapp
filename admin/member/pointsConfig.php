@@ -32,6 +32,7 @@ if(!empty($_POST)){
 	$cfg_returnPoint_info = (int)$returnPoint_info;
 	$cfg_returnPoint_waimai = (int)$returnPoint_waimai;
 	$cfg_returnPoint_homemaking = (int)$returnPoint_homemaking;
+	$cfg_returnPoint_education = (int)$returnPoint_education;
 	$cfg_returnPoint_travel = (int)$returnPoint_travel;
 
 	adminLog("修改积分设置");
@@ -52,6 +53,7 @@ if(!empty($_POST)){
 	$configFile .= "\$cfg_returnPoint_waimai = ".$cfg_returnPoint_waimai.";\r\n";
 	$configFile .= "\$cfg_returnPoint_homemaking = ".$cfg_returnPoint_homemaking.";\r\n";
 	$configFile .= "\$cfg_returnPoint_travel = ".$cfg_returnPoint_travel.";\r\n";
+	$configFile .= "\$cfg_returnPoint_education = ".$cfg_returnPoint_education.";\r\n";
 	$configFile .= "?".">";
 
 	$configIncFile = HUONIAOINC.'/config/pointsConfig.inc.php';
@@ -100,6 +102,7 @@ if(file_exists($tpl."/".$templates)){
 	$huoniaoTag->assign('returnPoint_waimai', $cfg_returnPoint_waimai);
 	$huoniaoTag->assign('returnPoint_homemaking', $cfg_returnPoint_homemaking);
 	$huoniaoTag->assign('returnPoint_travel', $cfg_returnPoint_travel);
+	$huoniaoTag->assign('returnPoint_education', $cfg_returnPoint_education);
 
 	$huoniaoTag->compile_dir = HUONIAOROOT."/templates_c/admin/pointsConfig";  //设置编译目录
 	$huoniaoTag->display($templates);

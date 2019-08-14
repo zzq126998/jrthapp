@@ -107,6 +107,13 @@ var adminPath = "{#$adminPath#}";
         <span class="add-on" style="display: inline-block;">%</span>
       </div><br />
       {#/if#}
+      {#if in_array("education", $installModuleArr)#}
+      <div class="input-prepend input-append">
+        <span class="add-on">教育订单</span>
+        <input class="input-mini" type="number" min="0" name="returnPoint_education" value="{#$returnPoint_education#}">
+        <span class="add-on" style="display: inline-block;">%</span>
+      </div><br />
+      {#/if#}
     </dd>
   </dl>
 

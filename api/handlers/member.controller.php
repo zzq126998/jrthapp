@@ -354,6 +354,7 @@ eot;
 			"homemaking" => $langData['homemaking'][10][29],//家政公司
 			"marry" => $langData['marry'][5][0],//婚假公司
 			"travel" => $langData['travel'][12][12],//旅游公司
+			"education" => $langData['education'][7][4],//教育公司
 
 		);
 		$autyTitle = array(
@@ -1781,7 +1782,12 @@ eot;
                     }
                 }
 
-				header("location:".getUrlPath($param));
+				//外卖订单详情只允许移动端访问
+				if($param['service'] == 'member' && $param['template'] == 'orderdetail' && $param['action'] == 'waimai' && !isMobile()){
+					$data['body'] = '请在手机端查看订单！';
+				}else{
+					header("location:".getUrlPath($param));
+				}
 			}
 
 			$huoniaoTag->assign('title', $data['title']);
@@ -2129,6 +2135,32 @@ eot;
 				}elseif($type == "strategy"){//旅游攻略
 					$customAtlasMax = $custom_travelstrategy_atlasMax ? $custom_travelstrategy_atlasMax : 9;
 				}
+
+			//教育
+			}elseif($module == "education"){
+				//是否有教师
+				if($type == "courses"){
+					$customAtlasMax = $custom_educationcourses_atlasMax ? $custom_educationcourses_atlasMax : 9;
+
+					$isteacher = 0;
+					$sql = $dsql->SetQuery("SELECT `id`, `title` FROM `#@__education_store` WHERE `userid` = $userid");
+					$res = $dsql->dsqlOper($sql, "results");
+					if(!empty($res[0]['id'])){
+						$storeid = $res[0]['id'];
+						$sql = $dsql->SetQuery("SELECT `id` FROM `#@__education_teacher` WHERE `company` = " . $res[0]['id']);
+						$res = $dsql->dsqlOper($sql, "results");
+						if(!empty($res[0]['id'])){
+							$isteacher = 1;
+						}
+					}
+					$huoniaoTag->assign('isteacher', (int)$isteacher);
+					$huoniaoTag->assign('storeid', (int)$storeid);
+
+					$sql = $dsql->SetQuery("SELECT `id`, `typename` FROM `#@__education_item` WHERE `parentid` = '3'");
+					$res = $dsql->dsqlOper($sql, "results");
+					$huoniaoTag->assign('itemall', $res ? json_encode($res) : []);
+
+				}
 			}
 
 			$huoniaoTag->assign('atlasMax', (int)$customAtlasMax);
@@ -2136,6 +2168,8 @@ eot;
 
 			global $cfg_videoSize;
 			$huoniaoTag->assign('videoSize', (int)$cfg_videoSize);
+
+			
 
 			$contorllerFile = dirname(__FILE__).'/'.$module.'.controller.php';
 			if(file_exists($contorllerFile)){
@@ -2168,6 +2202,21 @@ eot;
 				}
 
 				if($module == "travel"){
+					$param = array(
+						"action" => "fabu",
+						"type"   => $type,
+						"id"     => $id
+					);
+					$module($param);
+				}
+
+				if($module == "education"){
+					if($type == 'tutor' || $type == 'setup'){
+						$id = 1;
+						if($type == 'setup'){
+							$type = 'tutor';
+						}
+					}
 					$param = array(
 						"action" => "fabu",
 						"type"   => $type,
@@ -2284,7 +2333,7 @@ eot;
                         global $cfg_secureAccess;
                         global $cfg_basehost;
                         //$sql = $dsql->SetQuery("SELECT `title`,`click`,`litpic`,`ftime`,`typeid`,`catid`,`flow`,`way`,`pushurl` FROM `huoniao_livelist` where id =(SELECT max(`id`) i FROM `#@__livelist` where user='$userid')");
-                        $sql = $dsql->SetQuery("SELECT `id`,`title`,`click`,`litpic`,`startmoney`,`endmoney`,`password`,`ftime`,`typeid`,`catid`,`flow`,`way`,`pushurl`,`note`,`menu`,`pulltype`,`pullurl_pc`,`pullurl_touch` FROM `huoniao_livelist` where id='$id'");
+                        $sql = $dsql->SetQuery("SELECT `id`,`title`,`click`,`litpic`,`startmoney`,`endmoney`,`password`,`ftime`,`typeid`,`catid`,`flow`,`way`,`pushurl`,`note`,`menu`,`pulltype`,`pullurl_pc`,`pullurl_touch`,`lng`,`lat` FROM `huoniao_livelist` where id='$id'");
                         $res = $dsql->dsqlOper($sql, "results");
                         if($res){
 
@@ -2304,8 +2353,13 @@ eot;
                             $menu          = $res[0]['menu'];
                             $pulltype      = $res[0]['pulltype'];
                             $pullurl_pc    = $res[0]['pullurl_pc'];
-                            $pullurl_touch = $res[0]['pullurl_touch'];
+							$pullurl_touch = $res[0]['pullurl_touch'];
+							$lnglat = '';
+							if(!empty($res[0]['lng']) && !empty($res[0]['lat'])){
+								$lnglat    = $res[0]['lng'] . ',' . $res[0]['lat'];
+							}
 
+                            $huoniaoTag->assign('lnglat', $lnglat);
                             $huoniaoTag->assign('catid', $catid);
                             $huoniaoTag->assign('typeid', $typeid);
                             $huoniaoTag->assign('flow', $flow);
@@ -2678,6 +2732,14 @@ eot;
                     $zjcom = 1;
                 }
                 $huoniaoTag->assign("zjcom", $zjcom);
+			}elseif($module == "education"){
+				$zjcom = 0;
+                $sql = $dsql->SetQuery("SELECT `id` FROM `#@__education_store` WHERE `userid` = $userid");
+                $ret = $dsql->dsqlOper($sql, "results");
+                if($ret){
+                    $zjcom = 1;
+                }
+                $huoniaoTag->assign("zjcom", $zjcom);
 			}
 
 			// 配置页面显示模板列表
@@ -2920,9 +2982,58 @@ eot;
 		$userLogin->checkUserIsLogin();
 		$uid = $userLogin->getMemberID();
 
+		global $cfg_minWithdraw;  //起提金额
+		global $cfg_maxWithdraw;  //最多提现
+		global $cfg_withdrawFee;  //手续费
+		global $cfg_withdrawCycle;  //提现周期  0不限制  1每周  2每月
+		global $cfg_withdrawCycleWeek;  //周几
+		global $cfg_withdrawCycleDay;  //几日
+		global $cfg_withdrawPlatform;  //提现平台
+		global $cfg_withdrawNote;  //提现说明
+
+		$cfg_minWithdraw = (float)$cfg_minWithdraw;
+		$cfg_maxWithdraw = (float)$cfg_maxWithdraw;
+		$cfg_withdrawFee = (float)$cfg_withdrawFee;
+		$cfg_withdrawCycle = (int)$cfg_withdrawCycle;
+		$withdrawPlatform = $cfg_withdrawPlatform ? unserialize($cfg_withdrawPlatform) : array('weixin', 'alipay', 'bank');
+
+		//提现周期
+		$withdrawCycleState = 1;
+		$withdrawCycleNote = '';
+		if($cfg_withdrawCycle){
+			//周几
+			if($cfg_withdrawCycle == 1){
+
+				$week = date("w", time());
+				if($week != $cfg_withdrawCycleWeek){
+					$array = $langData['siteConfig'][34][5];  //array('周日', '周一', '周二', '周三', '周四', '周五', '周六')
+					$withdrawCycleState = 0;
+					$withdrawCycleNote = str_replace('1', $array[$week], $langData['siteConfig'][36][0]);  //当前不可提现，提现时间：每周一
+				}
+
+			//几日
+			}elseif($cfg_withdrawCycle == 2){
+
+				$day = date("d", time());
+				if($day != $cfg_withdrawCycleDay){
+					$withdrawCycleState = 0;
+					$withdrawCycleNote = str_replace('1', $cfg_withdrawCycleDay, $langData['siteConfig'][36][1]);  //当前不可提现，提现时间：每月1日
+				}
+
+			}
+		}
+
+		$huoniaoTag->assign("minWithdraw", $cfg_minWithdraw);
+		$huoniaoTag->assign("maxWithdraw", $cfg_maxWithdraw);
+		$huoniaoTag->assign("withdrawFee", $cfg_withdrawFee);
+		$huoniaoTag->assign("withdrawCycleState", $withdrawCycleState);
+		$huoniaoTag->assign("withdrawCycleNote", $withdrawCycleNote);
+		$huoniaoTag->assign("withdrawPlatform", $withdrawPlatform);
+		$huoniaoTag->assign("withdrawNote", nl2br($cfg_withdrawNote));
+
 		//查询选用的帐号
 		$id = (int)$id;
-		$type = !empty($type) ? $type : "bank";
+		$type = !empty($type) ? $type : ($withdrawPlatform ? $withdrawPlatform[0] : '');
 		$bank = $alipay = array();
 		if($id){
 			$sql = $dsql->SetQuery("SELECT `bank`, `cardnum`, `cardname` FROM `#@__member_withdraw_card` WHERE `id` = $id AND `uid` = $uid");
@@ -2940,7 +3051,7 @@ eot;
 
 		//提取第一个帐号
 		if(empty($bank)){
-			$sql = $dsql->SetQuery("SELECT `bank`, `cardnum`, `cardname` FROM `#@__member_withdraw_card` WHERE `uid` = $uid AND `bank` != 'alipay' ORDER BY `id` DESC LIMIT 1");
+			$sql = $dsql->SetQuery("SELECT `bank`, `cardnum`, `cardname` FROM `#@__member_withdraw_card` WHERE `uid` = $uid AND `bank` != 'alipay' AND `bank` != 'weixin' ORDER BY `id` DESC LIMIT 1");
 			$ret = $dsql->dsqlOper($sql, "results");
 			if($ret && is_array($ret)){
 				$bank = $ret[0];
@@ -3381,7 +3492,9 @@ eot;
 					if($module == 'waimai'){
 						$type = $ordertype == "paotui" ? 1 : 0;
 						// 修改评论使用
-						$sql = $dsql->SetQuery("SELECT * FROM `#@__waimai_common` WHERE `oid` = $id AND `uid` = $userid AND `type` = $type");
+						// $sql = $dsql->SetQuery("SELECT * FROM `#@__waimai_common` WHERE `oid` = $id AND `uid` = $userid AND `type` = $type");
+						$type_ = $ordertype == "paotui" ? 'paotui-order' : 'waimai-order';
+						$sql = $dsql->SetQuery("SELECT * FROM `#@__public_comment` WHERE `userid` = '$userid' AND `oid` = '$id' AND `type` = '$type_' AND `pid` = 0");
 						$ret = $dsql->dsqlOper($sql, 'results');
 						$common = array();
 						if($ret){
@@ -4033,7 +4146,7 @@ eot;
 
 			//判断当前登录会员是否已经关注过要访问的会员
 			$userid = $userLogin->getMemberID();
-			if($userid != -1){
+			if($userid > 0){
 				$sql = $dsql->SetQuery("SELECT `id` FROM `#@__member_follow` WHERE `tid` = $userid AND `fid` = $id");
 				$ret = $dsql->dsqlOper($sql, "results");
 				if($ret && is_array($ret)){
@@ -5037,6 +5150,28 @@ eot;
 		$cardnum = empty($cardnum) ? array("") : explode(',',$cardnum);
 		$huoniaoTag->assign('cardnum', $cardnum);
 
+	}elseif($action == "education"){
+		$userLogin->checkUserIsLogin();
+
+		$sql = $dsql->SetQuery("SELECT `id`, `title` FROM `#@__education_store` WHERE `state` = 1 AND `userid` = $userid");
+		$res = $dsql->dsqlOper($sql, "results");
+		if(!empty($res[0]['id'])){
+			$isEducationStore = true;
+		}else{
+			$isEducationStore = false;
+		}
+		if($userinfo['userType'] == 2) {
+			$userid = $res[0]['id'];
+		}
+		$sql = $dsql->SetQuery("SELECT `id` FROM `#@__education_tutor` WHERE `state` = 1 AND `userid` = $userid");
+		$res = $dsql->dsqlOper($sql, "results");
+		if(!empty($res[0]['id'])){
+			$isEducationTutor = true;
+		}else{
+			$isEducationTutor = false;
+		}
+		$huoniaoTag->assign('isEducationStore', $isEducationStore);
+		$huoniaoTag->assign('isEducationTutor', $isEducationTutor);
 	}
 
 

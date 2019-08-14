@@ -320,7 +320,7 @@ function travel($params, $content = "", &$smarty = array(), &$repeat = array()){
 		$type = $type ? (int)$type : 0;
 		$huoniaoTag->assign('type', $type);
 
-        $detailHandels = new handlers($service, "commentDetail");
+        $detailHandels = new handlers("member", "commentDetail");
         $detail  = $detailHandels->getHandle(array("id" => $id));
         if(is_array($detail) && $detail['state'] == 100){
             $detail  = $detail['info'];

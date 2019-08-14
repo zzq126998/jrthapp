@@ -1,8 +1,8 @@
 body, html{font-size: .3rem; background: #f8f8f8; -webkit-tap-highlight-color: rgba(255, 255, 255, 0); -webkit-user-select: none; -moz-user-focus: none; -moz-user-select: none;}
 a:hover{text-decoration: none;}
 input{-webkit-appearance: none; appearance: none;}
-.huoniao_iOS{padding-top: 20px;}
-
+.huoniao_iOS .amount {padding-left: .25rem;}
+.huoniao_iOS .amount .goBack {display: none;}
 
 /*信息数量*/
 .amount{padding: .25rem 0 .25rem .8rem; position: relative;}

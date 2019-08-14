@@ -125,6 +125,7 @@ $(function () {
                     if(data.state == 100){
                         $(".mod-list  .loading").remove();
                         var list = data.info.list, html = [];
+
                         if(list.length > 0){
                             for(var i = 0; i < list.length; i++){
                                 // li标签上加 class="active" 表示已领取

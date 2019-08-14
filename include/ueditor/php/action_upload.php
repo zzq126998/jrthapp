@@ -58,8 +58,13 @@ if ($info["state"] == "SUCCESS") {
         // $large = $up->smallImg($cfg_meditorPicWidth, 9999, "large", $cfg_quality);
     }
 
+    //获取文件后缀
+    $fileClass_ = explode(".", $info["originalName"]);
+    $fileClass_ = $fileClass_[count($fileClass_) - 1];
+    $fileClass = chkType($fileClass_);
+
     //对图片文件添加水印
-    if (($action == "uploadimage" || $action == "uploadscrawl") && $markConfig['editorMarkState'] == 1) {
+    if (($action == "uploadimage" || $action == "uploadscrawl") && $markConfig['editorMarkState'] == 1 && $fileClass_ != 'gif') {
         $waterMark = $up->waterMark($markConfig);
     }
 
@@ -127,7 +132,8 @@ if ($info["state"] == "SUCCESS") {
     $userLogin = new userLogin($dbo);
     $userid = $userLogin->getMemberID();
 
-    $attachment = $dsql->SetQuery("INSERT INTO `#@__attachment` (`userid`, `filename`, `filesize`, `path`, `pubdate`) VALUES ('$userid', '" . $info["originalName"] . "', '" . $info["size"] . "', '" . $url[1] . "', '" . GetMkTime(time()) . "')");
+    $originalName = ($editor_ftpType == 1 || $editor_ftpType == 2) ? 'is_createface_' : '';
+    $attachment = $dsql->SetQuery("INSERT INTO `#@__attachment` (`userid`, `filename`, `filetype`, `filesize`, `path`, `pubdate`) VALUES ('$userid', '" . $info["originalName"] . "', '" . $fileClass . "', '" . $info["size"] . "', '" . $url[1] . "', '" . GetMkTime(time()) . "')");
     $aid = $dsql->dsqlOper($attachment, "lastid");
     if (!$aid) die('{"state":"数据写入失败！"}');
 
@@ -150,12 +156,43 @@ if ($info["state"] == "SUCCESS") {
     }
 }
 
+$turl = getFilePath($fid);
+$videoimg = $editor_ftpType == 1 ? $turl."?x-oss-process=video/snapshot,t_0,f_jpg,w_0,h_0,m_fast" : ($editor_ftpType == 2 ? "?vframe/jpg/offset/1/rotate/auto" : str_replace(".mp4", ".png", $turl));
+PutCookie('ftpType', $editor_ftpType, 3600);
 return json_encode(array(
     "url" => $path,
-    "turl" => getFilePath($fid),
+    "turl" => $turl,
+    "videoimg" => $videoimg,
     "original" => $info["originalName"],
     "name" => $info["originalName"],
     "type" => $info["type"],
     "size" => $info["size"],
     "state" => $info["state"]
 ));
+
+
+
+//判断文件类型
+function chkType($f = NULL)
+{
+    if (!empty($f)) {
+        $f = strtolower($f);
+        global $cfg_softType;
+        global $cfg_thumbType;
+        $flashType = "swf";
+        global $cfg_audioType;
+        global $cfg_videoType;
+
+        $thumbType_ = explode("|", $cfg_thumbType);
+        $flashType_ = explode("|", $flashType);
+        $audioType_ = explode("|", $cfg_audioType);
+
+        if (in_array($f, $cfg_softType)) return "file";
+        if (in_array($f, $thumbType_)) return "image";
+        if (in_array($f, $flashType_)) return "flash";
+        if (in_array($f, $audioType_)) return "audio";
+        if (in_array($f, $cfg_videoType)) return "video";
+    } else {
+        return "file";
+    }
+}

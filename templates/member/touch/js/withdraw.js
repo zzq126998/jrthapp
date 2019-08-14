@@ -1,38 +1,55 @@
 $(function(){
 
   // 选择支付方式
-  $('.tbank').click(function(){
-    $(this).addClass('curr').siblings('li').removeClass('curr');
-    $('.bankbox').show();
-    $('.alipay').hide();
-    $("#amount, .amount").val("");
-  })
-
-  $('.talipay').click(function(){
-    $(this).addClass('curr').siblings('li').removeClass('curr');
-    $('.bankbox').hide();
-    $('.alipay').show();
-    $("#amount, .amount").val("");
-  })
-
-  $('.amount').bind('input porperchange', function(){
-    var amount = $(this).val();
-    $('#amount').val(amount);
-  })
+  $('.tab li').bind('click', function(){
+  	var t = $(this), lid = t.data('id');
+  	$(this).addClass('curr').siblings('li').removeClass('curr');
+  	$('.witem').hide();
+  	$('.' + lid).show();
+  });
 
   //提交申请
 	$("#tj").bind("click", function(event){
 		var t = $(this), data = [];
 
-		var type = Number($(".tab .curr").attr('data-id'));
+		var type = $(".tab .curr").attr('data-id');
+
+		//微信
+		if(type == 'weixin'){
+
+            // 无记录状态
+			var amount = $(".weixin #amount").val();
+			data.push("bank=weixin");
+
+		//支付宝
+        }else if(type == 'alipay'){
+
+            // 无记录状态
+			var cardnum = $(".alipay #cardnum").val(),
+                cardname = $(".alipay #cardname").val(),
+                amount = $(".alipay #amount").val();
+
+			if(cardnum == ""){
+				showMsg(langData['siteConfig'][20][208]);
+				return false;
+			}
+
+			if(cardname == ""){
+				showMsg(langData['siteConfig'][20][209]);
+				return false;
+			}
+
+			data.push("bank=alipay");
+			data.push("cardnum="+cardnum);
+			data.push("cardname="+cardname);
 
 		//银行卡
-		if(type == 1){
+        }else if(type == 'bank'){
 
-			var bank = $(".bankbox #bank").val(),
-					cardnum = $(".bankbox #cardnum").val().replace(/\s/g, ""),
-					cardname = $(".bankbox #cardname").val(),
-          amount = $(".bankbox #amount").val();
+            var bank = $(".bankbox #bank").val(),
+                cardnum = $(".bankbox #cardnum").val().replace(/\s/g, ""),
+                cardname = $(".bankbox #cardname").val(),
+                amount = $(".bankbox #amount").val();
 
 			if(bank == ""){
 				showMsg(langData['siteConfig'][20][204]);
@@ -53,34 +70,22 @@ $(function(){
 			data.push("cardnum="+cardnum);
 			data.push("cardname="+cardname);
 
-		//支付宝
-		}else if(type == 2){
-
-      // 无记录状态
-			var cardnum = $(".alipay #cardnum").val(),
-					cardname = $(".alipay #cardname").val(),
-          amount = $(".alipay #amount").val();
-
-			if(cardnum == ""){
-				showMsg(langData['siteConfig'][20][208]);
-				return false;
-			}
-
-			if(cardname == ""){
-				showMsg(langData['siteConfig'][20][209]);
-				return false;
-			}
-
-			data.push("bank=alipay");
-			data.push("cardnum="+cardnum);
-			data.push("cardname="+cardname);
-
 		}
 
 		if(amount == ""){
 			showMsg(langData['siteConfig'][20][207]);
 			return false;
 		}
+
+        if(minWithdraw && amount < minWithdraw){
+            showMsg((langData['siteConfig'][36][3]).replace(1, minWithdraw));  ////起提金额：1元
+			return false;
+        }
+
+        if(maxWithdraw && amount > maxWithdraw){
+            showMsg((langData['siteConfig'][36][4]).replace(1, maxWithdraw));  //单次最多提现：1元
+			return false;
+        }
 
 		if(amount > money){
 			showMsg(langData['siteConfig'][19][720]+money);

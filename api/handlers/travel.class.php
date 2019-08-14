@@ -205,7 +205,7 @@ class travel {
 			$return['travelrentcaratlasMax']  = $custom_travelrentcar_atlasMax;
 			$return['travelvisaatlasMax']     = $custom_travelvisa_atlasMax;
 			$return['travelagencyatlasMax']   = $custom_travelagency_atlasMax;
-			
+
 			$return['travelTrainCheck']   = $customtravelTrainCheck;
 			$return['travelTrainTouchUrl']= $customtravelTrainTouchUrl;
 			$return['travelPlaneCheck']   = $customtravelPlaneCheck;
@@ -645,7 +645,7 @@ class travel {
         if($cityid){
             $where .= " AND `cityid` = '$cityid'";
 		}
-		
+
 		if(!empty($filter)){
 			$where .= " AND FIND_IN_SET('".$filter."', `bind_module`)";
 		}
@@ -790,7 +790,7 @@ class travel {
 				}else{
 					$list[$key]['addrname'] = "";
 				}
-				
+
 				$param = array(
 					"service" => "travel",
 					"template" => "store-detail",
@@ -921,7 +921,7 @@ class travel {
 		}//print_R($storeDetail);exit;
 		return $storeDetail;
 	}
-	
+
 	/**
 	* 配置商铺
 	* @return array
@@ -1035,7 +1035,7 @@ class travel {
 		}
 
 	}
-	
+
 	/**
 	 * 操作旅游酒店
 	 * oper=add: 增加
@@ -1074,7 +1074,7 @@ class travel {
 
 		$roomlist        = json_decode($roomlist, true);
 
-		
+
 
 		$userinfo = $userLogin->getMemberInfo();
 		if($userinfo['userType'] == 2 && !verifyModuleAuth(array("module" => "travel"))){
@@ -1146,9 +1146,6 @@ class travel {
 				}
 
 				//保存房间信息
-				/* $sql = $dsql->SetQuery("DELETE FROM `#@__travel_hotelroom` WHERE `hotelid` = ".$id);
-				$dsql->dsqlOper($sql, "update"); */
-
 				if(!empty($roomlist)){
 					foreach($roomlist as $val){
 						$specialtime = stripslashes($val['specialtime']);
@@ -1162,10 +1159,6 @@ class travel {
 							$pics = $dsql->SetQuery("INSERT INTO `#@__travel_hotelroom` (`title`, `hotelid`, `area`, `iswindow`, `typeid`, `breakfast`, `price`, `specialtime`, `pubdate`) VALUES ('$val[title]', '$id', '$val[area]', '$val[iswindow]', '$val[typeid]', '$val[breakfast]', '$val[price]', '$specialtime', '$pubdate')");
 							$dsql->dsqlOper($pics, "update");
 						}
-
-						/* 
-						$pics = $dsql->SetQuery("INSERT INTO `#@__travel_hotelroom` (`title`, `hotelid`, `area`, `iswindow`, `typeid`, `breakfast`, `price`, `specialtime`, `pubdate`) VALUES ('$val[title]', '$aid', '$val[area]', '$val[iswindow]', '$val[typeid]', '$val[breakfast]', '$val[price]', '$specialtime', '$pubdate')");
-						$dsql->dsqlOper($pics, "update"); */
 					}
 				}
 
@@ -1175,7 +1168,7 @@ class travel {
 				clearCache("travel_hotel_detail", $id);
 				checkCache("travel_hotel_list", $id);
 				clearCache("travel_hotel_total", 'key');
-				
+
 
 				return $langData['travel'][12][35];//修改成功！
 			}else{
@@ -1403,7 +1396,7 @@ class travel {
 			$pageinfo['audit'] = $totalAudit;
 			$pageinfo['refuse'] = $totalRefuse;
 		}
-		
+
 		$atpage = $pageSize*($page-1);
 		$where = " LIMIT $atpage, $pageSize";
 		$sql = $dsql->SetQuery($archives.$orderby_.$where);
@@ -1502,7 +1495,7 @@ class travel {
 		}
 
 		//$where = " AND `state` = 1";
-		
+
 		$archives = $dsql->SetQuery("SELECT `id`, `title`, `userid`, `company`, `pics`, `price`, `tag`, `video`, `lng`, `lat`, `cityid`, `typeid`, `addrid`, `address`, `click`, `pubdate`, `state` FROM `#@__travel_hotel` WHERE `id` = ".$id.$where);
 		$results  = getCache("travel_hotel_detail", $archives, 0, $id);
 		if($results){
@@ -1653,7 +1646,7 @@ class travel {
 		$pubdate         =  GetMkTime(time());
 		$ticketlist      = json_decode($ticketlist, true);
 
-		
+
 
 		$userinfo = $userLogin->getMemberInfo();
 		if($userinfo['userType'] == 2 && !verifyModuleAuth(array("module" => "travel"))){
@@ -1747,7 +1740,7 @@ class travel {
 				clearCache("travel_ticket_detail", $id);
 				checkCache("travel_ticket_list", $id);
 				clearCache("travel_ticket_total", 'key');
-				
+
 
 				return $langData['travel'][12][35];//修改成功！
 			}else{
@@ -1996,7 +1989,7 @@ class travel {
 			$pageinfo['audit'] = $totalAudit;
 			$pageinfo['refuse'] = $totalRefuse;
 		}
-		
+
 		$atpage = $pageSize*($page-1);
 		$where = " LIMIT $atpage, $pageSize";
 		$sql = $dsql->SetQuery($archives.$orderby_.$where);
@@ -2100,7 +2093,7 @@ class travel {
 		}
 
 		//$where = " AND `state` = 1";
-		
+
 		$archives = $dsql->SetQuery("SELECT `id`, `title`, `userid`, `note`, `company`, `pics`, `opentime`, `tag`, `video`, `lng`, `lat`, `cityid`, `travelname`, `addrid`, `address`, `click`, `pubdate`, `state` FROM `#@__travel_ticket` WHERE `id` = ".$id.$where);
 		$results  = getCache("travel_ticket_detail", $archives, 0, $id);
 		if($results){
@@ -2139,7 +2132,8 @@ class travel {
 			}
 			$storeDetail["workArr"]         = $workArr;
 
-			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__travelcommon` WHERE `aid` = ".$results[0]['id']." AND `type` = 2 AND `ischeck` = 1 AND `floor` = 0");
+			// $archives = $dsql->SetQuery("SELECT `id` FROM `#@__travelcommon` WHERE `aid` = ".$results[0]['id']." AND `type` = 2 AND `ischeck` = 1 AND `floor` = 0");
+			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'travel-ticket' AND `aid` = '$id' AND `pid` = 0");
 			$totalCount = $dsql->dsqlOper($archives, "totalCount");
             $storeDetail['common'] = $totalCount;
 
@@ -2280,7 +2274,7 @@ class travel {
 			$archives = $dsql->SetQuery("INSERT INTO `#@__travel_rentcar` (`typeid`, `userid`, `company`, `title`, `cityid`, `addrid`, `address`, `pics`, `video`, `price`, `tag`, `pubdate`, `state`) VALUES ('$typeid', '$userid', '$company', '$title', '$cityid', '$addrid', '$address', '$pics', '$video', '$price', '$tag', '$pubdate', '$customtravelrentcarCheck')");
 			$aid = $dsql->dsqlOper($archives, "lastid");
 			if(is_numeric($aid)){
-				
+
 				if($customtravelrentcarCheck){
 					updateCache("travel_rentcar_list", 300);
 				}
@@ -2311,7 +2305,7 @@ class travel {
 				clearCache("travel_rentcar_detail", $id);
 				checkCache("travel_rentcar_list", $id);
 				clearCache("travel_rentcar_total", 'key');
-				
+
 
 				return $langData['travel'][12][35];//修改成功！
 			}else{
@@ -2533,7 +2527,7 @@ class travel {
 			$pageinfo['audit'] = $totalAudit;
 			$pageinfo['refuse'] = $totalRefuse;
 		}
-		
+
 		$atpage = $pageSize*($page-1);
 		$where = " LIMIT $atpage, $pageSize";
 		$sql = $dsql->SetQuery($archives.$orderby_.$where);
@@ -2628,7 +2622,7 @@ class travel {
 		}
 
 		//$where = " AND `state` = 1";
-		
+
 		$archives = $dsql->SetQuery("SELECT `id`, `title`, `userid`, `price`, `company`, `pics`, `typeid`, `tag`, `video`, `lng`, `lat`, `cityid`, `addrid`, `address`, `click`, `pubdate`, `state` FROM `#@__travel_rentcar` WHERE `id` = ".$id.$where);
 		$results  = getCache("travel_rentcar_detail", $archives, 0, $id);
 		if($results){
@@ -2768,7 +2762,7 @@ class travel {
 		$reminder     	 =  filterSensitiveWords(addslashes($param['reminder']));
 		$notice     	 =  filterSensitiveWords(addslashes($param['notice']));
 		$processingflow  =  $param['processingflow'];
-		
+
 		$pubdate         =  GetMkTime(time());
 
 		$userinfo = $userLogin->getMemberInfo();
@@ -2814,7 +2808,7 @@ class travel {
 			$archives = $dsql->SetQuery("INSERT INTO `#@__travel_visa` (`userid`, `company`, `title`, `subtitle`, `country`, `typeid`, `price`, `entrytimes`, `staytimes`, `earliestdate`, `valid`, `processingtime`, `pics`, `video`, `scope`, `materials`, `serviceincludes`, `incumbents`, `retiree`, `professional`, `students`, `children`, `others`, `reminder`, `notice`, `processingflow`, `pubdate`, `state`) VALUES ('$userid', '$company', '$title', '$subtitle', '$country', '$typeid', '$price', '$entrytimes', '$staytimes', '$earliestdate', '$valid', '$processingtime', '$pics', '$video', '$scope', '$materials', '$serviceincludes', '$incumbents', '$retiree', '$professional', '$students', '$children', '$others', '$reminder', '$notice', '$processingflow', '$pubdate', '$customtravelvisaCheck')");
 			$aid = $dsql->dsqlOper($archives, "lastid");
 			if(is_numeric($aid)){
-				
+
 				if($customtravelvisaCheck){
 					updateCache("travel_visa_list", 300);
 				}
@@ -2845,7 +2839,7 @@ class travel {
 				clearCache("travel_visa_detail", $id);
 				checkCache("travel_visa_list", $id);
 				clearCache("travel_visa_total", 'key');
-				
+
 
 				return $langData['travel'][12][35];//修改成功！
 			}else{
@@ -3066,7 +3060,7 @@ class travel {
 			$pageinfo['audit'] = $totalAudit;
 			$pageinfo['refuse'] = $totalRefuse;
 		}
-		
+
 		$atpage = $pageSize*($page-1);
 		$where = " LIMIT $atpage, $pageSize";
 		$sql = $dsql->SetQuery($archives.$orderby_.$where);
@@ -3143,7 +3137,7 @@ class travel {
 		}
 
 		//$where = " AND `state` = 1";
-		
+
 		$archives = $dsql->SetQuery("SELECT `id`, `title`, `subtitle`, `country`, `entrytimes`, `staytimes`, `earliestdate`, `valid`, `processingtime`, `scope`, `materials`, `serviceincludes`, `incumbents`, `retiree`, `professional`, `students`, `children`, `others`, `reminder`, `notice`, `processingflow`, `userid`, `price`, `company`, `pics`, `typeid`, `video`, `click`, `pubdate`, `state` FROM `#@__travel_visa` WHERE `id` = ".$id.$where);
 		$results  = getCache("travel_visa_detail", $archives, 0, $id);
 		if($results){
@@ -3195,7 +3189,8 @@ class travel {
 			$storeDetail['notice']      = $results[0]['notice'];
 			$storeDetail['processingflow']= $results[0]['processingflow'];
 
-			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__travelcommon` WHERE `aid` = ".$results[0]['id']." AND `type` = 4 AND `ischeck` = 1 AND `floor` = 0");
+			// $archives = $dsql->SetQuery("SELECT `id` FROM `#@__travelcommon` WHERE `aid` = ".$results[0]['id']." AND `type` = 4 AND `ischeck` = 1 AND `floor` = 0");
+			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'travel-visa' AND `aid` = '$id' AND `pid` = 0");
 			$totalCount = $dsql->dsqlOper($archives, "totalCount");
             $storeDetail['common'] = $totalCount;
 
@@ -3305,7 +3300,7 @@ class travel {
 		$pubdate         =  GetMkTime(time());
 		$ticketlist      =  json_decode($ticketlist, true);
 
-		
+
 
 		$userinfo = $userLogin->getMemberInfo();
 		if($userinfo['userType'] == 2 && !verifyModuleAuth(array("module" => "travel"))){
@@ -3400,7 +3395,7 @@ class travel {
 				clearCache("travel_agency_detail", $id);
 				checkCache("travel_agency_list", $id);
 				clearCache("travel_agency_total", 'key');
-				
+
 
 				return $langData['travel'][12][35];//修改成功！
 			}else{
@@ -3536,7 +3531,7 @@ class travel {
 				$lower = $addrid;
 			}
 			$where .= " AND `addrid` in ($lower)";
-			
+
 		}
 
 		//价格区间
@@ -3630,7 +3625,7 @@ class travel {
 			$pageinfo['audit'] = $totalAudit;
 			$pageinfo['refuse'] = $totalRefuse;
 		}
-		
+
 		$atpage = $pageSize*($page-1);
 		$where = " LIMIT $atpage, $pageSize";
 		$sql = $dsql->SetQuery($archives.$orderby_.$where);
@@ -3726,7 +3721,7 @@ class travel {
 		}
 
 		//$where = " AND `state` = 1";
-		
+
 		$archives = $dsql->SetQuery("SELECT `id`, `title`, `userid`, `flag`, `typeid`, `instructions`, `expense`, `itinerary`, `note`, `company`, `imglist`, `pics`, `missiontime`, `tag`, `video`, `cityid`, `travelservice`, `addrid`, `address`, `click`, `pubdate`, (SELECT avg(c.`price`) FROM `#@__travel_ticketinfo` c WHERE c.`ticketid` = l.`id` AND c.`typeid` = '1' ) AS price, `state` FROM `#@__travel_agency` l WHERE `id` = ".$id.$where);
 		$results  = getCache("travel_agency_detail", $archives, 0, $id);
 		if($results){
@@ -3754,7 +3749,8 @@ class travel {
 			$storeDetail['flag']        = $results[0]['flag'];
 			$storeDetail['flagname']    = $results[0]['flag'] ? $this->gettypename("star_type", $results[0]['flag']) : '';
 
-			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__travelcommon` WHERE `aid` = ".$results[0]['id']." AND `type` = 3 AND `ischeck` = 1 AND `floor` = 0");
+			// $archives = $dsql->SetQuery("SELECT `id` FROM `#@__travelcommon` WHERE `aid` = ".$results[0]['id']." AND `type` = 3 AND `ischeck` = 1 AND `floor` = 0");
+			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'travel-agency' AND `aid` = '$id' AND `pid` = 0");
 			$totalCount = $dsql->dsqlOper($archives, "totalCount");
             $storeDetail['common'] = $totalCount;
 
@@ -3949,7 +3945,7 @@ class travel {
 				clearCache("travel_video_detail", $id);
 				checkCache("travel_video_list", $id);
 				clearCache("travel_video_total", 'key');
-				
+
 
 				return $langData['travel'][12][35];//修改成功！
 			}else{
@@ -3958,7 +3954,7 @@ class travel {
 		}elseif($oper == 'del'){
 			if($userResult){
 				$archives = $dsql->SetQuery("SELECT l.`id`, l.`litpic`, l.`video`, l.`userid` FROM `#@__travel_video` l WHERE l.`id` = '$id' AND l.`userid` = " . $userResult[0]['id']);
-				
+
 			}else{
 				$archives = $dsql->SetQuery("SELECT l.`id`, l.`litpic`, l.`video`, l.`userid` FROM `#@__travel_video` l WHERE l.`id` = '$id' AND l.`userid` = " . $userid);
 			}
@@ -3985,7 +3981,7 @@ class travel {
 			}else{
 				return array("state" => 101, "info" => $langData['travel'][12][38]);//信息不存在，或已经删除！
 			}
-			
+
 		}
 
 	}
@@ -4031,7 +4027,7 @@ class travel {
 			}
 
 			$where .= " AND s.`state` = 1 ";
-			
+
 			$sql = $dsql->SetQuery("SELECT `id` FROM `#@__travel_store` WHERE 1=1 $where1");
 			$ret = $dsql->dsqlOper($sql, "results");
 			if($ret){
@@ -4043,7 +4039,7 @@ class travel {
 			}
 
 			$zj_state = " AND z.`state` = 1";
-			
+
 		}else{
 			$sql = $dsql->SetQuery("SELECT `id` FROM `#@__travel_store` WHERE `userid` = $uid");
 			$ret = $dsql->dsqlOper($sql, "results");
@@ -4131,7 +4127,7 @@ class travel {
 			$pageinfo['audit'] = $totalAudit;
 			$pageinfo['refuse'] = $totalRefuse;
 		}
-		
+
 		$atpage = $pageSize*($page-1);
 		$where = " LIMIT $atpage, $pageSize";
 		$sql = $dsql->SetQuery($archives.$orderby_.$where);
@@ -4196,7 +4192,7 @@ class travel {
 				}else{
 
 				} */
-				
+
 			}
 
 		}
@@ -4221,7 +4217,7 @@ class travel {
 		}
 
 		//$where = " AND `state` = 1";
-		
+
 		$archives = $dsql->SetQuery("SELECT s.`id`, s.`zan`, s.`usertype`, s.`userid`, s.`title`, s.`litpic`, s.`video`, s.`click`, s.`pubdate`, s.`state`, z.`id` as comid FROM `#@__travel_video` s LEFT JOIN `#@__travel_store` z ON z.`id` = s.`userid` WHERE s.`id` = ".$id.$where);
 		$results  = getCache("travel_video_detail", $archives, 0, $id);
 		if($results){
@@ -4289,16 +4285,19 @@ class travel {
 				$storeDetail['up'] = $zan == "has" ? 1 : 0;
 			}
 
-			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__travelcommon` WHERE `aid` = ".$results[0]['id']." AND `type` = 0 AND `ischeck` = 1 AND `floor` = 0");
+			// $archives = $dsql->SetQuery("SELECT `id` FROM `#@__travelcommon` WHERE `aid` = ".$results[0]['id']." AND `type` = 0 AND `ischeck` = 1 AND `floor` = 0");
+			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'travel-video' AND `aid` = '$id' AND `pid` = 0");
 			$totalCount = $dsql->dsqlOper($archives, "totalCount");
             $storeDetail['common'] = $totalCount;
 
-			$param = array(
-				"service"  => "travel",
-				"template" => "store-detail",
-				"id"       => $results[0]['company']
-			);
-			$storeDetail['companyurl'] = getUrlPath($param);
+			if($results[0]['usertype']==1){
+				$param = array(
+					"service"  => "travel",
+					"template" => "store-detail",
+					"id"       => $results[0]['company']
+				);
+				$storeDetail['companyurl'] = getUrlPath($param);
+			}
 
 			//验证是否已经收藏
 			$params = array(
@@ -4402,7 +4401,7 @@ class travel {
 				clearCache("travel_strategy_detail", $id);
 				checkCache("travel_strategy_list", $id);
 				clearCache("travel_strategy_total", 'key');
-				
+
 
 				return $langData['travel'][12][35];//修改成功！
 			}else{
@@ -4411,7 +4410,7 @@ class travel {
 		}elseif($oper == 'del'){
 			if($userResult){
 				$archives = $dsql->SetQuery("SELECT l.`id`, l.`litpic`, l.`pics`, l.`userid` FROM `#@__travel_strategy` l WHERE l.`id` = '$id' AND l.`userid` = " . $userResult[0]['id']);
-				
+
 			}else{
 				$archives = $dsql->SetQuery("SELECT l.`id`, l.`litpic`, l.`pics`, l.`userid` FROM `#@__travel_strategy` l WHERE l.`id` = '$id' AND l.`userid` = " . $userid);
 			}
@@ -4438,7 +4437,7 @@ class travel {
 			}else{
 				return array("state" => 101, "info" => $langData['travel'][12][38]);//信息不存在，或已经删除！
 			}
-			
+
 		}
 
 	}
@@ -4487,7 +4486,7 @@ class travel {
 			}
 
 			$where .= " AND s.`state` = 1 ";
-			
+
 			$sql = $dsql->SetQuery("SELECT `id` FROM `#@__travel_store` WHERE 1=1 $where1");
 			$ret = $dsql->dsqlOper($sql, "results");
 			if($ret){
@@ -4500,13 +4499,13 @@ class travel {
 				}else{
 					$where .= " OR ( s.`usertype` = 1 AND s.`userid` in(".join(',',$storeList)."))";
 				}
-				
+
 			}else{
 				//$where .= " AND s.`usertype` = 0 AND s.`userid` = ".$uid;
 			}
 
 			$zj_state = " AND z.`state` = 1";
-			
+
 		}else{
 			$sql = $dsql->SetQuery("SELECT `id` FROM `#@__travel_store` WHERE `userid` = $uid");
 			$ret = $dsql->dsqlOper($sql, "results");
@@ -4590,7 +4589,7 @@ class travel {
 			$pageinfo['audit'] = $totalAudit;
 			$pageinfo['refuse'] = $totalRefuse;
 		}
-		
+
 		$atpage = $pageSize*($page-1);
 		$where = " LIMIT $atpage, $pageSize";
 		$sql = $dsql->SetQuery($archives.$orderby_.$where);
@@ -4666,7 +4665,7 @@ class travel {
 				}else{
 
 				} */
-				
+
 			}
 
 		}
@@ -4691,7 +4690,7 @@ class travel {
 		}
 
 		//$where = " AND `state` = 1";
-		
+
 		$archives = $dsql->SetQuery("SELECT s.`id`, s.`usertype`, s.`typeid`, s.`note`, s.`userid`, s.`title`, s.`litpic`, s.`pics`, s.`click`, s.`pubdate`, s.`state`, z.`id` as comid FROM `#@__travel_strategy` s LEFT JOIN `#@__travel_store` z ON z.`id` = s.`userid` WHERE s.`id` = ".$id.$where);
 		$results  = getCache("travel_strategy_detail", $archives, 0, $id);
 		if($results){
@@ -4758,16 +4757,19 @@ class travel {
 			}
 			$storeDetail['user'] = $userArr;
 
-			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__travelcommon` WHERE `aid` = ".$results[0]['id']." AND `type` = 1 AND `ischeck` = 1 AND `floor` = 0");
+			// $archives = $dsql->SetQuery("SELECT `id` FROM `#@__travelcommon` WHERE `aid` = ".$results[0]['id']." AND `type` = 1 AND `ischeck` = 1 AND `floor` = 0");
+			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'travel-strategy' AND `aid` = '$id' AND `pid` = 0");
 			$totalCount = $dsql->dsqlOper($archives, "totalCount");
             $storeDetail['common'] = $totalCount;
 
-			$param = array(
-				"service"  => "travel",
-				"template" => "store-detail",
-				"id"       => $results[0]['company']
-			);
-			$storeDetail['companyurl'] = getUrlPath($param);
+			if($results[0]['usertype']==1){
+				$param = array(
+					"service"  => "travel",
+					"template" => "store-detail",
+					"id"       => $results[0]['company']
+				);
+				$storeDetail['companyurl'] = getUrlPath($param);
+			}
 
 			//验证是否已经收藏
 			$params = array(
@@ -4866,7 +4868,7 @@ class travel {
         }
 
         return array("pageInfo" => $pageinfo, "list" => $list);
-		
+
 	}
 
 	/**
@@ -4934,7 +4936,7 @@ class travel {
 
 				$userArr = explode(",", $val['duser']);
                 $list[$key]['already'] = in_array($userLogin->getMemberID(), $userArr) ? 1 : 0;
-                
+
                 $lower = null;
                 $param['fid'] = $val['id'];
                 $param['page'] = 1;
@@ -5206,7 +5208,7 @@ class travel {
 			$tel         = $userAddr[0]['tel'];
 			$backcontact = !empty($mobile) ? $mobile . (!empty($tel) ? " / ".$tel : "") : $tel;
 		}
-		
+
 
 		if($type == 1 || $type == 2){//景点门票 周边游
 			$sql = $dsql->SetQuery("SELECT `id`, `title`, `ticketid`, `price`, `specialtime` FROM `#@__travel_ticketinfo` WHERE `id` = $proid ");
@@ -5617,7 +5619,7 @@ class travel {
 				$orderid  = $res['id'];   //订单ID
 				$upoint   = $res['point'];    //使用的积分
 				$ubalance = $res['balance'];  //使用的余额
-				$type     = $res['type'];   
+				$type     = $res['type'];
 
 				//扣除会员积分
 				if(!empty($upoint) && $upoint > 0){
@@ -5830,7 +5832,21 @@ class travel {
 						if($ret){
 							$username = $ret[0]['nickname'] ? $ret[0]['nickname'] : $ret[0]['username'];
 						}
-						updateMemberNotice($userid, "会员-订单支付成功", $paramUser, array("username" => $username, "title" => $title, "order" => $value, 'amount' => $totalPrice));
+
+						//自定义配置
+						$config = array(
+							"username" => $username,
+							"title" => $title,
+							"order" => $value,
+							"amount" => $totalPrice,
+							"fields" => array(
+								'keyword1' => '商品信息',
+								'keyword2' => '订单金额',
+								'keyword3' => '订单状态'
+							)
+						);
+
+						updateMemberNotice($userid, "会员-订单支付成功", $paramUser, $config);
 
 						//获取会员名
 						$username = "";
@@ -5839,11 +5855,28 @@ class travel {
 						if($ret){
 							$username = $ret[0]['nickname'] ? $ret[0]['nickname'] : $ret[0]['username'];
 						}
-						updateMemberNotice($uid, "会员-商家新订单通知", $paramBusi, array("username" => $username, "title" => $title, "order" => $value, "amount" => $totalPrice, "date" => date("Y-m-d H:i:s", time())));
+
+						//自定义配置
+						$config = array(
+							"username" => $username,
+							"title" => $title,
+							"order" => $value,
+							"amount" => $totalPrice,
+							"date" => date("Y-m-d H:i:s", time()),
+							"fields" => array(
+								'keyword1' => '订单编号',
+								'keyword2' => '商品名称',
+								'keyword3' => '订单金额',
+								'keyword4' => '付款状态',
+								'keyword5' => '付款时间'
+							)
+						);
+
+						updateMemberNotice($uid, "会员-商家新订单通知", $paramBusi, $config);
 					}
 
 				}
-				
+
 			}
 		}
 	}
@@ -5910,7 +5943,7 @@ class travel {
 		$state1 = $dsql->dsqlOper($archives." AND `orderstate` = 1", "totalCount");
 		//待服务
 		$state2 = $dsql->dsqlOper($archives." AND `orderstate` = 2", "totalCount");
-		
+
 		$state20 = $dsql->dsqlOper($archives." AND (`orderstate` = 2 or `orderstate` = 4)", "totalCount");
 		//服务无效
 		$state3 = $dsql->dsqlOper($archives." AND `orderstate` = 3", "totalCount");
@@ -6059,7 +6092,7 @@ class travel {
 					);
 
 				}elseif($val['type'] == 4){//签证
-						
+
 					$this->param = $val['proid'];
 					$proDetail = $this->visaDetail();
 					$list[$key]['title']  = $proDetail['title'];
@@ -6108,7 +6141,7 @@ class travel {
 					);
 					$list[$key]["cardnumUrl"] = getUrlPath($param);
 				}
-				
+
 			}
 		}
 		return array("pageInfo" => $pageinfo, "list" => $list);
@@ -6256,7 +6289,7 @@ class travel {
 			$orderDetail['product']['lat']      = $detail['lat'];
 			$orderDetail['product']['litpic']   = $detail['pics'][0]['path'];
 			$orderDetail['product']['price']    = $detail['price'] ? $detail['price'] : $ret[0]['price'];
-			
+
 			$url = getUrlPath($param);
 			$orderDetail['product']['url'] = $url;
 
@@ -6271,7 +6304,7 @@ class travel {
 			$procount   = $results["procount"];
 			$totalAmount += $orderprice * $procount;
 
-			
+
 			$orderDetail["orderprice"] = $orderprice;
 			$orderDetail["totalmoney"] = $totalAmount;
 			$orderDetail["point"]      = $point;
@@ -6463,11 +6496,11 @@ class travel {
 				$point    = $results['point'];    //需要退回的积分
 				$balance  = $results['balance'];  //需要退回的余额
 				$payprice = $results['payprice']; //需要退回的支付金额
-				$ordernum = $results['ordernum']; 
-				$type     = $results['type']; 
-				$procount = $results['procount']; 
-				$proid    = $results['proid']; 
-				$walktime = $results['walktime']; 
+				$ordernum = $results['ordernum'];
+				$type     = $results['type'];
+				$procount = $results['procount'];
+				$proid    = $results['proid'];
+				$walktime = $results['walktime'];
 
 				$now1 = GetMkTime(date('Y-m-d', time()));
 
@@ -6523,7 +6556,7 @@ class travel {
 				}
 
 				return $langData['travel'][13][45];//提交成功！
-				
+
 			}else{
 				return array("state" => 101, "info" => $langData['travel'][13][46]);//订单不存在，或已经删除！
 			}
@@ -6591,7 +6624,7 @@ class travel {
 			$retnote    = '';
 
 			$orderIdArr = array();
-			
+
 			$paramBusi = array(
 				"service"  => "member",
 				"template" => "orderdetail",
@@ -6817,7 +6850,7 @@ class travel {
 				}
 			//可以使用
 			}else{
-				
+
 				//获取信息
 				if($type == 1 || $type == 2){//景点门票 周边游
 					$sql = $dsql->SetQuery("SELECT `id`, `title`, `ticketid`, `price`, `specialtime` FROM `#@__travel_ticketinfo` WHERE `id` = $proid ");
@@ -7123,7 +7156,7 @@ class travel {
 
 		if(empty($id))    return array("state" => 200, "info" => $langData['travel'][12][23]);  //格式错误
 
-		
+
 		$sql = $dsql->SetQuery("SELECT `id`, `walktime`, `departuretime`, `orderstate`, `proid`, `procount`, `people`, `contact` FROM `#@__travel_order` WHERE `id` = $id ");
 		$ret = $dsql->dsqlOper($sql, 'results');
 		if($ret){
@@ -7246,7 +7279,7 @@ class travel {
 			if($type == 4){//签证
 				$this->param = $proid;
 				$detail = $this->visaDetail();
-				
+
 			}else{
 				if($type == 1 || $type == 2){//景点门票 周边游
 					$sql = $dsql->SetQuery("SELECT `id`, `title`, `ticketid`, `price`, `specialtime` FROM `#@__travel_ticketinfo` WHERE `id` = $proid ");
@@ -7260,7 +7293,7 @@ class travel {
 				}elseif($type == 3){
 					$this->param = $ret[0]['hotelid'];
 				}
-				
+
 				if($type == 1){
 					$detail = $this->ticketDetail();
 				}elseif($type == 2){

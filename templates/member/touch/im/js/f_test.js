@@ -39,7 +39,7 @@ function getinfo(user_id){
         success: function(data){
             if(data.state == 100){
                 console.log(data)
-                var src = data.info.photo != ""?data.info.photo:templets_skin+"images/head_img.jpg"
+                var src = data.info.photo != ""?data.info.photo:staticPath+"images/noPhoto_60.jpg";
 				$('.im-right_info h2').text(data.info.nickname);
 				$('.im-left_head').children('img').attr('src',src);
 				if(data.info.addrName!=''){
@@ -66,12 +66,13 @@ function getinfo(user_id){
 }
 
 $('.im-send_btn,.im-send_sure').click(function(){
-	var note = $('#im-test_info').html();
+	var note = $('#im-test_info').html()==''?'我是'+userinfo['name']:$('#im-test_info').html();
 	f_test(user_id,note);
 	
 })
 //好友验证发送
 function f_test(id,note){
+	
 	$.ajax({
         url: '/include/ajax.php?service=siteConfig&action=applyFriend&tid='+id+'&note='+note,
         type: 'post',

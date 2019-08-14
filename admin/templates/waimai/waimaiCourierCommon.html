@@ -136,16 +136,16 @@ td.center {text-align: center;}
                             {#foreach $list as $key => $value#}
                             <tr class="{#if $key%2 == 0#}odd{#else#}even{#/if#}" data-oid={#$value['oid']#} data-type="{#if $value['type'] == 0#}waimai{#else#}paotui{#/if#}">
                                 <td width="70">{#$value['name']#}</td>
-                                <td width="70">{#$value['uid']#}</td>
+                                <td width="70">{#$value['userid']#}</td>
                                 <td width="70">{#$value['username']#}</td>
                                 <td width="140">{#$value['shopname']#}</td>
                                 <td>{#$value['contentps']#}</td>
                                 <td width="80">{#$value['starps']#}</td>
-                                <td width="150">{#$value['pubdate']|date_format: "%Y-%m-%d %H:%M:%S"#}</td>
+                                <td width="150">{#$value['dtime']|date_format: "%Y-%m-%d %H:%M:%S"#}</td>
                                 <td width="80">
                                 <a href="javascript:;" class="label label-sm label-success orderdetail" title="订单详情">{#$value['ordernumstore']#}</a>
                                 </td>
-                                <td width="40" class="center">{#if $value['type'] == 0#}外卖{#else#}跑腿{#/if#}</td>
+                                <td width="40" class="center">{#if $value['type'] == 'waimai-order'#}外卖{#else#}跑腿{#/if#}</td>
                             </tr>
                             {#/foreach#}
                             {#if $list|@count == 0#}

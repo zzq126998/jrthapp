@@ -331,6 +331,30 @@ $(function () {
 			$('#pullurl_pc').val(pullurl_pc);
 		}
 	})
+
+	//标注地图
+	$("#mark").bind("click", function(){
+		$.dialog({
+			id: "markDitu",
+			title: "标注地图位置<small>（请点击/拖动图标到正确的位置，再点击底部确定按钮。）</small>",
+			content: 'url:'+adminPath+'../api/map/mark.php?mod=house&lnglat='+$("#lnglat").val()+"&city="+mapCity+"&addr="+$("#addr").val(),
+			width: 800,
+			height: 500,
+			max: true,
+			ok: function(){
+				var doc = $(window.parent.frames["markDitu"].document),
+					lng = doc.find("#lng").val(),
+					lat = doc.find("#lat").val(),
+					addr = doc.find("#addr").val();
+				$("#lnglat").val(lng+","+lat);
+				if($("#addr").val() == ""){
+					$("#addr").val(addr);
+				}
+				huoniao.regex($("#addr"));
+			},
+			cancel: true
+		});
+	});
 });
 
 

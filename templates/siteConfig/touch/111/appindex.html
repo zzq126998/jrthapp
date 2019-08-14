@@ -20,6 +20,14 @@
   var templets = '{#$templets_skin#}';
   var listArr = [];
   jQuery = $;
+
+  if(device.indexOf('huoniao') > -1){
+      setTimeout(function(){
+          setupWebViewJavascriptBridge(function(bridge) {
+              bridge.callHandler('goToIndex', {}, function(){});
+          });
+      }, 500);
+  }
 </script>
 <style>
   html #newBridge {display: none;}
@@ -152,23 +160,23 @@
 
   {#if in_array("huangye", $installModuleArr)#}
   <!-- 黄页 s -->
-  <div class="module huangye">
-    <div class="title fn-clear"><h3>黄页</h3><a href="{#$huangye_channelDomain#}" class="more">查看更多 &raquo;</a></div>
-    <div class="list">
-      {#huangye action="ilist" pageSize=4 return="hlist"#}
-      <div class="item fn-clear">
-        <a href="{#$hlist.url#}">
-          <div class="pic"><img src="{#$hlist.litpic#}" alt="{#$hlist.title#}"></div>
-          <div class="info">
-            <p class="tit">{#$hlist.title#}</p>
-            <p class="other">{#$hlist.addressdet#}</p>
-          </div>
-        </a>
-        <a href="tel:{#$hlist.tel#}" class="tel">电话</a>
-      </div>
-      {#/huangye#}
+    <div class="module huangye">
+        <div class="title fn-clear"><h3>黄页</h3><a href="{#$huangye_channelDomain#}" class="more">查看更多 &raquo;</a></div>
+        <div class="list">
+            {#business action="blist" pageSize=4 return="hlist"#}
+            <div class="item fn-clear">
+                <a href="{#$hlist.url#}">
+                    <div class="pic"><img src="{#$hlist.logo#}" alt="{#$hlist.title#}"></div>
+                    <div class="info">
+                        <p class="tit">{#$hlist.title#}</p>
+                        <p class="other">{#$hlist.address#}</p>
+                    </div>
+                </a>
+                <a href="tel:{#$hlist.tel#}" class="tel">电话</a>
+            </div>
+            {#/business#}
+        </div>
     </div>
-  </div>
   <!-- 黄页 e -->
   {#/if#}
 

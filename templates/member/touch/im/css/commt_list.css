@@ -11,6 +11,7 @@ html,body{min-height: 100%; background-color: #ededed;}
 .commt_li a{display: block;}
 
 .commt_con h3{font-size: .32rem; padding: .2rem .24rem; line-height: .44rem; font-weight: normal;}
+.commt_con h3 img{width: .35rem; height: .35rem; vertical-align: middle;}
 .con_box{ background-color: #fff;}
 .mycon.con_box,.mycon.commt_con{background-color: #f7f7f7;}
 .con_box{height: 1.5rem;}
@@ -26,11 +27,13 @@ html,body{min-height: 100%; background-color: #ededed;}
 .reply_btn{background: none; box-shadow: none;color: #4d6fff; font-size: .28rem; width: 1.1rem; text-align: center; border-radius: .26rem; border: solid 1px #4d6fff; position: absolute; top: .34rem; right: .24rem; line-height: .46rem;} 
 
 /*加载更多*/
-.loading{padding:.6rem 0;text-align: center;}
-.loading img{width: .4rem;}
+.loading{padding:.6rem 0; text-align: center;}
+.loading img{width: 2rem; }
 .loading span{display: block;font-size: .26rem;color:#919191;margin:.2rem auto;}
-
+.im-no_list{text-align: center; color: #999; margin-top: 1rem;}
+.im-no_list img{width: 3rem !important; margin-bottom: .3rem; height: auto;}
 /*回复*/
+.emotion_img{width: .35rem; vertical-align: middle;}
 .textarea img{width: .5rem; vertical-align: middle;}
 .textarea:empty::before{color:lightgrey;content:attr(placeholder);}
 .reply_page{width: 100%; height: 100%; position: relative;position: fixed; bottom: -100%; background: #fff;z-index: 1000001;}

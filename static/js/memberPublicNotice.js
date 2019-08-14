@@ -1,11 +1,10 @@
-var templets_skin = '{#$templets_skin#}' ;
 //var staticPath = typeof staticPath != "undefined" && staticPath != "" ? staticPath : masterDomain + '/static';
 
 $(function(){
-		
+
     //引入样式
 
-	
+
     //公共样式名
     var notice = "hn_memberPublicNotice",
         header = "hn_memberPublicNotice_header",
@@ -46,8 +45,6 @@ $(function(){
 
     }
 
- 
+
 
 });
-
-

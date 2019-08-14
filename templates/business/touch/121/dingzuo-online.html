@@ -4,29 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
 <title>{#$detail.title#}-{#$langData['siteConfig'][16][6]#}</title>
-<link rel="stylesheet" href="{#$templets_skin#}css/base.css?v={#$cfg_staticVersion#}">
+<link rel="stylesheet" href="{#$cfg_staticPath#}css/core/touchBase.css?v={#$cfg_staticVersion#}">
 <link rel="stylesheet" href="{#$templets_skin#}css/dingzuo-online.css?v={#$cfg_staticVersion#}">
 <script src="{#$cfg_staticPath#}js/core/touchScale.js?v={#$cfg_staticVersion#}"></script>
 <script type="text/javascript" src="{#$cfg_staticPath#}js/core/zepto.min.js"></script>
 <script type="text/javascript">
-var cookiePre = '{#$cfg_cookiePre#}', masterDomain = '{#$cfg_basehost#}';
-var shopid = {#$detail.id#};
-var date = '{#$date#}';
-var people = {#$detail.dingzuo_min_people#};
-var retUrl = '{#getUrlPath service="business" template="dingzuo-results" ordernum="%ordernum%"#}';
-var state = {#$detail.dingzuo_state#};
+	var staticPath = '{#$cfg_staticPath#}';
+	var hideFileUrl = {#$cfg_hideUrl#};
+	var cookiePre = '{#$cfg_cookiePre#}', masterDomain = '{#$cfg_basehost#}';
+	var shopid = {#$detail.id#};
+	var date = '{#$date#}';
+	var people = {#$detail.dingzuo_min_people#};
+	var retUrl = '{#getUrlPath service="business" template="dingzuo-results" ordernum="%ordernum%"#}';
+	var state = {#$detail.dingzuo_state#};
 </script>
 </head>
 <body>
-	<div class="header">
-		<div class="header-l"><a href="javascript:history.go(-1)" class="goBack"></a></div>
-		<div class="header-address">
-			<span>{#$langData['siteConfig'][22][33]#}</span>
-		</div>
-		<div class="header-search">
-			<a href="javascript:;" class="dropnav"></a>
-		</div>
-	</div>
+{#include file="../../../siteConfig/touch_top.html" pageTitle={#$langData['siteConfig'][22][33]#}#}
+
 	<div class="shop_info fn-clear">
 		<div class="shop_logo">
 			<a href="{#getUrlPath service="business" template="detail" id=$detail.id#}"><img src="{#if $detail.logo#}{#$detail.logo#}{#else#}{#$templets_skin#}images/shop.png{#/if#}" alt=""></a>
@@ -109,6 +104,21 @@ var state = {#$detail.dingzuo_state#};
 		<div class="table_box"></div>
 		<div class="table_sure">{#$langData['siteConfig'][6][0]#}</div>
 	</div>
+
+	<script type="text/javascript">
+		var wxconfig = {
+			"appId": '{#$wxjssdk_appId#}',
+			"timestamp": '{#$wxjssdk_timestamp#}',
+			"nonceStr": '{#$wxjssdk_nonceStr#}',
+			"signature": '{#$wxjssdk_signature#}',
+			"description": '地址：{#$detail.address#}',
+			"title": '{#$detail.title#}在线预约订座',
+			"imgUrl": '{#if $detail.logo#}{#$detail.logo#}{#else#}{#$templets_skin#}images/shop.png{#/if#}',
+			"link": '{#getUrlPath service='business' template='dingzuo-online' id=$detail.id#}',
+		};
+
+		document.write(unescape("%3Cscript src='{#$cfg_staticPath#}js/publicShare.js?v="+~(-new Date())+"'type='text/javascript'%3E%3C/script%3E"));
+	</script>
 
 <script type='text/javascript' src='{#$cfg_basehost#}/include/json.php?action=lang'></script>
 <script type="text/javascript" src="{#$templets_skin#}js/dingzuo-online.js?v={#$cfg_staticVersion#}"></script>

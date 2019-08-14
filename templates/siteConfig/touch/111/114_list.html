@@ -17,11 +17,12 @@
   var lng = '';
   var radius = '99999';
   var pageData = {};
+  var site_map = '{#$site_map#}';
 </script>
 
 <style media="screen">
 body {padding-top: calc(1px + 1.68rem);}
-.huoniao_iOS body {padding-top: calc(21px + 1.68rem);}
+.huoniao_iOS body {padding-top: .9rem;}
 </style>
 
 {#* 微信分享 *#}
@@ -107,9 +108,10 @@ body {padding-top: calc(1px + 1.68rem);}
 <div class="list">
   <div class="loading"><span>加载中...</span></div>
 </div>
-
+<div id="map"></div>
 <div class="tishi" style="display: none;"><div class="chesi"><p></p></div></div>
 <a href="javascript:;" class="appMapBtn"></a>
+<script type='text/javascript' src='{#$cfg_basehost#}/include/json.php?action=lang'></script>
 {#include file="{#$HUONIAOROOT#}/templates/siteConfig/public_location.html"#}
 <script type="text/javascript" src="{#$cfg_staticPath#}js/publicOpenMap.js?v={#$cfg_staticVersion#}"></script>
 <script src="{#$templets_skin#}js/114_list.js?v={#$cfg_staticVersion#}"></script>

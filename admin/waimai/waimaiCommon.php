@@ -14,7 +14,8 @@ $userLogin = new userLogin($dbo);
 $tpl = dirname(__FILE__)."/../templates/waimai";
 $huoniaoTag->template_dir = $tpl; //设置后台模板目录
 
-$dbname = "waimai_common";
+// $dbname = "waimai_common";
+$dbname = "public_comment";
 $templates = "waimaiCommon.html";
 
 $shop = array();
@@ -44,11 +45,11 @@ if($shopResult){
     foreach($shopResult as $key => $loupan){
         array_push($shopids, $loupan['id']);
     }
-    $where = " AND c.`sid` in (".join(",", $shopids).")";
+    $where = " AND c.`aid` in (".join(",", $shopids).")";
 }
 
 if($shopid){
-    $where = " AND c.`sid` = $shopid"; 
+    $where = " AND c.`aid` = $shopid"; 
     $huoniaoTag->assign('shopid', $shopid);
 }
 $sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__$dbname` c WHERE 1 = 1".$where);
@@ -61,7 +62,7 @@ $totalPage = ceil($totalCount/$pageSize);
 $p = (int)$p == 0 ? 1 : (int)$p;
 $atpage = $pageSize * ($p - 1);
 
-$sql = $dsql->SetQuery("SELECT c.*, o.`ordernumstore`, s.`shopname` FROM (`#@__$dbname` c LEFT JOIN `#@__waimai_order` o ON c.`oid` = o.`id`) LEFT JOIN `#@__waimai_shop` s ON c.`sid` = s.`id` WHERE c.`type` = 0".$where." ORDER BY `id` DESC");
+$sql = $dsql->SetQuery("SELECT c.*, o.`ordernumstore`, s.`shopname` FROM (`#@__$dbname` c LEFT JOIN `#@__waimai_order` o ON c.`oid` = o.`id`) LEFT JOIN `#@__waimai_shop` s ON c.`aid` = s.`id` WHERE c.`type` = 'waimai-order' ".$where." ORDER BY `id` DESC");
 
 
 $ret = $dsql->dsqlOper($sql." LIMIT $atpage, $pageSize", "results");

@@ -77,10 +77,10 @@
 				<p><span class="t">场馆：</span><a href="{#getUrlParam url={#$pageUrl#} data={#$pageParam#} center={#$fairs.fairs['id']#}#}#J_crumbs">{#$fairs.fairs['title']#}</a></p>
 				<p><span class="t">时间：</span><span class="red">{#$fairs.date#} {#$fairs.began#}-{#$fairs.end#} </span></p>
 				<p><span class="t">地址：</span><span class="adr">{#$fairs.fairs.addr[0]#} {#$fairs.fairs.addr[1]#} {#$fairs.fairs.address#}</span><a href="{#$fairs.url#}#xl" class="do" target="_blank">地图</a><a href="{#$fairs.url#}#xl" class="do" target="_blank">公交线路</a></p>
-				<p>{#if $fairs.fairs.tel != ""#}<span class="t">电话：</span>{#$fairs.fairs.tel#}&nbsp;&nbsp;{#/if#}{#if $fairs.fairs.fax != ""#}传真：{#$fairs.fairs.fax#}&nbsp;&nbsp;{#/if#}{#if $fairs.fairs.email != ""#}邮箱：{#$fairs.fairs.email#}{#/if#}</p>
+				{#if $userinfo#}<p>{#if $fairs.fairs.tel != ""#}<span class="t">电话：</span>{#$fairs.fairs.tel#}&nbsp;&nbsp;{#/if#}{#if $fairs.fairs.fax != ""#}传真：{#$fairs.fairs.fax#}&nbsp;&nbsp;{#/if#}{#if $fairs.fairs.email != ""#}邮箱：{#$fairs.fairs.email#}{#/if#}</p>{#else#}<p><span class="t"><a href="{#$cfg_basehost#}/login.html">登录后显示联系方式</a></span></p>{#/if#}
 				<p class="detail fn-clear">
 					<a href="{#$fairs.url#}" class="d" target="_blank">详细介绍</a>
-					{#if $fairs.fairs.qq != ""#}<a class="ctag ctag-qq"></a><span>QQ：{#$fairs.fairs.qq#}</span>{#/if#}
+					{#if $fairs.fairs.qq != ""#}<a class="ctag ctag-qq"></a><span>QQ：{#if $userinfo#}{#$fairs.fairs.qq#}{#else#}<a href="{#$cfg_basehost#}/login.html">登录后显示</a>{#/if#}</span>{#/if#}
 				</p>
 			</div>
 		</li>
@@ -103,6 +103,6 @@
 </script>
 <script type="text/javascript" src="{#$cfg_staticPath#}js/ui/jquery.qrcode.min.js"></script>
 <script type="text/javascript" src="{#$cfg_staticPath#}js/ui/calendar/WdatePicker.js?v=2"></script>
-<script type="text/javascript" src="{#$templets_skin#}js/recruit.js"></script>
+<script type="text/javascript" src="{#$templets_skin#}js/recruit.js?v={#$cfg_staticVersion#}"></script>
 </body>
 </html>

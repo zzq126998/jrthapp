@@ -25,7 +25,7 @@ $(function(){
 					}
 					typeList.push('  <div class="row15"><a href="javascript:;" class="ad"></a></div>');
 					typeList.push('  <div class="row15"><a href="javascript:;" class="up">向上</a><a href="javascript:;" class="down">向下</a></div>');
-					typeList.push('  <div class="row17 left">&nbsp;&nbsp;&nbsp;<a href=javascript:;" class="del">删除</a></div>');
+					typeList.push('  <div class="row17 left">&nbsp;&nbsp;&nbsp;<a href=javascript:;" class="del">删除编辑</a></div>');
 					typeList.push('</div>');
 
 
@@ -420,7 +420,33 @@ $(function(){
 	$(".root").delegate(".del", "click", function(event){
 		event.preventDefault();
 		var t = $(this), id = t.parent().parent().find("input").attr("data-id"), type = t.parent().text();
-		t.parent().parent().parent().remove();
+
+		var tip = "";
+		if(t.parent().parent().next("ul").html() != undefined && t.parent().parent().next("ul").html() != ""){
+			tip = "确定后，此分类下的子级也将同时删除！<br />";
+		}
+
+		//从异步请求
+		if(type.indexOf("编辑") > -1){
+			$.dialog.confirm(tip+"删除后无法恢复，请谨慎操作！！！", function(){
+				huoniao.showTip("loading", "正在删除，，请稍候...");
+				huoniao.operaJson("zhuantiPar.php?dopost=del&action="+action, "id="+id, function(data){
+					if(data.state == 100){
+						huoniao.showTip("success", data.info, "auto");
+						setTimeout(function() { 
+							location.reload();
+						}, 800);
+					}else{
+						alert(data.info);
+						return false;
+					}
+				});
+			});
+			//跳转到对应删除页面
+		}else{
+			t.parent().parent().parent().remove();
+		}
+
 	});
 
 	//保存

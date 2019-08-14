@@ -182,6 +182,8 @@ $(function(){
     									common    = list[i].common,
     									litpic    = list[i].litpic;
 
+                                if(list[i].arcrank != "1") url = "javascript:;";
+
     							html.push('<div class="TuanBox" data-id="'+id+'"><div class="Info fn-clear"><a href="'+url+'">');
     							if(litpic != ""){
     								html.push('<div class="tuanIMG"><img src="'+huoniao.changeFileSize(litpic, "small")+'" alt=""></div>');

@@ -633,7 +633,7 @@ function typeAjax($arr, $pid = 0, $dopost, $more = array()){
             if ($dopost == "houseaddr") {
                 $archives = $dsql->SetQuery("SELECT `typename`, `weight`, `longitude`, `latitude` FROM `#@__" . $dopost . "` WHERE `id` = " . $id);
                 // 分类有图标
-            } elseif ($dopost == "marry_type" || $dopost == "homemaking_type" || $dopost == "car_brandtype" || $dopost == "business_type" || $dopost == "tieba_type" || $dopost == "integral_type" || $dopost == "infotype" || $dopost == "tuantype" || $dopost == "shop_type" || $dopost == "huangyetype") {
+            } elseif ($dopost == "education_type" || $dopost == "marry_type" || $dopost == "homemaking_type" || $dopost == "car_brandtype" || $dopost == "business_type" || $dopost == "tieba_type" || $dopost == "integral_type" || $dopost == "infotype" || $dopost == "tuantype" || $dopost == "shop_type" || $dopost == "huangyetype") {
                 $hasIcon = true;
                 $archives = $dsql->SetQuery("SELECT `typename`, `weight`, `icon` FROM `#@__" . $dopost . "` WHERE `id` = " . $id);
             } else {
@@ -700,6 +700,8 @@ function typeAjax($arr, $pid = 0, $dopost, $more = array()){
                             $tit = "家政服务";
                         }elseif($dopost == "marry_type"){
                             $tit = "婚嫁";
+                        }elseif($dopost == "education_type"){
+                            $tit = "教育";
                         }
                         adminLog("修改" . $tit . "分类图标", $dopost . "=>" . $name . "=>" . $icon);
                     }
@@ -1516,6 +1518,11 @@ function sendsms($phone, $id, $code, $type = "", $has = false, $promotion = fals
         if ($contentTpl) {
             $tempid = $contentTpl['title'];
             $content = $contentTpl['content'];
+            if($tempid == "" || $content == ""){
+                return array("state" => 200, "info" => '短信通知未启用');
+            }
+        }else{
+            return array("state" => 200, "info" => '短信通知未启用');
         }
 
 //        if ($tempid == "" && $content == "") {
@@ -2707,11 +2714,10 @@ function changeFileSize($params){
     global $cfg_uploadDir;
 
     if($type == "small" || $type == "middle"){
-        if(!strstr($url, "altas") && !strstr($url, "photo") && !strstr($url, "thumb")){
+        if(!strstr($url, "atlas") && !strstr($url, "photo") && !strstr($url, "thumb")){
             return $url;
         }
     }
-
     $localpath = $cfg_secureAccess . $cfg_basehost . $cfg_uploadDir;
     $urls = explode($localpath, $url);
     $url_ = $urls[1];
@@ -3168,8 +3174,8 @@ function getUrlPath($params){
                             $ret = $dsql->dsqlOper($sql, "results");
                             if ($ret) {
                                 $getDomain = getDomain("website", "website", $websiteid);
-                                if ($getDomain && $ret[0]['domaintype'] && $getDomain['state'] == 1) {
-                                    return $cfg_secureAccess . $getDomain['domain'] . "/" . $alias . ".html";
+                                if ($getDomain && $ret[0]['domaintype'] && $getDomain['state'] == 1 && !isMobile()) {
+                                    return $cfg_secureAccess . $getDomain['domain'] . ($alias ? "/" . $alias . ".html" : "");
                                 }
                             }
                         }
@@ -3179,7 +3185,7 @@ function getUrlPath($params){
 
                     return $domain . "/" . $template . ($alias ? "/" . $alias . ".html" : "") . $after;
                 } else {
-                    return $domain . "/" . join("-", $paramRewrite) . ".html" . $after;
+                    return $domain . "/" . ($service == 'member' && $template == 'chat' ? 'im/' : '') . join("-", $paramRewrite) . ".html" . $after;
                 }
             } else {
                 return $domain;
@@ -4083,7 +4089,7 @@ function updateAdminNotice($module, $part){
  * @param $module 模块
  * @param $part   栏目
  */
-function updateMemberNotice($uid, $notify, $param = array(), $config = array(), $customPhone = ''){
+function updateMemberNotice($uid, $notify, $param = array(), $config = array(), $customPhone = '', $im = array()){
     global $dsql;
     if (!$uid) return;
 
@@ -4108,7 +4114,7 @@ function updateMemberNotice($uid, $notify, $param = array(), $config = array(), 
     //信息URL
     $url = "";
     if ($param) {
-        $url = getUrlPath($param);
+        $url = is_array($param) ? getUrlPath($param) : $param;
         $config['url'] = $url;
     }
 
@@ -4157,7 +4163,7 @@ function updateMemberNotice($uid, $notify, $param = array(), $config = array(), 
     $title = $cArr['title'];
     $content = $cArr['content'];
     if ($title || $content) {
-        sendapppush($uid, $title, $content, $url);
+        sendapppush($uid, $title, $content, $url, "default", false, $im);
     }
 
 }
@@ -4364,36 +4370,42 @@ function getWechatMsgErrCode($code){
  * @param $title   消息标题
  * @param $body    消息内容
  * @param $url     跳转地址
+ * @param $music   音效
+ * @param $all     是否推送所有设备
  */
-function sendapppush($uid, $title, $body, $url = "", $music = "default"){
+function sendapppush($uid, $title, $body, $url = "", $music = "default", $all = false, $im = array()){
     global $dsql;
     global $cfg_basehost;
     global $cfg_secureAccess;
 
-    if (!$uid || $uid < 1) return;
+    if (!$all && (!$uid || $uid < 1)) return;
 
-    //是否登录设备s
-    $sourceclientAll = '';
-    $iosSend = $androidSend = false;
-    $sql = $dsql->SetQuery("SELECT `sourceclient` FROM `#@__member`  WHERE `id` = $uid");
-    $res = $dsql->dsqlOper($sql, "results");
-    if($res[0]['sourceclient']){
-        $sourceclientAll = unserialize($res[0]['sourceclient']);
-        foreach ($sourceclientAll as $key => $value) {
-            $val = strtolower($value['type']);
-            if (preg_match("/android|mini|mobile|mobi|Nokia|Symbian/", $val)) {
-                $androidSend = true;
-            }
-            if(preg_match("/iphone|ios|iPod|iPad|/", $val)){
-                $iosSend = true;
+    if(!$all){
+        //是否登录设备s
+        $sourceclientAll = '';
+        $iosSend = $androidSend = false;
+        $sql = $dsql->SetQuery("SELECT `sourceclient` FROM `#@__member`  WHERE `id` = $uid");
+        $res = $dsql->dsqlOper($sql, "results");
+        if($res[0]['sourceclient']){
+            $sourceclientAll = unserialize($res[0]['sourceclient']);
+            foreach ($sourceclientAll as $key => $value) {
+                $val = strtolower($value['type']);
+                if (preg_match("/android|mini|mobile|mobi|Nokia|Symbian/", $val)) {
+                    $androidSend = true;
+                }
+                if(preg_match("/iphone|ios|iPod|iPad|/", $val)){
+                    $iosSend = true;
+                }
             }
         }
-    }
-    //是否登录设备e
+        //是否登录设备e
 
-    //查询会员未读消息数量
-    $sql = $dsql->SetQuery("SELECT log.`id` FROM `#@__member_letter_log` log LEFT JOIN `#@__member_letter` l ON l.`id` = log.`lid` WHERE log.`state` = 0 AND l.`type` = 0 AND log.`uid` = $uid");
-    $msgnum = $dsql->dsqlOper($sql, "totalCount");
+        //查询会员未读消息数量
+        $sql = $dsql->SetQuery("SELECT log.`id` FROM `#@__member_letter_log` log LEFT JOIN `#@__member_letter` l ON l.`id` = log.`lid` WHERE log.`state` = 0 AND l.`type` = 0 AND log.`uid` = $uid");
+        $msgnum = $dsql->dsqlOper($sql, "totalCount");
+    }else{
+        $iosSend = $androidSend = true;
+    }
 
     //查询推送配置
     $platform = $android_access_id = $android_access_key = $android_secret_key = $ios_access_id = $ios_access_key = $ios_secret_key = "";
@@ -4448,13 +4460,20 @@ function sendapppush($uid, $title, $body, $url = "", $music = "default"){
             $customizedcast->setAppMasterSecret($android_secret_key);
             $customizedcast->setPredefinedKeyValue("appkey", $android_access_key);
             $customizedcast->setPredefinedKeyValue("timestamp", strval(time()));
-            $customizedcast->setPredefinedKeyValue("alias", $uid);
-            $customizedcast->setPredefinedKeyValue("alias_type", "userID");
+            if(!$all){
+                $customizedcast->setPredefinedKeyValue("alias", $uid);
+                $customizedcast->setPredefinedKeyValue("alias_type", "userID");
+            }
             $customizedcast->setPredefinedKeyValue("ticker", $title);
             $customizedcast->setPredefinedKeyValue("title", $title);
             $customizedcast->setPredefinedKeyValue("text", $body);
             $customizedcast->setPredefinedKeyValue("after_open", "go_app");
             $customizedcast->setExtraField("url", $url);
+            if($im){
+            	foreach ($im as $key => $value) {
+            		$customizedcast->setExtraField($key, $value);
+            	}
+            }
             $customizedcast->send();
         }
 
@@ -4464,13 +4483,20 @@ function sendapppush($uid, $title, $body, $url = "", $music = "default"){
             $customizedcast->setAppMasterSecret($ios_secret_key);
             $customizedcast->setPredefinedKeyValue("appkey", $ios_access_key);
             $customizedcast->setPredefinedKeyValue("timestamp", strval(time()));
-            $customizedcast->setPredefinedKeyValue("alias", $uid);
-            $customizedcast->setPredefinedKeyValue("alias_type", "userID");
+            if(!$all){
+                $customizedcast->setPredefinedKeyValue("alias", $uid);
+                $customizedcast->setPredefinedKeyValue("alias_type", "userID");
+            }
             $customizedcast->setPredefinedKeyValue("alert", $body);
             $customizedcast->setPredefinedKeyValue("badge", $msgnum);
             $customizedcast->setPredefinedKeyValue("sound", "chime");
             $customizedcast->setPredefinedKeyValue("production_mode", "false");
             $customizedcast->setCustomizedField("url", $url);
+            if($im){
+            	foreach ($im as $key => $value) {
+            		$customizedcast->setExtraField($key, $value);
+            	}
+            }
             $customizedcast->send();
         }
 
@@ -4489,8 +4515,13 @@ function sendapppush($uid, $title, $body, $url = "", $music = "default"){
 
                 // 推送目标
                 $request->setAppKey($android_access_key);
-                $request->setTarget("ACCOUNT"); //推送目标: DEVICE:推送给设备; ACCOUNT:推送给指定帐号,TAG:推送给自定义标签; ALL: 推送给全部
-                $request->setTargetValue($uid); //根据Target来设定，如Target=device, 则对应的值为 设备id1,设备id2. 多个值使用逗号分隔.(帐号与设备有一次最多100个的限制)
+                if($all){
+                    $request->setTarget("ALL");
+                    $request->setTargetValue("ALL");
+                }else{
+                    $request->setTarget("ACCOUNT"); //推送目标: DEVICE:推送给设备; ACCOUNT:推送给指定帐号,TAG:推送给自定义标签; ALL: 推送给全部
+                    $request->setTargetValue($uid); //根据Target来设定，如Target=device, 则对应的值为 设备id1,设备id2. 多个值使用逗号分隔.(帐号与设备有一次最多100个的限制)
+                }
                 $request->setDeviceType("ANDROID"); //设备类型 ANDROID iOS ALL.
                 $request->setPushType("NOTICE"); //消息类型 MESSAGE NOTICE
                 $request->setTitle($title); // 消息的标题
@@ -4499,9 +4530,23 @@ function sendapppush($uid, $title, $body, $url = "", $music = "default"){
                 // 推送配置: Android
                 $request->setAndroidNotifyType("BOTH");//通知的提醒方式 "VIBRATE" : 震动 "SOUND" : 声音 "BOTH" : 声音和震动 NONE : 静音
                 $request->setAndroidNotificationBarType(1);//通知栏自定义样式0-100
-                $request->setAndroidOpenType("APPLICATION");//点击通知后动作 "APPLICATION" : 打开应用 "ACTIVITY" : 打开AndroidActivity "URL" : 打开URL "NONE" : 无跳转
+                $request->setAndroidNotificationChannel("huoniao");
                 $request->setAndroidMusic($music);//Android通知音乐
-                $request->setAndroidExtParameters("{\"music\": \"$music\", \"url\":\"$url\"}"); // 设定android类型设备通知的扩展属性设定android类型设备通知的扩展属性
+
+                $params = array(
+                	"music" => $music,
+                	"url" => $url
+                );
+                if($im){
+                	$request->setAndroidOpenType("NONE");//点击通知后动作 "APPLICATION" : 打开应用 "ACTIVITY" : 打开AndroidActivity "URL" : 打开URL "NONE" : 无跳转
+                	foreach ($im as $key => $value) {
+                		$params[$key] = $value;
+                	}
+                }else{
+                	$request->setAndroidOpenType("APPLICATION");//点击通知后动作 "APPLICATION" : 打开应用 "ACTIVITY" : 打开AndroidActivity "URL" : 打开URL "NONE" : 无跳转
+                }
+	            $request->setAndroidExtParameters(json_encode($params)); // 设定android类型设备通知的扩展属性设定android类型设备通知的扩展属性
+
 
                 $response = $client->getAcsResponse($request);
             }
@@ -4517,8 +4562,13 @@ function sendapppush($uid, $title, $body, $url = "", $music = "default"){
 
                 // 推送目标
                 $request->setAppKey($ios_access_key);
-                $request->setTarget("ACCOUNT"); //推送目标: DEVICE:推送给设备; ACCOUNT:推送给指定帐号,TAG:推送给自定义标签; ALL: 推送给全部
-                $request->setTargetValue($uid); //根据Target来设定，如Target=device, 则对应的值为 设备id1,设备id2. 多个值使用逗号分隔.(帐号与设备有一次最多100个的限制)
+                if($all){
+                    $request->setTarget("ALL");
+                    $request->setTargetValue("ALL");
+                }else{
+                    $request->setTarget("ACCOUNT"); //推送目标: DEVICE:推送给设备; ACCOUNT:推送给指定帐号,TAG:推送给自定义标签; ALL: 推送给全部
+                    $request->setTargetValue($uid); //根据Target来设定，如Target=device, 则对应的值为 设备id1,设备id2. 多个值使用逗号分隔.(帐号与设备有一次最多100个的限制)
+                }
                 $request->setDeviceType("iOS"); //设备类型 ANDROID iOS ALL.
                 $request->setPushType("NOTICE"); //消息类型 MESSAGE NOTICE
                 $request->setTitle($title); // 消息的标题
@@ -4531,7 +4581,16 @@ function sendapppush($uid, $title, $body, $url = "", $music = "default"){
                 $request->setiOSApnsEnv("PRODUCT");//iOS的通知是通过APNs中心来发送的，需要填写对应的环境信息。"DEV" : 表示开发环境 "PRODUCT" : 表示生产环境
                 $request->setiOSRemind("false"); // 推送时设备不在线（既与移动推送的服务端的长连接通道不通），则这条推送会做为通知，通过苹果的APNs通道送达一次(发送通知时,Summary为通知的内容,Message不起作用)。注意：离线消息转通知仅适用于生产环境
                 $request->setiOSRemindBody("iOSRemindBody");//iOS消息转通知时使用的iOS通知内容，仅当iOSApnsEnv=PRODUCT && iOSRemind为true时有效
-                $request->setiOSExtParameters("{\"url\":\"$url\"}"); //自定义的kv结构,开发者扩展用 针对iOS设备
+
+                $params = array(
+                	"url" => $url
+                );
+                if($im){
+                	foreach ($im as $key => $value) {
+                		$params[$key] = $value;
+                	}
+                }
+                $request->setiOSExtParameters(json_encode($params)); //自定义的kv结构,开发者扩展用 针对iOS设备
 
                 $response = $client->getAcsResponse($request);
             }
@@ -6027,6 +6086,14 @@ function getModuleList($showIndex = false){
 	//读缓存
     $module_cache = $HN_memory->get('site_module');
     if($module_cache){
+
+        if ($showIndex) {
+            array_unshift($module_cache, array(
+                "title" => "首页",
+                "name" => "index"
+            ));
+        }
+
         return $module_cache;
     }else {
 
@@ -6037,14 +6104,6 @@ function getModuleList($showIndex = false){
             $i = 0;
             if ($result) {//如果有子类
 
-                if ($showIndex) {
-                    $results[0] = array(
-                        "title" => "首页",
-                        "name" => "index"
-                    );
-
-                    $i = 1;
-                }
                 foreach ($result as $key => $value) {
                     $results[$i]["title"] = $value['subject'] ? $value['subject'] : $value['title'];
                     $results[$i]["name"] = $value['name'];
@@ -6053,6 +6112,13 @@ function getModuleList($showIndex = false){
 
                 //写缓存
                 $HN_memory->set('site_module', $results);
+
+                if ($showIndex) {
+                    array_unshift($results, array(
+                        "title" => "首页",
+                        "name" => "index"
+                    ));
+                }
 
                 return $results;
             } else {
@@ -6839,7 +6905,7 @@ function checkPagePath(&$service, $pagePath, $reqUri){
                     $_REQUEST['type'] = $pagePathArr[2];
                 }
             }
-        }elseif($pagePath == "travel"){
+        }elseif($pagePath == "travel" || $pagePath == "education"){
             $pagePath .= "-".$pagePathArr[1];
             $_REQUEST['id'] = isset($pagePathArr[2]) ? $pagePathArr[2] : '';
         }
@@ -6935,6 +7001,7 @@ function checkPagePath(&$service, $pagePath, $reqUri){
              $_REQUEST['ordernum'] = $pagePathArr[1];
          }elseif ($pagePathArr[0] == "store_list"){
              $_REQUEST['list_id'] = $pagePathArr[1];
+             $_REQUEST['addr_id'] = $pagePathArr[2];
          }elseif ($pagePathArr[0] == "category"){
             $_REQUEST['typeid'] = $pagePathArr[1];
          }elseif ($pagePathArr[0] == "comdetail"){
@@ -7444,6 +7511,39 @@ function checkPagePath(&$service, $pagePath, $reqUri){
             $fields = array("type", "id");
         }elseif($pagePath == 'travel-ticketstate' || $pagePath == 'travel-hotelstate'){
             $fields = array("ordernum");
+        }
+
+        if(!strstr($pagePath, "-") && $i >= 1){
+            $data = $dataArr;
+        }
+    }elseif($service == "education"){//教育
+        $pagePath = "";
+        $i = $end = 0;
+        foreach ($pagePathArr as $k => $v) {
+            if(!$end && $v && strstr($v, ',') === false && !is_numeric($v)){
+                $pagePath = $pagePath ? ($pagePath."-".$v) : $v;
+            }else{
+                $dataArr[] = urldecode($v);
+                $i++;
+                $end = 1;
+            }
+        }
+        $fields = array("id", "aid", "page");
+
+        if(strstr($pagePath, "store-detail")){
+            $fields = array("id");
+            if($pagePath != "store-detail"){
+                $data = array();
+                for($s = 4; $s < count($pagePathArr); $s++){
+                    $data[] = $pagePathArr[$s];
+                }
+                $pagePath = "store-detail";
+                $_REQUEST['tpl'] = $pagePathArr[2];
+            }
+        }elseif($pagePath == 'detail'){
+            $_REQUEST['id'] = $pagePathArr[1];
+        }elseif($pagePath == 'confirm-order'){
+            $fields = array("type", "id");
         }
 
         if(!strstr($pagePath, "-") && $i >= 1){
@@ -8179,6 +8279,7 @@ function checkShowModule($bind_module = array(), $usetype = "manage", $getConfig
     $allModule[] = array('name' => 'homemaking', 'title' => '家政', 'is_module' => 1, 'check' => 'store');
     $allModule[] = array('name' => 'marry', 'title' => '婚嫁', 'is_module' => 1, 'check' => 'store');
     $allModule[] = array('name' => 'travel', 'title' => $langData['travel'][12][9], 'is_module' => 1, 'check' => 'store');
+    $allModule[] = array('name' => 'education', 'title' => $langData['education'][7][3], 'is_module' => 1, 'check' => 'store');
 
     global $installModuleArr;
     global $installModuleTitleArr;
@@ -8499,6 +8600,19 @@ function checkShowModule($bind_module = array(), $usetype = "manage", $getConfig
                         $has = true;
                         $sid = $ret[0]['id'];
                         $param = array("service" => "travel", "template" => "store-detail", "id" => $sid);
+                    }
+                }
+            }elseif($value['name'] == 'education'){
+                if($isMember){
+                    $has = true;
+                    $param = array("service" => "member", "type" => 'user', "template" => "education");
+                }else{
+                    $sql = $dsql->SetQuery("SELECT `id` FROM `#@__education_store` WHERE `userid` = $uid AND `state` = 1");
+                    $ret = $dsql->dsqlOper($sql, "results");
+                    if ($ret) {
+                        $has = true;
+                        $sid = $ret[0]['id'];
+                        $param = array("service" => "education", "template" => "store-detail", "id" => $sid);
                     }
                 }
             }

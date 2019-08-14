@@ -430,12 +430,11 @@ class video
             $pageinfo['refuse'] = $totalRefuse;
         }
 
-
         if ($tongcheng) {
             $lnglat_  = explode(',', $lnglat);
             $lng_     = $lnglat_[0];
             $lat_     = $lnglat_[1];
-            $archives = $dsql->SetQuery("SELECT `id`, `title`, `subtitle`, `typeid`, `flag`, `keywords`, `lng`,`lat`,`description`, `source`, `redirecturl`, `litpic`, `color`, `click`, l.`arcrank`, `pubdate`, `admin`,  (SELECT COUNT(`id`)  FROM `#@__videocommon` WHERE `aid` = l.`id` AND `ischeck` = 1) AS total, 
+            $archives = $dsql->SetQuery("SELECT `id`, `title`, `subtitle`, `typeid`, `flag`, `keywords`, `lng`,`lat`,`description`, `source`, `redirecturl`, `litpic`, `color`, `click`, l.`arcrank`, `pubdate`, `admin`,  (SELECT COUNT(`id`)  FROM `#@__public_comment` WHERE `type` = 'video-detail' AND `pid` = 0 AND `aid` = l.`id` AND `ischeck` = 1) AS total,
 FORMAT((
     6371 * acos(
         cos(radians($lat_)) * cos(radians(lat)) * cos(
@@ -446,7 +445,7 @@ FORMAT((
 FROM `#@__videolist` l WHERE `del` = 0" . $where);
             $where1   .= " HAVING distance < 30 ";
         } else {
-            $archives = $dsql->SetQuery("SELECT `id`, `title`, `subtitle`, `typeid`, `flag`, `keywords`, `lng`,`lat`,`description`, `source`, `redirecturl`, `litpic`, `color`, `click`, l.`arcrank`, `pubdate`, `admin`,  (SELECT COUNT(`id`)  FROM `#@__videocommon` WHERE `aid` = l.`id` AND `ischeck` = 1) AS total FROM `#@__videolist` l WHERE `del` = 0" . $where);
+            $archives = $dsql->SetQuery("SELECT `id`, `title`, `subtitle`, `typeid`, `flag`, `keywords`, `lng`,`lat`,`description`, `source`, `redirecturl`, `litpic`, `color`, `click`, l.`arcrank`, `pubdate`, `admin`,  (SELECT COUNT(`id`)  FROM `#@__public_comment` WHERE `type` = 'video-detail' AND `pid` = 0 AND `aid` = l.`id` AND `ischeck` = 1) AS total FROM `#@__videolist` l WHERE `del` = 0" . $where);
         }
 
         $atpage  = $pageSize * ($page - 1);
@@ -490,7 +489,8 @@ FROM `#@__videolist` l WHERE `del` = 0" . $where);
                     $list[$key]['is_user'] = 0;
                 }
 
-                $sql                    = $dsql->SetQuery("SELECT * FROM `#@__site_zanmap` WHERE `vid` = {$val['id']} AND `temp` = 'video' ");
+                // $sql                    = $dsql->SetQuery("SELECT * FROM `#@__site_zanmap` WHERE `vid` = {$val['id']} AND `temp` = 'video' ");
+                $sql                    = $dsql->SetQuery("SELECT * FROM `#@__public_up` WHERE `type` = '0' AND `tid` = {$val['id']} AND `module` = 'video' AND `action` = 'detail' ");
                 $ret                    = $dsql->dsqlOper($sql, 'totalCount');
                 $list[$key]['zanCount'] = $ret;
 
@@ -507,7 +507,8 @@ FROM `#@__videolist` l WHERE `del` = 0" . $where);
                 $list[$key]['pubdate1'] = date("H:i", $val['pubdate']);
                 $list[$key]['pubdate2'] = date("m-d", $val['pubdate']);
                 $user_id                = $userLogin->getMemberID();
-                $sql                    = $dsql->SetQuery("SELECT * FROM `#@__site_zanmap` WHERE `vid` = {$val['id']}  AND `userid` = $user_id  AND `temp` = 'video' ");
+                // $sql                    = $dsql->SetQuery("SELECT * FROM `#@__site_zanmap` WHERE `vid` = {$val['id']}  AND `userid` = $user_id  AND `temp` = 'video' ");
+                $sql                    = $dsql->SetQuery("SELECT * FROM `#@__public_up` WHERE `type` = '0' AND `ruid` = $user_id AND `tid` = {$val['id']} AND `module` = 'video' AND `action` = 'detail' ");
                 $ret                    = $dsql->dsqlOper($sql, 'totalCount');
                 if ($ret) {
                     $list[$key]['is_zan'] = 1;
@@ -590,6 +591,7 @@ FROM `#@__videolist` l WHERE `del` = 0" . $where);
             $articleDetail["cityid"]       = $results[0]['cityid'];
             $articleDetail["subtitle"]     = $results[0]['subtitle'];
             $articleDetail["flag"]         = $results[0]['flag'];
+            $articleDetail["admin"]        = $results[0]['admin'];
             $articleDetail["redirecturl"]  = $results[0]['redirecturl'];
             $articleDetail["litpic"]       = !empty($results[0]['litpic']) ? getFilePath($results[0]['litpic']) : "";
             $articleDetail["litpicSource"] = !empty($results[0]['litpic']) ? $results[0]['litpic'] : "";
@@ -630,8 +632,9 @@ FROM `#@__videolist` l WHERE `del` = 0" . $where);
             } else {
                 $videourl = getFilePath($videourl);
             }
-            
-            if($articleDetail["realVideoUrl"] && (isWeixin() || $is_android_app)){
+
+            $isWxMiniprogram = GetCookie('isWxMiniprogram');
+            if($articleDetail["realVideoUrl"] && ($isWxMiniprogram || $is_android_app)){
                 $videourl = $articleDetail["realVideoUrl"];
                 $videotype = 0;
             }
@@ -671,14 +674,19 @@ FROM `#@__videolist` l WHERE `del` = 0" . $where);
             }
             //是否点赞
             $articleDetail['is_zan'] = 0;
-            $sql                     = $dsql->SetQuery("SELECT * FROM `#@__site_zanmap` WHERE `vid` = {$results[0]['id']}  AND `userid` = $user_id  AND `temp` = 'video' ");
+            // $sql                     = $dsql->SetQuery("SELECT * FROM `#@__site_zanmap` WHERE `vid` = {$results[0]['id']}  AND `userid` = $user_id  AND `temp` = 'video' ");
+            $sql                    = $dsql->SetQuery("SELECT * FROM `#@__public_up` WHERE `type` = '0' AND `ruid` = $user_id AND `tid` = {$results[0]['id']} AND `module` = 'video' AND `action` = 'detail' ");
             $ret                     = $dsql->dsqlOper($sql, 'totalCount');
             if ($ret) {
                 $articleDetail['is_zan'] = 1;
             }
 
             //视频评论
-            $sql = $dsql->SetQuery("SELECT * FROM `#@__videocommon` WHERE `aid` = {$results[0]['id']} AND `ischeck` = 1 AND `floor` = 0");
+            $archives   = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'video-detail' AND `aid` = {$results[0]['id']} AND `pid` = 0");
+			$totalCount = $dsql->dsqlOper($archives, "totalCount");
+            $articleDetail['common'] = $totalCount;
+
+            /* $sql = $dsql->SetQuery("SELECT * FROM `#@__videocommon` WHERE `aid` = {$results[0]['id']} AND `ischeck` = 1 AND `floor` = 0");
             $ret = $dsql->dsqlOper($sql, 'results');
             foreach ($ret as $key => $item) {
                 $ret[$key]['user'] = getMemberDetail($item['userid']);
@@ -701,7 +709,7 @@ FROM `#@__videolist` l WHERE `del` = 0" . $where);
                 $ret[$key]['floor_common'] = $ret_;
             }
 
-            $articleDetail['common_list'] = $ret;
+            $articleDetail['common_list'] = $ret; */
 
             //视频总数
             $sql                        = $dsql->SetQuery("SELECT * FROM `#@__videolist` WHERE `admin` = {$results[0]['admin']}");
@@ -1050,5 +1058,3 @@ FROM `#@__videolist` l WHERE `del` = 0" . $where);
     }
 
 }
-
-

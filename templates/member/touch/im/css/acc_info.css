@@ -55,7 +55,7 @@ html,body{height: 100%; background-color: #f2f2f2;}
 .im-pop_recf .im-recf_info{padding-top: .14rem; font-size: .26rem;}
 .im-pop_recf .im-recf_info h2{font-size: .26rem;}
 /*推荐好友样式弹出层修改*/
-.im-recf_modal .alert-title{font-size: .36rem; color: #333;  line-height: normal !important; margin-top: .36rem;text-align: left !important; margin-left: .48rem; }
+.im-recf_modal .alert-title{font-size: .36rem; color: #333;  line-height: normal !important; margin-top: .36rem;text-align: left !important; margin-left: .48rem;max-width: 4.3rem;overflow: hidden;text-overflow: ellipsis;white-space: nowrap; }
 .im-recf_modal .alert-content {line-height: 1.3em !important; }
 .im-recf_modal .alert-btn-p1{color: #a2a4ab !important;}
 

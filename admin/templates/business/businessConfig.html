@@ -160,6 +160,12 @@ var thumbSize = {#$thumbSize#}, thumbType = "{#$thumbType#}", action = "{#$actio
         <span class="input-tips" style="display:block;margin-top:10px;"><s></s>如果需要增加或者修改标签内容，请上传标签图标到 "/static/images/business/" 目录下，图标为png类型，命名格式为：“b_sertag_ + 标签名称的全拼”</span>
       </dd>
     </dl>
+    <dl class="clearfix">
+      <dt><label>评论审核：</label></dt>
+      <dd class="radio">
+        {#html_radios name="commentCheck" values=$commentCheck checked=$commentCheckChecked output=$commentCheckNames separator="&nbsp;&nbsp;"#}
+      </dd>
+    </dl>
   </div>
 
   <script type="text/templates" id="trTemp">
@@ -618,6 +624,16 @@ var thumbSize = {#$thumbSize#}, thumbType = "{#$thumbType#}", action = "{#$actio
               <td><textarea name="joinAuth[store][travel][note]">{#$joinAuth.store.travel.note#}</textarea></td>
               <td><input type="checkbox" name="joinAuth[store][travel][perm][]" value="1"{#if $joinAuth.store.travel.perm && "1"|in_array:$joinAuth.store.travel.perm#} checked{#/if#}></td>
               <td><input type="checkbox" name="joinAuth[store][travel][perm][]" value="2"{#if $joinAuth.store.travel.perm && "2"|in_array:$joinAuth.store.travel.perm#} checked{#/if#}></td>
+            </tr>
+            {#/if#}
+            {#if in_array("education", $installModuleArr)#}
+            <tr>
+              <td>教育培训<input type="hidden" name="joinAuth[store][education][perm][]" value="-1" /></td>
+              <td><textarea name="joinAuth[store][education][note]">{#$joinAuth.store.education.note#}</textarea></td>
+              <td><input type="checkbox" name="joinAuth[store][education][perm][]" value="1"{#if $joinAuth.store.education.perm && "1"|in_array:$joinAuth.store.education.perm#} checked{#/if#}><br>
+                <div class="input-append" style="margin-top: 5px;"><input class="span1" type="text" name="joinAuth[module][education][limit]" value="{#$joinAuth.module.education.limit#}"><span class="add-on">条</span></div>
+              </td>
+              <td><input type="checkbox" name="joinAuth[store][education][perm][]" value="2"{#if $joinAuth.store.education.perm && "2"|in_array:$joinAuth.store.education.perm#} checked{#/if#}></td>
             </tr>
             {#/if#}
 

@@ -450,21 +450,21 @@ class article {
             $flag_p = in_array('p', $flags_) ? 'p' : '';
             $flag_where = '';
             if($flag_h){
-                $flag_where .= "lt.`flag_h` = 1 AND";
+                $flag_where .= " lt.`flag_h` = 1 AND ";
             }
             if($flag_r){
-                $flag_where .= "lt.`flag_r` = 1 AND";
+                $flag_where .= " lt.`flag_r` = 1 AND ";
             }
             if($flag_b){
-                $flag_where .= "lt.`flag_b` = 1 AND";
+                $flag_where .= " lt.`flag_b` = 1 AND ";
             }
             if($flag_t){
-                $flag_where .= "lt.`flag_t` = 1 AND";
+                $flag_where .= " lt.`flag_t` = 1 AND ";
             }
             if($flag_p){
-                $flag_where .= "lt.`flag_p` = 1 AND";
+                $flag_where .= " lt.`flag_p` = 1 AND ";
             }
-            $flag_where = substr($flag_where, 0, -3);
+            $flag_where = substr($flag_where, 0, -4);
 			$where .= " AND " . $flag_where;
 			// AND `flag` like '%h%' AND `flag` like '%b%'
 		}
@@ -572,7 +572,7 @@ class article {
             // $archives .= $dsql->SetQuery("SELECT l.`id`, l.`title`, l.`admin`, l.`subtitle`, l.`flag`, l.`weight`, l.`keywords`, l.`description`, l.`redirecturl`, l.`litpic`, l.`color`, l.`click`, l.`arcrank`, l.`pubdate`, (SELECT COUNT(`id`)  FROM `#@__articlecommon` WHERE `aid` = l.`id` AND `ischeck` = 1 AND `floor` = 0) AS total, l.`waitpay`, l.`admin`, l.`mold`, l.`zan`, l.`writer`, l.`videotime`, l.`videotype`, l.`videourl` FROM `". $table_all ."` l WHERE l.`del` = 0".$where);
 
             // 这里是要查询的字段
-            $archives = "SELECT l.`id`, l.`title`, l.`admin`, l.`subtitle`, l.`flag`, l.`weight`, l.`keywords`, l.`description`, l.`redirecturl`, l.`litpic`, l.`color`, l.`click`, l.`arcrank`, l.`pubdate`, (SELECT COUNT(`id`)  FROM `#@__articlecommon` WHERE `aid` = l.`id` AND `ischeck` = 1 AND `floor` = 0) AS total, l.`waitpay`, l.`admin`, l.`mold`, l.`zan`, l.`writer`, l.`videotime`, l.`videotype`, l.`videourl`";
+            $archives = "SELECT l.`id`, l.`title`, l.`admin`, l.`subtitle`, l.`flag`, l.`weight`, l.`keywords`, l.`description`, l.`redirecturl`, l.`litpic`, l.`color`, l.`click`, l.`arcrank`, l.`pubdate`, (SELECT COUNT(`id`)  FROM `#@__public_comment` WHERE `aid` = l.`id` AND `ischeck` = 1 AND `pid` = 0 AND `type` = 'article-detail') AS total, l.`waitpay`, l.`admin`, l.`mold`, l.`zan`, l.`writer`, l.`videotime`, l.`videotype`, l.`videourl`";
 
 		}else{
 
@@ -602,7 +602,7 @@ class article {
             // $archives = "SELECT l.`id`, l.`title`, l.`admin`, l.`subtitle`, l.`typeid`, l.`flag`, l.`weight`, l.`keywords`, l.`description`, l.`source`, l.`redirecturl`, l.`litpic`, l.`color`, l.`click`, l.`arcrank`, l.`pubdate`, (SELECT COUNT(`id`)  FROM `#@__articlecommon` WHERE `aid` = l.`id` AND `ischeck` = 1 AND `floor` = 0) AS total, l.`waitpay`, l.`admin`, l.`mold`, l.`zan`, l.`writer`, l.`videotime`, l.`videotype`, l.`videourl` FROM `". $table_all ."` l WHERE `del` = 0".$where;
 
             // 这里是要查询的数据
-            $archives = "SELECT l.`id`, l.`title`, l.`admin`, l.`subtitle`, l.`typeid`, l.`flag`, l.`weight`, l.`keywords`, l.`description`, l.`source`, l.`redirecturl`, l.`litpic`, l.`color`, l.`click`, l.`arcrank`, l.`pubdate`, l.`typeset`, l.`videotype`, l.`videourl`, (SELECT COUNT(`id`)  FROM `#@__articlecommon` WHERE `aid` = l.`id` AND `ischeck` = 1 AND `floor` = 0) AS total, l.`waitpay`, l.`admin`, l.`mold`, l.`zan`, l.`writer`, l.`videotime`, l.`videotype`, l.`videourl`";
+            $archives = "SELECT l.`id`, l.`title`, l.`admin`, l.`subtitle`, l.`typeid`, l.`flag`, l.`weight`, l.`keywords`, l.`description`, l.`source`, l.`redirecturl`, l.`litpic`, l.`color`, l.`click`, l.`arcrank`, l.`pubdate`, l.`typeset`, l.`videotype`, l.`videourl`, (SELECT COUNT(`id`)  FROM `#@__public_comment` WHERE `aid` = l.`id` AND `ischeck` = 1 AND `pid` = 0 AND `type` = 'article-detail') AS total, l.`waitpay`, l.`admin`, l.`mold`, l.`zan`, l.`writer`, l.`videotime`, l.`videotype`, l.`videourl`";
 
 		}
 		//总分页数
@@ -1095,7 +1095,8 @@ class article {
                 $articleDetail["video"] = getFilePath($results[0]['videourl']);
             }
 
-			$archives = $dsql->SetQuery("SELECT `id` FROM `#@__articlecommon` WHERE `aid` = ".$results[0]['id']." AND `ischeck` = 1 AND `floor` = 0");
+            // $archives = $dsql->SetQuery("SELECT `id` FROM `#@__articlecommon` WHERE `aid` = ".$results[0]['id']." AND `ischeck` = 1 AND `floor` = 0");
+            $archives = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'article-detail' AND `aid` = '$id' AND `pid` = 0");
 			$totalCount = $dsql->dsqlOper($archives, "totalCount");
             $articleDetail['common'] = $totalCount;
 
@@ -1502,7 +1503,7 @@ class article {
         $title       = filterSensitiveWords(addslashes($param['title']));
         $typeid      = $param['typeid'];
         $litpic      = $param['litpic'];
-        $body        = filterSensitiveWords($param['body']);
+        $body        = filterSensitiveWords($param['body'], false);
         $imglist     = $param['imglist'];
         $writer      = filterSensitiveWords(addslashes($param['writer']));
         $source      = filterSensitiveWords(addslashes($param['source']));
@@ -1782,7 +1783,7 @@ class article {
         $cityid   = $param['cityid'];
         $typeid   = $param['typeid'];
         $litpic   = $param['litpic'];
-        $body     = filterSensitiveWords($param['body']);
+        $body     = filterSensitiveWords($param['body'], false);
         $imglist  = $param['imglist'];
         $writer   = filterSensitiveWords(addslashes($param['writer']));
         $source   = filterSensitiveWords(addslashes($param['source']));
@@ -2024,7 +2025,7 @@ class article {
 		$param   = $this->param;
 		$aid     = $param['aid']; //信息ID
 
-		$archives = $dsql->SetQuery("SELECT m.`id`, m.`username`, m.`photo`, r.`amount`, r.`date` FROM `#@__member_reward` r LEFT JOIN `#@__member` m ON m.`id` = r.`uid` WHERE r.`aid` = ".$aid." AND r.`state` = 1 ORDER BY r.`id` ASC");
+		$archives = $dsql->SetQuery("SELECT m.`id`, m.`nickname`, m.`photo`, r.`amount`, r.`date` FROM `#@__member_reward` r LEFT JOIN `#@__member` m ON m.`id` = r.`uid` WHERE r.`aid` = ".$aid." AND r.`state` = 1 ORDER BY r.`id` ASC");
 		//总条数
 		$totalCount = $dsql->dsqlOper($archives, "totalCount");
 
@@ -2036,7 +2037,7 @@ class article {
 			if($results){
 				foreach($results as $key => $val){
 					$list[$key]['id']       = $val['id'];
-					$list[$key]['username'] = $val['username'];
+					$list[$key]['username'] = $val['nickname'];
 					$list[$key]['photo']    = !empty($val['photo']) ? getFilePath($val['photo']) : "";
 					$list[$key]['amount']   = $val['amount'];
                     $list[$key]['date']     = $val['date'];
@@ -2940,7 +2941,7 @@ AA;
         $where = $order = "";
         $list = array();
 
-        $loginUid = $userLogin->getMemberID();
+        $loginUid = $this->param['from'] ? $this->param['from'] : $userLogin->getMemberID();
 
         if($type){
             $where .= " AND `type` = $type";

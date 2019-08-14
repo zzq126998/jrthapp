@@ -32,21 +32,21 @@ $(function(){
             }, 1000);
         }
     });
-	   
-	    
 
-	  
 
-	 
-	 
-	 
+
+
+
+
+
+
 	 //广告位滚动
     new Swiper('.banner .swiper-container', {pagination: '.banner .pagination',paginationClickable: true, loop: true, autoplay: 2000, autoplayDisableOnInteraction : false});
 	  $('.next-page').click(function(){
 	    $('.pagination .swiper-pagination-switch').eq(1).click();
 	  });
-	
- 
+
+
     //导航
     $.ajax({
         type: "POST",
@@ -87,7 +87,7 @@ $(function(){
             $('.tcInfo').hide();
         }
     });
-		
+
 		//同城头条动态数据
     $.ajax({
         type: "POST",
@@ -147,7 +147,7 @@ $(function(){
             $('.tcNews').hide();
         }
     });
-	  
+
 	  //出租房源
 	  $.ajax({
             type: "POST",
@@ -176,17 +176,17 @@ $(function(){
                     $('.house-list-box ul').html(newsList.join(''));
                 }else{
                     $('.house-list-box ul').html('<li class="loading">暂无数据！</li>');
-                  
+
                 }
             },
             error: function(){
                 $('.house-list-box ul').html('<li class="loading">加载失败！</li>');
             }
         });
-        
-        
+
+
      //同城分类信息
-     
+
     if($('.info-list-box').size() > 0){
         $.ajax({
             type: "POST",
@@ -200,12 +200,14 @@ $(function(){
                         newsList.push('<li class="info-list">');
                         newsList.push('<a href="'+list[i].url+'">');
                         newsList.push('<div class="for-margin">');
-                        newsList.push('<div class="info-img">');
-                        newsList.push('<img src="'+huoniao.changeFileSize(list[i].litpic, 'small')+'">');
-                        newsList.push('</div>');
+						if(list[i].litpic){
+	                        newsList.push('<div class="info-img">');
+	                        newsList.push('<img src="'+huoniao.changeFileSize(list[i].litpic, 'small')+'">');
+	                        newsList.push('</div>');
+						}
                         newsList.push('<div class="info-detail-box">');
                         newsList.push('<h3 class="info-detail">'+list[i].title+'</h3>');
-                        
+
 //                      newsList.push('<h4>'+list[i].title+'</h4>');
                         var price = '';
                         if(list[i].price_switch == 0){
@@ -215,7 +217,9 @@ $(function(){
                                 price = '<span>价格面议</span>';
                             }
                         }
-                        newsList.push('<p class="info-price">'+price+'</p>');
+						if(price){
+	                        newsList.push('<p class="info-price">'+price+'</p>');
+						}
                         newsList.push('<p class="pub-list-style info-area"><span>'+list[i].address+'</span>&nbsp;<span>'+list[i].pubdate1+'</span></p>');
                         newsList.push('</div>');
                         newsList.push('</div>');
@@ -223,11 +227,11 @@ $(function(){
                         newsList.push('</li>');
                     }
                     $('.info-list-box ul').html(newsList.join(''));
-                    
-                    
+
+
                 }else{
                     $('.info-list-box ul').html('<li class="loading">暂无数据！</li>');
-                    
+
                 }
             },
             error: function(){
@@ -235,8 +239,8 @@ $(function(){
             }
         });
     }
-    
-    
+
+
     //企业招聘
     if($('.job-list-box').size() > 0){
         $.ajax({
@@ -247,7 +251,7 @@ $(function(){
             success: function (data) {
                 if(data && data.state == 100){
                     var newsList = [], list = data.info.list;
-                    
+
                     for (var i = 0; i < list.length; i++){
                         var price= list[i].salary ;
 //                  		console.log(list[i]);
@@ -264,13 +268,13 @@ $(function(){
                     				newsList.push('</div>');
                     			}
                     			if(price != '面议'){
-                    				
+
                     				newsList.push('<p class="job-need">'+list[i].addr[0]+' '+list[i].educational+' '+list[i].experience+'<b class="price-area">'+price+'元</b> </p>');
                     			}else{
-                    				
+
                     				newsList.push('<p class="job-need">'+list[i].addr[0]+' '+list[i].educational+' '+list[i].experience+'<b class="price-area">面议</b> </p>');
                     			}
-                    			
+
                     			newsList.push('<p class="job-label"><b class="news-state">'+list[i].timeUpdate+'</b></p>')
                     		}else{
                     			newsList.push('<li class="job-list">');
@@ -284,10 +288,10 @@ $(function(){
                     			if(price != '面议'){
                     				newsList.push('<b class="price-area">'+ list[i].salary +'元</b> </div>');
                     			}else{
-                    				newsList.push('<b class="price-area">面议</b> </div>');	
+                    				newsList.push('<b class="price-area">面议</b> </div>');
                     			}
                     			newsList.push('<p class="job-need">'+list[i].addr[list[i].addr.length-1]+' '+list[i].educational+' '+list[i].experience+'<b class="news-state">'+list[i].timeUpdate+'</b></p>');
-//                  			
+//
                     		}
                     		newsList.push('</div>');
                     		newsList.push('</a>');
@@ -309,22 +313,22 @@ $(function(){
                         newsList.push('</li>');
                     }
                     $('.job-list-box ul').html(newsList.join(''));
-                    
+
                 }else{
                     $('.job-list-box ul').html('<li class="loading">暂无数据！</li>');
-                    
+
                 }
             },
             error: function(){
                 $('.job-list-box').html('<li class="loading">加载失败！</li>');
             }
-         
+
         });
     }
-    
-    
-    
-    
+
+
+
+
      // 获取推荐商家
     var lng = lat = 0;
     var page = 1, isload = false;
@@ -341,28 +345,28 @@ $(function(){
                     for(var i = 0; i < data.info.list.length; i++){
                         var d = data.info.list[i];
                         html.push('<li class="business-list">');
-                        html.push(' <a href="'+d.url+'">');  
+                        html.push(' <a href="'+d.url+'">');
                         html.push('  <div class="for-margin">');
-                        html.push('  <div class="business-img"><div class="label-business">');  
+                        html.push('  <div class="business-img"><div class="label-business">');
                         if(d.face_qj == "1"){
                             html.push('    <span class="all-area">全景</span>');
                         }
                         if(d.face_video == "1"){
                             html.push('    <span class="business-video">视频</span>');
                         }
-                       
+
                         html.push('</div>');
                         html.push('<img src="'+(d.logo ? d.logo : (templets + 'images/fShop.png'))+'" alt="">');
                         html.push('  </div>');
                         html.push('  <div class="buiness-detail-box">');
-                        html.push('    <h3 class="buiness-detail">'+(d.top == "1" ? '<i></i>' : '')+'<span>'+d.title+'</span> '+(d.type == "2" ? '<s></s>' : '')+'&nbsp;<h3>'); 
+                        html.push('    <h3 class="buiness-detail">'+(d.top == "1" ? '<i></i>' : '')+'<span>'+d.title+'</span> '+(d.type == "2" ? '<s></s>' : '')+'&nbsp;<h3>');
                         html.push('    <p class="business-service">');
                         if(d.typename.length>2){
                         	html.push('				<span class="label label-k">'+d.typename[0]+'<span><span class="label label-o">'+d.typename[1]+'<span><span class="label label-c">'+d.typename[2]+'<span>')
-                        
+
                         }else{
                         	html.push('				<span class="label label-k">'+d.typename[0]+'</span><span class="label label-o">'+d.typename[1]+'</span>')
-                        
+
                         }
                         html.push('    </p>')
                         html.push('    <p class="business-area">'+d.address+'</span></p>');
@@ -375,7 +379,7 @@ $(function(){
 //                          html.push('      <img src="'+templets+'images/hPhone.png" alt="">');
                             html.push('    </a>');
                         }
-                       
+
                         html.push('</li>');
                     }
 
@@ -441,7 +445,7 @@ $(function(){
 
     }
      $('.shop-more a').click(function(){
-     	
+
         var t = $(this);
         if(isload || t.hasClass('disabled')) return;
         page++;
@@ -458,10 +462,10 @@ $.ajax({
     type: 'get',
     dataType: 'json',
     data:'service=huodong&action=hlist&page=1&pageSize=4&keywords=&typeid=0',
-    
+
     success: function(data){
         if(data && data.state == 100){
-           var newsList = [], list = data.info.list;  
+           var newsList = [], list = data.info.list;
            for(var i=0; i<list.length; i++){
            		newsList.push('<div class="activity swiper-slide">');
            		newsList.push('<a href="'+list[i].url+'">');
@@ -471,7 +475,7 @@ $.ajax({
            		newsList.push('</div>');
            		newsList.push('<div class="act-info">');
            		newsList.push('<div class="act-logo"><img src="'+list[i].userphoto+'"/></div>');
-           	
+
 							newsList.push('<div class="act-detail">');
 							newsList.push('<p class="act-name">'+list[i].title+'</p>');
            		newsList.push('<p class="act-in-num">已报名<i>'+list[i].reg+'</i>人</p>');
@@ -484,13 +488,13 @@ $.ajax({
            		newsList.push('</div>');
            		newsList.push('</a>');
            		newsList.push('</div>');
-//         		
+//
            }
            newsList.push('<div class="activity-kong swiper-slide"></div>');
            $('.tc-activity').html(newsList.join(''));
            //同城活动滚动
 				 var swiper = new Swiper('.tc-activity-box .swiper-container', {
-				 		
+
 			      slidesPerView: 2,
 			      spaceBetween:0,
 			      pagination: {
@@ -501,12 +505,12 @@ $.ajax({
         }else{
            $('.tc-activity').html('<div class="loading">暂无数据！</div>');
 //         $('.info-list-box  .look-more').remove();
-          }            
+          }
     },
     error: function(){
                 $('.info-list-box ul').html('<div class="loading">加载失败！</div>');
             }
-  
+
  })
 
 
@@ -531,10 +535,10 @@ $.ajax({
         });
 
     }
-	
+
 	//扫一扫
 	$(".search-scan").delegate(".scan", "click", function(){
-	
+
 		//APP端
   	if(device.indexOf('huoniao') > -1){
       setupWebViewJavascriptBridge(function(bridge) {

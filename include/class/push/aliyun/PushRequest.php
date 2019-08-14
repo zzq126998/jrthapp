@@ -225,6 +225,19 @@ class PushRequest extends \RpcAcsRequest
 		$this->queryParameters["AndroidOpenUrl"]=$androidOpenUrl;
 	}
 
+    /**
+     * @param string $androidNotificationChannel
+     *
+     * @return $this
+     */
+    public function setAndroidNotificationChannel($androidNotificationChannel)
+    {
+        $this->requestParameters['AndroidNotificationChannel'] = $androidNotificationChannel;
+        $this->queryParameters['AndroidNotificationChannel'] = $androidNotificationChannel;
+
+        return $this;
+    }
+
 	public function getAndroidXiaoMiActivity() {
 		return $this->androidXiaoMiActivity;
 	}

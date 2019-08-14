@@ -1,4 +1,5 @@
-body {padding-bottom: .96rem;}
+html,body {min-height:100vh;}
+body{padding-bottom:1.5rem;}
 .contentBox{margin-left: .3rem; margin-right: .3rem;}
 .contentBox p{text-align: center; color: #9399A5;  font-size: .26rem; padding-top: .2rem; padding-bottom: .2rem;}
 .contentBox .nin{color: #ff5151;}

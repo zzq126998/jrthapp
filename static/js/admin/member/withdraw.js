@@ -168,6 +168,24 @@ $(function(){
 		});
 	});
 
+	//打款
+	$("#list").delegate(".payment", "click", function(){
+		var id = $(this).attr('data-id');
+		$.dialog.confirm('此操作不可恢复，您确定要打款吗？', function(){
+			huoniao.showTip("loading", "正在操作，请稍候...");
+			huoniao.operaJson("withdrawEdit.php?dopost=transfers", "id="+id, function(data){
+				if(data.state == 100){
+					huoniao.showTip("success", data.info, "auto");
+					setTimeout(function() {
+						getList();
+					}, 500);
+				}else{
+					$.dialog.alert(data.info);
+				}
+			});
+		});
+	});
+
 	//单选
 	$("#list tbody").delegate("tr", "click", function(event){
 		var isCheck = $(this), checkLength = $("#list tbody tr.selected").length;
@@ -239,7 +257,13 @@ function getList(){
 				listArr.push('  <td class="row3"><span class="check"></span></td>');
 				listArr.push('  <td class="row15 left"><a href="javascript:;" data-id="'+list[i].uid+'" class="userinfo">'+list[i].username+'</a></td>');
 				listArr.push('  <td class="row17 left">'+list[i].tdate+'</td>');
-				listArr.push('  <td class="row30 left">'+list[i].cardname+'（'+list[i].bank+'）'+'<br />'+list[i].cardnum+'</td>');
+
+				var account = list[i].cardname+'（'+(list[i].bank == 'alipay' ? '支付宝' : list[i].bank)+'）'+'<br />'+list[i].cardnum;
+				if(list[i].bank == 'weixin'){
+					account = '微信';
+				}
+
+				listArr.push('  <td class="row30 left">'+account+'</td>');
 				listArr.push('  <td class="row10 left">&yen;'+list[i].amount+'</td>');
 				var state = "&nbsp;";
 				switch (list[i].state) {
@@ -254,7 +278,13 @@ function getList(){
 						break;
 				}
 				listArr.push('  <td class="row10 left">'+state+'</td>');
-				listArr.push('  <td class="row15 left"><a data-id="'+list[i].id+'" data-title="'+list[i].username+'提现详细" href="withdrawEdit.php?dopost=edit&id='+list[i].id+'" title="修改" class="edit">修改</a><a href="javascript:;" title="删除" class="del">删除</a></td>');
+
+				var btn = '';
+				if(list[i].state == '0' && (list[i].bank == 'weixin' || list[i].bank == 'alipay')){
+					btn = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" data-id="'+list[i].id+'" class="payment" title="确认打款">付款</a>';
+				}
+
+				listArr.push('  <td class="row15 left"><a data-id="'+list[i].id+'" data-title="'+list[i].username+'提现详细" href="withdrawEdit.php?dopost=edit&id='+list[i].id+'" title="修改" class="edit">修改</a><a href="javascript:;" title="删除" class="del">删除</a>'+btn+'</td>');
 			}
 
 			obj.find("tbody").html(listArr.join(""));

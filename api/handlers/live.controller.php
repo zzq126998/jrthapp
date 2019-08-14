@@ -142,7 +142,7 @@ function live($params, $content = "", &$smarty = array(), &$repeat = array())
             //判断当前登录会员是否已经关注过要访问的会员
             $userid = $userLogin->getMemberID();
             $fid    = $detailConfig[0]['user'];
-            $sql    = $dsql->SetQuery("SELECT `id` FROM `#@__live_follow` WHERE `tid` = $userid AND `fid` = $fid");
+            $sql    = $dsql->SetQuery("SELECT `id` FROM `#@__member_follow` WHERE `tid` = $userid AND `fid` = $fid AND `for` = ''");
             $ret    = $dsql->dsqlOper($sql, "results");
             if ($ret && is_array($ret)) {
                 $huoniaoTag->assign('isfollow', 1);

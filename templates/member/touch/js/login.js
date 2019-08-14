@@ -8,10 +8,12 @@ $(function(){
     }
 
     var appSign = [];
+    var isapp = 0;
     setTimeout(function(){
       //获取APP信息
       setupWebViewJavascriptBridge(function(bridge) {
         bridge.callHandler("getAppInfo", {}, function(responseData){
+            isapp = 1;
             var data = JSON.parse(responseData);
             if(data.device && data.title && data.serial){
                 appSign.push('deviceTitle='+data.title);
@@ -274,7 +276,7 @@ $(function(){
                     if (data.indexOf("100") > -1) {
                         $("body").append('<div style="display:none;">' + data + '</div>');
 
-                        if (device.indexOf('huoniao') <= -1) {
+                        if (device.indexOf('huoniao') <= -1 && !isapp) {
                             top.location.href = redirectUrl;
                         } else {
                             setupWebViewJavascriptBridge(function (bridge) {

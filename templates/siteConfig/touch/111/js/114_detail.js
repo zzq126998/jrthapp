@@ -21,7 +21,7 @@ $(function(){
 	}
 
 	HN_Location.init(function(data){
-    if (data == undefined || data.address == "" || data.name == "" || data.lat == "" || data.lng == "") {
+    if (data == undefined || data.address == "" || data.lat == "" || data.lng == "") {
 			// msg('定位获取失败');
     }else{
 			$('.item-route').show();
@@ -49,17 +49,54 @@ $(function(){
 			}else if(site_map == 'qq'){
 				mapUrl = 'http://apis.map.qq.com/uri/v1/search?keyword=' + address + ' ' + name;
 			}
-			$('.appMapBtn').attr('href', mapUrl);
+			$('.appMapBtn').attr('data-href', mapUrl);
 
 		}
 	});
 
-	if(site_map == 'baidu'){
-		var map = new BMap.Map("allmap");          // 创建地图实例
-		var point = new BMap.Point(lng, lat);
-		map.centerAndZoom(point, 20);
-		map.disableDragging();
-	}
+	if(site_map == 'baidu') {
+        var map = new BMap.Map("allmap");          // 创建地图实例
+        var point = new BMap.Point(lng, lat);
+        map.centerAndZoom(point, 18);
+        map.disableDragging();
+        map.addControl(new BMap.NavigationControl({
+            anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
+            type: BMAP_NAVIGATION_CONTROL_SMALL
+        }));
+
+    }else if(site_map == 'amap'){
+        var map = new AMap.Map("allmap",{
+            //二维地图显示视口
+            view: new AMap.View2D({
+                center: new AMap.LngLat(lng, lat),//地图中心点
+                zoom: 18 //地图显示的缩放级别
+            }),
+            dragEnable: false
+        });
+        AMap.plugin([
+            'AMap.ToolBar'
+        ], function(){
+            map.addControl(new AMap.ToolBar());
+        });
+    }else if(site_map == 'google'){
+        var map_default_lng  = parseFloat(lat), map_default_lat  = parseFloat(lng);
+        var uluru = {lat: map_default_lng, lng: map_default_lat};
+        setMap();
+      	function setMap(){
+          var map = new google.maps.Map(document.getElementById('allmap'), {
+            center: uluru,
+            zoom: 18,
+            gestureHandling: 'none',
+            zoomControl: true,
+            mapTypeControl: false,
+            streetViewControl: false,
+            zoomControlOptions: {
+              style: google.maps.ZoomControlStyle.SMALL
+            }
+          }); 
+        }
+    }
+
 
 	//电话
 	$('.tel').bind('click', function(){

@@ -1042,12 +1042,14 @@ class shop {
 				$list[$key]['productCount'] = $pcount;
 
 				//评论数量
-				$sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__shop_common` c LEFT JOIN `#@__shop_order` o ON o.`id` = c.`aid` WHERE o.`store` = ".$val['id']." AND c.`ischeck` = 1");
+				// $sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__shop_common` c LEFT JOIN `#@__shop_order` o ON o.`id` = c.`aid` WHERE o.`store` = ".$val['id']." AND c.`ischeck` = 1");
+				$sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__public_comment` c LEFT JOIN `#@__shop_order` o ON o.`id` = c.`oid` WHERE o.`orderstate` = 3 AND c.`ischeck` = 1 AND c.`type` = 'shop-order' AND o.`store` = ".$val['id']." AND c.`pid` = 0");
 				$rcount = $dsql->dsqlOper($sql, "totalCount");
 				$list[$key]['reviewCount'] = $rcount;
 
 				//好评率
-				$sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__shop_common` c LEFT JOIN `#@__shop_order` o ON o.`id` = c.`aid` WHERE o.`store` = ".$val['id']." AND c.`rating` = 1 AND c.`ischeck` = 1");
+				// $sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__shop_common` c LEFT JOIN `#@__shop_order` o ON o.`id` = c.`aid` WHERE o.`store` = ".$val['id']." AND c.`rating` = 1 AND c.`ischeck` = 1");
+				$sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__public_comment` c LEFT JOIN `#@__shop_order` o ON o.`id` = c.`oid` WHERE o.`orderstate` = 3 AND c.`ischeck` = 1 AND c.`rating` = 1 AND c.`type` = 'shop-order' AND o.`store` = ".$val['id']." AND c.`pid` = 0");
 				$hpcount = $dsql->dsqlOper($sql, "totalCount");
 
 				$rating = $hpcount > 0 ? ($hpcount/$rcount * 100) : 0;
@@ -1167,10 +1169,12 @@ class shop {
 			$results[0]['collect'] = $collect == "has" ? 1 : 0;
 
 			//评论数量
-			$sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__shop_common` c LEFT JOIN `#@__shop_order` o ON o.`id` = c.`aid` WHERE o.`store` = '$id' AND c.`ischeck` = 1");
+			// $sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__shop_common` c LEFT JOIN `#@__shop_order` o ON o.`id` = c.`aid` WHERE o.`store` = '$id' AND c.`ischeck` = 1");
+			$sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__public_comment` c LEFT JOIN `#@__shop_order` o ON o.`id` = c.`oid` WHERE o.`orderstate` = 3 AND c.`ischeck` = 1 AND c.`type` = 'shop-order' AND o.`store` = '$id' AND c.`pid` = 0");
 			$rcount = $dsql->dsqlOper($sql, "totalCount");
 			//好评率
-			$sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__shop_common` c LEFT JOIN `#@__shop_order` o ON o.`id` = c.`aid` WHERE o.`store` = '$id' AND c.`rating` = 1 AND c.`ischeck` = 1");
+			// $sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__shop_common` c LEFT JOIN `#@__shop_order` o ON o.`id` = c.`aid` WHERE o.`store` = '$id' AND c.`rating` = 1 AND c.`ischeck` = 1");
+			$sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__public_comment` c LEFT JOIN `#@__shop_order` o ON o.`id` = c.`oid` WHERE o.`orderstate` = 3 AND c.`ischeck` = 1 AND c.`rating` = 1 AND c.`type` = 'shop-order' AND o.`store` = '$id' AND c.`pid` = 0");
 			$hpcount = $dsql->dsqlOper($sql, "totalCount");
 
 			$rating = $hpcount > 0 ? ($hpcount/$rcount * 100) : 0;
@@ -1328,7 +1332,11 @@ class shop {
 		}else{
 
 			$now = GetMkTime(time());//OR (p.`kstime` <= $now AND p.`ketime` > $now) OR (p.`kstime` = 0 AND p.`ketime` = 0)
-			$where .= " AND ((p.`kstime` <= $now AND p.`ketime` > $now) OR (p.`btime` <= $now AND p.`etime` > $now) OR (p.`btime` = 0 AND p.`etime` = 0 AND p.`kstime` = 0 AND p.`ketime` = 0))";
+			$where .= " AND (
+				(p.`kstime` <= $now AND p.`ketime` > $now) OR
+				(p.`btime` <= $now AND p.`etime` > $now) OR
+				(p.`btime` = 0 AND p.`etime` = 0 AND p.`kstime` = 0 AND p.`ketime` = 0)
+			)";
 
 		}
 
@@ -1629,7 +1637,8 @@ class shop {
 				$list[$key]['hot']    = $hot;
 				$list[$key]['panic']  = $panic;
 
-				$sql = $dsql->SetQuery("SELECT `id` FROM `#@__shop_common` WHERE `pid` = ".$val['id']);
+				// $sql = $dsql->SetQuery("SELECT `id` FROM `#@__shop_common` WHERE `pid` = ".$val['id']);
+				$sql = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'shop-order' AND `aid` = ".$val['id']." AND `pid` = 0");
 				$comment = $dsql->dsqlOper($sql, "totalCount");
 				$list[$key]['comment']  = $comment;
 
@@ -1980,7 +1989,8 @@ class shop {
 
 
 			//评价
-			$sql = $dsql->SetQuery("SELECT `rating` FROM `#@__shop_common` c WHERE c.`ischeck` = 1 AND c.`pid` = ".$id);
+			// $sql = $dsql->SetQuery("SELECT `rating` FROM `#@__shop_common` c WHERE c.`ischeck` = 1 AND c.`pid` = ".$id);
+			$sql = $dsql->SetQuery("SELECT c.`rating` FROM `#@__public_comment` c WHERE c.`ischeck` = 1 AND c.`type` = 'shop-order' AND c.`aid` = '$id' AND c.`pid` = 0");
 			$res = $dsql->dsqlOper($sql, "results");
 			$rat = $rat1 = 0;
 			foreach($res as $k => $v){
@@ -1996,7 +2006,8 @@ class shop {
 			}
 			$totalCommon  = $dsql->dsqlOper($sql, "totalCount");  //评价总人数
 
-			$sql = $dsql->SetQuery("SELECT avg(c.`score1`) s1, avg(c.`score2`) s2, avg(c.`score3`) s3 FROM `#@__shop_common` c WHERE c.`ischeck` = 1 AND c.`pid` = ".$id);
+			// $sql = $dsql->SetQuery("SELECT avg(c.`score1`) s1, avg(c.`score2`) s2, avg(c.`score3`) s3 FROM `#@__shop_common` c WHERE c.`ischeck` = 1 AND c.`pid` = ".$id);
+			$sql = $dsql->SetQuery("SELECT avg(c.`sco1`) s1, avg(c.`sco2`) s2, avg(c.`sco3`) s3 FROM `#@__public_comment` c WHERE c.`ischeck` = 1 AND c.`type` = 'shop-order' AND c.`aid` = '$id' AND c.`pid` = 0");
 			$res = $dsql->dsqlOper($sql, "results");
 			$score1 = $res[0]['s1'];  //分项1
 			$score2 = $res[0]['s2'];  //分项2
@@ -2058,8 +2069,10 @@ class shop {
 	public function getCartList(){
 
 		global $dsql;
+		global $langData;
 
 		$param = $this->param;
+		if(is_array($param)) unset($param['time']);
 
 		//区分购物车或下单商品列表
 		if(!empty($param)){
@@ -4805,6 +4818,7 @@ class shop {
 			$orderDetail["orderdate"]  = $results["orderdate"];
 			$orderDetail["common"]     = $results["common"];
 			$orderDetail["logistic"]   = $results["logistic"];
+			$orderDetail["userid"]     = $results["userid"];
 
 
 			//店铺信息
@@ -4939,6 +4953,8 @@ class shop {
 					$proDetail[$p]['id']        = $detailConfig['id'];
 					$proDetail[$p]['title']     = $detailConfig['title'];
 					$proDetail[$p]['litpic']    = $detailConfig['litpic'];
+					$proDetail[$p]['orderid']   = $value['orderid'];
+					$proDetail[$p]['proid']     = $value['proid'];
 					$proDetail[$p]['speid']     = $value['speid'];
 					$proDetail[$p]['specation'] = $value['specation'];
 					$proDetail[$p]['price']     = $value['price'];
@@ -4951,7 +4967,8 @@ class shop {
 					//评价
 					if($results['orderstate'] == 3){
 
-						$sql = $dsql->SetQuery("SELECT `rating`, `score1`, `score2`, `score3`, `pics`, `content`, `ischeck` FROM `#@__shop_common` WHERE `aid` = ".$id." AND `speid` = '".$value['speid']."' AND `pid` = ".$value['proid']);
+						// $sql = $dsql->SetQuery("SELECT `rating`, `score1`, `score2`, `score3`, `pics`, `content`, `ischeck` FROM `#@__shop_common` WHERE `aid` = ".$id." AND `speid` = '".$value['speid']."' AND `pid` = ".$value['proid']);
+						$sql = $dsql->SetQuery("SELECT `rating`, `sco1` as score1, `sco2` as score2, `sco3` as score3, `pics`, `content`, `ischeck` FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'shop-order' AND `oid` = '$id' AND `speid` = '".$value['speid']."' AND `pid` = 0");
 						$ret = $dsql->dsqlOper($sql, "results");
 						$common = array();
 						if($ret){

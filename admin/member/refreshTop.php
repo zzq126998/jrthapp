@@ -185,6 +185,46 @@ if(!empty($_POST)){
 		$cfg_car_topPlan = serialize($car_topPlanArr);
 	}
 
+	//教育
+	if(in_array('education', $installModuleArr)){
+		$cfg_education_refreshFreeTimes = (int)$education_refreshFreeTimes;
+		$cfg_education_refreshNormalPrice = (float)$education_refreshNormalPrice;
+
+		$education_refreshArr = array();
+		if($education_refresh){
+			for ($i = 0; $i < count($education_refresh['times']); $i++) {
+				array_push($education_refreshArr, array(
+					'times' => (int)$education_refresh['times'][$i],
+					'day' => (int)$education_refresh['day'][$i],
+					'price' => (float)$education_refresh['price'][$i]
+				));
+			}
+		}
+		$cfg_education_refreshSmart = serialize($education_refreshArr);
+
+		$education_topNormalArr = array();
+		if($education_topNormal){
+			for ($i = 0; $i < count($education_topNormal['day']); $i++) {
+				array_push($education_topNormalArr, array(
+					'day' => (int)$education_topNormal['day'][$i],
+					'price' => (float)$education_topNormal['price'][$i]
+				));
+			}
+		}
+		$cfg_education_topNormal = serialize($education_topNormalArr);
+
+		$education_topPlanArr = array();
+		if($education_topPlan){
+			for ($i = 0; $i < count($education_topPlan['all']); $i++) {
+				array_push($education_topPlanArr, array(
+					'all' => (float)$education_topPlan['all'][$i],
+					'day' => (float)$education_topPlan['day'][$i]
+				));
+			}
+		}
+		$cfg_education_topPlan = serialize($education_topPlanArr);
+	}
+
 	adminLog("修改刷新置顶配置");
 
 
@@ -228,6 +268,15 @@ if(!empty($_POST)){
 		$configFile .= "\$cfg_car_refreshSmart = '".$cfg_car_refreshSmart."';\r\n";
 		$configFile .= "\$cfg_car_topNormal = '".$cfg_car_topNormal."';\r\n";
 		$configFile .= "\$cfg_car_topPlan = '".$cfg_car_topPlan."';\r\n";
+	}
+
+	//教育
+	if(in_array('education', $installModuleArr)){
+		$configFile .= "\$cfg_education_refreshFreeTimes = ".(int)$cfg_education_refreshFreeTimes.";\r\n";
+		$configFile .= "\$cfg_education_refreshNormalPrice = ".(float)$cfg_education_refreshNormalPrice.";\r\n";
+		$configFile .= "\$cfg_education_refreshSmart = '".$cfg_education_refreshSmart."';\r\n";
+		$configFile .= "\$cfg_education_topNormal = '".$cfg_education_topNormal."';\r\n";
+		$configFile .= "\$cfg_education_topPlan = '".$cfg_education_topPlan."';\r\n";
 	}
 
 	$configFile .= "?".">";
@@ -296,6 +345,15 @@ if(file_exists($tpl."/".$templates)){
 		$huoniaoTag->assign('car_refreshSmart', $cfg_car_refreshSmart ? unserialize($cfg_car_refreshSmart) : array());
 		$huoniaoTag->assign('car_topNormal', $cfg_car_topNormal ? unserialize($cfg_car_topNormal) : array());
 		$huoniaoTag->assign('car_topPlan', $cfg_car_topPlan ? unserialize($cfg_car_topPlan) : array());
+	}
+
+	//教育
+	if(in_array('education', $installModuleArr)){
+		$huoniaoTag->assign('education_refreshFreeTimes', (int)$cfg_education_refreshFreeTimes);
+		$huoniaoTag->assign('education_refreshNormalPrice', (float)$cfg_education_refreshNormalPrice);
+		$huoniaoTag->assign('education_refreshSmart', $cfg_education_refreshSmart ? unserialize($cfg_education_refreshSmart) : array());
+		$huoniaoTag->assign('education_topNormal', $cfg_education_topNormal ? unserialize($cfg_education_topNormal) : array());
+		$huoniaoTag->assign('education_topPlan', $cfg_education_topPlan ? unserialize($cfg_education_topPlan) : array());
 	}
 
 	$huoniaoTag->compile_dir = HUONIAOROOT."/templates_c/admin/refreshTop";  //设置编译目录

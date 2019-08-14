@@ -70,7 +70,7 @@ if(empty($auth) && (empty($id) || ($action != 'filecheck' && $action != 'sync' &
 
     //列出需要校验的文件范围
       $md5data = array();
-  	checkfiles('./', '\.(php|htaccess)', 0, 'fileSync.php,skin.php,print.php');
+  	checkfiles('./', '\.(php|htaccess)', 0, 'fileSync_hn.php,skin.php,print.php');
   	checkfiles($adminFolder . '/', '', 1, '', $adminFolder . '/', 'adminFolder/');
   	checkfiles('api/', '\.(php|htm|html|png|jpg|jpeg|gif)', 1, 'appConfig.json,config.inc.php,checkOrder.log,diancanPrint.log,login.log,memberEditWaimaiShop.log,pay.log,push.log');
   	checkfiles('data/admin/', '\.php');
@@ -136,7 +136,7 @@ if(empty($auth) && (empty($id) || ($action != 'filecheck' && $action != 'sync' &
   	$httpdown->OpenUrl($downloadUrl); # 远程文件地址
   	$r = $httpdown->SaveToBin(HUONIAOROOT . $file); # 保存路径及文件名
     $httpdown->Close(); # 释放资源
-    
+
     if(!$r){
       die($callback.'({"state": 200, "info": '.json_encode($httpdown->m_error).'})');
     }
@@ -144,7 +144,7 @@ if(empty($auth) && (empty($id) || ($action != 'filecheck' && $action != 'sync' &
   	if(!file_exists(HUONIAOROOT . $file)) {
   		die($callback.'({"state": 200, "info": '.json_encode("同步失败，请手动操作！").'})');
   	}
-    
+
   	die($callback.'({"state": 100, "info": '.json_encode("同步成功！").'})');
 
 
@@ -913,7 +913,7 @@ function checkfiles($currentdir, $ext = '', $sub = 1, $skip = '', $adminFolderNa
 
         if(is_dir($file)) {
           $md5data[str_replace(HUONIAOROOT . '/', '*', $file_)] = md5($file);
-        } else {
+        } elseif(strstr($entry, '.')) {
           if(file_exists($file)){
             $md5data[str_replace(HUONIAOROOT . '/', '*', $file_)] = md5_file($file);
           }else{
@@ -929,9 +929,9 @@ function checkfiles($currentdir, $ext = '', $sub = 1, $skip = '', $adminFolderNa
 // 同步分表
 
 function sync_fenbiao($base = "articlelist"){
-  global $cfg_cookieDomain;
-  PutCookie('syncFenbiao', 'article', 60);
-  PutCookie('cookieDomain', $cfg_cookieDomain, 60);
+  // global $cfg_cookieDomain;
+  // PutCookie('syncFenbiao', 'article', 60);
+  // PutCookie('cookieDomain', $cfg_cookieDomain, 60);
 
   // $sql = $dsql->SetQuery("SELECT id FROM `#@__site_sub_tablelist` WHERE `service` = 'article' LIMIT 1");
   // $tabs = $dsql->dsqlOper($sql, "results");
@@ -999,7 +999,7 @@ function compare_database($new, $old, $orig_table, $fb_table){
         $change['Comment'] = $table_detail['Comment'];
       if (!empty($change))
         $diff['table']['change'][$fb_table] = $change;
-    
+
   }
 
   //index

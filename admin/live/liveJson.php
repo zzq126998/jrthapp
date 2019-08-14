@@ -142,24 +142,35 @@ if($action == "live"){
 }else if($action == "addblack"){
     $archives = $dsql->SetQuery("SELECT * FROM `#@__liveaccount` where `state` = 1");
     $results  = $dsql->dsqlOper($archives, "results");
+    $pulltype=$results[0]['pulltype'];
     $vhost=$results[0]['vhost'];
     $appName=$results[0]['appname'];
 
-    $apiParams = array(
-        'Action'=>'ForbidLiveStream',
-        'DomainName'=>$vhost,
-        'AppName'=>$appName,
-        'StreamName'=>$stream,
-        'LiveStreamType'=>'publisher'
-    );
+    //第三方
+    if($pulltype){
 
-    $dataresult=$aliLive->aliApi($apiParams,$credential="GET", $domain="live.aliyuncs.com");
-    if(isset( $dataresult['Message'])){
-        die('{"state": 200, "info": ' . json_encode( $dataresult['Message']) . '}');
-    }else{
         $archives = $dsql->SetQuery("UPDATE `#@__".$dopost."list` SET `state` ='3' WHERE `id` = ".$id);
         $results = $dsql->dsqlOper($archives, "update");
         die('{"state": 100, "info": ' . json_encode( '成功加入黑名单') . '}');
+
+    //系统
+    }else{
+        $apiParams = array(
+            'Action'=>'ForbidLiveStream',
+            'DomainName'=>$vhost,
+            'AppName'=>$appName,
+            'StreamName'=>$stream,
+            'LiveStreamType'=>'publisher'
+        );
+
+        $dataresult=$aliLive->aliApi($apiParams,$credential="GET", $domain="live.aliyuncs.com");
+        if(isset( $dataresult['Message'])){
+            die('{"state": 200, "info": ' . json_encode( $dataresult['Message']) . '}');
+        }else{
+            $archives = $dsql->SetQuery("UPDATE `#@__".$dopost."list` SET `state` ='3' WHERE `id` = ".$id);
+            $results = $dsql->dsqlOper($archives, "update");
+            die('{"state": 100, "info": ' . json_encode( '成功加入黑名单') . '}');
+        }
     }
 }else if($action == "delblack"){
     $archives = $dsql->SetQuery("SELECT * FROM `#@__liveaccount` where `state` = 1");
@@ -385,6 +396,82 @@ if($action == "live"){
         }
     }else{
         die('{"state": 200, "info": '.json_encode("参数错误").'}');
+    }
+// 主播列表
+}else if($action == "liveAnchor"){
+    if(!testPurview("liveAnchor")){
+        die('{"state": 200, "info": '.json_encode("对不起，您无权使用此功能！").'}');
+    };
+
+    $pagestep = $pagestep == "" ? 10 : $pagestep;
+    $page     = $page == "" ? 1 : $page;
+
+    $totalPage=0;
+    $totalCount=0;
+    $where='';
+    $inner = "";
+    if($sKeyword != ""){
+        // $inner = "INNER JOIN (SELECT u.id FROM huoniao_member u WHERE (u.mtype = 1 || u.mtype = 2) AND (u.username LIKE '%{$sKeyword}%' || u.nickname LIKE '%{$sKeyword}%' || u.company LIKE '%{$sKeyword}%' || u.phone LIKE '%{$sKeyword}%' || u.email LIKE '%{$sKeyword}%') ) AS m ON a.uid = m.id";
+        $where .= " AND (m.username LIKE '%{$sKeyword}%' || m.nickname LIKE '%{$sKeyword}%' || m.company LIKE '%{$sKeyword}%' || m.phone LIKE '%{$sKeyword}%' || m.email LIKE '%{$sKeyword}%')";
+    }
+
+    $archives = $dsql->SetQuery("SELECT a.`id` FROM `#@__live_anchor` a LEFT JOIN `#@__member` m ON m.`id` = a.`uid` WHERE 1 = 1");
+    //总条数
+    $totalCount = $dsql->dsqlOper($archives, "totalCount");
+    //总分页数
+    $totalPage = ceil($totalCount/$pagestep);
+
+    $where .= " order by a.`id` desc";
+
+    $atpage = $pagestep*($page-1);
+    $where .= " LIMIT $atpage, $pagestep";
+
+    $archives = $dsql->SetQuery("SELECT a.*, m.`username`, m.`mtype`, m.`nickname`, m.`phone`, m.`photo` FROM `#@__live_anchor` a LEFT JOIN `#@__member` m ON m.`id` = a.`uid` WHERE 1=1".$where);
+    $results = $dsql->dsqlOper($archives, "results");
+
+    if(count($results) > 0){
+        $list=array();
+        foreach($results as $key=>$value){
+            $param = array(
+                "service"     => "live",
+                "template"    => "anchor_detail",
+                "id"          => $value['id']
+            );
+            $value['url']     = getUrlPath($param);
+            $value['pubdate'] = date("Y-m-d", $value['pubdate']);
+
+            $sql = $dsql->SetQuery("SELECT COUNT(*) total FROM `#@__livelist` WHERE `user` = ".$value['uid']);
+            $res = $dsql->dsqlOper($sql, "results");
+            $value['total'] = $res[0]['total'];
+
+            // 统计关注数
+            $sql = $dsql->SetQuery("SELECT count(`id`) t FROM `#@__member_follow` WHERE `fid` = " . $value['uid'] . " AND `for` = 'live'");
+            $fansret = $dsql->dsqlOper($sql, "results");
+            $value['totalFans'] = $fansret[0]['t'];
+
+            $list[$key]=$value;
+        }
+        if(count($list) > 0){
+            echo '{"state": 100, "info": '.json_encode("获取成功").', "pageInfo": {"totalPage": '.$totalPage.', "totalCount": '.$totalCount.'}, "anchorList": '.json_encode($list).'}';
+        }else{
+            echo '{"state": 101, "info": '.json_encode("暂无相关信息").', "pageInfo": {"totalPage": '.$totalPage.', "totalCount": '.$totalCount.'}}';
+        }
+    }else{
+        echo '{"state": 101, "info": '.json_encode("暂无相关信息").', "pageInfo": {"totalPage": '.$totalPage.', "totalCount": '.$totalCount.'}}';
+    }
+    die;
+// 修改主播推荐状态
+}else if($action == "liveAnchorRec"){
+    $id = (int)$_POST['id'];
+    $rec = (int)$_POST['rec'];
+    if($id){
+        $sql = $dsql->SetQuery("UPDATE `#@__live_anchor` SET `rec` = $rec WHERE `id` = $id");
+        $res = $dsql->dsqlOper($sql, "update");
+        if($res == "ok"){
+            echo '{"state": 100, "info": '.json_encode("操作成功").'}';
+        }else{
+            echo '{"state": 200, "info": '.json_encode("操作失败").'}';
+        }
     }
 }else{
     echo '{"state": 200, "info": '.json_encode("操作失败，参数错误！").'}';

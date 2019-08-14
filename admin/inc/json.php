@@ -1285,4 +1285,76 @@ if ($action == "checkFtpConn") {
         }
     }
     die;
+
+//检查会员是否已经存在（添加教育店铺）
+} elseif ($action == "checkUser_educationstore") {
+    
+    $key = $_POST['key'];
+    $result = "";
+    if (!empty($key)) {
+        $userSql = $dsql->SetQuery("SELECT `id`, `username`, `nickname`, `phone` FROM `#@__member` WHERE `username` like '%$key%' LIMIT 0, 10");
+        $userResult = $dsql->dsqlOper($userSql, "results");
+        if ($userResult) {
+            $result = json_encode($userResult);
+        }
+
+        $where = "";
+        if (!empty($id)) {
+            $where = " AND company.id != " . $id;
+        }
+
+        $userSql = $dsql->SetQuery("SELECT user.username, user.phone, user.nickname, company.id FROM `#@__education_store` company LEFT JOIN `#@__member` user ON user.id = company.userid WHERE user.username = '$key'" . $where);
+        $userResult = $dsql->dsqlOper($userSql, "results");
+        if ($userResult) {
+            echo 200;
+        } else {
+            echo $result;
+        }
+    }
+    die;
+//模糊匹配家政公司
+} elseif ($action == "checkEducationStore") {
+    $key = $_POST['key'];
+    if (!empty($key)) {
+        $where = " AND `cityid` in (0,$adminCityIds)";
+        $commSql = $dsql->SetQuery("SELECT `id`, `title` FROM `#@__education_store` WHERE `title` like '%$key%'".$where." LIMIT 0, 10");
+        $commResult = $dsql->dsqlOper($commSql, "results");
+        if ($commResult) {
+            echo json_encode($commResult);
+        }
+    }
+    die;
+//检查会员是否已经存在（添加教育店铺）
+} elseif ($action == "checkUser_educationtutor") {
+    
+    $key = $_POST['key'];
+    $id  = $_POST['id'];
+    $result = "";
+    if (!empty($key)) {
+        $userSql = $dsql->SetQuery("SELECT `id`, `username`, `nickname`, `phone` FROM `#@__member` WHERE `username` like '%$key%' LIMIT 0, 10");
+        $userResult = $dsql->dsqlOper($userSql, "results");
+        if ($userResult) {
+            $result = json_encode($userResult);
+        }
+
+        $where = "";
+        if (!empty($id)) {
+            $where = " AND company.userid = " . $id;
+        }
+        //商家
+        $commSql = $dsql->SetQuery("SELECT `id`, `title` FROM `#@__education_store` WHERE `userid` = '$id'");
+        $commResult = $dsql->dsqlOper($commSql, "results");
+        if ($commResult) {
+            $where = " AND company.userid = " . $commResult[0]['id'];
+        }
+
+        $userSql = $dsql->SetQuery("SELECT company.id FROM `#@__education_tutor` company WHERE 1=1" . $where);
+        $userResult = $dsql->dsqlOper($userSql, "results");
+        if ($userResult) {
+            echo 200;
+        } else {
+            echo $result;
+        }
+    }
+    die;
 }

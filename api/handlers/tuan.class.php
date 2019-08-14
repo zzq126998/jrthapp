@@ -1143,7 +1143,7 @@ class tuan {
 					$sql = $dsql->SetQuery("SELECT `id` FROM `#@__tuanlist` WHERE `arcrank` = 1 and `sid` = ".$val['id']);
 					$tuanRes = $dsql->dsqlOper($sql, "results");
 
-					$sql = $dsql->SetQuery("SELECT avg(c.`rating`) r FROM `#@__tuancommon` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`aid` WHERE o.`orderstate` = 3 AND c.`ischeck` = 1 AND o.`proid` = ".$tuanRes[0]['id']);
+					$sql = $dsql->SetQuery("SELECT avg(c.`rating`) r FROM `#@__public_comment` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`oid` WHERE c.`type` = 'tuan-order' AND c.`pid` = 0 AND o.`orderstate` = 3 AND c.`ischeck` = 1 AND o.`proid` = ".$tuanRes[0]['id']);
 					$ratingRes = $dsql->dsqlOper($sql, "results");
 					$list[$key]['rating'] = number_format($ratingRes[0]['r'],1);
 				}elseif($totalCount>1){
@@ -1151,7 +1151,7 @@ class tuan {
 					$tuanRes = $dsql->dsqlOper($sql, "results");
 					$rating = array();
 					foreach($tuanRes as $row){
-						$sql = $dsql->SetQuery("SELECT avg(c.`rating`) r FROM `#@__tuancommon` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`aid` WHERE o.`orderstate` = 3 AND c.`ischeck` = 1 AND o.`proid` = ".$row['id']);
+						$sql = $dsql->SetQuery("SELECT avg(c.`rating`) r FROM `#@__public_comment` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`oid` WHERE c.`type` = 'tuan-order' AND c.`pid` = 0 AND o.`orderstate` = 3 AND c.`ischeck` = 1 AND o.`proid` = ".$row['id']);
 						$ratingRes= $dsql->dsqlOper($sql, "results");
 						$rating[] = $ratingRes[0]['r'];
 					}
@@ -1295,14 +1295,16 @@ class tuan {
 			$storeDetail["qqArr"]    = $qq;
 
 			//评价
-			$sql = $dsql->SetQuery("SELECT avg(`rating`) r, avg(`score1`) s1, avg(`score2`) s2, avg(`score3`) s3 FROM `#@__tuan_storecommon`  WHERE `ischeck` = 1 AND `aid` = ".$id);
+			// $sql = $dsql->SetQuery("SELECT avg(`rating`) r, avg(`score1`) s1, avg(`score2`) s2, avg(`score3`) s3 FROM `#@__tuan_storecommon`  WHERE `ischeck` = 1 AND `aid` = ".$id);
+			$sql = $dsql->SetQuery("SELECT avg(`rating`) r, avg(`sco1`) s1, avg(`sco2`) s2, avg(`sco3`) s3 FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'tuan-store' AND `aid` = '$id' AND `pid` = 0");
 			$res = $dsql->dsqlOper($sql, "results");
 			$rating = !empty($res[0]['r']) ? $res[0]['r'] : 0;		//总评分
 			$score1 = $res[0]['s1'];  //分项1
 			$score2 = $res[0]['s2'];  //分项2
 			$score3 = $res[0]['s3'];  //分项3
 
-			$sql = $dsql->SetQuery("SELECT `id` FROM `#@__tuan_storecommon`  WHERE `ischeck` = 1 AND `aid` = ".$id);
+			// $sql = $dsql->SetQuery("SELECT `id` FROM `#@__tuan_storecommon`  WHERE `ischeck` = 1 AND `aid` = ".$id);
+			$sql = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'tuan-store' AND `aid` = '$id' AND `pid` = 0");
 			$totalCommon  = $dsql->dsqlOper($sql, "totalCount");  //评价总人数
 			$rating1      = $dsql->dsqlOper($sql." AND `rating` = 1", "totalCount");  //1分
 			$rating2      = $dsql->dsqlOper($sql." AND `rating` = 2", "totalCount");  //2分
@@ -1325,7 +1327,7 @@ class tuan {
 			$tuanRes = $dsql->dsqlOper($sql, "results");
 			$rating = $price = array();
 			foreach($tuanRes as $row){
-				$sql = $dsql->SetQuery("SELECT avg(c.`rating`) r FROM `#@__tuancommon` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`aid` WHERE o.`orderstate` = 3 AND c.`ischeck` = 1 AND o.`proid` = ".$results[0]['id']);
+				$sql = $dsql->SetQuery("SELECT avg(c.`rating`) r FROM `#@__public_comment` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`oid` WHERE c.`pid` = 0 AND c.`type` = 'tuan-order' o.`orderstate` = 3 AND c.`ischeck` = 1 AND o.`proid` = ".$results[0]['id']);
 				$ratingRes= $dsql->dsqlOper($sql, "results");
 				$price[]  = $row['price'];
 			}
@@ -1506,7 +1508,8 @@ class tuan {
 
 			//统计评论数量
 			//$sql = $dsql->SetQuery("SELECT count(c.`id`) totalCommon FROM `#@__tuancommon` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`aid` LEFT JOIN `#@__tuanlist` l ON l.`id` = o.`proid` WHERE c.`ischeck` = 1 AND l.`sid` = " . $id);
-			$sql = $dsql->SetQuery("SELECT count(`id`) totalCommon FROM `#@__tuan_storecommon`  WHERE `ischeck` = 1 AND `aid` = " . $id);
+			// $sql = $dsql->SetQuery("SELECT count(`id`) totalCommon FROM `#@__tuan_storecommon`  WHERE `ischeck` = 1 AND `aid` = " . $id);
+			$sql = $dsql->SetQuery("SELECT count(`id`) totalCommon FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'tuan-store' AND `aid` = '$id' AND `pid` = 0");
 			$ret = $dsql->dsqlOper($sql, "results");
 			$storeDetail['totalCommon'] = $ret[0]['totalCommon'];
 
@@ -2070,11 +2073,11 @@ class tuan {
 				}
 
 				//评价
-				$sql = $dsql->SetQuery("SELECT avg(c.`rating`) r FROM `#@__tuancommon` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`aid` WHERE o.`orderstate` = 3 AND c.`ischeck` = 1 AND o.`proid` = ".$val['id']);
+				$sql = $dsql->SetQuery("SELECT avg(c.`rating`) r FROM `#@__public_comment` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`oid` WHERE c.`type` = 'tuan-order' AND c.`pid` = 0 AND o.`orderstate` = 3 AND c.`ischeck` = 1 AND o.`proid` = ".$val['id']);
 				$res = $dsql->dsqlOper($sql, "results");
 				$rating = $res[0]['r'];
 
-				$sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__tuancommon` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`aid` WHERE o.`orderstate` = 3 AND c.`ischeck` = 1 AND o.`proid` = ".$val['id']);
+				$sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__public_comment` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`oid` WHERE c.`type` = 'tuan-order' AND c.`pid` = 0 AND o.`orderstate` = 3 AND c.`ischeck` = 1 AND o.`proid` = ".$val['id']);
 				$totalCommon  = $dsql->dsqlOper($sql, "totalCount");  //评价总人数
 
 				$list[$key]['common']['rating'] = number_format($rating, 1);
@@ -2114,7 +2117,7 @@ class tuan {
 					$list[$key]['pubdate']   = $val['pubdate'];
 
 					//评价数量
-					$sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__tuancommon` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`aid` WHERE o.`orderstate` = 3 AND c.`ischeck` = 1 AND o.`proid` = ".$val['id']);
+					$sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__public_comment` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`oid` WHERE c.`type` = 'tuan-order' AND c.`pid` = 0 AND o.`orderstate` = 3 AND c.`ischeck` = 1 AND o.`proid` = ".$val['id']);
 					$totalCommon  = $dsql->dsqlOper($sql, "totalCount");
 					$list[$key]['common'] = $totalCommon;
 
@@ -2314,14 +2317,16 @@ class tuan {
 			$tuanDetail['store'] = $this->storeDetail();
 
 			//评价
-			$sql = $dsql->SetQuery("SELECT avg(c.`rating`) r, avg(c.`score1`) s1, avg(c.`score2`) s2, avg(c.`score3`) s3 FROM `#@__tuancommon` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`aid` WHERE o.`orderstate` = 3 AND c.`ischeck` = 1 AND o.`proid` = ".$id);
+			// $sql = $dsql->SetQuery("SELECT avg(c.`rating`) r, avg(c.`score1`) s1, avg(c.`score2`) s2, avg(c.`score3`) s3 FROM `#@__tuancommon` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`aid` WHERE o.`orderstate` = 3 AND c.`ischeck` = 1 AND o.`proid` = ".$id);
+			$sql = $dsql->SetQuery("SELECT avg(c.`rating`) r, avg(c.`sco1`) s1, avg(c.`sco2`) s2, avg(c.`sco3`) s3 FROM `#@__public_comment` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`oid` WHERE o.`orderstate` = 3 AND c.`ischeck` = 1 AND c.`type` = 'tuan-order' AND c.`aid` = '$id' AND c.`pid` = 0");
 			$res = $dsql->dsqlOper($sql, "results");
 			$rating = $res[0]['r'];		//总评分
 			$score1 = $res[0]['s1'];  //分项1
 			$score2 = $res[0]['s2'];  //分项2
 			$score3 = $res[0]['s3'];  //分项3
 
-			$sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__tuancommon` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`aid` WHERE o.`orderstate` = 3 AND c.`ischeck` = 1 AND o.`proid` = ".$id);
+			// $sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__tuancommon` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`aid` WHERE o.`orderstate` = 3 AND c.`ischeck` = 1 AND o.`proid` = ".$id);
+			$sql = $dsql->SetQuery("SELECT c.`id` FROM `#@__public_comment` c LEFT JOIN `#@__tuan_order` o ON o.`id` = c.`oid` WHERE o.`orderstate` = 3 AND c.`ischeck` = 1 AND c.`type` = 'tuan-order' AND c.`aid` = '$id' AND c.`pid` = 0");
 
 			$totalCommon  = $dsql->dsqlOper($sql, "totalCount");  //评价总人数
 			$rating1      = $dsql->dsqlOper($sql." AND c.`rating` = 1", "totalCount");  //1分
@@ -2675,7 +2680,8 @@ class tuan {
 
 				//评价
 				if($val['orderstate'] == 3){
-					$archives = $dsql->SetQuery("SELECT `id` FROM `#@__tuancommon` WHERE `aid` = ".$val['id']);
+					// $archives = $dsql->SetQuery("SELECT `id` FROM `#@__tuancommon` WHERE `aid` = ".$val['id']);
+					$archives = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'tuan-order' AND `oid` = '".$val['id']."' AND `pid` = 0");
 					$common = $dsql->dsqlOper($archives, "totalCount");
 					$iscommon = $common > 0 ? 1 : 0;
 					$list[$key]['common'] = $iscommon;
@@ -3008,7 +3014,8 @@ class tuan {
 
 
 			//评价信息
-			$sql = $dsql->SetQuery("SELECT `rating`, `score1`, `score2`, `score3`, `pics`, `content`, `ischeck` FROM `#@__tuancommon` WHERE `aid` = ".$results['id']);
+			// $sql = $dsql->SetQuery("SELECT `rating`, `score1`, `score2`, `score3`, `pics`, `content`, `ischeck` FROM `#@__tuancommon` WHERE `aid` = ".$results['id']);
+			$sql = $dsql->SetQuery("SELECT `rating`, `sco1` as score1, `sco2` as score2, `sco3` as score3, `pics`, `content`, `ischeck` FROM `#@__public_comment` WHERE `ischeck` = 1 AND `type` = 'tuan-order' AND `oid` = '".$results['id']."' AND `pid` = 0");
 			$common = $dsql->dsqlOper($sql, "results");
 			if($common && $results['common'] == 1){
 				$common = $common[0];
@@ -4539,7 +4546,7 @@ class tuan {
 		$subway      = $param['subway'];
 		$subway      = isset($subway) ? join(',', $subway) : '';
 		$address     = filterSensitiveWords(addslashes($param['address']));
-		$lnglat      = filterSensitiveWords(addslashes($param['lnglat']));
+		$lnglat      = addslashes($param['lnglat']);
 		$phone       = filterSensitiveWords(addslashes($param['phone']));
 		$openStart   = filterSensitiveWords(addslashes($param['openStart']));
 		$openEnd     = filterSensitiveWords(addslashes($param['openEnd']));
@@ -5012,7 +5019,7 @@ class tuan {
 			if($results['uid'] == $uid){
 
 				//删除评论
-				$archives = $dsql->SetQuery("DELETE FROM `#@__tuancommon` WHERE `aid` = ".$id);
+				$archives = $dsql->SetQuery("DELETE FROM `#@__public_comment` WHERE `type` = 'tuan-order' AND `aid` = ".$id);
 				$dsql->dsqlOper($archives, "update");
 
 				$orderid = array();

@@ -54,7 +54,7 @@
 				<div class="visitor_list fn-clear">
 					<ul>
 						{#member action="visitor" return="visitor" uid={#$id#} pageSize="9"#}
-						<li><a href="{#$cfg_basehost#}/user/{#$visitor.uid#}" target="_blank" title="{#$visitor.nickname#}">
+						<li><a {#if !$visitor.state#}href="{#$cfg_basehost#}/user/{#$visitor.uid#}" target="_blank"{#else#}href="javascript:;"{#/if#} title="{#$visitor.nickname#}">
 							<div class="vis_pic">
 								<img src="{#if !$visitor.state#}{#$visitor.photo#}{#else#}/static/images/noPhoto_60.jpg{#/if#}" onerror="this.src='/static/images/noPhoto_60.jpg'" alt="">
 							</div>

@@ -20,6 +20,13 @@ $(function(){
       success: function (data) {
         t.removeClass("disabled");
         if(data.state == 100){
+            if(data.info.url!=undefined && data.info.url!=null){
+                $.dialog.tips(data.info.info, 3, 'alert.png');
+                setTimeout(function(){
+                    location.href = data.info.url;
+                }, 2000);
+                return false;
+            }
           $.dialog.tips('简历已成功投出去了，请静候佳音！', 3, 'success.png');
         }else{
           $.dialog.tips(data.info, 3, 'error.png');

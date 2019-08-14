@@ -1,14 +1,8 @@
 body, html{background: #f7f7f7;}
 
 /*头部*/
-.header{height: .8rem;display: -webkit-box;font-size: .36rem;line-height: .8rem;z-index: 10;width: 100%;max-width: 1080px;background: #ff8437;}
-.header-l img{display: block;width: .55rem;height: .5rem;margin: .15rem 0 0 .2rem}
-.header-l{-webkit-box-flex: 1;}
-.header-address{-webkit-box-flex: 1;text-align: center;color: #fff;}
-.header-search{-webkit-box-flex: 1;}
-.header a{display: inline-block;}
-.header-search a{display: block;;height: .8rem;width: .8rem;float: right;}
-.header-search img{display: block;width: .5rem;height: .5rem;margin: .15rem .2rem 0 0;}
+
+
 
 /*头部幻灯片部分*/
 .wrapper .swiper-container {height: 6rem;color: #fff;text-align: center; background: #fff;}
@@ -44,7 +38,8 @@ body, html{background: #f7f7f7;}
 /*进入店铺*/
 .store-tit{border-top: 1px solid #ececec; background: #fff; margin-top: .2rem; border-bottom: 1px solid #ececec;}
 .store-tit a{display: block; padding: .2rem;}
-.store-tit .store_icon{background: url(../images/shop.png) center center no-repeat; background-size: .3rem auto; display: block; width: .3rem; height: .3rem; float: left; margin-right: .1rem;}
+.store-tit .store_icon{display: block; width: .3rem; height: .3rem; float: left; margin-right: .1rem;}
+.store-tit .store_icon img {width: 100%; height: 100%; display: block;}
 .store-tit span{display: block; float: left;}
 .store-tit em{float: right; background: url(../images/arrow_right.png) right center no-repeat; background-size: .3rem auto; padding-right: .35rem; display: block;}
 

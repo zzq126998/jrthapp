@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
-<title>{#$detail.title#}-{#$langData['siteConfig'][22][20]#}</title>
-<link rel="stylesheet" href="{#$templets_skin#}css/base.css?v={#$cfg_staticVersion#}">
+<title>{#$langData['siteConfig'][22][20]#}</title>
+<link rel="stylesheet" href="{#$cfg_staticPath#}css/core/touchBase.css?v={#$cfg_staticVersion#}">
 <link rel="stylesheet" href="{#$templets_skin#}css/diancan-table.css?v={#$cfg_staticVersion#}">
 <script src="{#$cfg_staticPath#}js/core/touchScale.js?v={#$cfg_staticVersion#}"></script>
 <script src="{#$cfg_staticPath#}js/core/jquery-1.8.3.min.js"></script>
@@ -16,15 +16,8 @@ var manageUrl = '{#getUrlPath service="member" type="user" template="order-busin
 </script>
 </head>
 <body>
-	<div class="header">
-		<div class="header-l"><a href="javascript:history.go(-1)" class="goBack"></a></div>
-		<div class="header-address">
-			<span>{#$langData['siteConfig'][22][20]#}</span>
-		</div>
-		<div class="header-search">
-			<a href="javascript:;" class="dropnav"></a>
-		</div>
-	</div>
+{#include file="../../../siteConfig/touch_top.html" pageTitle={#$langData['siteConfig'][22][20]#}#}
+
 	<div class="table_head">
 		{#*
 		<div class="table_box">

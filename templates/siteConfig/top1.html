@@ -1,4 +1,4 @@
-<script type="text/javascript">var cookiePre = '{#$cfg_cookiePre#}', cfg_clihost = '{#$cfg_clihost#}';</script>
+<script type="text/javascript">var cookiePre = '{#$cfg_cookiePre#}', cfg_clihost = '{#$cfg_clihost#}', cfg_module = '{#$service#}',cfg_cityInfo = '{#$siteCityInfo#}'; </script>
 <!-- 顶部信息 s -->
 <div class="topInfo">
 	<div class="wrap fn-clear">
@@ -14,12 +14,8 @@
 						<div class="box">
 							<div class="content fn-clear">
 								<p class="tit">请选择您所在的城市：</p>
-								<ul>
-								{#siteConfig action='siteCity' return='city' module={#$service#}#}
-					      	<li><a href="{#$city.url#}" title="{#$city.name#}"{#if $siteCityInfo.domain == $city.domain#} class="curr"{#/if#} data-domain='{#$city|@json_encode#}'>{#$city.name#}<s><img src="{#$cfg_basehost#}/static/images/changecity_curr.png" /></s></a></li>
-					      {#/siteConfig#}
-				      	</ul>
-				      </div>
+								<ul></ul>
+				      		</div>
 				      <div class="morecontent fn-hide">
 								<dl class="hot">
 									<dt>热门</dt>

@@ -836,11 +836,99 @@ $(function(){
 				error: function(){
 				}
 			})
+		},
+		articleUeditorVideo_face: function(index){
+			var that_ = this;
+			var page = that_.list[index].page;
+			$.ajax({
+				url: 'article/articleJson.php',
+				type: 'post',
+				data: 'action=checkUeditorVideo_face',
+				dataType: 'json',
+				success: function(data){
+					if(data && data.length){
+						that_.list[index].stop = true;
+
+						$box = $('#articleUpdateUeditorVideotime_face.hide');
+						if(!$box.length){
+							$box = $('<div id="articleUpdateUeditorVideotime_face" class="hide"></div>');
+							$('body').append($box);
+						}
+						for(var i = 0; i < data.length; i++){
+							(function(data, i, obj, idx){
+
+		            var captureImage = function(videos, scale, path){
+		            		var scale = scale ? scale : 1;
+		                var canvas = document.createElement("canvas");
+				            canvas.width = videos.videoWidth * scale;
+				            canvas.height = videos.videoHeight * scale;
+				            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+				            $box.append(canvas);
+				 
+				            var img = document.createElement("img");
+				            var src = canvas.toDataURL("image/png");
+				            img.src = src;
+				            $box.append(img);
+
+				            var s = new Date().getTime();
+				            $.ajax({
+				            	url: '/include/upload.inc.php?mod=article',
+				            	type: 'post',
+				            	data: {
+				            		'type': 'adv',
+				            		'base64': 'base64|'+path,
+				            		'thumbLargeWidth': canvas.width,
+				            		'thumbLargeHeight': canvas.height,
+				            		'Filedata': src.split(',')[1],
+				            	},
+				            	dataType: 'json',
+				            	success: function(data){
+				            		if(data && data.state == 'SUCCESS'){
+				            			var e = new Date().getTime();
+				            			that_.speed = Math.round(data.fileSize/(e-s));
+				            			$.post('article/articleJson.php?action=updateVideotime_face', 'type=face&id='+d.id+'&litpic='+data.url);
+				            		}
+				            	},
+				            	error: function(){
+				            		console.log('error')
+				            	}
+				            })
+		            }
+
+								var d = data[i], url = d.src, path = d.path.replace('.mp4', '.png');
+								var video =  document.createElement('video');
+								video.src = url;
+								video.setAttribute('crossorigin', 'anonymous'); // 注意设置图片跨域应该在图片加载之前
+								$box.append(video);
+
+								video.addEventListener("loadeddata", function (_event) {
+
+							    	captureImage(video, 1, path);
+
+								    if(i + 1 == data.length){
+								    	$box.html('');
+								    	obj.list[idx].stop = false;
+								    }
+								});
+
+								video.addEventListener("error", function (_event) {
+									console.clear();
+                  console.log('%c新闻信息视频不存在，或者远程附件服务器没有设置允许跨域，无法自动生成视频缩略图。\n若您没有此需求，请忽略此消息。谢谢您的合作。', 'color:#ccc;font-size:12px');
+                })
+
+							})(data, i, that_, index)
+						}
+					}
+				},
+				error: function(){
+				}
+			})
 		}
 	}
 	function checkModule(){
 		if($('#modelList [data-id="article"]').length){
 			opearModuleData.list.push({'name': 'articleUpdateVideotime_face'}); // 新闻模块 获取已发布(本地上传)视频的时长及封面
+			opearModuleData.list.push({'name': 'articleUeditorVideo_face'}); // 新闻模块 获取已发布(本地上传)视频的时长及封面
 		}
 	}
 	checkModule();

@@ -1,4 +1,54 @@
 html{background: #f5f5f7;}
+
+
+/*视频*/
+.top-video{position: relative;height: 4.5rem;}
+.huoniao_iOS .top-video {margin-top: 20px;}
+.top-video video{width: 100%;}
+.video-box img{width: 100%;display: block;}
+/*全屏*/
+.fullscreen-box,.top-video .video-box {width: 100%;height: 100%;background: #000;}
+.fullscreen-box{position: fixed;z-index: 999999;top: 0;left: 0;bottom:0;-webkit-animation: bounceInDown .6s ease-out; -moz-animation: bounceInDown .6s ease-out; animation: bounceInDown .6s ease-out;}
+.fullscreen-box video{height:100%;position: relative;top: 50%;transform: translateY(-50%);-webkit-transform: translateY(-50%);}
+.fullscreen-box .vClose{position: absolute;top: .2rem;right: .2rem;width: .5rem;height: .5rem;display: block;background: url(../images/vclose.png) no-repeat center center;background-size: .5rem;z-index: 11;}
+.fullscreen-box #video-control{bottom:.4rem;}
+
+/*视频播放*/
+/*控制条*/
+#video-control{width:100%;position: absolute;bottom: 0;left: 0; display: flex;display: -webkit-flex;align-items: center;-webkit-box-align: center;padding: 5px 0;background-image: linear-gradient(-180deg,rgba(0,0,0,.3),rgba(0,0,0,.5));}
+.btn-control{width:5%;float:left;padding-left:10px}
+#video-control .play{width: .3rem;height: .3rem;background:url(../images/m_detail_video_icon.png) no-repeat;background-size: 1.2rem;background-position: 0 0;}
+#video-control .pause{width: .3rem;height: .3rem;background:url(../images/m_detail_video_icon.png) no-repeat;background-size: 1.2rem;background-position: 0 -.4rem;}
+#video-control .time{color:#fff;float:left;width:9%;font-size:.26rem;margin-left:.1rem;}
+#progress{float:left;width:55%;height:5px;background:#fff;border-radius:5px;margin-left:.2rem;position:relative}
+#bar{width:0;height:100%;background:#0598e7;border-radius:3px;display:inline-block;position:absolute;top:0;left:0}
+#control{width:.2rem;height:.2rem;position:absolute;border-radius:100%;left:0;top:-2.2px;background:#fff}
+#video-control .soundon{width:.4rem;height:.4rem;background:url(../images/soundon.png) no-repeat;background-size: .4rem;margin-left: .2rem;}
+#video-control .soundoff{width:.5rem;height:.5rem;background:url(../images/soundoff.png) no-repeat;background-size: .5rem;margin-left: .2rem;}
+#volume{float:left;width:15%;height:5px;background:#fff;box-shadow:1px 1px 2px 2px #232;border-radius:5px;margin-left:2px;position:relative}
+#volume-bar{width:10%;height:100%;background:#ccc;border-radius:3px;display:inline-block;position:absolute;top:0;left:0}
+#volume-control{width:15px;height:15px;position:absolute;border-radius:100%;left:0;top:-4px;background:#fff;box-shadow:1px 1px 2px 2px #132}
+#video-control .full{ width: .5rem;height: .5rem;float: left;margin-left: .5rem;transition: .3s all;background: url(../images/m_detail_video_icon.png) no-repeat;background-position: 0 -.85rem;background-size: 1.4rem;}
+#video-control .full.small{ width: .5rem;height: .5rem;float: left;margin-left: .5rem;transition: .3s all;background: url(../images/m_detail_video_icon.png) no-repeat;background-position: 0 -1.3rem;background-size: 1.4rem;}
+video::-webkit-media-controls-enclosure{overflow:hidden}
+video::-webkit-media-controls-panel{width:calc(100% + 35px)}
+
+/*按钮组合*/
+.video-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);-webkit-transform:translate(-50%,-50%)}
+.load-box,.play-box,.reload-box{background:rgba(0,0,0,.4);border:solid 2px #fff;border-radius:50%;text-align:center;width:1rem;height:1rem;position:relative}
+.pause-icon,.play-icon{display:block;width:.4rem;height:.4rem;background:url(../images/m_detail_video_icon.png)no-repeat;background-size:1.48rem}
+.play-icon{background-position:0 0;margin-left:.4rem;position:absolute;top:.3rem}
+.pause-icon{background-position:0-.45rem;margin-left:.32rem;position:absolute;top:.3rem}
+.load-icon{width:.5rem;height:.5rem;display:block;position:absolute;top:.24rem;left:.23rem;background:url(../images/load.png)no-repeat;background-size:.52rem;animation:loading 2s linear infinite;-webkit-animation:loading 2s linear infinite}@keyframes loading{0%{transform:rotate(1turn)}to{transform:rotate(0deg)}}
+.reload-icon{display:block;position:relative;top:50%;left:25%;transform:translateY(-50%);width:.5rem;height:.5rem;background:url(../images/m_detail_video_icon.png)no-repeat;background-size:1.48rem;background-position:0-1.94rem}
+.reload-box p{display:none;white-space:nowrap;line-height:.16rem;color:#fff;font-size:.15rem;margin-left:.1rem}
+.error-box .reload-box{border:1px solid#fff;border-radius:100px;padding:.08rem.5rem;display:flex;display:-webkit-flex;align-items:center;width:auto;height:auto;background:none}
+.error-box .reload-icon{top:auto;left:auto;transform:translateY(0)}
+.err-info{font-size:.14rem;color:#fff;line-height:.16rem;margin-bottom:.2rem}
+.error-box p{display:block}
+
+
+
 .top{padding: .3rem .24rem .45rem;background: #fff;}
 .top .title{position: relative;margin-bottom: .3rem;}
 .top .title h3{color: #202021;font-size: .4rem;font-weight: bold;margin-right: .28rem;}
@@ -189,3 +239,15 @@ html{background: #f5f5f7;}
 .videoModal .swiper-slide{width:100%!important;height: 100%}
 .videoModal .swiper-slide img{width:100%;height:auto;position: relative;top: 50%; transform: translateY(-50%);-webkit-transform: translateY(-50%);}
 .videoModal video{height: 4.4rem;position: absolute;top:50%;margin-top: -2.2rem;}
+
+/*电话样式修改*/
+.phone_btn.im_iphone{ width: 1.8rem; height: .6rem; border-radius: .3rem; font-size: .22rem; color: #fff; display: inline-block; line-height: .6rem; text-align: left; position: relative; padding-left: .72rem; box-sizing: border-box; position: absolute; right: .32rem; bottom: 50%; margin-bottom: -.3rem;
+background: -webkit-linear-gradient(left, #2458ff , #68acff); /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right, #2458ff, #68acff); /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right, #2458ff, #68acff); /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right, #2458ff , #68acff); /* 标准的语法 */
+}
+ .phone_btn.im_iphone:before{content: '';display: block; width: .6rem; height: .6rem; background-image: url(../images/iphone_icon.png) ; background-repeat: no-repeat; background-size: contain; position: absolute; left: 0; top: 0;}
+
+.panel-info .info{ position: relative;}
+.panel-info .info .name em{max-width: 45%; display: inline-block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; vertical-align: middle;}

@@ -337,7 +337,8 @@ class waimai
             $order = " ORDER BY s.`ordervalid` DESC, `yingye` DESC, s.`basicprice_min` ASC, s.`sort` DESC, s.`id` DESC";
         } elseif ($orderby == 4) {
             $order  = " ORDER BY s.`ordervalid` DESC, `yingye` DESC, `common` DESC";
-            $common = ", (SELECT count(c.`id`) FROM `#@__waimai_common` c WHERE c.`sid` = s.`id`) AS common";
+            // $common = ", (SELECT count(c.`id`) FROM `#@__waimai_common` c WHERE c.`sid` = s.`id`) AS common";
+            $common = ", (SELECT count(c.`id`) FROM `#@__public_comment` c WHERE c.`aid` = s.`id` AND c.`pid` = 0 AND c.`type` = 'waimai-order') AS common";
         }
 
         if (empty($keywords)) {
@@ -533,7 +534,8 @@ class waimai
             $list[$key]['sale'] = $value['sale'];
 
             // 评分
-            $sql                = $dsql->SetQuery("SELECT avg(`star`) r FROM `#@__waimai_common` WHERE `sid` = " . $value['id']);
+            // $sql                = $dsql->SetQuery("SELECT avg(`star`) r FROM `#@__waimai_common` WHERE `sid` = " . $value['id']);
+            $sql = $dsql->SetQuery("SELECT avg(`star`) r FROM `#@__public_comment` WHERE `aid` = '".$value['id']."' AND `type` = 'waimai-order' AND `pid` = 0");
             $res                = $dsql->dsqlOper($sql, "results");
             $rating             = $res[0]['r'];        //总评分
             $list[$key]['star'] = number_format($rating, 1);
@@ -1059,12 +1061,14 @@ class waimai
             $common = array();
 
             // 评分
-            $sql            = $dsql->SetQuery("SELECT avg(`star`) r FROM `#@__waimai_common` WHERE `sid` = " . $id);
+            // $sql            = $dsql->SetQuery("SELECT avg(`star`) r FROM `#@__waimai_common` WHERE `sid` = " . $id);
+            $sql = $dsql->SetQuery("SELECT avg(`star`) r FROM `#@__public_comment` WHERE `aid` = '$id' AND `type` = 'waimai-order' AND `pid` = 0");
             $res            = $dsql->dsqlOper($sql, "results");
             $rating         = $res[0]['r'];        //总评分
             $common['star'] = number_format($rating, 1);
 
-            $archives = $dsql->SetQuery("SELECT `id` FROM `#@__waimai_common` WHERE `sid` = " . $id);
+            // $archives = $dsql->SetQuery("SELECT `id` FROM `#@__waimai_common` WHERE `sid` = " . $id);
+            $archives = $dsql->SetQuery("SELECT `id` FROM `#@__public_comment` WHERE `aid` = '$id' AND `type` = 'waimai-order' AND `pid` = 0");
             //总条数
             $totalCount = $dsql->dsqlOper($archives, "totalCount");
             // 一星
@@ -1086,7 +1090,8 @@ class waimai
             $common['totalCount5'] = $totalCountStar5;
 
             // 配送评分
-            $sql              = $dsql->SetQuery("SELECT avg(`starps`) r FROM `#@__waimai_common` WHERE `sid` = " . $id);
+            // $sql              = $dsql->SetQuery("SELECT avg(`starps`) r FROM `#@__waimai_common` WHERE `sid` = " . $id);
+            $sql = $dsql->SetQuery("SELECT avg(`starps`) r FROM `#@__public_comment` WHERE `aid` = '$id' AND `type` = 'waimai-order' AND `pid` = 0");
             $res              = $dsql->dsqlOper($sql, "results");
             $rating           = $res[0]['r'];        //总评分
             $common['starps'] = number_format($rating, 1);
@@ -1115,12 +1120,14 @@ class waimai
         $results = array();
 
         // 评分
-        $sql             = $dsql->SetQuery("SELECT avg(`star`) r FROM `#@__waimai_common` WHERE `sid` = " . $id);
+        // $sql             = $dsql->SetQuery("SELECT avg(`star`) r FROM `#@__waimai_common` WHERE `sid` = " . $id);
+        $sql = $dsql->SetQuery("SELECT avg(`star`) r FROM `#@__public_comment` WHERE `aid` = '$id' AND `type` = 'waimai-order' AND `pid` = 0");
         $res             = $dsql->dsqlOper($sql, "results");
         $rating          = $res[0]['r'];        //总评分
         $results['star'] = number_format($rating, 1);
 
-        $archives = $dsql->SetQuery("SELECT `id` FROM `#@__waimai_common` WHERE `sid` = " . $id);
+        // $archives = $dsql->SetQuery("SELECT `id` FROM `#@__waimai_common` WHERE `sid` = " . $id);
+        $archives = $dsql->SetQuery("SELECT avg(`star`) r FROM `#@__public_comment` WHERE `aid` = '$id' AND `type` = 'waimai-order' AND `pid` = 0");
         //总条数
         $totalCount = $dsql->dsqlOper($archives, "totalCount");
         // 一星
@@ -2205,11 +2212,10 @@ class waimai
                         // 查询管理会员 推送给商家
                         $sql = $dsql->SetQuery("SELECT `userid` FROM `#@__waimai_shop_manager` WHERE `shopid` = $sid");
                         $ret = $dsql->dsqlOper($sql, "results");
+                        $businessOrderUrl = $cfg_secureAccess . $cfg_basehost . "/wmsj/order/waimaiOrderDetail.php?id=" . $id;
                         if ($ret) {
-                            $url = $cfg_secureAccess . $cfg_basehost . "/wmsj/order/waimaiOrderDetail.php?id=" . $id;
-
                             foreach ($ret as $k => $v) {
-                                sendapppush($v['userid'], "您有一笔新订单！", "订单号：" . $shopname . $newOrdernumstore, $url, "newshoporder");
+                                sendapppush($v['userid'], "您有一笔新订单！", "订单号：" . $shopname . $newOrdernumstore, $businessOrderUrl, "newshoporder");
                                 // aliyunPush($v['userid'], "您有一笔新订单！", "订单号：".$shopname.$newOrdernumstore, "newshoporder", $url);
                             }
                         }
@@ -2219,6 +2225,14 @@ class waimai
                         if($ret){
                             $username = $ret[0]['username'];
                         }
+
+                        $paramUser = array(
+							"service"  => "member",
+							"type"     => "user",
+							"template" => "orderdetail",
+							"action"   => "waimai",
+							"id"       => $id
+						);
 
                         //自定义配置
 						$config = array(
@@ -2232,27 +2246,7 @@ class waimai
 								'keyword3' => '订单状态'
 							)
 						);
-
-                        //店铺订单提醒
-                        updateMemberNotice($uid, "会员-订单支付成功", '', $config);
-
-                        //自定义配置
-						$config = array(
-							"username" => $username,
-							"title" => "外卖订单",
-							"order" => $ordernum,
-							"amount" => $amount,
-							"date" => date("Y-m-d H:i:s", time()),
-							"fields" => array(
-								'keyword1' => '订单编号',
-								'keyword2' => '商品名称',
-								'keyword3' => '订单金额',
-								'keyword4' => '付款状态',
-								'keyword5' => '付款时间'
-							)
-						);
-
-                        updateMemberNotice($uid, "会员-商家新订单通知", '', $config);
+                        updateMemberNotice($uid, "会员-订单支付成功", $paramUser, $config);
 
                         // 更新满送优惠券状态
                         $sql = $dsql->SetQuery("UPDATE `#@__waimai_quanlist` SET `state` = 0 WHERE `from` = $id AND `state` = -1");
@@ -3176,7 +3170,8 @@ class waimai
             // 评价
             $return['iscomment'] = $order['iscomment'];
             if ($order['iscomment'] == 1) {
-                $sql               = $dsql->SetQuery("SELECT * FROM `#@__waimai_common` WHERE `uid` = $userid AND `oid` = $id AND `type` = 0");
+                // $sql               = $dsql->SetQuery("SELECT * FROM `#@__waimai_common` WHERE `uid` = $userid AND `oid` = $id AND `type` = 0");
+                $sql = $dsql->SetQuery("SELECT * FROM `#@__public_comment` WHERE `userid` = '$userid' AND `oid` = '$id' AND `type` = 'waimai-order' AND `pid` = 0");
                 $ret               = $dsql->dsqlOper($sql, "results");
                 $return['comment'] = $ret[0];
             }
@@ -5169,7 +5164,8 @@ class waimai
 
         $oid      = $this->param['oid'];
         $sid      = $this->param['sid'];
-        $archives = $dsql->SetQuery(" SELECT * FROM `#@__waimai_common` WHERE `oid` = {$oid} AND `uid` = {$userid} AND `sid` = {$sid} AND `type` = 0 ");
+        // $archives = $dsql->SetQuery(" SELECT * FROM `#@__waimai_common` WHERE `oid` = {$oid} AND `uid` = {$userid} AND `sid` = {$sid} AND `type` = 0 ");
+        $archives = $dsql->SetQuery("SELECT * FROM `#@__public_comment` WHERE `aid` = '$sid' AND `userid` = '$userid' AND `oid` = '$oid' AND `type` = 'waimai-order' AND `pid` = 0");
         $res      = $dsql->dsqlOper($archives, "results");
         if ($res) {
             $pics  = $res[0]['pics'];
@@ -5304,7 +5300,8 @@ class waimai
         if (empty($id)) return array("state" => 200, "info" => '参数错误！');
         if (empty($content)) return array("state" => 200, "info" => '请填写内容！');
 
-        $sql = $dqsl->SetQuery("SELECT `uid`, `sid`, `replaydate` FROM `#@__waimai_common` WHERE `id` = $id");
+        // $sql = $dsql->SetQuery("SELECT `uid`, `sid`, `replaydate` FROM `#@__waimai_common` WHERE `id` = $id");
+        $sql = $dsql->SetQuery("SELECT `userid` uid, `aid` sid, `replaydate` FROM `#@__public_comment` WHERE `id` = $id");
         $ret = $dsql->dsqlOper($sql, "results");
         if ($ret) {
             if ($ret[0]['replydate'] != 0) {
@@ -5314,7 +5311,8 @@ class waimai
             return array("state" => 200, "info" => '提交失败！');
         }
 
-        $sql = $dqsl->SetQuery("UPDATE `#@__waimai_common` SET `reply` = '$content', `replydate` = '$pubdate' WHERE `id` = $id");
+        // $sql = $dsql->SetQuery("UPDATE `#@__waimai_common` SET `reply` = '$content', `replydate` = '$pubdate' WHERE `id` = $id");
+        $sql = $dsql->SetQuery("UPDATE `#@__public_comment` SET `reply` = '$content', `replydate` = '$pubdate' WHERE `id` = $id");
         $ret = $dsql->dsqlOper($sql, "update");
         if ($ret == "ok") {
             return "提交成功";
@@ -5343,7 +5341,8 @@ class waimai
         if ($ret) {
             $id = $ret[0]['id'];
 
-            $sql2 = $dsql->SetQuery("SELECT * FROM `#@__waimai_common` WHERE `oid` = {$id} AND `uid` = {$uid} AND `sid` = {$sid}");
+            // $sql2 = $dsql->SetQuery("SELECT * FROM `#@__waimai_common` WHERE `oid` = {$id} AND `uid` = {$uid} AND `sid` = {$sid}");
+            $sql2 = $dsql->SetQuery("SELECT * FROM `#@__public_comment` WHERE `aid` = '$sid' AND `userid` = '$uid' AND `oid` = '$id' AND `type` = 'waimai-order' AND `pid` = 0");
             $ret2 = $dsql->dsqlOper($sql2, "results");
 
             if ($ret2) {
@@ -6058,7 +6057,8 @@ class waimai
             // 评价
             $return['iscomment'] = $order['iscomment'];
             if ($order['iscomment'] == 1) {
-                $sql               = $dsql->SetQuery("SELECT * FROM `#@__waimai_common` WHERE `uid` = $userid AND `oid` = $id");
+                // $sql               = $dsql->SetQuery("SELECT * FROM `#@__waimai_common` WHERE `uid` = $userid AND `oid` = $id");
+                $sql = $dsql->SetQuery("SELECT * FROM `#@__public_comment` WHERE `userid` = '$userid' AND `oid` = '$id' AND `type` = 'paotui-order' AND `pid` = 0");
                 $ret               = $dsql->dsqlOper($sql, "results");
                 $return['comment'] = $ret[0];
             }

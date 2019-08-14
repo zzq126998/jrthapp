@@ -52,6 +52,7 @@
         {#if in_array("info", $installModuleArr)#}<li data-page="1" data-totalpage="1" data-action="info"><a href="javascript:;">{#$langData['siteConfig'][16][125]#}</a></li>{#/if#}
         {#if in_array("house", $installModuleArr)#}<li data-page="1" data-totalpage="1" data-action="house"><a href="javascript:;">{#$langData['siteConfig'][16][26]#}</a></li>{#/if#}
         {#if in_array("huodong", $installModuleArr)#}<li data-page="1" data-totalpage="1" data-action="huodong"><a href="javascript:;">{#$langData['siteConfig'][19][251]#}</a></li>{#/if#}
+        {#if in_array("live", $installModuleArr)#}<li data-page="1" data-totalpage="1" data-action="live"><a href="javascript:;">{#$langData['siteConfig'][10][24]#}</a></li>{#/if#}
       </ul>
     </div>
   </div>
@@ -92,6 +93,11 @@
 				{#if in_array("huodong", $installModuleArr)#}
         <div class="swiper-slide">
           <div class="content-slide huodong"></div>
+        </div>
+				{#/if#}
+				{#if in_array("live", $installModuleArr)#}
+        <div class="swiper-slide">
+          <ul class="content-slide live"></ul>
         </div>
 				{#/if#}
       </div>

@@ -203,7 +203,7 @@ function getrecord(type){
         //拼接对话
         if (from == userinfo['uid']) {
         	gest ='im-to_other';
-        	imghead = '<div class="im-m_head"><a href="javascript:;"><img src="'+userinfo['photo']+'"></a></div>';
+        	imghead = '<div class="im-m_head"><a href="javascript:;"><img src="'+(userinfo['photo']?userinfo['photo']:staticPath+"images/noPhoto_60.jpg")+'"></a></div>';
             var fromUser = "<span style='color: red;'>你</span>";
             sf = true;
         } else {
@@ -212,7 +212,7 @@ function getrecord(type){
 		
         if (to == userinfo['uid']) {
         	gest ='im-from_other';
-        	imghead = '<div class="im-m_head"><a href="'+channelDomain+'/acc_info-'+toUserinfo['uid']+'.html"><img src="'+toUserinfo['photo']+'"></a></div>';
+        	imghead = '<div class="im-m_head"><a href="'+channelDomain+'/acc_info-'+toUserinfo['uid']+'.html"><img src="'+(toUserinfo['photo']?toUserinfo['photo']:staticPath+"images/noPhoto_60.jpg")+'"></a></div>';
            
         } else {
             var toUser = toUserinfo['name'];
@@ -222,7 +222,7 @@ function getrecord(type){
 
         // 文本
         if(data.contentType == "text"){
-            text = '<div class="im-text_msg">'+data.content.replace(/\\/g,"")+'</div>';
+            text = '<div class="im-text_msg">'+data.content.replace(/△(.+?)△/g,'<img src="$1"/>')+'</div>';
             typemsg= '';
             style="";
             attrbuite=""

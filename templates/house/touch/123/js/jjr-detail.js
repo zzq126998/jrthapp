@@ -62,7 +62,7 @@ $(function(){
     active.attr({'data-lock': 1});
 
     $.ajax({
-      url: masterDomain + '/include/ajax.php?service=house&action='+type+'List&zj='+zjuid+'&pageSize='+pageSize+'&page='+page,
+      url: '/include/ajax.php?service=house&action='+type+'List&zj='+zjuid+'&pageSize='+pageSize+'&page='+page,
       type: 'get',
       dataType: 'json',
       success: function(data){
@@ -112,7 +112,7 @@ $(function(){
               var junjia = '';
               if(d.price > 0){
                 price = '<span class="price r">'+d.price+''+echoCurrency('short')+'/月</span>';
-                junjia = '<em class="r">均价 '+Math.ceil(d.price / d.area)+''+echoCurrency('short')+'/平</em>';
+                junjia = '<em class="r">均价 '+Mathth.ceil(d.price / d.area)+''+echoCurrency('short')+'/平</em>';
               }else{
                 price = '<span class="price r">面议</span>';
               }

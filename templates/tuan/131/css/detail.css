@@ -83,7 +83,7 @@
 .summary .r .btns a {width: 160px; height: 40px; line-height: 40px; text-align: center; border-radius: 4px; background-color: #f22034; color: #fff; font-size: 18px;}
 .summary .r .btns a:hover {background-color: #dd2446;}
 
-.summary .r .btns .link-add {border-color: #dedede; background-color: #efefef; font-size: 18px; color: #565656; margin-left: 15px;}
+.summary .r .btns .link-add {border-color: #dedede; background-color: #efefef; font-size: 18px; color: #565656; margin: 0 15px;}
 .summary .r .btns a:hover.link-add {background-color: #e0e0e0;}
 .summary .r .btns .link-add s {width: 17px; height: 14px; background-position: -45px -126px;margin: 0px 10px 5px 0px;}
 
@@ -96,6 +96,7 @@
 .summary .r .tools .favorite.curr {color: #f22034;}
 .summary .r .tools .favorite.curr s{background-position: -19px -90px;}
 .summary .r .tools .share s {width: 15px; height: 19px; margin: -2px 5px 0 0; background-position: -23px -67px;}
+.summary .r .service {margin-top: 20px;}
 .summary .r .service a{float: right;color: #a0a0a0;font-size: 14px; margin-left: 10px;}
 .summary .r .service a s{display: inline-block;background: url("../images/tuanSprite.png") no-repeat;}
 .summary .r .service .s1 s {width: 27px; height: 23px; margin:-2px 3px -7px 0;  background-position: 2px -43px;}
@@ -109,9 +110,9 @@
 .summary .r .expiry em{width: 30px;height: 30px;line-height: 30px;display: inline-block;background: #636363;color: #ffff;border-radius: 2px;font-size: 14px;font-weight: bold;text-align: center;margin-left: 6px;}
 .summary .r .pintuan{margin-bottom: 20px;}
 .summary .r .pintuan a {width: 163px;height: 38px;line-height: 38px;text-align: center;border-radius: 4px;background-color: #f22034;color: #fff;font-size: 16px;}
-.summary .r .pintuan .link-open{background-color: #f4a50c;margin-left: 15px;}
+.summary .r .pintuan .link-open{background-color: #f4a50c;margin-left: 5px;}
 .summary .r .pintuan a:hover.link-open{background-color: #e29706;}
-.summary .r .pintuan .link-add {border-color: #dedede; background-color: #efefef; font-size: 16px; color: #565656; margin-left: 15px;}
+.summary .r .pintuan .link-add {border-color: #dedede; background-color: #efefef; font-size: 16px; color: #565656; margin: 0 15px;}
 .summary .r .pintuan a:hover.link-add {background-color: #e0e0e0;}
 .summary .r .pintuan .link-add s {width: 17px; height: 14px; background-position: -45px -126px; margin: 0px 4px 4px 0px;}
 .summary .r .pintuan a.disabled {color: #999; cursor: no-drop; background-color: #dbdbdb; border-bottom: 1px solid #dbdbdb;}
@@ -340,3 +341,9 @@ html #ldg_lockmask {background: #000; filter: alpha(opacity=30); opacity: .3;}
 .summary .r .seckill .price .discount{position:relative;z-index:2;margin-left:20px;color:#fff;display: inline-block;width: 42px;height: 23px;border-radius: 3px;background: #f22034;font-size: 14px;line-height: 23px;box-sizing: border-box;padding-left: 3px;}
 .summary .r .seckill .price .discount:before{position:absolute;z-index:1;left:-21px;top:0px;display: inline-block;width: 0;height: 0;border-width: 11px;border-style: solid;border-color: transparent #f22034 transparent transparent;content: '';}
 .summary .r .seckill .num{padding-left: 20px;}
+
+
+/*聊天*/
+.summary .r .pintuan a.chat_to-Link{width: 120px;background-color: #efefef;font-size: 16px; color: #565656; text-align: center;}
+.summary .r .pintuan a.chat_to-Link:before{content: ''; display: inline-block; border-radius:4px ; width: 16px; height: 16px; background: url(../images/msgto.png) no-repeat; background-size: cover; vertical-align: middle; margin-right: 6px;}
+.summary .r .pintuan a.chat_to-Link:hover{background-color: #ebebeb;}

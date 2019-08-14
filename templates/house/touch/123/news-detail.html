@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1.0,maximum-scale=1.0, user-scalable=0">
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <title>{#$detail_typename#}</title>
+<meta name="keywords" content="{#$detail_keyword#}" />
+<meta name="description" content="{#$detail_description#}" />
 <link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/core/touchBase.css?v={#$cfg_staticVersion#}" />
 <link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/ui/swiper.min_4.2.2.css?v={#$cfg_staticVersion#}">
 <link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/zx-detail.css?v={#$cfg_staticVersion#}">
@@ -75,6 +77,8 @@
 
 		<div class="mask"></div>
 	</div>
+	<!-- 图片放大 -->
+	{#include file="../../../siteConfig/bigimg_1.2.html"#}
 <script type="text/javascript"  src="{#$cfg_staticPath#}js/ui/swiper.min_4.2.2.js?v={#$cfg_staticVersion#}" type="text/javascript"></script>
 <script src="{#$cfg_staticPath#}js/ui/jquery.bigImage.js?v={#$cfg_staticVersion#}" type="text/javascript"></script>
 <script src="{#$templets_skin#}js/zx-detail.js?v={#$cfg_staticVersion#}"></script>
@@ -92,6 +96,11 @@
 	};
 	document.write(unescape("%3Cscript src='{#$cfg_staticPath#}js/publicShare.js?v="+~(-new Date())+"'type='text/javascript'%3E%3C/script%3E"));
 </script>
-
+	<script type="text/javascript">
+        //放大图片
+        $.fn.bigImage({
+            artMainCon:".housing_txt",  //图片所在的列表标签
+        });
+	</script>
 </body>
 </html>

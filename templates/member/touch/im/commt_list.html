@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>评论</title>
+		<title>评论和赞</title>
 		<meta name="wap-font-scale" content="no">
 		<meta name="format-detection" content="telephone=no">
 		<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no,viewport-fit=cover">		
@@ -13,78 +13,17 @@
 		<script>
 			var masterDomain = '{#$cfg_basehost#}', channelDomain = '{#$article_channelDomain#}';
 			var staticPath = '{#$cfg_staticPath#}',templets_skin = '{#$templets_skin#}';
+			var cookiePre = '{#$cfg_cookiePre#}'
 		</script>
 	</head>
 	<body>
 		{#include file="../../../siteConfig/touch_top.html" pageTitle="评论"#}  {#*  评论   *#}
 		<div class="commt_box">
 			<ul class="commt_list">
-				<li class="commt_li">
-					<div class="f_info">
-						<a href="#" class="fn-clear">
-							<div class="left_head">
-								<img src="{#$templets_skin#}upfile/img.png" />
-								<i class="vip_level"><img src="{#$templets_skin#}upfile/vip_icon.png"/></i>
-							</div>
-							<div class="right_info">
-								<h2>王柯达</h2>
-								<p>2018-12-23  12:23:21</p>
-							</div>
-						</a>
-						<button class="reply_btn">回复</button>
-					</div>
-					<a class="commt_link">
-						<div class="commt_con">
-							<h3>喜欢，手动点赞</h3>
-							<div class="mycon con_box">
-								<div class="left_img">
-									<img src="{#$templets_skin#}upfile/img_1.png" />
-								</div>
-								<div class="right_box">
-									<h2>我：</h2>
-									<p class="con">大清早去看雾凇和日出，虽然冷可是太壮观了。机子是CANON EOS 60D，焦距：50.0 MM 光圈：6.92 EV (F</p>
-								</div>
-							</div>
-						</div>
-					</a>
-				</li>
-				<li class="commt_li">
-					<div class="f_info">
-						<a href="#" class="fn-clear">
-							<div class="left_head">
-								<img src="{#$templets_skin#}upfile/img.png" />
-								<i class="vip_level"><img src="{#$templets_skin#}upfile/vip_icon.png"/></i>
-							</div>
-							<div class="right_info">
-								<h2>王柯达</h2>
-								<p>2018-12-23  12:23:21</p>
-							</div>
-						</a>
-						<button class="reply_btn">回复</button>
-					</div>
-					<a href="#" class="commt_link">
-						<div class="commt_con">
-							<h3>如果是在没有其他信息的情况下，我们可以从几种可能性中选择</h3>
-							<div class="commt_con mycon  ">
-								<h3>这里是我的评论</h3>
-								<div class="con_box">
-									<div class="left_img">
-										<img src="{#$templets_skin#}upfile/img_1.png" />
-									</div>
-									<div class="right_box">
-										<h2>钱东：</h2>
-										<p class="con">大清早去看雾凇和日出，虽然冷可是太壮观了。机子是CANON EOS 60D，焦距：50.0 MM 光圈：6.92 EV (F</p>
-									</div>
-								</div>
-							</div>	
-						</div>
-					</a>
-					
-				</li>
+				
 			</ul>
 			<div class="loading">
-				<img src="{#$templets_skin#}images/loading_1.gif"/>
-				<span>加载中</span>
+				<img src="{#$templets_skin#}images/loading.png"/>
 			</div>
 		</div>
 		<div class="reply_page">

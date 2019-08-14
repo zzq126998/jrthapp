@@ -80,7 +80,6 @@ var dataGeetest = "";
           //获取成功
           
           if(data && data.state == 100){
-            btn.removeClass("disabled");
            alert('验证码已发送');
           //获取失败
           }else{

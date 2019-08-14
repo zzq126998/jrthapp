@@ -4,7 +4,7 @@
 <meta charset="{#$cfg_soft_lang#}">
 <meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1.0,maximum-scale=1.0, user-scalable=0">
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<title>楼盘详情</title>
+<title>{#$detail_title#}</title>
 <link rel="stylesheet" type="text/css" href="{#$cfg_staticPath#}css/core/touchBase.css?v={#$cfg_staticVersion#}" />
 <link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/loupan-detail.css?v={#$cfg_staticVersion#}">
 <link rel="stylesheet" type="text/css" href="{#$templets_skin#}css/common.css?v={#$cfg_staticVersion#}">
@@ -29,8 +29,15 @@
 		"action" : 'loupan',
 		"id" : '{#$detail_id#}'
 	};
-
 	var masterDomain = '{#$cfg_basehost#}',staticPath = '{#$cfg_staticPath#}', cookiePre = '{#$cfg_cookiePre#}', templates = '{#$templets_skin#}', page_type = 'loupan';
+	var imconfig = {
+		'mod':'house',
+		'chatid':"{#$detail_user.uid#}",
+		'title': '[楼盘{#$pageType#}]{#$detail_title#}',
+		"price": '{#$detail_price#}万元',
+		"imgUrl": '{#changeFileSize url={#$detail_litpic#} type='small'#}',
+		"link": '{#getUrlPath service="house" template="sp-detail" id=$detail_id#}',
+	}
 </script>
 </head>
 
@@ -367,7 +374,7 @@
         </div>
         <div class="big-wrapper">
             <a href="{#getUrlPath service='house' template='dingy' param="id={#$detail_id#}"#}" class="button post_ulog"><i></i>消息订阅</a>
-            <a href="javascript:;" class="button call_phone"><i></i>电话咨询</a>
+            <a href="javascript:;" class="button call_phone  chat_to-Link" data-type="detail"><i></i>在线咨询</a>
         </div>
 	</div>
 

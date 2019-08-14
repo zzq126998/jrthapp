@@ -76,6 +76,16 @@ $(function(){
     }
   });
 
+  $('.job-list .yp').bind('click', function(){
+	 var t = $(this), par = t.closest('.job-item');
+
+	 $('.job-list').find('.cklab').removeClass('selected');
+	 $('.job-list').find('.job-check').attr('checked', false);
+
+	 par.find('.cklab').addClass('selected');
+	 par.find('.job-check').attr('checked', true);
+  });
+
 	// 应聘、收藏
 	$('.yp , .sc').click(function(){
 
@@ -115,9 +125,16 @@ $(function(){
       success: function (data) {
         a.removeClass("disabled");
         if(data.state == 100){
-					$.dialog.tips(con, 3, 'success.png');
+			if(data.info.url!=undefined && data.info.url!=null){
+				$.dialog.tips(data.info.info, 3, 'alert.png');
+				setTimeout(function(){
+					location.href = data.info.url;
+				}, 2000);
+				return false;
+			}
+			$.dialog.tips(con, 3, 'success.png');
         }else{
-					$.dialog.tips(data.info, 3, 'error.png');
+			$.dialog.tips(data.info, 3, 'error.png');
         }
       },
       error: function(){

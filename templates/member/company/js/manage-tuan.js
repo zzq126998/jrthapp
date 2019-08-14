@@ -95,6 +95,8 @@ function getList(is){
 									common    = list[i].common,
 									litpic    = list[i].litpic;
 
+							if(list[i].arcrank != "1") url = 'javascript:;" style="cursor:default;"';
+
 							html.push('<div class="item fn-clear" data-id="'+id+'">');
 							if(litpic != ""){
 								html.push('<div class="p"><a href="'+url+'" target="_blank"><i></i><img src="'+huoniao.changeFileSize(litpic, "small")+'" /></a></div>');

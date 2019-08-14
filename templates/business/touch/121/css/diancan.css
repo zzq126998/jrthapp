@@ -14,14 +14,6 @@ body,html{
      -o-filter: blur(30px);
      filter: blur(30px);
      filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='30');}
-.header{height: .8rem;display: -webkit-box;font-size: .36rem;line-height: .8rem;z-index: 10;width: 100%;max-width: 1080px;background: #ff8437;}
-.header-l img{display: block;width: .55rem;height: .5rem;margin: .15rem 0 0 .2rem}
-.header-l{-webkit-box-flex: 1;}
-.header-address{-webkit-box-flex: 1;text-align: center;color: #fff;}
-.header-search{-webkit-box-flex: 1;}
-.header a{display: inline-block;}
-.header-search a{display: block;;height: .8rem;width: .8rem;float: right;}
-.header-search img{display: block;width: .5rem;height: .5rem;margin: .15rem .2rem 0 0;}
 .shop-info{position: relative; z-index: 2; margin: 0 .3rem; padding: .2rem 0;}
 .shop-info-img{width: 1.5rem;height: 1.5rem;border-radius: 50%;border: .04rem solid #fff;float: left;margin-right: .2rem;}
 .shop-info-img img{width: 100%;height: 100%;border-radius: 50%;}
