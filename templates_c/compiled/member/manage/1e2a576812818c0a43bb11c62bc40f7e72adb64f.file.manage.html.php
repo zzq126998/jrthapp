@@ -1,17 +1,17 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-13 17:41:15
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-15 11:36:58
          compiled from "D:\myphp_www\PHPTutorial\WWW\ziyuan\templates\member\company\manage.html" */ ?>
-<?php /*%%SmartyHeaderCode:12051043205d5285bb504506-36112505%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:10076900185d54d35a91d2a5-11433436%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     '1e2a576812818c0a43bb11c62bc40f7e72adb64f' => 
     array (
       0 => 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\templates\\member\\company\\manage.html',
-      1 => 1538124084,
+      1 => 1564477451,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '12051043205d5285bb504506-36112505',
+  'nocache_hash' => '10076900185d54d35a91d2a5-11433436',
   'function' => 
   array (
   ),
@@ -29,9 +29,9 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
   'version' => 'Smarty-3.1.21-dev',
-  'unifunc' => 'content_5d5285bb58d0c7_79629119',
+  'unifunc' => 'content_5d54d35a967657_41859996',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_5d5285bb58d0c7_79629119')) {function content_5d5285bb58d0c7_79629119($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['pageTitle'] = new Smarty_variable((($_smarty_tpl->tpl_vars['langData']->value['siteConfig'][11][12]).(" - ")).($_smarty_tpl->tpl_vars['cfg_webname']->value), null, 0);?>
+<?php if ($_valid && !is_callable('content_5d54d35a967657_41859996')) {function content_5d54d35a967657_41859996($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['pageTitle'] = new Smarty_variable((($_smarty_tpl->tpl_vars['langData']->value['siteConfig'][11][12]).(" - ")).($_smarty_tpl->tpl_vars['cfg_webname']->value), null, 0);?>
 <?php echo $_smarty_tpl->getSubTemplate ("head.html", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0);?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $_smarty_tpl->tpl_vars['templets_skin']->value;?>

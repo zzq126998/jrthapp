@@ -1,8 +1,10 @@
 <?php
 //数据库连接信息
-$DB_HOST = '182.61.51.112';        //数据库地址
+//$DB_HOST = '114.55.171.156';        //数据库地址
+$DB_HOST = '127.0.0.1';        //数据库地址
 $DB_NAME = 'huoniao';   //数据库名
 $DB_USER = 'root';   //数据库用户名
+//$DB_PASS = 'ythayixia@163.com';   //数据库密码
 $DB_PASS = 'root';   //数据库密码
 $DB_PREFIX = 'huoniao_';       //数据库表前缀
 $DB_CHARSET = 'utf8';          //数据库编码

@@ -6867,6 +6867,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          * @warning 必须且只能调用一次
          */
         render: function (container) {
+            console.log(container);
             var me = this,
                 options = me.options,
                 getStyleValue=function(attr){
@@ -29233,6 +29234,7 @@ UE.ui = baidu.editor.ui = {};
         });
 
         var oldRender = editor.render;
+
         editor.render = function (holder) {
             if (holder.constructor === String) {
                 editor.key = holder;
@@ -29246,11 +29248,12 @@ UE.ui = baidu.editor.ui = {};
                     });
                     new EditorUI(editor.options);
                     if (holder) {
+
                         if (holder.constructor === String) {
                             holder = document.getElementById(holder);
                         }
                         holder && holder.getAttribute('name') && ( editor.options.textarea = holder.getAttribute('name'));
-                        if (holder && /script|textarea/ig.test(holder.tagName)) {
+                         if (holder && /script|textarea/ig.test(holder.tagName)) {
                             var newDiv = document.createElement('div');
                             holder.parentNode.insertBefore(newDiv, holder);
                             var cont = holder.value || holder.innerHTML;
@@ -29275,10 +29278,12 @@ UE.ui = baidu.editor.ui = {};
                                 domUtils.removeAttributes(holder,'id');
                             }
                             holder = newDiv;
+
                             holder.innerHTML = '';
                         }
 
                     }
+
                     domUtils.addClass(holder, "edui-" + editor.options.theme);
                     editor.ui.render(holder);
                     var opt = editor.options;

@@ -3,8 +3,398 @@
   <component name="ChangeListManager">
     <list default="true" id="2f4dab65-2c12-4030-9f99-540c21d42407" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/config/siteConfig.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/config/siteConfig.inc.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/handlers/shop.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/handlers/shop.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/handlers/shop.controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/handlers/shop.controller.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/admin/staticVersion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/admin/staticVersion.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/cache/1/3301" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/cache/14/23014" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/cache/3/703" beforeDir="false" afterPath="$PROJECT_DIR$/data/cache/3/703" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/cache/40/19840" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/cache/45/5345" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/cache/5/18605" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/cache/61/29961" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/cache/7/10607" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/cache/80/21380" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/cache/90/30990" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/cache/97/26597" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/cache/user.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/ajax.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/dbinfo.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/dbinfo.inc.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/noticeErrorMessage.log" beforeDir="false" afterPath="$PROJECT_DIR$/include/noticeErrorMessage.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/ueditor/ueditor.all.js" beforeDir="false" afterPath="$PROJECT_DIR$/include/ueditor/ueditor.all.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/system_site_city.json" beforeDir="false" afterPath="$PROJECT_DIR$/system_site_city.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/member/company/css/fabu-tuan.css" beforeDir="false" afterPath="$PROJECT_DIR$/templates/member/company/css/fabu-tuan.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/member/company/fabu-shop.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/member/company/fabu-shop.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/member/company/js/fabu-shop.js" beforeDir="false" afterPath="$PROJECT_DIR$/templates/member/company/js/fabu-shop.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/5390eda9ab83a64cc59a7378b55496882d81880a.file.index.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/admin/5390eda9ab83a64cc59a7378b55496882d81880a.file.index.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/article/0b5787d5614f443f8f62cb292f280dd94b24e0bd.file.selfmediaAdd.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/article/1991d9ec18fa7f95265d4257d7cbdfc95a3e233b.file.selfmediaList.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/article/25976590b7a48e346f25e2f8bf904ba06cd11721.file.articleList.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/article/2ec8bdd4344eeca90520465dd040c0e1fb13532c.file.articleAdd.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/article/3ed81492e62ad829a175f9cfc7b49c214bf8e800.file.articleConfig.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/article/47d1de8bfafdeaccc4ab576a4a0d4ce83e5fcbc1.file.articleCommon.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/article/49ce4f71f08631d063243c4472b584b1a70078c9.file.selfmediaField.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/article/984901b2b8bf09c54c54b19ff8a202eef112783c.file.zhuantiAdd.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/article/98c4c4b23f522c07d0944f8395261b008146e0c1.file.zhuanti.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/article/a7045dcc194dea22d00e799c8bb1b52166f44025.file.zhuantiPar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/article/af34b7e2904c2a5b8be915ea0567dae47db71eb6.file.articleType.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/article/bfc32c5235e441af8fd9b97667d396949e7dae57.file.mytag.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/article/c598e38d109b33b0eaa7e89fb24e6c1d95854d8e.file.organizat.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/business/bea60a79884a404e478c0e944b4e9403007c5da8.file.businessConfig.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/admin/business/bea60a79884a404e478c0e944b4e9403007c5da8.file.businessConfig.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/car/03032cfcddaf3995b6dc54fdcbfe44a3bf1870c5.file.carAdd.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/car/84c951f39812c1cbcb9d84df9402ee6e61306846.file.carConfig.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/info/353d961f114df601989708a97101ecac9934dfe1.file.infoConfig.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/info/709cb5246f66e8b1550f79c6a2b08dd42dffb423.file.infoList.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/info/c04a6da40d866951c6f6d94932e9f56fcb5595f3.file.infoAdd.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/info/fbc32888a28e7892ba68579baac0b6abb3287db8.file.infoType.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/live/64889b5138d5c009c5ea03791e298727286b1dea.file.liveList.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/live/71b7bc84633d633961793024a101e392c4a8c27e.file.liveType.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/live/a4b37c5496961943c632b6f70bc462980ac728c3.file.liveAccount.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/live/d8cf5f0400082e5b0817fa560237767e2b8ababf.file.liveConfig.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/shop/025b6051e919c8e5da67c76e7e5922a45f3188d9.file.shopStoreList.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/shop/0393232c9150b06576c3a85f4440f43d99c6fdec.file.shopNotice.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/shop/1c17de80c71b6d7189d690afdf42acf6a3395dd5.file.shopNews.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/shop/20a008a98fd5148330bb40dd5613fd511304f0f9.file.shopType.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/admin/shop/20a008a98fd5148330bb40dd5613fd511304f0f9.file.shopType.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/shop/4c5660c6081c3338fb5d1096549cafb15f08e3b8.file.mytagAdd.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/shop/58d2a5bef5e7606360e422abf3bb060f7330b05e.file.mytag.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/shop/92db01dc7ca4e1777064a8da5e5b0a77331ab7e4.file.shopConfig.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/shop/a6a5a97c6cfb8d93e0dbcfdcbf1db3de1c267f10.file.specialTempType.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/shop/b97ae9126080f360bf5f5593fe41b1abfa3158cf.file.productList.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/06a5e16e56531c2590aca1177ab552b23e993278.file.dbData.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/0de1762bf41c2cf82e4d0c9c4bc8dd9947e68e82.file.advAdd.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/189fa07084cf317cd04aad9df1ce174cc553a2fb.file.siteModuleDomain.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/232d982d51ca761b98bfb83771a690e7d2efe381.file.editTemplate.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/25bbe52b966be9abf3f7abe2da70468f7ae9195e.file.siteBBS.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/26fcf09faf0b19cf06d12fd0c131a741ba3a8e5e.file.siteCity.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/3525cfda7a8843773d4e3cf3b75baef626fd38bd.file.advType.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/3ccdfe1141f5d58b191f79b9233b4438e719973d.file.siteBusinessDomain.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/44dd01d9fb4035046c66c9ac06f0f20d1953b19a.file.moduleList.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/65eb6edc931e2629cde8c232e06a052a4ae6be6b.file.advList.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/8d69f2ea17eb70212ac8f0723cbc1393f54d8c3f.file.friendLink.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/90313e7a38706df7acc90460fc8c8c18b91a4280.file.siteConfig.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/adad7f90f570319ffa520d18bc398c51e7be5fd8.file.dbReplace.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/b094ad7127ad4551f6aa5d8edb0deb5daa251eef.file.siteConfig.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/bf327d55897bac164d4a097000b314e03d64a806.file.store.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/c09ba49aa7055bc6793511ee1644201061315b68.file.siteClearCache.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/ce76b53fcf74f62d482c458b6e58941d306f1225.file.siteSubwayAdd.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/e30d8957a1e4d6e64fe657faec9aae2bb6c0c49f.file.siteClearCache.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/admin/siteConfig/e30d8957a1e4d6e64fe657faec9aae2bb6c0c49f.file.siteClearCache.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/eba84aa41ae12bdc4e86da2bd75a83b93a75cca2.file.loginConnect.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/ee9b36a3daad06de30137f06652d2a8773a8c8d6.file.siteSubway.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/f41adc1e661099068be87d028aabc11fe7865d36.file.siteNotify.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/f8eb102de2dccd9c433101b6df3929ebf8ae7098.file.dbQuery.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/fd7f4158f47d418484b82c29ada11e1e46eac8af.file.plugins.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/siteConfig/ffc08be11af55a23f02823ffa637d18efda4a271.file.siteAddr.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/special/2d75b4c97dde217f670c8b55dcb036c2f46508a8.file.specialType.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/special/6665cdfbbb0b9fe46c6cdde729d930d73f79e4fb.file.specialTempList.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/special/984d28eb2f06d1713377156ab4a298c4b9c87732.file.specialAdd.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/special/98b374519a5c4755eef078914ddd898c108ec7f6.file.websiteElement.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/special/babfcfdde83df5937e3145cabaf6fdc0e6067b79.file.specialTempAdd.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/special/f2dddcf441f91ff421d341fb9e8ad7b0b091881a.file.specialConfig.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/tuan/600119aa24783602c1c05f03b37e375550d756e9.file.siteCityAdvanced.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/tuan/ac7306ddc32fe20eb3d5866d040cc526da209b45.file.tuanConfig.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/tuan/f90f815b905709564081b7b0b697b734f85aa875.file.siteCityBusiness.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/video/34ef3a0d6af0c15e3f33efc56202109dcda5efe2.file.liveAdd.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/admin/website/355584fc9bab419385bb18ad531a0e430e5eef5f.file.websiteConfig.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/detail/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/detail/2aba31e45bae103d59c02c9a470bcfa2bb146bfd.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/detail/9fd9fa4563d46aaedf5374fc50fca317aba2e71b.file.detail.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/detail/a16fdffe8c597e97d9c852ae6e01d2092a1aeb20.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/detail/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/index/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/index/0ba9a777a8c078abdfdb580c42305bb72a5095e0.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/index/2aba31e45bae103d59c02c9a470bcfa2bb146bfd.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/index/448578b238a086c43652ffec9f89427c89e15ece.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/index/a16fdffe8c597e97d9c852ae6e01d2092a1aeb20.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/index/d4bd836df4d7bc24ef98e58ebaf17ab143b4674c.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/index/d5c2ebc69e46f8967126cad76caade5af1a6f9e0.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/index/e7a2ff90b7bd4166296376281cb6b63d93136e79.file._top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/index/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/list/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/list/2aba31e45bae103d59c02c9a470bcfa2bb146bfd.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/list/448578b238a086c43652ffec9f89427c89e15ece.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/list/9b52504e7c554f5478fe7a58a48e8562aac5ee94.file.toutiao.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/list/a16fdffe8c597e97d9c852ae6e01d2092a1aeb20.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/list/bcf0d935a5ec76b60714c4317277ce92826a1ca0.file.toutiao.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/list/d4bd836df4d7bc24ef98e58ebaf17ab143b4674c.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/list/e7a2ff90b7bd4166296376281cb6b63d93136e79.file._top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/list/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/mddetail/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/mddetail/2aba31e45bae103d59c02c9a470bcfa2bb146bfd.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/mddetail/4aa8653140ac738b7b6683560844c9762252139a.file.mddetail.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/mddetail/a16fdffe8c597e97d9c852ae6e01d2092a1aeb20.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/mddetail/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/media/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/media/2aba31e45bae103d59c02c9a470bcfa2bb146bfd.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/media/a16fdffe8c597e97d9c852ae6e01d2092a1aeb20.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/media/e92bfbf1660b6e3954f161b07039a0027113f82f.file.media.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/media/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/niday/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/niday/2aba31e45bae103d59c02c9a470bcfa2bb146bfd.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/niday/a16fdffe8c597e97d9c852ae6e01d2092a1aeb20.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/niday/acc2e8ecf18ab1b3c626e16a30e992ae6d90762b.file.niday.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/niday/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/picnews/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/picnews/176987c19cbd1e63cef9c3b4b38b449346f77af4.file.picnews.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/picnews/2aba31e45bae103d59c02c9a470bcfa2bb146bfd.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/picnews/a16fdffe8c597e97d9c852ae6e01d2092a1aeb20.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/picnews/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/short_video/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/short_video/2aba31e45bae103d59c02c9a470bcfa2bb146bfd.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/short_video/60d01563ee0977438454cfc530384fab630ffbdc.file.short_video.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/short_video/a16fdffe8c597e97d9c852ae6e01d2092a1aeb20.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/short_video/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/touch/list/a3c2464b0531c604ca89a6616823909d340cdf4e.file.touch_bottom_4.3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/touch/list/cc789e3cec9e7a20056fb2dd3bd4c950c97bbc12.file.public_share.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/touch/list/dc893ff29ace41d88969d2f4e7663a23c83f9a32.file.touch_top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/touch/list/f7a99350fb827fdb521c806093dc9c3c67a243c2.file.list.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/toutiao/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/toutiao/2aba31e45bae103d59c02c9a470bcfa2bb146bfd.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/toutiao/a16fdffe8c597e97d9c852ae6e01d2092a1aeb20.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/toutiao/bcf0d935a5ec76b60714c4317277ce92826a1ca0.file.toutiao.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/toutiao/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/video/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/video/2aba31e45bae103d59c02c9a470bcfa2bb146bfd.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/video/a16fdffe8c597e97d9c852ae6e01d2092a1aeb20.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/video/c62d26c03a96b6634cd093885aba6a99fb1ec874.file.video.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/video/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/zhuanti/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/zhuanti/13104e8f4eaef50e04103249f750f947b75bf53d.file.zhuanti.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/zhuanti/2aba31e45bae103d59c02c9a470bcfa2bb146bfd.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/zhuanti/a16fdffe8c597e97d9c852ae6e01d2092a1aeb20.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/article/zhuanti/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/car/index/c4f1832b2d60ff667fd1fce0d0f687b6978e71df.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/car/index/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/car/touch/index/8cd3c5daeb1115c19e14a5431573255c1bf26b3c.file.touch_top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/car/touch/index/e221a7f546361ee3123817a503343879cb1e1d6e.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/car/touch/list/6acbbd93f86bdfb900fc1935d3daebe642a9a1a2.file.list.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/car/touch/list/8cd3c5daeb1115c19e14a5431573255c1bf26b3c.file.touch_top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/car/touch/sell/60fab6ff19373705e94d500c743671cca27c7665.file.sell.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/car/touch/sell/8cd3c5daeb1115c19e14a5431573255c1bf26b3c.file.touch_top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/education/index/29ce79bd856f367de23204d092568ba9cde97753.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/homemaking/index/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/homemaking/index/f94f135da5c8bae2eb7afd333055667f30d6c5fe.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/house/index/077faf8f57bdb1e56a2878866bf18c6fbe665590.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/house/index/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/info/index/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/info/index/15fb88816eed8848e9b76e1fcf7cd52ae9f57295.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/info/index/3584ab52e4145edf69adcbdffbe887092cfcac79.file.header_search.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/info/index/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/info/list/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/info/list/3584ab52e4145edf69adcbdffbe887092cfcac79.file.header_search.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/info/list/35e67dd4f06548af8b26cc9dd4af5101aa9c5553.file.list.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/info/list/ca56f53d70b6767ee3a10ffe7c29f602cf7f8af3.file.bottom.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/info/list/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/job/touch/zhaopin/2e1cf2a93af6b46cff482c54bd8f08d225cc903d.file.zhaopin.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/job/touch/zhaopin/dc893ff29ace41d88969d2f4e7663a23c83f9a32.file.touch_top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/live/detail/062c359a0223b14011a2c816d58bc4df8825eee0.file.public_top_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/live/detail/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/live/detail/15c1dfbe8546d1c74703105b462c43f332a5d590.file.detail.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/live/detail/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/live/index/062c359a0223b14011a2c816d58bc4df8825eee0.file.public_top_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/live/index/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/live/index/4f742a1ea9ac574647c7d8bab3e86ec00c539606.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/live/index/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/live/livelist/062c359a0223b14011a2c816d58bc4df8825eee0.file.public_top_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/live/livelist/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/live/livelist/95fd880ae73cec6e8eba48b06b935e46e9080ff3.file.livelist.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/live/livelist/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/marry/index/0a62d3f81e7744c5f499d01c5e7fe9b6a4c4f8f5.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/marry/index/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-about/24aa2450228643fbe36a3397a8cf52892ada5d72.file.business-about.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-about/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-about/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-about/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-albums/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-albums/71910a920b6d070941e57491828c42ddcd3e5ddc.file.business-albums.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-albums/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-albums/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-comment/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-comment/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-comment/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-comment/dfe802fd1f38935465e39607a1b2ae7b0afaa1f0.file.business-comment.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-config/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-config/586f1807f4b581d7b89cb0645f69b2321678766f.file.business-config.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-config/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-config/a9b2ff5fb2d417075d604167b1658574b2d40863.file.business-config-form.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-config/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-custom_menu/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-custom_menu/8ed7868a9f20eeff96e8644f891b236d2d21163c.file.business-custom_menu.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-custom_menu/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-custom_menu/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-custom_nav/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-custom_nav/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-custom_nav/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-custom_nav/e557c89ef47b42ce0225b35db592b3adbeeeedff.file.business-custom_nav.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-news/3cbc9d01bb4c0a5694c3103ed434d36c40edd344.file.business-news.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-news/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-news/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-news/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-panor/4036535cf4b670a438775b526e38a12c4023a191.file.business-panor.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-panor/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-panor/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/business-panor/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/car-broker/1412ca6302e564c9dfc843c112debb1c5afc46a6.file.car-broker.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/car-broker/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/car-broker/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/car-broker/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/car_receive_broker/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/car_receive_broker/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/car_receive_broker/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/car_receive_broker/e4bcf9a80e4bf08328e3d5683af901aaf372df86.file.car_receive_broker.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/category/32dabe827d33ca6928fb3c0ca396aec951c8c558.file.category-shop.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/category/32dabe827d33ca6928fb3c0ca396aec951c8c558.file.category-shop.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/category/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/category/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/category/49e6eedb14c503676219b56282381efb67475717.file.category.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/category/49e6eedb14c503676219b56282381efb67475717.file.category.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/category/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/category/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/category/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/category/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/config-selfmedia/166a307b34148b036b3b21e0d0368dd969c9a623.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/config-selfmedia/62f42f48218f2b690f7daffe86ff4077436ea7a1.file.config-selfmedia.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/config-selfmedia/8dbde61d7645a7a7a84749d267648422c9d3dba5.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/config-selfmedia/b7ee91600e398ed7b7e463ae595e31f8ee42e52d.file.sidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/config/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/config/6899b50a7ee06ff577e986a10fff0be782dd6e34.file.config.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/config/79df3cc4db3361a481a4c8e57a1faccd9b0065b7.file.config-shop.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/config/8b40dd3207a86469fcb5a6c72b0eb05a5885f846.file.config-car.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/config/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/config/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/fabu/0d7c25a3a0cdc2abf53d4e0c4e74bac8db27610a.file.fabu-live.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/fabu/166a307b34148b036b3b21e0d0368dd969c9a623.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/fabu/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/fabu/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/fabu/66696444561ce163499fb909b4a1c621b4eb571d.file.fabu.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/fabu/66696444561ce163499fb909b4a1c621b4eb571d.file.fabu.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/fabu/7d28846b2fe08eb684388eedee0baed3d6c0bf5b.file.fabu.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/fabu/8dbde61d7645a7a7a84749d267648422c9d3dba5.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/fabu/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/fabu/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/fabu/b2b228ddf2fc07a1ea93411d0ac8642c87d978fe.file.fabu-pay.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/fabu/b7ee91600e398ed7b7e463ae595e31f8ee42e52d.file.sidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/fabu/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/fabu/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/fabu/d62e0e8ba1fe0a585735a3befad3b4f64c6aada6.file.fabu-shop.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/fabu/d62e0e8ba1fe0a585735a3befad3b4f64c6aada6.file.fabu-shop.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/fabu/f0ab444c608df6bae304260d779a29d2d9132837.file.fabu-business-custom_menu.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/fabu/f882880ee986a98a21af69af8718d810c7c6cabe.file.fabu-business.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/index/166a307b34148b036b3b21e0d0368dd969c9a623.file.top.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/index/166a307b34148b036b3b21e0d0368dd969c9a623.file.top.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/index/23df2c9b4e12cc55c353b7b35f220fca303db8c5.file.index.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/index/23df2c9b4e12cc55c353b7b35f220fca303db8c5.file.index.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/index/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/index/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/index/4a2da03d1ade57233538beff192f5d44d9d46603.file.index.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/index/4a2da03d1ade57233538beff192f5d44d9d46603.file.index.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/index/8dbde61d7645a7a7a84749d267648422c9d3dba5.file.footer.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/index/8dbde61d7645a7a7a84749d267648422c9d3dba5.file.footer.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/index/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/index/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/index/b7ee91600e398ed7b7e463ae595e31f8ee42e52d.file.sidebar.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/index/b7ee91600e398ed7b7e463ae595e31f8ee42e52d.file.sidebar.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/index/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/index/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/login/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/login/5ca396b66dac9e69c4590253151722493a69a1b4.file.login.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/login/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/manage/00b317dd4b0061a0913b03e1643ee13188a57c4f.file.manage-live.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/manage/166a307b34148b036b3b21e0d0368dd969c9a623.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/manage/1e2a576812818c0a43bb11c62bc40f7e72adb64f.file.manage.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/manage/1e2a576812818c0a43bb11c62bc40f7e72adb64f.file.manage.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/manage/3ef881258f3b460a84cfc6c1a91842562146679b.file.manage.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/manage/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/manage/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/manage/4a3bc4561b28320a55b3169a4264e2f0f44543de.file.refreshTop.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/manage/4a3bc4561b28320a55b3169a4264e2f0f44543de.file.refreshTop.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/manage/8dbde61d7645a7a7a84749d267648422c9d3dba5.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/manage/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/manage/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/manage/b2b228ddf2fc07a1ea93411d0ac8642c87d978fe.file.fabu-pay.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/manage/b7ee91600e398ed7b7e463ae595e31f8ee42e52d.file.sidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/manage/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/manage/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/manage/ea566bbc245b242e3794cc9b35b03872d28ea6ca.file.manage-shop.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/manage/ea566bbc245b242e3794cc9b35b03872d28ea6ca.file.manage-shop.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/message/166a307b34148b036b3b21e0d0368dd969c9a623.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/message/8dbde61d7645a7a7a84749d267648422c9d3dba5.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/message/b217282508f9c4d4b50a9e8a3a9828652a6b7c25.file.message.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/message/b7ee91600e398ed7b7e463ae595e31f8ee42e52d.file.sidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/module/046c7c20decc6d7c68506cd334decc370fc62b82.file.module.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/module/046c7c20decc6d7c68506cd334decc370fc62b82.file.module.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/module/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/module/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/module/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/module/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/module/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/member/module/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/order/49126df1c13855718a009a92c4a8649455e58e5f.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/order/9dbedd14e7fc8aa7bd865c6fdae7f3a34d35917b.file.order.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/order/a246898e13be9c3006a4fbf99bd3788d69b29c4c.file.headSidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/order/a5bb064860ed137db815e2313b5a9187d00d7f7f.file.order-shop.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/order/ba1051d644b89156a12df2a654694e2453309f53.file.head.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/register/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/register/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/register/f6016e5189ecbe5ae58b62cdefad659734bd6f89.file.register.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/security/166a307b34148b036b3b21e0d0368dd969c9a623.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/security/8dbde61d7645a7a7a84749d267648422c9d3dba5.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/security/b7ee91600e398ed7b7e463ae595e31f8ee42e52d.file.sidebar.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/security/bba5ad1cd13abce0b0d4cf158cc9d6577ef44e53.file.security.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/touch/index/a3c2464b0531c604ca89a6616823909d340cdf4e.file.touch_bottom_4.3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/touch/index/d5e95d2aa3e3ccfae80b82f6d835148af940a846.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/touch/login/c9cd31a14be41f692752be99d323b57b662fe83b.file.login.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/touch/login/cc789e3cec9e7a20056fb2dd3bd4c950c97bbc12.file.public_share.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/touch/login/dc893ff29ace41d88969d2f4e7663a23c83f9a32.file.touch_top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/member/touch/login_touch_popup_3.4/17af3a030a6ae90061fb3dc8a2cbdd432eae0510.file.login_touch_popup_3.4.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/paper/index/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/paper/index/394aabb15d70c9d53b254b2451174ab8c57854b0.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/paper/index/ea075d59a259c293fed1914371f294ae46cf3cbd.file.header.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/paper/index/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/quanjing/index/448578b238a086c43652ffec9f89427c89e15ece.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/quanjing/index/bc459a2651fa21e67e3165c9d5c9a00d61b73f37.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/quanjing/index/cad2dd52234ba583f400c77861c58171ea07705e.file.public_top_v1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/quanjing/index/d4bd836df4d7bc24ef98e58ebaf17ab143b4674c.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/brand/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/brand/5a3c3c1d7e2668f585241aff2d153b861c1b2406.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/brand/d707852cbe4c3b6adc019152d514e5ef4bce64ca.file.bottom.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/brand/f34ed46bfdb8bf095acce4f96c1ddeb5cb5c46de.file.brand.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/brand/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/index/0645e225e9784f1a374b7d72be8e32a849f6446b.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/index/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/shop/index/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/index/18a0fc1147963ba8a5742e4786cefa02fc9602fd.file.bottom.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/index/448578b238a086c43652ffec9f89427c89e15ece.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/index/5a3c3c1d7e2668f585241aff2d153b861c1b2406.file.top.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/shop/index/5a3c3c1d7e2668f585241aff2d153b861c1b2406.file.top.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/index/b2637894a6d3369d12a15a65b4e604bef2b5bd6a.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/index/d4bd836df4d7bc24ef98e58ebaf17ab143b4674c.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/index/d707852cbe4c3b6adc019152d514e5ef4bce64ca.file.bottom.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/shop/index/d707852cbe4c3b6adc019152d514e5ef4bce64ca.file.bottom.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/index/e7d56ad1a60dd432a254adf4f9cedbf2700710d6.file.index.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/shop/index/e7d56ad1a60dd432a254adf4f9cedbf2700710d6.file.index.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/index/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/shop/index/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/news/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/news/5a3c3c1d7e2668f585241aff2d153b861c1b2406.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/news/d707852cbe4c3b6adc019152d514e5ef4bce64ca.file.bottom.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/news/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/news/f701096447b06b2cf440ba1958e53248742c7915.file.news.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/qianggou/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/qianggou/18a0fc1147963ba8a5742e4786cefa02fc9602fd.file.bottom.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/qianggou/2773798bb4358a91ca0874564fc3d1e4ce035115.file.qianggou.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/qianggou/27b44c562c27dfdf1f60037ff646464aadc6706c.file.qianggou.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/qianggou/448578b238a086c43652ffec9f89427c89e15ece.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/qianggou/5a3c3c1d7e2668f585241aff2d153b861c1b2406.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/qianggou/b2637894a6d3369d12a15a65b4e604bef2b5bd6a.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/qianggou/d4bd836df4d7bc24ef98e58ebaf17ab143b4674c.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/qianggou/d707852cbe4c3b6adc019152d514e5ef4bce64ca.file.bottom.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/qianggou/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/secKill/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/secKill/5a3c3c1d7e2668f585241aff2d153b861c1b2406.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/secKill/ab2a1738d9ba9725bc1aea534476f5861441e6a2.file.secKill.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/secKill/d707852cbe4c3b6adc019152d514e5ef4bce64ca.file.bottom.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/secKill/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/store/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/store/5a3c3c1d7e2668f585241aff2d153b861c1b2406.file.top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/store/bddb00c16ceba6a5db88bad959ba5ed1fbf2ddcf.file.store.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/store/d707852cbe4c3b6adc019152d514e5ef4bce64ca.file.bottom.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/store/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/touch/index/4214dad5b48e5e06a21dea1b00e5ed4d05ad26d0.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/shop/touch/index/dc893ff29ace41d88969d2f4e7663a23c83f9a32.file.touch_top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/help-detail/448578b238a086c43652ffec9f89427c89e15ece.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/help-detail/74a764c6695c0d0ee4c7ade5121c4fc1329e2847.file.help-detail.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/help/0bc4e7e33f4372770a6499153094d39961d1701e.file.help.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/help/448578b238a086c43652ffec9f89427c89e15ece.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/help/a4574b90be87b1faf634e2682985f80d74c50c5e.file.help.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/help/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/index/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/siteConfig/index/06eba21c7cd755007dff105f872c6df685d7d995.file.public_foot_v3.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/index/2fc9a949c99cc14c94c434327a33e3dc7bafa3da.file.index.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/siteConfig/index/2fc9a949c99cc14c94c434327a33e3dc7bafa3da.file.index.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/index/448578b238a086c43652ffec9f89427c89e15ece.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/index/6f2d60fd79f966e6bc2f6d25107f8efe37335763.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/index/a060db4e1345ce5fde6234a1a3df19ef93bdf600.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/index/d4bd836df4d7bc24ef98e58ebaf17ab143b4674c.file.public_foot_v3.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/index/f041b4bd1e720acda4f0f0e10836f25e1422e7a3.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/index/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" beforeDir="false" afterPath="$PROJECT_DIR$/templates_c/compiled/siteConfig/index/f3dc9da755fe56ea49ea3a08339a36b02f8fd951.file.top1.html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/touch/index/1ead9d357513c470d77b935bed06d9c219c81c63.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/touch/index/8db7c44063bb5f0bfd97da195c060d4fabf48cd1.file.public_location.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/touch/index/96c0eb521ea1e1e3179ef4ec42d4c133303d8bfe.file.touch_bottom_3.4.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/siteConfig/touch/index/cc789e3cec9e7a20056fb2dd3bd4c950c97bbc12.file.public_share.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/tieba/touch/index/aeee69d97adf14f1031810860601aca7cd2168bb.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/tieba/touch/index/dc893ff29ace41d88969d2f4e7663a23c83f9a32.file.touch_top.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/travel/index/d58770d9628cf0f5126a97f3fc6bd87774aec038.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/waimai/index/448578b238a086c43652ffec9f89427c89e15ece.file.top1.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/waimai/index/520eeaefd1a5ae66438bc75561adc6fa21b85783.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/waimai/touch/index/04c0854f152c4cc8885bd7e9d658bc31751c3f8e.file.index.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/waimai/touch/index/8db7c44063bb5f0bfd97da195c060d4fabf48cd1.file.public_location.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/waimai/touch/index/b7f8e3ba2df639bdfc6fd0b6acc9713100f76809.file.footer.html.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates_c/compiled/waimai/touch/index/dc893ff29ace41d88969d2f4e7663a23c83f9a32.file.touch_top.html.php" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,36 +407,42 @@
       <usages-collector id="statistics.lifecycle.project">
         <counts>
           <entry key="project.open.time.2" value="1" />
+          <entry key="project.open.time.21" value="1" />
+          <entry key="project.open.time.32" value="1" />
           <entry key="project.open.time.5" value="1" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="html" value="24" />
-          <entry key="js" value="2" />
-          <entry key="php" value="13" />
+          <entry key="css" value="1" />
+          <entry key="html" value="30" />
+          <entry key="js" value="4" />
+          <entry key="php" value="23" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="HTML" value="24" />
-          <entry key="JavaScript" value="2" />
-          <entry key="PHP" value="13" />
+          <entry key="CSS" value="1" />
+          <entry key="HTML" value="30" />
+          <entry key="JavaScript" value="4" />
+          <entry key="PHP" value="23" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="html" value="105" />
-          <entry key="js" value="24" />
-          <entry key="php" value="220" />
+          <entry key="css" value="1" />
+          <entry key="html" value="906" />
+          <entry key="js" value="128" />
+          <entry key="php" value="832" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="HTML" value="105" />
-          <entry key="JavaScript" value="24" />
-          <entry key="PHP" value="220" />
+          <entry key="CSS" value="1" />
+          <entry key="HTML" value="906" />
+          <entry key="JavaScript" value="128" />
+          <entry key="PHP" value="832" />
         </counts>
       </usages-collector>
     </session>
@@ -54,23 +450,99 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/include/dbinfo.inc.php">
+        <entry file="file://$PROJECT_DIR$/templates/member/company/air_parameters.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="468">
-              <caret line="13" column="50" lean-forward="true" selection-start-line="13" selection-start-column="50" selection-end-line="13" selection-end-column="50" />
+            <state relative-caret-position="422">
+              <caret line="225" column="69" lean-forward="true" selection-start-line="225" selection-start-column="69" selection-end-line="225" selection-end-column="69" />
+              <folding>
+                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#1;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#2;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#3;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#4;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#6;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#div#6;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#4;n#div#0;n#div#6;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#7;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#div#7;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#4;n#div#0;n#div#7;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#8;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#div#8;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#11;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#div#11;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#12;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#div#12;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#13;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#div#13;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#14;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#div#14;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#15;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#div#15;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#16;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#div#16;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#17;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#19;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#div#19;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#20;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#div#20;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#21;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#div#21;n#form#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#22;n#form#0;n#div#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/api/handlers/airparems.class.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="36">
+              <caret line="10" column="15" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/api/handlers/airparems.controller.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="324">
+              <caret line="9" column="24" lean-forward="true" selection-start-line="9" selection-start-column="24" selection-end-line="9" selection-end-column="24" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/include/config/siteConfig.inc.php">
+        <entry file="file://$PROJECT_DIR$/templates/member/company/css/fabu-tuan.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="35" column="26" selection-start-line="35" selection-start-column="26" selection-end-line="35" selection-end-column="26" />
-              <folding>
-                <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#p#0;n#!!top" expanded="true" />
-              </folding>
+            <state relative-caret-position="396">
+              <caret line="9" column="14" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/include/ajax.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="181" lean-forward="true" selection-start-line="181" selection-end-line="181" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/api/handlers/shop.controller.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="72">
+              <caret line="11" column="33" selection-start-line="11" selection-start-column="33" selection-end-line="11" selection-end-column="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/api/handlers/shop.class.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="495" column="64" lean-forward="true" selection-start-line="495" selection-start-column="64" selection-end-line="495" selection-end-column="64" />
             </state>
           </provider>
         </entry>
@@ -79,16 +551,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>$huoniaoTag</find>
-      <find>hnup.rucheng.pro</find>
+      <find>render</find>
+      <find>offsetWidth</find>
+      <find>oldRender</find>
+      <find>一口价</find>
       <find>$action</find>
-      <find>nextArticle</find>
+      <find>ajax</find>
+      <find>, `practical_lift`</find>
+      <find>INSERT</find>
+      <find>detail_inventory</find>
+      <find>detail_mprice</find>
+      <find>fabu</find>
+      <find>detail_title</find>
+      <find>put</find>
+      <find>shop_product</find>
+      <find>edit</find>
+      <find>$dsql</find>
+      <find>SELECT</find>
+      <find>#@__shop_product</find>
+      <find>detail()</find>
+      <find>666</find>
+      <find>$do</find>
+      <find>&quot;service&quot;     =&gt;</find>
+      <find>notice</find>
+      <find>newsDetail</find>
+      <find>news-detail</find>
+      <find>data-url</find>
+      <find>url</find>
+      <find>&quot;service&quot;</find>
+      <find>shop</find>
       <find>detail</find>
-      <find>zhuanti</find>
-      <find>#article</find>
-      <find>请选择所属行业</find>
-      <find>UE.getEditor</find>
-      <find>holder.offsetWidth</find>
     </findStrings>
     <dirStrings>
       <dir>D:\myphp_www\PHPTutorial\WWW\ziyuan</dir>
@@ -109,9 +601,21 @@
         <option value="$PROJECT_DIR$/api/handlers/article.controller.php" />
         <option value="$PROJECT_DIR$/templates/article/skin7/zhuanti.html" />
         <option value="$PROJECT_DIR$/templates/member/company/config-shop.html" />
+        <option value="$PROJECT_DIR$/include/config/siteConfig.inc.php" />
         <option value="$PROJECT_DIR$/include/ueditor/ueditor.all.js" />
         <option value="$PROJECT_DIR$/include/dbinfo.inc.php" />
-        <option value="$PROJECT_DIR$/include/config/siteConfig.inc.php" />
+        <option value="$PROJECT_DIR$/templates/member/company/touch/fabu-shop.html" />
+        <option value="$PROJECT_DIR$/admin/templates/shop/selectCategory.html" />
+        <option value="$PROJECT_DIR$/include/config/airparems.inc.php" />
+        <option value="$PROJECT_DIR$/include/ajax.php" />
+        <option value="$PROJECT_DIR$/api/handlers/shop.class.php" />
+        <option value="$PROJECT_DIR$/api/handlers/shop.controller.php" />
+        <option value="$PROJECT_DIR$/api/handlers/airparems.class.php" />
+        <option value="$PROJECT_DIR$/api/handlers/airparems.controller.php" />
+        <option value="$PROJECT_DIR$/templates/member/company/fabu-shop.html" />
+        <option value="$PROJECT_DIR$/templates/member/company/air_parameters.html" />
+        <option value="$PROJECT_DIR$/templates/member/company/js/fabu-shop.js" />
+        <option value="$PROJECT_DIR$/templates/member/company/css/fabu-tuan.css" />
       </list>
     </option>
   </component>
@@ -122,8 +626,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="177" />
-    <option name="y" value="108" />
+    <option name="x" value="-427" />
+    <option name="y" value="38" />
     <option name="width" value="1293" />
     <option name="height" value="1017" />
   </component>
@@ -143,18 +647,42 @@
             <path>
               <item name="ziyuan" type="b2602c69:ProjectViewProjectNode" />
               <item name="ziyuan" type="462c0819:PsiDirectoryNode" />
-              <item name="include" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ziyuan" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ziyuan" type="462c0819:PsiDirectoryNode" />
-              <item name="include" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ziyuan" type="b2602c69:ProjectViewProjectNode" />
               <item name="ziyuan" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="member" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ziyuan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ziyuan" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="member" type="462c0819:PsiDirectoryNode" />
+              <item name="company" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ziyuan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ziyuan" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="member" type="462c0819:PsiDirectoryNode" />
+              <item name="company" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ziyuan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ziyuan" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="member" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ziyuan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ziyuan" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="member" type="462c0819:PsiDirectoryNode" />
+              <item name="touch" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -164,10 +692,16 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SearchEverywhereHistoryKey" value="console.log&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\myphp_www\PHPTutorial\WWW\ziyuan\templates\member\company" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -192,18 +726,20 @@
       <option name="presentableId" value="Default" />
       <updated>1565581183911</updated>
       <workItem from="1565581185672" duration="14851000" />
-      <workItem from="1565683072604" duration="7783000" />
+      <workItem from="1565683072604" duration="9553000" />
+      <workItem from="1565767945392" duration="4430000" />
+      <workItem from="1565835804179" duration="31446000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="22634000" />
+    <option name="totallyTimeSpent" value="60280000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49919224" visible="true" weight="0.25266525" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49919224" visible="true" weight="0.25799572" />
       <window_info id="Structure" order="1" sideWeight="0.50080776" side_tool="true" weight="0.25266525" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -231,32 +767,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/api/handlers/image.class.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2160">
-          <caret line="72" column="36" selection-start-line="72" selection-start-column="36" selection-end-line="72" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/handlers/homemaking.controller.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7380">
-          <caret line="11" column="33" selection-start-line="11" selection-start-column="33" selection-end-line="11" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/admin/app/audioVideoProcess.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/admin/huangye/huangyeAddr.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/admin/huangye/huangyeComplain.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/admin/app/appConfig.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/admin/login.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2626">
@@ -415,31 +925,197 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/ueditor/ueditor.all.js">
+    <entry file="file://$PROJECT_DIR$/templates_c/compiled/member/fabu/d62e0e8ba1fe0a585735a3befad3b4f64c6aada6.file.fabu-shop.html.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
-          <caret line="29282" column="50" lean-forward="true" selection-start-line="29282" selection-start-column="50" selection-end-line="29282" selection-end-column="50" />
+        <state relative-caret-position="189">
+          <caret line="5" column="9" lean-forward="true" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#6#177#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/include/dbinfo.inc.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="13" column="50" lean-forward="true" selection-start-line="13" selection-start-column="50" selection-end-line="13" selection-end-column="50" />
+        <state relative-caret-position="252">
+          <caret line="7" column="16" selection-start-line="7" selection-start-column="16" selection-end-line="7" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/ueditor/ueditor.all.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1052352">
+          <caret line="29236" selection-start-line="29236" selection-end-line="29236" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/include/config/siteConfig.inc.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="35" column="26" selection-start-line="35" selection-start-column="26" selection-end-line="35" selection-end-column="26" />
+        <state relative-caret-position="1152">
+          <caret line="32" column="22" selection-start-line="32" selection-start-column="22" selection-end-line="32" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/member/company/touch/fabu-shop.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="101" column="22" lean-forward="true" selection-start-line="101" selection-start-column="22" selection-end-line="101" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/admin/templates/shop/selectCategory.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1800">
+          <caret line="41" column="12" selection-start-line="41" selection-start-column="12" selection-end-line="41" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/member/company/head.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="7" column="45" selection-start-line="7" selection-start-column="45" selection-end-line="7" selection-end-column="106" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/member/company/fabu-vote.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-9406" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/handlers/huodong.controller.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="6" column="16" lean-forward="true" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/config/article.inc.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/config/education.inc.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/handlers/shop.controller.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="11" column="33" selection-start-line="11" selection-start-column="33" selection-end-line="11" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/member/company/js/fabu-shop.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1009">
+          <caret line="406" column="66" lean-forward="true" selection-start-line="406" selection-start-column="66" selection-end-line="406" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/config/airparems.inc.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2520">
+          <caret line="70" column="30" lean-forward="true" selection-start-line="70" selection-start-column="30" selection-end-line="70" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/ajax.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="181" lean-forward="true" selection-start-line="181" selection-end-line="181" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/handlers/shop.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="495" column="64" lean-forward="true" selection-start-line="495" selection-start-column="64" selection-end-line="495" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/member/company/fabu-shop.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="29" column="163" selection-start-line="29" selection-start-column="155" selection-end-line="29" selection-end-column="163" />
           <folding>
-            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#p#0;n#!!top" expanded="true" />
+            <element signature="e#1989#1995#0" expanded="true" />
+            <element signature="e#1995#2001#0" expanded="true" />
+            <element signature="e#2001#2007#0" expanded="true" />
+            <element signature="e#2007#2013#0" expanded="true" />
+            <element signature="n#style#0;n#select#0;n#dd#0;n#dl#3;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#dd#0;n#dl#3;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#ul#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#ul#0;n#div#0;n#dd#0;n#dl#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#li#0;n#div#0;n#dd#0;n#dl#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#a#0;n#p#0;n#div#1;n#div#1;n#dd#0;n#dl#0;n#!!top" expanded="true" />
+            <element signature="e#10605#10611#0" expanded="true" />
+            <element signature="e#10611#10617#0" expanded="true" />
+            <element signature="n#style#0;n#script#0;n#dd#0;n#dl#1;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#dd#0;n#dl#1;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/member/company/air_parameters.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="422">
+          <caret line="225" column="69" lean-forward="true" selection-start-line="225" selection-start-column="69" selection-end-line="225" selection-end-column="69" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#2;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#3;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#4;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#6;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#6;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#4;n#div#0;n#div#6;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#7;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#7;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#4;n#div#0;n#div#7;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#8;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#8;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#11;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#11;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#12;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#12;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#13;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#13;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#14;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#14;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#15;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#15;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#16;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#16;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#17;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#19;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#19;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#20;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#20;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#21;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#21;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#22;n#form#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/handlers/airparems.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="10" column="15" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/handlers/airparems.controller.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="9" column="24" lean-forward="true" selection-start-line="9" selection-start-column="24" selection-end-line="9" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/member/company/css/fabu-tuan.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="9" column="14" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
         </state>
       </provider>
     </entry>

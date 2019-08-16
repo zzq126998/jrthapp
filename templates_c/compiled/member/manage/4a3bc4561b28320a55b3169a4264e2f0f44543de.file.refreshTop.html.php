@@ -1,17 +1,17 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-12 16:14:37
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-15 11:36:58
          compiled from "D:\myphp_www\PHPTutorial\WWW\ziyuan\templates\member\refreshTop.html" */ ?>
-<?php /*%%SmartyHeaderCode:17142299015d511fed3357c6-11137826%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:14498905195d54d35abe0495-68403142%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     '4a3bc4561b28320a55b3169a4264e2f0f44543de' => 
     array (
       0 => 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\templates\\member\\refreshTop.html',
-      1 => 1553911858,
+      1 => 1564476881,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '17142299015d511fed3357c6-11137826',
+  'nocache_hash' => '14498905195d54d35abe0495-68403142',
   'function' => 
   array (
   ),
@@ -32,9 +32,9 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
   'version' => 'Smarty-3.1.21-dev',
-  'unifunc' => 'content_5d511fed36a3a9_83194561',
+  'unifunc' => 'content_5d54d35ac1ae39_43902631',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_5d511fed36a3a9_83194561')) {function content_5d511fed36a3a9_83194561($_smarty_tpl) {?><?php if (!is_callable('smarty_modifier_date_format')) include 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\include\\tpl\\plugins\\modifier.date_format.php';
+<?php if ($_valid && !is_callable('content_5d54d35ac1ae39_43902631')) {function content_5d54d35ac1ae39_43902631($_smarty_tpl) {?><?php if (!is_callable('smarty_modifier_date_format')) include 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\include\\tpl\\plugins\\modifier.date_format.php';
 ?><?php echo '<script'; ?>
  type="text/javascript">
   var userTotalBalance = <?php echo sprintf('%.2f',$_smarty_tpl->tpl_vars['userinfo']->value['money']);?>
@@ -268,7 +268,7 @@ images/pay_wx.png"><?php echo $_smarty_tpl->tpl_vars['langData']->value['siteCon
 
           <?php if ($_smarty_tpl->tpl_vars['_bindex']->value['payment']==1) {?>
           <?php ob_start();?><?php echo $_smarty_tpl->tpl_vars['payment']->value['pay_code'];?>
-<?php $_tmp25=ob_get_clean();?><?php $_smarty_tpl->tpl_vars['paytype'] = new Smarty_variable($_tmp25, null, 0);?>
+<?php $_tmp11=ob_get_clean();?><?php $_smarty_tpl->tpl_vars['paytype'] = new Smarty_variable($_tmp11, null, 0);?>
           <?php }?>
           <li<?php if ($_smarty_tpl->tpl_vars['_bindex']->value['payment']==1) {?> class="active"<?php }?> data-id="<?php echo $_smarty_tpl->tpl_vars['payment']->value['pay_code'];?>
 "><a href="javascript:;" class="<?php echo $_smarty_tpl->tpl_vars['payment']->value['pay_code'];?>

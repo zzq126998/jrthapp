@@ -186,6 +186,7 @@ if($action == "getSysTime"){
 
 	//获取接口数据
 	$handels = new handlers($service, $action);
+//	var_dump($handels);exit;
 	$return = $handels->getHandle($param);
 
 	if($pageInfo == 1 && $return['state'] == 100){

@@ -372,13 +372,13 @@ $(function(){
       });
     }
 
-		if(!regex.inventory() && offsetTop <= 0){
-			offsetTop = $("#inventory").position().top;
-		}
+		// if(!regex.inventory() && offsetTop <= 0){
+		// 	offsetTop = $("#inventory").position().top;
+		// }
 
-		if(!regex.limit() && offsetTop <= 0){
-			offsetTop = $("#limit").position().top;
-		}
+		// if(!regex.limit() && offsetTop <= 0){
+		// 	offsetTop = $("#limit").position().top;
+		// }
 
 		if(litpic == "" && offsetTop <= 0){
 			$.dialog.alert(langData['siteConfig'][27][78]);

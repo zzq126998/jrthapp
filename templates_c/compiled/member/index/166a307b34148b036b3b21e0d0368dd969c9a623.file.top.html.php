@@ -1,17 +1,17 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-12 15:05:29
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-16 10:26:07
          compiled from "D:\myphp_www\PHPTutorial\WWW\ziyuan\templates\member\top.html" */ ?>
-<?php /*%%SmartyHeaderCode:16665646415d510fb91c9438-35033521%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:876729255d56143fea9a70-04241015%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     '166a307b34148b036b3b21e0d0368dd969c9a623' => 
     array (
       0 => 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\templates\\member\\top.html',
-      1 => 1556457137,
+      1 => 1564476967,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '16665646415d510fb91c9438-35033521',
+  'nocache_hash' => '876729255d56143fea9a70-04241015',
   'function' => 
   array (
   ),
@@ -33,9 +33,9 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
   'version' => 'Smarty-3.1.21-dev',
-  'unifunc' => 'content_5d510fb92389b2_89804916',
+  'unifunc' => 'content_5d56144001b1d2_26757559',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_5d510fb92389b2_89804916')) {function content_5d510fb92389b2_89804916($_smarty_tpl) {?><?php if (!is_callable('smarty_modifier_replace')) include 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\include\\tpl\\plugins\\modifier.replace.php';
+<?php if ($_valid && !is_callable('content_5d56144001b1d2_26757559')) {function content_5d56144001b1d2_26757559($_smarty_tpl) {?><?php if (!is_callable('smarty_modifier_replace')) include 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\include\\tpl\\plugins\\modifier.replace.php';
 ?><?php echo '<script'; ?>
  type="text/javascript">var memberPage = true, cookiePre = '<?php echo $_smarty_tpl->tpl_vars['cfg_cookiePre']->value;?>
 ', channelDomain = '<?php echo smarty_modifier_replace($_smarty_tpl->tpl_vars['member_userDomain']->value,"http://",'');?>

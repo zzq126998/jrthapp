@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-12 14:40:19
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-14 14:06:00
          compiled from "D:\myphp_www\PHPTutorial\WWW\ziyuan\admin\templates\business\businessConfig.html" */ ?>
 <?php /*%%SmartyHeaderCode:12311462285d5109d3ed6867-69020008%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'bea60a79884a404e478c0e944b4e9403007c5da8' => 
     array (
       0 => 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\admin\\templates\\business\\businessConfig.html',
-      1 => 1560907569,
+      1 => 1565752405,
       2 => 'file',
     ),
   ),
@@ -15,6 +15,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
+  'version' => 'Smarty-3.1.21-dev',
+  'unifunc' => 'content_5d5109d41306f3_27512996',
   'variables' => 
   array (
     'cfg_soft_lang' => 0,
@@ -45,6 +47,9 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'description' => 0,
     'agreement' => 0,
     'businessTag' => 0,
+    'commentCheck' => 0,
+    'commentCheckChecked' => 0,
+    'commentCheckNames' => 0,
     'trialState' => 0,
     'trialStateChecked' => 0,
     'trialStateNames' => 0,
@@ -165,8 +170,6 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'jsFile' => 0,
   ),
   'has_nocache_code' => false,
-  'version' => 'Smarty-3.1.21-dev',
-  'unifunc' => 'content_5d5109d41306f3_27512996',
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_5d5109d41306f3_27512996')) {function content_5d5109d41306f3_27512996($_smarty_tpl) {?><?php if (!is_callable('smarty_function_html_radios')) include 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\include\\tpl\\plugins\\function.html_radios.php';
 if (!is_callable('smarty_function_html_options')) include 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\include\\tpl\\plugins\\function.html_options.php';
@@ -366,6 +369,13 @@ echo $_smarty_tpl->tpl_vars['sharePic']->value;?>
         <span class="input-tips" style="display:block;margin-top:10px;"><s></s>首次使用请点击下方“确认提交”按钮</span>
         <span class="input-tips" style="display:block;margin-top:10px;"><s></s>多个请用“|”分隔。如：wifi|停车|包间</span>
         <span class="input-tips" style="display:block;margin-top:10px;"><s></s>如果需要增加或者修改标签内容，请上传标签图标到 "/static/images/business/" 目录下，图标为png类型，命名格式为：“b_sertag_ + 标签名称的全拼”</span>
+      </dd>
+    </dl>
+    <dl class="clearfix">
+      <dt><label>评论审核：</label></dt>
+      <dd class="radio">
+        <?php echo smarty_function_html_radios(array('name'=>"commentCheck",'values'=>$_smarty_tpl->tpl_vars['commentCheck']->value,'checked'=>$_smarty_tpl->tpl_vars['commentCheckChecked']->value,'output'=>$_smarty_tpl->tpl_vars['commentCheckNames']->value,'separator'=>"&nbsp;&nbsp;"),$_smarty_tpl);?>
+
       </dd>
     </dl>
   </div>
@@ -876,6 +886,18 @@ $_smarty_tpl->tpl_vars['cost']->_loop = true;
 </textarea></td>
               <td><input type="checkbox" name="joinAuth[store][travel][perm][]" value="1"<?php if ($_smarty_tpl->tpl_vars['joinAuth']->value['store']['travel']['perm']&&in_array("1",$_smarty_tpl->tpl_vars['joinAuth']->value['store']['travel']['perm'])) {?> checked<?php }?>></td>
               <td><input type="checkbox" name="joinAuth[store][travel][perm][]" value="2"<?php if ($_smarty_tpl->tpl_vars['joinAuth']->value['store']['travel']['perm']&&in_array("2",$_smarty_tpl->tpl_vars['joinAuth']->value['store']['travel']['perm'])) {?> checked<?php }?>></td>
+            </tr>
+            <?php }?>
+            <?php if (in_array("education",$_smarty_tpl->tpl_vars['installModuleArr']->value)) {?>
+            <tr>
+              <td>教育培训<input type="hidden" name="joinAuth[store][education][perm][]" value="-1" /></td>
+              <td><textarea name="joinAuth[store][education][note]"><?php echo $_smarty_tpl->tpl_vars['joinAuth']->value['store']['education']['note'];?>
+</textarea></td>
+              <td><input type="checkbox" name="joinAuth[store][education][perm][]" value="1"<?php if ($_smarty_tpl->tpl_vars['joinAuth']->value['store']['education']['perm']&&in_array("1",$_smarty_tpl->tpl_vars['joinAuth']->value['store']['education']['perm'])) {?> checked<?php }?>><br>
+                <div class="input-append" style="margin-top: 5px;"><input class="span1" type="text" name="joinAuth[module][education][limit]" value="<?php echo $_smarty_tpl->tpl_vars['joinAuth']->value['module']['education']['limit'];?>
+"><span class="add-on">条</span></div>
+              </td>
+              <td><input type="checkbox" name="joinAuth[store][education][perm][]" value="2"<?php if ($_smarty_tpl->tpl_vars['joinAuth']->value['store']['education']['perm']&&in_array("2",$_smarty_tpl->tpl_vars['joinAuth']->value['store']['education']['perm'])) {?> checked<?php }?>></td>
             </tr>
             <?php }?>
 

@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-12 14:41:56
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-14 11:34:57
          compiled from "D:\myphp_www\PHPTutorial\WWW\ziyuan\admin\templates\index.html" */ ?>
 <?php /*%%SmartyHeaderCode:7384245815d510a34332ea3-36351164%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '5390eda9ab83a64cc59a7378b55496882d81880a' => 
     array (
       0 => 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\admin\\templates\\index.html',
-      1 => 1561715346,
+      1 => 1565752405,
       2 => 'file',
     ),
   ),
@@ -15,6 +15,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
+  'version' => 'Smarty-3.1.21-dev',
+  'unifunc' => 'content_5d510a3437b311_26228896',
   'variables' => 
   array (
     'cfg_soft_lang' => 0,
@@ -38,8 +40,6 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'gotopage' => 0,
   ),
   'has_nocache_code' => false,
-  'version' => 'Smarty-3.1.21-dev',
-  'unifunc' => 'content_5d510a3437b311_26228896',
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_5d510a3437b311_26228896')) {function content_5d510a3437b311_26228896($_smarty_tpl) {?><!DOCTYPE html>
 <!--[if lt IE 9]>
@@ -196,7 +196,7 @@ echo $_smarty_tpl->tpl_vars['storeData']->value;?>
 >
 <?php echo '<script'; ?>
  type="text/javascript" src="<?php echo $_smarty_tpl->tpl_vars['cfg_basehost']->value;?>
-/static/js/admin/index.js?v=105"><?php echo '</script'; ?>
+/static/js/admin/index.js?v=106"><?php echo '</script'; ?>
 >
 </body>
 </html>

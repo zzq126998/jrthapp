@@ -1,17 +1,17 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-13 16:37:02
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-15 10:37:49
          compiled from "D:\myphp_www\PHPTutorial\WWW\ziyuan\templates\member\company\fabu.html" */ ?>
-<?php /*%%SmartyHeaderCode:13179759375d5276aec56805-83396962%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:2439212765d54c57d2abdf4-84653312%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     '66696444561ce163499fb909b4a1c621b4eb571d' => 
     array (
       0 => 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\templates\\member\\company\\fabu.html',
-      1 => 1556457137,
+      1 => 1565752410,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '13179759375d5276aec56805-83396962',
+  'nocache_hash' => '2439212765d54c57d2abdf4-84653312',
   'function' => 
   array (
   ),
@@ -38,9 +38,9 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
   'version' => 'Smarty-3.1.21-dev',
-  'unifunc' => 'content_5d5276aecf8a17_47517147',
+  'unifunc' => 'content_5d54c57d324fb8_73542735',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_5d5276aecf8a17_47517147')) {function content_5d5276aecf8a17_47517147($_smarty_tpl) {?><?php if ($_smarty_tpl->tpl_vars['do']->value=="edit") {?>
+<?php if ($_valid && !is_callable('content_5d54c57d324fb8_73542735')) {function content_5d54c57d324fb8_73542735($_smarty_tpl) {?><?php if ($_smarty_tpl->tpl_vars['do']->value=="edit") {?>
 <?php $_smarty_tpl->tpl_vars['pageTitle'] = new Smarty_variable((((($_smarty_tpl->tpl_vars['langData']->value['siteConfig'][6][142]).(" - ")).($_smarty_tpl->tpl_vars['detail_title']->value)).(" - ")).($_smarty_tpl->tpl_vars['cfg_webname']->value), null, 0);?>
 <?php } else { ?>
 <?php $_smarty_tpl->tpl_vars['pageTitle'] = new Smarty_variable((($_smarty_tpl->tpl_vars['langData']->value['siteConfig'][6][143]).(" - ")).($_smarty_tpl->tpl_vars['cfg_webname']->value), null, 0);?>
@@ -75,7 +75,7 @@ css/ui/jquery.chosen.css?v=<?php echo $_smarty_tpl->tpl_vars['cfg_staticVersion'
 <?php echo '</script'; ?>
 >
 </head>
-<?php if ($_smarty_tpl->tpl_vars['type']->value=="nanny") {?>
+<?php if ($_smarty_tpl->tpl_vars['type']->value=="nanny"&&$_smarty_tpl->tpl_vars['type']->value!=0) {?>
 <?php $_smarty_tpl->tpl_vars['pageCurr'] = new Smarty_variable("fabu_".((string)$_smarty_tpl->tpl_vars['module']->value)."_".((string)$_smarty_tpl->tpl_vars['type']->value), null, 0);?>
 <?php } else { ?>
 <?php $_smarty_tpl->tpl_vars['pageCurr'] = new Smarty_variable("fabu_".((string)$_smarty_tpl->tpl_vars['module']->value), null, 0);?>
@@ -86,7 +86,7 @@ css/ui/jquery.chosen.css?v=<?php echo $_smarty_tpl->tpl_vars['cfg_staticVersion'
 
 <div class="main">
 	<div class="container fn-clear">
-		<?php if ($_smarty_tpl->tpl_vars['type']->value=="nanny") {?>
+		<?php if ($_smarty_tpl->tpl_vars['type']->value=="nanny"&&$_smarty_tpl->tpl_vars['type']->value!=0) {?>
 		<?php echo $_smarty_tpl->getSubTemplate ("fabu-".((string)$_smarty_tpl->tpl_vars['module']->value)."-".((string)$_smarty_tpl->tpl_vars['type']->value).".html", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0);?>
 
 		<?php } else { ?>

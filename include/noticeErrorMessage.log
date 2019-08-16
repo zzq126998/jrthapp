@@ -103,3 +103,13 @@
 [2019-06-10 23:49:39][debug] 错误内容："The following From address failed: admin@rucheng.pro : MAIL FROM command failed,Insufficient system storage\r\n,452,4.3.1SMTP server error: MAIL FROM command failed Detail: Insufficient system storage\r\n SMTP code: 452 Additional SMTP info: 4.3.1SMTP server error: MAIL FROM command failed Detail: Insufficient system storage\r\n SMTP code: 452 Additional SMTP info: 4.3.1"
 
 
+[2019-08-14 15:26:23][debug] 邮件发送错误日志
+[2019-08-14 15:26:23][debug] 发送内容：{"邮箱：":"123654@qq.com","标题：":"店铺审核通知-互动诸城","内容：":"HI，你大爷<br \/><br \/>您的店铺你大爷，已经通过审核。<a href=\"http:\/\/ziyuan.cc\/b\/config-business.html\" target=\"_blank\">点击查看<\/a>。<br \/><br \/>互动诸城<br \/>2019-08-14 15:26:19<br \/><br \/>这是一封系统自动发出的邮件，请不要直接回复。"}
+[2019-08-14 15:26:23][debug] 错误内容："SMTP connect() failed. https:\/\/github.com\/PHPMailer\/PHPMailer\/wiki\/Troubleshooting"
+
+
+[2019-08-15 10:28:01][debug] 邮件发送错误日志
+[2019-08-15 10:28:01][debug] 发送内容：{"邮箱：":"123123@qq.com","标题：":"店铺审核通知-互动诸城","内容：":"HI，测试<br \/><br \/>您的店铺测试1，已经通过审核。<a href=\"http:\/\/ziyuan.cc\/b\/config-business.html\" target=\"_blank\">点击查看<\/a>。<br \/><br \/>互动诸城<br \/>2019-08-15 10:27:57<br \/><br \/>这是一封系统自动发出的邮件，请不要直接回复。"}
+[2019-08-15 10:28:01][debug] 错误内容："SMTP connect() failed. https:\/\/github.com\/PHPMailer\/PHPMailer\/wiki\/Troubleshooting"
+
+

@@ -175,6 +175,7 @@ class shop {
 				}
 			}
 
+
 		}else{
 
 			//自定义LOGO
@@ -1754,6 +1755,7 @@ class shop {
      * @return array
      */
 	public function detail(){
+
 		global $dsql;
 		global $oper;
 		$listingDetail = array();
@@ -2055,7 +2057,6 @@ class shop {
 			// 所属分站
 //			$sql = $dsql->SetQuery("SELECT `addrid` FROM `#@__shop_store` WHERE `id` = ".$results[0]['store']);
 			// $ret = $dsql->dsqlOper($sql)
-
 			return $results[0];
 		}
 	}
@@ -5517,19 +5518,23 @@ class shop {
 
 		$userid    = $userLogin->getMemberID();
 		$param     = $this->param;
-
+        //var_dump($param);exit;
 		$typeid    = $param['typeid'];
 		$brand     = (int)$param['brand'];
 		$itemid    = $param['itemid'];
 		$title     = filterSensitiveWords(addslashes($param['title']));
 		$category  = $param['category'];
 		$mprice    = $param['mprice'];
+		$body_color = $param['body_color'];
+		$method     = $param['method'];
 		$price     = $param['price'];
-		$logistic  = $param['logistic'];
-		$volume    = (float)$param['volume'];
-		$weight    = (float)$param['weight'];
-		$inventory = $param['inventory'];
-		$limit     = $param['limit'];
+		//$price     = $param['price'];
+
+		//$logistic  = $param['logistic'];
+		//$volume    = (float)$param['volume'];
+		//$weight    = (float)$param['weight'];
+		//$inventory = $param['inventory'];
+		//$limit     = $param['limit'];
 		$litpic    = $param['litpic'];
 		$imglist   = $param['imglist'];
 		$video     = $param['video'];
@@ -5610,12 +5615,12 @@ class shop {
 		}
 
 		if(!preg_match("/^0|\d*\.?\d+$/i", $price, $matches)){
-			return array("state" => 200, "info" => $langData['shop'][4][59]);  //一口价不得为空，类型为数字！
+			return array("state" => 200, "info" => $langData['shop'][4][59]);  //售价不得为空，类型为数字！
 		}
 
-		if(empty($logistic)){
-			return array("state" => 200, "info" => $langData['shop'][4][60]);  //请选择物流运费模板！
-		}
+//		if(empty($logistic)){
+//			return array("state" => 200, "info" => $langData['shop'][4][60]);  //请选择物流运费模板！
+//		}
 
 		//获取分类下相应规格
 		$specifival = array();
@@ -5641,43 +5646,43 @@ class shop {
 			}
 		}
 
-		if(!empty($spearray)){
-			if(count($spearray) > 1){
-				$spearray = descartes($spearray);
-			}else{
-				$spearray = $spearray[0];
-			}
-			foreach($spearray as $key => $val){
-				$speid = $val;
-				if(is_array($val)){
-					$speid = join("-", $val);
-				}
-				$spemprice = $_POST["f_mprice_".$speid];
-				$speprice = $_POST["f_price_".$speid];
-				$speinventory = $_POST["f_inventory_".$speid];
-				if(!preg_match("/^0|\d*\.?\d+$/i", $spemprice, $matches)){
-					return array("state" => 200, "info" => $langData['shop'][4][61]);  //规格表中价格不得为空，类型为数字！
-				}elseif(!preg_match("/^0|\d*\.?\d+$/i", $speprice, $matches)){
-					return array("state" => 200, "info" => $langData['shop'][4][62]);  //规格表中库存不得为空，类型为数字！
-				}elseif(!preg_match("/^0|\d*\.?\d+$/i", $speinventory, $matches)){
-					return array("state" => 200, "info" => $langData['shop'][4][62]);  //规格表中库存不得为空，类型为数字！
-				}else{
-					$invent += $speinventory;
-					array_push($specifival, $speid.",".$spemprice."#".$speprice."#".$speinventory);
-				}
-			}
-		}
+//		if(!empty($spearray)){
+//			if(count($spearray) > 1){
+//				$spearray = descartes($spearray);
+//			}else{
+//				$spearray = $spearray[0];
+//			}
+//			foreach($spearray as $key => $val){
+//				$speid = $val;
+//				if(is_array($val)){
+//					$speid = join("-", $val);
+//				}
+//				$spemprice = $_POST["f_mprice_".$speid];
+//				$speprice = $_POST["f_price_".$speid];
+//				$speinventory = $_POST["f_inventory_".$speid];
+//				if(!preg_match("/^0|\d*\.?\d+$/i", $spemprice, $matches)){
+//					return array("state" => 200, "info" => $langData['shop'][4][61]);  //规格表中价格不得为空，类型为数字！
+//				}elseif(!preg_match("/^0|\d*\.?\d+$/i", $speprice, $matches)){
+//					return array("state" => 200, "info" => $langData['shop'][4][62]);  //规格表中库存不得为空，类型为数字！
+//				}elseif(!preg_match("/^0|\d*\.?\d+$/i", $speinventory, $matches)){
+//					return array("state" => 200, "info" => $langData['shop'][4][62]);  //规格表中库存不得为空，类型为数字！
+//				}else{
+//					$invent += $speinventory;
+//					array_push($specifival, $speid.",".$spemprice."#".$speprice."#".$speinventory);
+//				}
+//			}
+//		}
 
-		if(!empty($specifival)){
-			$specifival = join("|", $specifival);
-			$inventory = $invent;
-		}else{
-			$specifival = "";
-
-			if(!preg_match("/^0|\d*\.?\d+$/i", $inventory, $matches)){
-				return array("state" => 200, "info" => $langData['shop'][4][63]);  //库存不得为空，类型为数字！
-			}
-		}
+//		if(!empty($specifival)){
+//			$specifival = join("|", $specifival);
+//			$inventory = $invent;
+//		}else{
+//			$specifival = "";
+//
+//			if(!preg_match("/^0|\d*\.?\d+$/i", $inventory, $matches)){
+//				return array("state" => 200, "info" => $langData['shop'][4][63]);  //库存不得为空，类型为数字！
+//			}
+//		}
 
 		if(empty($litpic)){
 			return array("state" => 200, "info" => $langData['shop'][4][64]);  //请上传商品缩略图！
@@ -5694,7 +5699,9 @@ class shop {
 		}
 
 		//保存到主表
-		$archives = $dsql->SetQuery("INSERT INTO `#@__shop_product` (`type`, `title`, `brand`, `property`, `store`, `category`, `mprice`, `price`, `logistic`, `volume`, `weight`, `specification`, `inventory`, `limit`, `sales`, `litpic`, `sort`, `click`, `state`, `pics`, `body`, `mbody`, `pubdate`, `video`) VALUES ('$typeid', '$title', '$brand', '$property', '$sid', '$category', '$mprice', '$price', '$logistic', '$volume', '$weight', '$specifival', '$inventory', '$limit', '0', '$litpic', '1', '1', '0', '$imglist', '$body', '$body', '$pubdate', '$video')");
+		//$archives = $dsql->SetQuery("INSERT INTO `#@__shop_product` (`type`, `title`, `brand`, `property`, `store`, `category`, `mprice`, `price`, `logistic`, `volume`, `weight`, `specification`, `inventory`, `limit`, `sales`, `litpic`, `sort`, `click`, `state`, `pics`, `body`, `mbody`, `pubdate`, `video`) VALUES ('$typeid', '$title', '$brand', '$property', '$sid', '$category', '$mprice', '$price', '$logistic', '$volume', '$weight', '$specifival', '$inventory', '$limit', '0', '$litpic', '1', '1', '0', '$imglist', '$body', '$body', '$pubdate', '$video')");
+		$archives = $dsql->SetQuery("INSERT INTO `#@__shop_product` (`type`, `title`, `brand`, `property`, `store`, `category`, `mprice`, `price`, `litpic`, `sort`, `click`, `state`, `pics`, `body`, `mbody`, `pubdate`, `video`,`body_color`,`method`) 
+                                                                 VALUES ('$typeid', '$title', '$brand', '$property', '$sid', '$category', '$mprice', '$price', '$litpic', '1', '1', '0', '$imglist', '$body', '$body', '$pubdate', '$video','$body_color','$method')");
 		$aid = $dsql->dsqlOper($archives, "lastid");
 
 		if(is_numeric($aid)){
@@ -5719,28 +5726,53 @@ class shop {
 		global $dsql;
 		global $userLogin;
 		global $langData;
+//		$userid    = $userLogin->getMemberID();
+//		$param     = $this->param;
+//
+		//$id        = $param['id'];
+//		$typeid    = $param['typeid'];
+//		$brand     = (int)$param['brand'];
+//		$itemid    = $param['itemid'];
+//		$title     = filterSensitiveWords(addslashes($param['title']));
+//		$category  = $param['category'];
+//		$mprice    = $param['mprice'];
+//		$price     = $param['price'];
+//		$logistic  = $param['logistic'];
+//		$volume    = (float)$param['volume'];
+//		$weight    = (float)$param['weight'];
+//		$inventory = $param['inventory'];
+//		$limit     = $param['limit'];
+//		$litpic    = $param['litpic'];
+//		$imglist   = $param['imglist'];
+//		$video     = $param['video'];
+//		$body      = filterSensitiveWords(addslashes($param['body']));
+//		$pubdate   = GetMkTime(time());
 
-		$userid    = $userLogin->getMemberID();
-		$param     = $this->param;
+        $userid    = $userLogin->getMemberID();
+        $param     = $this->param;
+        //var_dump($param);exit;
+        $typeid    = $param['typeid'];
+        $id        = $param['id'];
+        $brand     = (int)$param['brand'];
+        $itemid    = $param['itemid'];
+        $title     = filterSensitiveWords(addslashes($param['title']));
+        $category  = $param['category'];
+        $mprice    = $param['mprice'];
+        $body_color = $param['body_color'];
+        $method     = $param['method'];
+        $price     = $param['price'];
+        //$price     = $param['price'];
 
-		$id        = $param['id'];
-		$typeid    = $param['typeid'];
-		$brand     = (int)$param['brand'];
-		$itemid    = $param['itemid'];
-		$title     = filterSensitiveWords(addslashes($param['title']));
-		$category  = $param['category'];
-		$mprice    = $param['mprice'];
-		$price     = $param['price'];
-		$logistic  = $param['logistic'];
-		$volume    = (float)$param['volume'];
-		$weight    = (float)$param['weight'];
-		$inventory = $param['inventory'];
-		$limit     = $param['limit'];
-		$litpic    = $param['litpic'];
-		$imglist   = $param['imglist'];
-		$video     = $param['video'];
-		$body      = filterSensitiveWords(addslashes($param['body']));
-		$pubdate   = GetMkTime(time());
+        //$logistic  = $param['logistic'];
+        //$volume    = (float)$param['volume'];
+        //$weight    = (float)$param['weight'];
+        //$inventory = $param['inventory'];
+        //$limit     = $param['limit'];
+        $litpic    = $param['litpic'];
+        $imglist   = $param['imglist'];
+        $video     = $param['video'];
+        $body      = filterSensitiveWords(addslashes($param['body']));
+        $pubdate   = GetMkTime(time());
 
 		if($userid == -1){
 			return array("state" => 200, "info" => $langData['siteConfig'][20][262]);  //登录超时，请重新登录！
@@ -5777,7 +5809,7 @@ class shop {
 		if($itemid == ""){
 			return array("state" => 200, "info" => $langData['shop'][4][56]);  //分类属性ID获取失败，请重新选择分类！
 		}
-
+//var_dump(1111);exit;
 		//获取分类下相应属性
 		$property = array();
 		$propertyName = "item";
@@ -5823,9 +5855,9 @@ class shop {
 			return array("state" => 200, "info" => $langData['shop'][4][59]);  //一口价不得为空，类型为数字！
 		}
 
-		if(empty($logistic)){
-			return array("state" => 200, "info" => $langData['shop'][4][60]);  //请选择物流运费模板！
-		}
+//		if(empty($logistic)){
+//			return array("state" => 200, "info" => $langData['shop'][4][60]);  //请选择物流运费模板！
+//		}
 
 		//获取分类下相应规格
 		$specifival = array();
@@ -5851,43 +5883,43 @@ class shop {
 			}
 		}
 
-		if(!empty($spearray)){
-			if(count($spearray) > 1){
-				$spearray = descartes($spearray);
-			}else{
-				$spearray = $spearray[0];
-			}
-			foreach($spearray as $key => $val){
-				$speid = $val;
-				if(is_array($val)){
-					$speid = join("-", $val);
-				}
-				$spemprice = $_POST["f_mprice_".$speid];
-				$speprice = $_POST["f_price_".$speid];
-				$speinventory = $_POST["f_inventory_".$speid];
-				if(!preg_match("/^0|\d*\.?\d+$/i", $spemprice, $matches)){
-					return array("state" => 200, "info" => $langData['shop'][4][61]);  //规格表中价格不得为空，类型为数字！
-				}elseif(!preg_match("/^0|\d*\.?\d+$/i", $speprice, $matches)){
-					return array("state" => 200, "info" => $langData['shop'][4][62]);  //规格表中库存不得为空，类型为数字！
-				}elseif(!preg_match("/^0|\d*\.?\d+$/i", $speinventory, $matches)){
-					return array("state" => 200, "info" => $langData['shop'][4][62]);  //规格表中库存不得为空，类型为数字！
-				}else{
-					$invent += $speinventory;
-					array_push($specifival, $speid.",".$spemprice."#".$speprice."#".$speinventory);
-				}
-			}
-		}
+//		if(!empty($spearray)){
+//			if(count($spearray) > 1){
+//				$spearray = descartes($spearray);
+//			}else{
+//				$spearray = $spearray[0];
+//			}
+//			foreach($spearray as $key => $val){
+//				$speid = $val;
+//				if(is_array($val)){
+//					$speid = join("-", $val);
+//				}
+//				$spemprice = $_POST["f_mprice_".$speid];
+//				$speprice = $_POST["f_price_".$speid];
+//				$speinventory = $_POST["f_inventory_".$speid];
+//				if(!preg_match("/^0|\d*\.?\d+$/i", $spemprice, $matches)){
+//					return array("state" => 200, "info" => $langData['shop'][4][61]);  //规格表中价格不得为空，类型为数字！
+//				}elseif(!preg_match("/^0|\d*\.?\d+$/i", $speprice, $matches)){
+//					return array("state" => 200, "info" => $langData['shop'][4][62]);  //规格表中库存不得为空，类型为数字！
+//				}elseif(!preg_match("/^0|\d*\.?\d+$/i", $speinventory, $matches)){
+//					return array("state" => 200, "info" => $langData['shop'][4][62]);  //规格表中库存不得为空，类型为数字！
+//				}else{
+//					$invent += $speinventory;
+//					array_push($specifival, $speid.",".$spemprice."#".$speprice."#".$speinventory);
+//				}
+//			}
+//		}
 
-		if(!empty($specifival)){
-			$specifival = join("|", $specifival);
-			$inventory = $invent;
-		}else{
-			$specifival = "";
-
-			if(!preg_match("/^0|\d*\.?\d+$/i", $inventory, $matches)){
-				return array("state" => 200, "info" => $langData['shop'][4][63]);  //库存不得为空，类型为数字！
-			}
-		}
+//		if(!empty($specifival)){
+//			$specifival = join("|", $specifival);
+//			$inventory = $invent;
+//		}else{
+//			$specifival = "";
+//
+//			if(!preg_match("/^0|\d*\.?\d+$/i", $inventory, $matches)){
+//				return array("state" => 200, "info" => $langData['shop'][4][63]);  //库存不得为空，类型为数字！
+//			}
+//		}
 
 		if(empty($litpic)){
 			return array("state" => 200, "info" => $langData['shop'][4][64]);  //请上传商品缩略图！
@@ -5904,7 +5936,7 @@ class shop {
 		}
 
 		//保存到主表
-		$archives = $dsql->SetQuery("UPDATE `#@__shop_product` SET `type` = '$typeid', `title` = '$title', `brand` = '$brand', `property` = '$property', `category` = '$category', `mprice` = '$mprice', `price` = '$price', `logistic` = '$logistic', `volume` = '$volume', `weight` = '$weight', `specification` = '$specifival', `inventory` = '$inventory', `limit` = '$limit', `litpic` = '$litpic', `state` = 0, `pics` = '$imglist', `body` = '$body', `video` = '$video' WHERE `id` = ".$id);
+		$archives = $dsql->SetQuery("UPDATE `#@__shop_product` SET `type` = '$typeid', `title` = '$title', `brand` = '$brand', `property` = '$property', `category` = '$category', `mprice` = '$mprice', `price` = '$price', `specification` = '$specifival',  `litpic` = '$litpic', `state` = 0, `pics` = '$imglist', `body` = '$body', `video` = '$video', `body_color` = '$body_color', `method` = '$method' WHERE `id` = ".$id);
 		$ret = $dsql->dsqlOper($archives, "update");
 
 		if($ret == "ok"){
@@ -6197,6 +6229,21 @@ class shop {
 	    );
 	    //print_R($list);exit;
 	}
+
+    /**
+     * 商品详细信息
+     * @return array
+     */
+    public function airparems(){
+
+        $param = array(
+            "service"     => "shop",
+            "template"    => "air_parameters",
+            "id"          => 666
+        );
+        var_dump(1111);exit;
+
+    }
 
 
 

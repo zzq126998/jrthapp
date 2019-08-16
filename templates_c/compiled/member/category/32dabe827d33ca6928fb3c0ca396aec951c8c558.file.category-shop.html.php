@@ -1,6 +1,6 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-13 17:46:57
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-15 11:43:57
          compiled from "D:\myphp_www\PHPTutorial\WWW\ziyuan\templates\member\company\category-shop.html" */ ?>
-<?php /*%%SmartyHeaderCode:8361918365d528711e8fb41-38455553%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:15899504865d54d4fdddb042-38035746%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
@@ -11,7 +11,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '8361918365d528711e8fb41-38455553',
+  'nocache_hash' => '15899504865d54d4fdddb042-38035746',
   'function' => 
   array (
   ),
@@ -25,9 +25,9 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
   'version' => 'Smarty-3.1.21-dev',
-  'unifunc' => 'content_5d528711ead015_55815834',
+  'unifunc' => 'content_5d54d4fddf8519_79106756',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_5d528711ead015_55815834')) {function content_5d528711ead015_55815834($_smarty_tpl) {?><?php ob_start();?><?php echo verifyModuleAuth(array('module'=>'shop'),$_smarty_tpl);?>
+<?php if ($_valid && !is_callable('content_5d54d4fddf8519_79106756')) {function content_5d54d4fddf8519_79106756($_smarty_tpl) {?><?php ob_start();?><?php echo verifyModuleAuth(array('module'=>'shop'),$_smarty_tpl);?>
 <?php $_tmp5=ob_get_clean();?><?php if ($_tmp5) {?>
 <div class="tbar fn-clear">
   <div class="operater">

@@ -1,17 +1,17 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-13 10:36:59
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-15 11:43:54
          compiled from "D:\myphp_www\PHPTutorial\WWW\ziyuan\templates\member\company\headSidebar.html" */ ?>
-<?php /*%%SmartyHeaderCode:19825505455d52224b4e8f55-93585841%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:11789433245d54d4fa1abf23-69401264%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     'a246898e13be9c3006a4fbf99bd3788d69b29c4c' => 
     array (
       0 => 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\templates\\member\\company\\headSidebar.html',
-      1 => 1557071651,
+      1 => 1565752410,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '19825505455d52224b4e8f55-93585841',
+  'nocache_hash' => '11789433245d54d4fa1abf23-69401264',
   'function' => 
   array (
   ),
@@ -32,9 +32,9 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
   'version' => 'Smarty-3.1.21-dev',
-  'unifunc' => 'content_5d52224b650614_25833400',
+  'unifunc' => 'content_5d54d4fa301c99_44464527',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_5d52224b650614_25833400')) {function content_5d52224b650614_25833400($_smarty_tpl) {?><?php if (!is_callable('smarty_modifier_replace')) include 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\include\\tpl\\plugins\\modifier.replace.php';
+<?php if ($_valid && !is_callable('content_5d54d4fa301c99_44464527')) {function content_5d54d4fa301c99_44464527($_smarty_tpl) {?><?php if (!is_callable('smarty_modifier_replace')) include 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\include\\tpl\\plugins\\modifier.replace.php';
 ?><div class="head">
 	<ul class="l">
 		<li class="index"><a href="<?php echo $_smarty_tpl->tpl_vars['cfg_basehost']->value;?>
@@ -438,12 +438,12 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 						<a<?php if ($_smarty_tpl->tpl_vars['pageCurr']->value=="manage_homemaking"||$_smarty_tpl->tpl_vars['pageCurr']->value=="fabu_homemaking") {?> class="curr"<?php }?> href="<?php echo getUrlPath(array('service'=>'member','template'=>'manage','action'=>'homemaking'),$_smarty_tpl);?>
 "><?php echo $_smarty_tpl->tpl_vars['langData']->value['homemaking'][8][31];?>
 </a>
-						<!--<a<?php if ($_smarty_tpl->tpl_vars['pageCurr']->value=="homemaking_nanny"||$_smarty_tpl->tpl_vars['pageCurr']->value=="fabu_homemaking_nanny") {?> class="curr"<?php }?> href="<?php echo getUrlPath(array('service'=>'member','template'=>'homemaking-nanny'),$_smarty_tpl);?>
+						<a<?php if ($_smarty_tpl->tpl_vars['pageCurr']->value=="homemaking_nanny"||$_smarty_tpl->tpl_vars['pageCurr']->value=="fabu_homemaking_nanny") {?> class="curr"<?php }?> href="<?php echo getUrlPath(array('service'=>'member','template'=>'homemaking-nanny'),$_smarty_tpl);?>
 "><?php echo $_smarty_tpl->tpl_vars['langData']->value['homemaking'][8][44];?>
 </a>
 						<a<?php if ($_smarty_tpl->tpl_vars['pageCurr']->value=="order_homemaking") {?> class="curr"<?php }?> href="<?php echo getUrlPath(array('service'=>'member','template'=>'order','action'=>'homemaking'),$_smarty_tpl);?>
 "><?php echo $_smarty_tpl->tpl_vars['langData']->value['siteConfig'][19][447];?>
-</a>-->
+</a>
 					</dd>
 				</dl>
 

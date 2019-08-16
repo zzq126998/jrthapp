@@ -1,6 +1,6 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-12 14:06:14
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-15 11:43:08
          compiled from "D:\myphp_www\PHPTutorial\WWW\ziyuan\templates\siteConfig\public_foot_v3.html" */ ?>
-<?php /*%%SmartyHeaderCode:13647868625d5101d661f0f0-00836404%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:17216106825d54d4cc99e079-74988829%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
@@ -11,7 +11,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '13647868625d5101d661f0f0-00836404',
+  'nocache_hash' => '17216106825d54d4cc99e079-74988829',
   'function' => 
   array (
   ),
@@ -30,9 +30,9 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
   'version' => 'Smarty-3.1.21-dev',
-  'unifunc' => 'content_5d5101d662eb08_39228718',
+  'unifunc' => 'content_5d54d4cc9b18f5_87242349',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_5d5101d662eb08_39228718')) {function content_5d5101d662eb08_39228718($_smarty_tpl) {?><div class="footer <?php echo $_smarty_tpl->tpl_vars['theme']->value;?>
+<?php if ($_valid && !is_callable('content_5d54d4cc9b18f5_87242349')) {function content_5d54d4cc9b18f5_87242349($_smarty_tpl) {?><div class="footer <?php echo $_smarty_tpl->tpl_vars['theme']->value;?>
 ">
   <div class="wrap">
     <?php if ($_smarty_tpl->tpl_vars['module']->value) {?>
@@ -57,7 +57,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
           <?php $_smarty_tpl->smarty->_tag_stack[] = array('siteConfig', array('action'=>"singel",'pageSize'=>"4")); $_block_repeat=true; echo siteConfig(array('action'=>"singel",'pageSize'=>"4"), null, $_smarty_tpl, $_block_repeat);while ($_block_repeat) { ob_start();?>
 
           <dd><a href="<?php ob_start();?><?php echo $_smarty_tpl->tpl_vars['row']->value['id'];?>
-<?php $_tmp27=ob_get_clean();?><?php echo getUrlPath(array('service'=>'siteConfig','template'=>'about','id'=>$_tmp27),$_smarty_tpl);?>
+<?php $_tmp18=ob_get_clean();?><?php echo getUrlPath(array('service'=>'siteConfig','template'=>'about','id'=>$_tmp18),$_smarty_tpl);?>
 " target="_blank"><?php echo $_smarty_tpl->tpl_vars['row']->value['title'];?>
 </a></dd>
           <?php $_block_content = ob_get_clean(); $_block_repeat=false; echo siteConfig(array('action'=>"singel",'pageSize'=>"4"), $_block_content, $_smarty_tpl, $_block_repeat); } array_pop($_smarty_tpl->smarty->_tag_stack);?>
@@ -71,14 +71,14 @@ $_valid = $_smarty_tpl->decodeProperties(array (
           <dt><?php echo $_smarty_tpl->tpl_vars['type']->value['typename'];?>
 <s></s></dt>
           <?php ob_start();?><?php echo $_smarty_tpl->tpl_vars['type']->value['id'];?>
-<?php $_tmp28=ob_get_clean();?><?php $_smarty_tpl->smarty->_tag_stack[] = array('siteConfig', array('action'=>'helpsType','type'=>$_tmp28,'return'=>'type1','pageSize'=>"5")); $_block_repeat=true; echo siteConfig(array('action'=>'helpsType','type'=>$_tmp28,'return'=>'type1','pageSize'=>"5"), null, $_smarty_tpl, $_block_repeat);while ($_block_repeat) { ob_start();?>
+<?php $_tmp19=ob_get_clean();?><?php $_smarty_tpl->smarty->_tag_stack[] = array('siteConfig', array('action'=>'helpsType','type'=>$_tmp19,'return'=>'type1','pageSize'=>"5")); $_block_repeat=true; echo siteConfig(array('action'=>'helpsType','type'=>$_tmp19,'return'=>'type1','pageSize'=>"5"), null, $_smarty_tpl, $_block_repeat);while ($_block_repeat) { ob_start();?>
 
           <dd><a href="<?php ob_start();?><?php echo $_smarty_tpl->tpl_vars['type1']->value['id'];?>
-<?php $_tmp29=ob_get_clean();?><?php echo getUrlPath(array('service'=>'siteConfig','template'=>'help','id'=>$_tmp29),$_smarty_tpl);?>
+<?php $_tmp20=ob_get_clean();?><?php echo getUrlPath(array('service'=>'siteConfig','template'=>'help','id'=>$_tmp20),$_smarty_tpl);?>
 " target="_blank" title="<?php echo $_smarty_tpl->tpl_vars['type1']->value['typename'];?>
 "><?php echo $_smarty_tpl->tpl_vars['type1']->value['typename'];?>
 </a></dd>
-          <?php $_block_content = ob_get_clean(); $_block_repeat=false; echo siteConfig(array('action'=>'helpsType','type'=>$_tmp28,'return'=>'type1','pageSize'=>"5"), $_block_content, $_smarty_tpl, $_block_repeat); } array_pop($_smarty_tpl->smarty->_tag_stack);?>
+          <?php $_block_content = ob_get_clean(); $_block_repeat=false; echo siteConfig(array('action'=>'helpsType','type'=>$_tmp19,'return'=>'type1','pageSize'=>"5"), $_block_content, $_smarty_tpl, $_block_repeat); } array_pop($_smarty_tpl->smarty->_tag_stack);?>
 
         </dl>
         <?php $_block_content = ob_get_clean(); $_block_repeat=false; echo siteConfig(array('action'=>'helpsType','return'=>'type','pageSize'=>"5"), $_block_content, $_smarty_tpl, $_block_repeat); } array_pop($_smarty_tpl->smarty->_tag_stack);?>

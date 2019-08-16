@@ -1,17 +1,17 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-12 14:06:20
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-16 10:26:20
          compiled from "D:\myphp_www\PHPTutorial\WWW\ziyuan\templates\siteConfig\top1.html" */ ?>
-<?php /*%%SmartyHeaderCode:7975704445d5101dc773f82-49213109%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:7348741895d56144cda8652-15517223%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     'f3dc9da755fe56ea49ea3a08339a36b02f8fd951' => 
     array (
       0 => 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\templates\\siteConfig\\top1.html',
-      1 => 1558086990,
+      1 => 1565752416,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '7975704445d5101dc773f82-49213109',
+  'nocache_hash' => '7348741895d56144cda8652-15517223',
   'function' => 
   array (
   ),
@@ -19,15 +19,14 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   array (
     'cfg_cookiePre' => 0,
     'cfg_clihost' => 0,
-    'siteCityInfo' => 0,
     'service' => 0,
-    'city' => 0,
-    'cfg_basehost' => 0,
+    'siteCityInfo' => 0,
     'userinfo' => 0,
     'member_userDomain' => 0,
     'member_busiDomain' => 0,
     'langData' => 0,
     'userDomain' => 0,
+    'cfg_basehost' => 0,
     '_bindex' => 0,
     'row1' => 0,
     'cfg_staticVersion' => 0,
@@ -39,12 +38,14 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
   'version' => 'Smarty-3.1.21-dev',
-  'unifunc' => 'content_5d5101dc7ba4b5_57798718',
+  'unifunc' => 'content_5d56144ce67d30_76641897',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_5d5101dc7ba4b5_57798718')) {function content_5d5101dc7ba4b5_57798718($_smarty_tpl) {?><?php echo '<script'; ?>
+<?php if ($_valid && !is_callable('content_5d56144ce67d30_76641897')) {function content_5d56144ce67d30_76641897($_smarty_tpl) {?><?php echo '<script'; ?>
  type="text/javascript">var cookiePre = '<?php echo $_smarty_tpl->tpl_vars['cfg_cookiePre']->value;?>
 ', cfg_clihost = '<?php echo $_smarty_tpl->tpl_vars['cfg_clihost']->value;?>
-';<?php echo '</script'; ?>
+', cfg_module = '<?php echo $_smarty_tpl->tpl_vars['service']->value;?>
+',cfg_cityInfo = '<?php echo $_smarty_tpl->tpl_vars['siteCityInfo']->value;?>
+'; <?php echo '</script'; ?>
 >
 <!-- 顶部信息 s -->
 <div class="topInfo">
@@ -62,20 +63,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 						<div class="box">
 							<div class="content fn-clear">
 								<p class="tit">请选择您所在的城市：</p>
-								<ul>
-								<?php ob_start();?><?php echo $_smarty_tpl->tpl_vars['service']->value;?>
-<?php $_tmp15=ob_get_clean();?><?php $_smarty_tpl->smarty->_tag_stack[] = array('siteConfig', array('action'=>'siteCity','return'=>'city','module'=>$_tmp15)); $_block_repeat=true; echo siteConfig(array('action'=>'siteCity','return'=>'city','module'=>$_tmp15), null, $_smarty_tpl, $_block_repeat);while ($_block_repeat) { ob_start();?>
-
-					      	<li><a href="<?php echo $_smarty_tpl->tpl_vars['city']->value['url'];?>
-" title="<?php echo $_smarty_tpl->tpl_vars['city']->value['name'];?>
-"<?php if ($_smarty_tpl->tpl_vars['siteCityInfo']->value['domain']==$_smarty_tpl->tpl_vars['city']->value['domain']) {?> class="curr"<?php }?> data-domain='<?php echo json_encode($_smarty_tpl->tpl_vars['city']->value);?>
-'><?php echo $_smarty_tpl->tpl_vars['city']->value['name'];?>
-<s><img src="<?php echo $_smarty_tpl->tpl_vars['cfg_basehost']->value;?>
-/static/images/changecity_curr.png" /></s></a></li>
-					      <?php $_block_content = ob_get_clean(); $_block_repeat=false; echo siteConfig(array('action'=>'siteCity','return'=>'city','module'=>$_tmp15), $_block_content, $_smarty_tpl, $_block_repeat); } array_pop($_smarty_tpl->smarty->_tag_stack);?>
-
-				      	</ul>
-				      </div>
+								<ul></ul>
+				      		</div>
 				      <div class="morecontent fn-hide">
 								<dl class="hot">
 									<dt>热门</dt>
@@ -184,23 +173,23 @@ images/public_top_icon_wechat.png" /></i><?php echo $_smarty_tpl->tpl_vars['lang
 <i class="picon picon-down"></i></a>
 				<div class="submenu">
 					<?php ob_start();?><?php echo verifyModuleAuth(array('module'=>'article','type'=>'userCenter'),$_smarty_tpl);?>
-<?php $_tmp16=ob_get_clean();?><?php if (in_array("article",$_smarty_tpl->tpl_vars['installModuleArr']->value)&&(!$_smarty_tpl->tpl_vars['userinfo']->value||$_tmp16)) {?><a href="<?php echo getUrlPath(array('service'=>'member','type'=>'user','template'=>'fabu','action'=>'article'),$_smarty_tpl);?>
+<?php $_tmp15=ob_get_clean();?><?php if (in_array("article",$_smarty_tpl->tpl_vars['installModuleArr']->value)&&(!$_smarty_tpl->tpl_vars['userinfo']->value||$_tmp15)) {?><a href="<?php echo getUrlPath(array('service'=>'member','type'=>'user','template'=>'fabu','action'=>'article'),$_smarty_tpl);?>
 " target="_blank"><?php echo $_smarty_tpl->tpl_vars['langData']->value['siteConfig'][19][235];?>
 </a><?php }?>
 					<?php ob_start();?><?php echo verifyModuleAuth(array('module'=>'info','type'=>'userCenter'),$_smarty_tpl);?>
-<?php $_tmp17=ob_get_clean();?><?php if (in_array("info",$_smarty_tpl->tpl_vars['installModuleArr']->value)&&(!$_smarty_tpl->tpl_vars['userinfo']->value||$_tmp17)) {?><a href="<?php echo getUrlPath(array('service'=>'member','type'=>'user','template'=>'fabu','action'=>'info'),$_smarty_tpl);?>
+<?php $_tmp16=ob_get_clean();?><?php if (in_array("info",$_smarty_tpl->tpl_vars['installModuleArr']->value)&&(!$_smarty_tpl->tpl_vars['userinfo']->value||$_tmp16)) {?><a href="<?php echo getUrlPath(array('service'=>'member','type'=>'user','template'=>'fabu','action'=>'info'),$_smarty_tpl);?>
 " target="_blank"><?php echo $_smarty_tpl->tpl_vars['langData']->value['siteConfig'][19][236];?>
 </a><?php }?>
 					<?php ob_start();?><?php echo verifyModuleAuth(array('module'=>'house','type'=>'userCenter'),$_smarty_tpl);?>
-<?php $_tmp18=ob_get_clean();?><?php if (in_array("house",$_smarty_tpl->tpl_vars['installModuleArr']->value)&&(!$_smarty_tpl->tpl_vars['userinfo']->value||$_tmp18)) {?><a href="<?php echo getUrlPath(array('service'=>'member','type'=>'user','template'=>'config','action'=>'house'),$_smarty_tpl);?>
+<?php $_tmp17=ob_get_clean();?><?php if (in_array("house",$_smarty_tpl->tpl_vars['installModuleArr']->value)&&(!$_smarty_tpl->tpl_vars['userinfo']->value||$_tmp17)) {?><a href="<?php echo getUrlPath(array('service'=>'member','type'=>'user','template'=>'config','action'=>'house'),$_smarty_tpl);?>
 " target="_blank"><?php echo $_smarty_tpl->tpl_vars['langData']->value['siteConfig'][11][6];?>
 </a><?php }?>
 					<?php ob_start();?><?php echo verifyModuleAuth(array('module'=>'huodong','type'=>'userCenter'),$_smarty_tpl);?>
-<?php $_tmp19=ob_get_clean();?><?php if (in_array("huodong",$_smarty_tpl->tpl_vars['installModuleArr']->value)&&(!$_smarty_tpl->tpl_vars['userinfo']->value||$_tmp19)) {?><a href="<?php echo getUrlPath(array('service'=>'huodong','template'=>'fabu'),$_smarty_tpl);?>
+<?php $_tmp18=ob_get_clean();?><?php if (in_array("huodong",$_smarty_tpl->tpl_vars['installModuleArr']->value)&&(!$_smarty_tpl->tpl_vars['userinfo']->value||$_tmp18)) {?><a href="<?php echo getUrlPath(array('service'=>'huodong','template'=>'fabu'),$_smarty_tpl);?>
 " target="_blank"><?php echo $_smarty_tpl->tpl_vars['langData']->value['siteConfig'][11][7];?>
 </a><?php }?>
 					<?php ob_start();?><?php echo verifyModuleAuth(array('module'=>'tieba','type'=>'userCenter'),$_smarty_tpl);?>
-<?php $_tmp20=ob_get_clean();?><?php if (in_array("tieba",$_smarty_tpl->tpl_vars['installModuleArr']->value)&&(!$_smarty_tpl->tpl_vars['userinfo']->value||$_tmp20)) {?><a href="<?php echo getUrlPath(array('service'=>'tieba','template'=>'index','param'=>'#publish'),$_smarty_tpl);?>
+<?php $_tmp19=ob_get_clean();?><?php if (in_array("tieba",$_smarty_tpl->tpl_vars['installModuleArr']->value)&&(!$_smarty_tpl->tpl_vars['userinfo']->value||$_tmp19)) {?><a href="<?php echo getUrlPath(array('service'=>'tieba','template'=>'index','param'=>'#publish'),$_smarty_tpl);?>
 " target="_blank"><?php echo $_smarty_tpl->tpl_vars['langData']->value['siteConfig'][11][3];?>
 </a><?php }?>
 				</div>

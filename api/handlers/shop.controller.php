@@ -10,7 +10,6 @@ function shop($params, $content = "", &$smarty = array(), &$repeat = array()){
 	$service = "shop";
 	extract ($params);
 	if(empty($action)) return '';
-
 	global $huoniaoTag;
 	global $dsql;
 	global $userLogin;

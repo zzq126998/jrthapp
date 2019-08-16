@@ -1,6 +1,6 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-14 11:29:06
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2019-08-15 11:43:08
          compiled from "D:\myphp_www\PHPTutorial\WWW\ziyuan\templates\siteConfig\103\index.html" */ ?>
-<?php /*%%SmartyHeaderCode:6167223785d5380024798f5-16581638%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:1977238655d54d4cc300745-37140059%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
@@ -11,7 +11,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '6167223785d5380024798f5-16581638',
+  'nocache_hash' => '1977238655d54d4cc300745-37140059',
   'function' => 
   array (
   ),
@@ -86,9 +86,9 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
   'version' => 'Smarty-3.1.21-dev',
-  'unifunc' => 'content_5d53800266f938_32874099',
+  'unifunc' => 'content_5d54d4cc50fdd6_76779115',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_5d53800266f938_32874099')) {function content_5d53800266f938_32874099($_smarty_tpl) {?><?php if (!is_callable('smarty_modifier_date_format')) include 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\include\\tpl\\plugins\\modifier.date_format.php';
+<?php if ($_valid && !is_callable('content_5d54d4cc50fdd6_76779115')) {function content_5d54d4cc50fdd6_76779115($_smarty_tpl) {?><?php if (!is_callable('smarty_modifier_date_format')) include 'D:\\myphp_www\\PHPTutorial\\WWW\\ziyuan\\include\\tpl\\plugins\\modifier.date_format.php';
 ?><!DOCTYPE html>
 <html>
 <head>
